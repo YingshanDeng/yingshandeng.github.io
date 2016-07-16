@@ -343,24 +343,15 @@
 
       
         
-          
-            <p> 本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。</p>
+          <p> 本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。</p>
 <blockquote>
-<p><strong>TL;DR</strong><br>1、采用 <a href="https://hexo.io/zh-cn/" target="_blank" rel="external">Hexo</a> 作为博客框架<br>2、采用 <a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Next</a> 作为博客主题<br>3、使用 <a href="http://www.qiniu.com/" target="_blank" rel="external">七牛云存储</a> 作为图床，存放图片<br>4、使用 <a href="http://duoshuo.com/" target="_blank" rel="external">多说</a> 作为评论系统<br>5、使用 <a href="https://swiftype.com/" target="_blank" rel="external">Swiftype</a> 作为站内搜索<br>6、使用 <a href="https://leancloud.cn/" target="_blank" rel="external">leancloud</a> 为文章阅读次数统计</p>
+<p><strong>TL;DR</strong><br>1、采用 <a href="https://hexo.io/zh-cn/">Hexo</a> 作为博客框架<br>2、采用 <a href="http://theme-next.iissnan.com/">Next</a> 作为博客主题<br>3、使用 <a href="http://www.qiniu.com/">七牛云存储</a> 作为图床，存放图片<br>4、使用 <a href="http://duoshuo.com/">多说</a> 作为评论系统<br>5、使用 <a href="https://swiftype.com/">Swiftype</a> 作为站内搜索<br>6、使用 <a href="https://leancloud.cn/">leancloud</a> 为文章阅读次数统计</p>
 </blockquote>
-<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p>1、命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建文章</span></span><br><span class="line">hexo new <span class="string">"My New Post"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务器</span></span><br><span class="line">hexo server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署</span></span><br><span class="line">hexo clean</span><br><span class="line">hexo generate</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure></p>
-<p>2、有关部署<br>本博客是托管在 Github 上 <a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a> 所以是通过 Git 的方式部署的。根据 Hexo 文档的介绍，需要先安装一个 package<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span> hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure></p>
-<p>然后修改配置：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">deploy:</span></span><br><span class="line"><span class="symbol">  type:</span> git</span><br><span class="line"><span class="symbol">  repo:</span> <span class="params">&lt;repository url&gt;</span></span><br><span class="line"><span class="symbol">  branch:</span> [branch]</span><br></pre></td></tr></table></figure></p>
-<p>3、自定义域名</p>
-<ul>
-<li>DNS: 添加两个 A records: 192.30.252.153  192.30.252.154</li>
-<li>CNAME 文件，这文件需要放在部署文件的根目录，即 <code>public</code> 目录下。由于每次部署都需要重新生成该目录文件，那么这个文件要放到什么位置呢？<strong>这个文件需要放在 hexo folder/source文件夹根目录下</strong>。</li>
-</ul>
-<p>4、关于文章分类和标签<br>在其他系统中，分类和标签听起来很接近，但是在 Hexo 中两者有着明显的差别：分类具有顺序性和层次性，也就是说 Foo, Bar 不等于 Bar, Foo；而标签没有顺序和层次。<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">categories:</span><br><span class="line">  -<span class="ruby"> Diary</span><br><span class="line"></span>tags:</span><br><span class="line">  -<span class="ruby"> tag1</span><br><span class="line"></span>  -<span class="ruby"> tag2</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="第三方服务集成"><a href="#第三方服务集成" class="headerlink" title="第三方服务集成"></a>第三方服务集成</h3><p>有关第三方服务在 Next 文档中有详细的介绍: <a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="external">第三方服务集成</a></p>
-<h3 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h3><p><a href="http://notes.iissnan.com/" target="_blank" rel="external">Next 作者博客</a></p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/07/16/hello-blog/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>

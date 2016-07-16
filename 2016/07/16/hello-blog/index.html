@@ -88,26 +88,20 @@
 
 <meta name="description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
 
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索6、使用 leancloud 为文章阅读次数统计
-
-Hexo1、命令12345678910# 创建文章hexo new &quot;My New">
+TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索6、使用 leancloud 为文章阅读次数统计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hello Blog">
 <meta property="og:url" content="http://objcer.com/2016/07/16/hello-blog/index.html">
 <meta property="og:site_name" content="Deng's Blog">
 <meta property="og:description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
 
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索6、使用 leancloud 为文章阅读次数统计
-
-Hexo1、命令12345678910# 创建文章hexo new &quot;My New">
-<meta property="og:updated_time" content="2016-07-16T09:07:56.000Z">
+TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索6、使用 leancloud 为文章阅读次数统计">
+<meta property="og:updated_time" content="2016-07-16T09:09:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hello Blog">
 <meta name="twitter:description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
 
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索6、使用 leancloud 为文章阅读次数统计
-
-Hexo1、命令12345678910# 创建文章hexo new &quot;My New">
+TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索6、使用 leancloud 为文章阅读次数统计">
 
 
 
@@ -354,6 +348,7 @@ Hexo1、命令12345678910# 创建文章hexo new &quot;My New">
 <blockquote>
 <p><strong>TL;DR</strong><br>1、采用 <a href="https://hexo.io/zh-cn/" target="_blank" rel="external">Hexo</a> 作为博客框架<br>2、采用 <a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Next</a> 作为博客主题<br>3、使用 <a href="http://www.qiniu.com/" target="_blank" rel="external">七牛云存储</a> 作为图床，存放图片<br>4、使用 <a href="http://duoshuo.com/" target="_blank" rel="external">多说</a> 作为评论系统<br>5、使用 <a href="https://swiftype.com/" target="_blank" rel="external">Swiftype</a> 作为站内搜索<br>6、使用 <a href="https://leancloud.cn/" target="_blank" rel="external">leancloud</a> 为文章阅读次数统计</p>
 </blockquote>
+<a id="more"></a>
 <h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p>1、命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建文章</span></span><br><span class="line">hexo new <span class="string">"My New Post"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务器</span></span><br><span class="line">hexo server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署</span></span><br><span class="line">hexo clean</span><br><span class="line">hexo generate</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure></p>
 <p>2、有关部署<br>本博客是托管在 Github 上 <a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a> 所以是通过 Git 的方式部署的。根据 Hexo 文档的介绍，需要先安装一个 package<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span> hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure></p>
 <p>然后修改配置：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">deploy:</span></span><br><span class="line"><span class="symbol">  type:</span> git</span><br><span class="line"><span class="symbol">  repo:</span> <span class="params">&lt;repository url&gt;</span></span><br><span class="line"><span class="symbol">  branch:</span> [branch]</span><br></pre></td></tr></table></figure></p>
