@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="DNS Prefetching," />
 
 
 
@@ -84,15 +84,24 @@
 
 
 
-<meta name="description" content="Hello World">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Deng's Blog">
-<meta property="og:url" content="http://objcer.com/index.html">
+<meta name="description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
+
+参考文章: 官方文档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNS Prefetching">
+<meta property="og:url" content="http://objcer.com/2016/09/25/DNS-Prefetching/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="Hello World">
+<meta property="og:description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
+
+参考文章: 官方文档">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png">
+<meta property="og:updated_time" content="2016-11-05T12:50:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Deng's Blog">
-<meta name="twitter:description" content="Hello World">
+<meta name="twitter:title" content="DNS Prefetching">
+<meta name="twitter:description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
+
+参考文章: 官方文档">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png">
 
 
 
@@ -113,10 +122,10 @@
 
 
 
-  <link rel="canonical" href="http://objcer.com/"/>
+  <link rel="canonical" href="http://objcer.com/2016/09/25/DNS-Prefetching/"/>
 
 
-  <title> Deng's Blog </title>
+  <title> DNS Prefetching | Deng's Blog </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -137,9 +146,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
@@ -218,9 +225,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -240,10 +247,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/09/25/DNS-Prefetching/" itemprop="url">
-                  DNS Prefetching
-                </a>
+                DNS Prefetching
               
             
           </h1>
@@ -318,179 +322,108 @@
       
 
       
-        
-          <p>在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。</p>
+        <p>在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。</p>
 <blockquote>
-<p>参考文章: <a href="https://www.chromium.org/developers/design-documents/dns-prefetching">官方文档</a></p>
+<p>参考文章: <a href="https://www.chromium.org/developers/design-documents/dns-prefetching" target="_blank" rel="external">官方文档</a></p>
 </blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/09/25/DNS-Prefetching/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+<a id="more"></a>
+<h3 id="DNS-解析方式"><a href="#DNS-解析方式" class="headerlink" title="DNS 解析方式"></a>DNS 解析方式</h3><p>1、自动获取: 会把当前页面中所有带 <code>href</code> 属性的超链接进行 DNS 解析</p>
+<blockquote>
+<p>Chromium uses the “href” attribute of hyperlinks to find host names to prefetch</p>
+</blockquote>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">a</span> href=<span class="string">"http://www.objcer.com"</span>&gt;<span class="keyword">a</span>&lt;/<span class="keyword">a</span>&gt;</div></pre></td></tr></table></figure>
+<p>2、手动获取</p>
+<blockquote>
+<p>However, some of those hyperlinks may be redirects, for example if the site is trying to count how many times the link is clicked.  In those situations, the “true” targeted domain is not necessarily discernible by examining the content of a web page, and so Chromium not able to prefetch the final targeted domain</p>
+</blockquote>
+<p>但是，如果有些超链接做了重定向，那么在这时自动解析DNS就无法得到正确的 IP 地址，那么就应该手动设置，将实际要DNS解析的域名写到 link 标签的 <code>href</code> 属性中。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"dns-prefetch"</span> <span class="attr">href</span>=<span class="string">"//host_name_to_prefetch.com"</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>我们可以注意到百度页面 head 中就包含了如下一段 DNS 预加载的 link 标签：</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png" alt=""></p>
+<h3 id="DNS-Prefetch-Control"><a href="#DNS-Prefetch-Control" class="headerlink" title="DNS Prefetch Control"></a>DNS Prefetch Control</h3><blockquote>
+<ul>
+<li>By default, Chromium does not prefetch host names in hyperlinks that appear in HTTPS pages.</li>
+<li>To allow webmasters to control whether DNS prefetch is enabled or disabled, Chromium includes a DNS Prefetch Control mechanism. It can be used to turn DNS prefetch on for HTTPS pages, or turn it off for HTTP pages.</li>
+</ul>
+</blockquote>
+<p>超链接在 https 下是不会启用 DNS 预解析的，但是浏览器提供了一个开关来设置是否在 HTTPS 下启用预解析，是否在 HTTP 下关闭预解析。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"x-dns-prefetch-control"</span> <span class="attr">content</span>=<span class="string">"on"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"x-dns-prefetch-control"</span> <span class="attr">content</span>=<span class="string">"off"</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1、DNS prefetching is an attempt to resolve domain names before a user tries to follow a link. This is done using the computer’s normal DNS resolution mechanism;</p>
+<p>2、 Chromium currently employs 8 completely asynchronous worker threads to do nothing but perform DNS prefetch resolution.</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://www.jianshu.com/p/c3a14a853c79" target="_blank" rel="external">参考链接1</a><br><a href="https://segmentfault.com/a/1190000003944417" target="_blank" rel="external">参考链接2</a></p>
+
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/16/hello-blog/" itemprop="url">
-                  你好，博客
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-16T16:14:51+08:00" content="2016-07-16">
-              2016-07-16
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/博客/" itemprop="url" rel="index">
-                    <span itemprop="name">博客</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/16/hello-blog/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/16/hello-blog/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/07/16/hello-blog/" class="leancloud_visitors" data-flag-title="你好，博客">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
+            <a href="/tags/DNS-Prefetching/" rel="tag">#DNS Prefetching</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p> 本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。</p>
-<blockquote>
-<p><strong>TL;DR</strong><br>1、采用 <a href="https://hexo.io/zh-cn/">Hexo</a> 作为博客框架<br>2、采用 <a href="http://theme-next.iissnan.com/">Next</a> 作为博客主题<br>3、使用 <a href="http://www.qiniu.com/">七牛云存储</a> 作为图床，存放图片<br>4、使用 <a href="http://duoshuo.com/">多说</a> 作为评论系统<br>5、使用 <a href="https://swiftype.com/">Swiftype</a> 作为站内搜索 [<strong>已经失效🙄</strong>]<br>6、使用 <a href="https://leancloud.cn/">leancloud</a> 为文章阅读次数统计</p>
-</blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/16/hello-blog/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/16/hello-blog/" rel="next" title="你好，博客">
+                <i class="fa fa-chevron-left"></i> 你好，博客
+              </a>
+            
           </div>
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/25/DNS-Prefetching/"
+     data-title="DNS Prefetching"
+     data-content=""
+     data-url="http://objcer.com/2016/09/25/DNS-Prefetching/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
 
 
           </div>
@@ -498,6 +431,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/25/DNS-Prefetching/"
+           data-title="DNS Prefetching" data-url="http://objcer.com/2016/09/25/DNS-Prefetching/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -517,8 +458,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.png"
@@ -597,6 +547,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS-解析方式"><span class="nav-number">1.</span> <span class="nav-text">DNS 解析方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS-Prefetch-Control"><span class="nav-number">2.</span> <span class="nav-text">DNS Prefetch Control</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -700,6 +661,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
 
   
 
