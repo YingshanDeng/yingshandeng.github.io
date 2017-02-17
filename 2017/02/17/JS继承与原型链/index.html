@@ -1,0 +1,842 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="继承,原型链," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="案例分析：1234567891011121314151617function Thing1() &amp;#123;    this.foo = &apos;foo&apos;&amp;#125;Thing1.prototype.foo = &quot;bar&quot;;function Thing2() &amp;#123;  this.logFoo(); // log: bar  Thing1.apply(this);  this.logFoo(); /">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS继承与原型链">
+<meta property="og:url" content="http://objcer.com/2017/02/17/JS继承与原型链/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="案例分析：1234567891011121314151617function Thing1() &amp;#123;    this.foo = &apos;foo&apos;&amp;#125;Thing1.prototype.foo = &quot;bar&quot;;function Thing2() &amp;#123;  this.logFoo(); // log: bar  Thing1.apply(this);  this.logFoo(); /">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/253EFEA4-F163-471A-87EC-78D7781F57C0.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png">
+<meta property="og:updated_time" content="2017-02-17T13:24:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS继承与原型链">
+<meta name="twitter:description" content="案例分析：1234567891011121314151617function Thing1() &amp;#123;    this.foo = &apos;foo&apos;&amp;#125;Thing1.prototype.foo = &quot;bar&quot;;function Thing2() &amp;#123;  this.logFoo(); // log: bar  Thing1.apply(this);  this.logFoo(); /">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/02/17/JS继承与原型链/"/>
+
+
+  <title> JS继承与原型链 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JS继承与原型链
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-17T21:13:32+08:00" content="2017-02-17">
+              2017-02-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/17/JS继承与原型链/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/17/JS继承与原型链/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/17/JS继承与原型链/" class="leancloud_visitors" data-flag-title="JS继承与原型链">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>案例分析：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Thing1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.foo = <span class="string">'foo'</span></div><div class="line">&#125;</div><div class="line">Thing1.prototype.foo = <span class="string">"bar"</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Thing2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.logFoo(); <span class="comment">// log: bar</span></div><div class="line">  Thing1.apply(<span class="keyword">this</span>);</div><div class="line">  <span class="keyword">this</span>.logFoo(); <span class="comment">// log: foo</span></div><div class="line">&#125;</div><div class="line">Thing2.prototype = <span class="built_in">Object</span>.create(Thing1.prototype);</div><div class="line">Thing2.prototype.constructor = Thing2;</div><div class="line">Thing2.prototype.logFoo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.foo);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> thing2 = <span class="keyword">new</span> Thing2();</div></pre></td></tr></table></figure></p>
+<p>上面这个例子中，依次输出：’bar’, ‘foo’。其中涉及到 JavaScript 继承及原型链，本文介绍下其中涉及的概念和作用机制。</p>
+<a id="more"></a>
+<p>在 JavaScript 中，一切皆对象(Object)，但是 JS 中并没有类(class)；<em>[ECMAScript6 引入 class,但其仍然是基于原型的]。</em> JS 是基于原型(prototype-based)来实现面向对象的编程范式。</p>
+<p>在 JavaScript 中，每一个对象都对应一个原型对象，并从原型对象继承属性和方法；而这个原型对象又有自己的原型，直到某个对象的原型为null为止（也就是不再有原型指向），指向这条链的最后一环。这种一级一级的链结构称之为原型链(prototype-chain)。</p>
+<h2 id="关于-proto-和-prototype"><a href="#关于-proto-和-prototype" class="headerlink" title="关于 __proto__ 和 prototype"></a>关于 <code>__proto__</code> 和 <code>prototype</code></h2><ul>
+<li><code>__proto__</code> 属性的值就是对象对应的原型对象，标识自己所继承的原型</li>
+</ul>
+<blockquote>
+<p>遵循ECMAScript标准，<code>someObject.[[Prototype]]</code> 符号是用于指派 <code>someObject</code> 的原型。这个等同于 JavaScript 的 <code>__proto__</code>  属性。从 ECMAScript 6 开始, <code>[[Prototype]]</code> 可以用 <code>Object.getPrototypeOf()</code> 和 <code>Object.setPrototypeOf()</code> 访问器来访问。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ES 规范定义对象字面量的原型就是 Object.prototype</span></div><div class="line"><span class="keyword">var</span> one = &#123;<span class="attr">x</span>: <span class="number">1</span>&#125;;</div><div class="line"><span class="comment">// 调用 Object 构造函数，所以 two.__proto__ 就是 Object.prototype</span></div><div class="line"><span class="keyword">var</span> two = <span class="keyword">new</span> <span class="built_in">Object</span>(&#123;<span class="attr">x</span>: <span class="number">1</span>&#125;);</div><div class="line">one.__proto__ === <span class="built_in">Object</span>.prototype <span class="comment">// true</span></div><div class="line"><span class="built_in">Object</span>.getPrototypeOf(one) === <span class="built_in">Object</span>.prototype <span class="comment">// true</span></div><div class="line">two.__proto__ === <span class="built_in">Object</span>.prototype <span class="comment">// true</span></div><div class="line"><span class="built_in">Object</span>.getPrototypeOf(two) === <span class="built_in">Object</span>.prototype <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<ul>
+<li><code>prototype</code> 属性并不是每个对象都有（<code>__proto__</code>属性是每个对象都有），<strong>只有函数才有 <code>prototype</code> 属性</strong></li>
+</ul>
+<p>当你创建函数时，JS会为这个函数自动添加 <code>prototype</code> 属性，值是空对象。而一旦你把这个函数当作构造函数（constructor）调用（即通过new关键字调用），那么JS就会帮你创建该构造函数的实例，实例继承构造函数 <code>prototype</code> 的所有属性和方法（实例通过设置自己的 <code>__proto__</code> 指向承构造函数的 <code>prototype</code> 来实现这种继承）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">classA</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> classA();</div><div class="line"></div><div class="line">a.__proto__ === classA.prototype <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p>我们已经知道函数中有一个特殊的属性叫做原型 <code>prototype</code>，这个特殊的属性和 <code>new</code> 运算符一起工作，使用 <code>new</code> 创建一个对象实例时，实例内部的 <code>__proto__</code> 属性就引用了这个原型。对象的 <code>__proto__</code> 指向自己构造函数的 <code>prototype</code>。<code>obj.__proto__.__proto__...</code> 的原型链由此产生，包括我们的操作符 <code>instanceof</code> 正是通过探测 <code>obj.__proto__.__proto__... === Constructor.prototype</code> 来验证 <code>obj</code> 是否是 <code>Constructor</code> 的实例</p>
+<p>对于函数，我们可以通过访问 <code>prototype</code> 属性来得知其原型，而对于对象实例，我们可以通过 Object.getPrototypeOf() 来获取，二者功能一致。</p>
+<p>当执行 <code>var a = new classA();</code> 时，JavaScript 实际执行的是：<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = new Object();</div><div class="line">a.<span class="string">[[Prototype]]</span> = classA.prototype;</div><div class="line">classA.call(a);</div></pre></td></tr></table></figure></p>
+<p>然后当你在访问实例的属性时，如 <code>a.someProp</code>，JavaScript 首先检查它们是否直接存在于该对象中（即是否是该对象的自身属性），如果没有，它会在其 <code>__proto__</code> 中查找，即 <code>Object.getPrototypeOf(a).someProp</code>，如果仍旧没有，它就会继续查找 <code>Object.getPrototypeOf(Object.getPrototypeOf(a)).someProp</code>，一直查找下去，直到它找到这个属性，或者 <code>Object.getPrototypeOf()</code> 返回 <code>null</code> 。</p>
+<h2 id="基于原型链的继承"><a href="#基于原型链的继承" class="headerlink" title="基于原型链的继承"></a>基于原型链的继承</h2><p>JavaScript 中通过原型链实现继承，其基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法。回顾一下构造函数(constructor)，原型(prototype)和实例(instance)的关系：</p>
+<ul>
+<li>每个构造函数都有一个原型对象(<code>prototype</code>)，原型对象都包含一个指向构造函数的指针(<code>constructor</code>)</li>
+<li>实例都包含一个指向原型对象的内部指针(<code>__proto__</code>)</li>
+</ul>
+<p>如果让原型对象等于另一个类型的实例，那么此时的原型对象将包含一个指向另一个原型的指针，如此层层递进，就构成了所谓的原型链。</p>
+<p>下面详细介绍两种基于原型链继承的写法：</p>
+<h3 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">&#125;</div><div class="line">Person.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Programmer</span>(<span class="params">name, age</span>) </span>&#123;</div><div class="line">    Person.call(<span class="keyword">this</span>, name); <span class="comment">// 第二次调用 Person() 构造函数</span></div><div class="line"></div><div class="line">    <span class="keyword">this</span>.age = age;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Programmer.prototype = <span class="keyword">new</span> Person(); <span class="comment">// 第一次调用 Person() 构造函数</span></div><div class="line">Programmer.prototype.constructor = Programmer;</div><div class="line">Programmer.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.age)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先看一下 <code>Person</code>， 在构造函数中，定义了一个属性 <code>name</code>，然后在 <code>Person</code> 的原型中增加了一个 <code>sayName</code> 方法。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png" alt=""></p>
+<p>调用 <code>Person</code> 的构造函数，<code>var person = new Person(&#39;Tom&#39;);</code>，创建一个实例，我们可以得到：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/253EFEA4-F163-471A-87EC-78D7781F57C0.png" alt=""><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png" alt=""></p>
+<p>接着看一下子类 <code>Programmer</code>，调用构造函数 <code>var programmer = new Programmer(&#39;Jack&#39;, 20);</code> 创建一个实例对象。注意到其中的注释，我们发现，调用了两次 <code>Person</code> 的构造函数。第一次调用 <code>Person</code> 构造函数时，<code>Programmer.prototype</code> 会得到一个 <code>name</code> 属性，它是 <code>Person</code> 的实例属性，只不过现在位于 <code>Programmer</code> 的原型中。当调用 <code>Programmer</code> 的构造函数时，又一次调用了 <code>Person</code> 的构造函数，这一次又在新对象上创建了 <code>name</code> 属性，只不过这个 <code>name</code> 属性屏蔽了原型中的同名属性。</p>
+<p>这时就会发现，有两个 <code>name</code> 属性，一个在实例上，一个在 <code>Programmer</code> 原型中，这就是两次调用 <code>Person</code> 构造函数的结果。</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png" alt=""></p>
+<h3 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h3><p>那么其实不必为了指定子类型的原型而调用超类的构造函数，我们需要的只是超类型原型的一个副本而已。对其中的一行代码改造一下<br><figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 将 <span class="type">Programmer</span>.proto<span class="keyword">type</span> = new <span class="type">Person</span>(); 这行代码改成如下：</div><div class="line"><span class="type">Programmer</span>.proto<span class="keyword">type</span> = <span class="type">Object</span>.create(<span class="type">Person</span>.prototype); // ①</div><div class="line"><span class="type">Programmer</span>.proto<span class="keyword">type</span>.constructor = <span class="type">Programmer</span>; // ②</div></pre></td></tr></table></figure></p>
+<p>如上，第①步创建超类型原型的一个副本，赋值给子类型的原型；第②步为子类型原型重新设置 constructor 属性，从而弥补因重写原型而失去的默认 constructor 属性。<br>这种继承方式的高效体现在其只调用了一次 <code>Person</code> 构造函数，并且因此避免了在 <code>Programmer.prototype</code> 上创建不必要的，多余的属性。所以这种方式也是目前继承最理想，最常用的写法。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>在原型链上查找属性比较耗时，对性能有副作用，这在性能要求苛刻的情况下很重要。另外，试图访问不存在的属性时会遍历整个原型链。遍历对象的属性时，原型链上的每个可枚举属性都会被枚举出来。<br>检测对象的属性是定义在自身上还是在原型链上，有必要使用 <code>hasOwnProperty</code> 方法，所有继承自 Object.proptotype 的对象都包含这个方法。<code>hasOwnProperty</code> 是 JavaScript 中唯一一个只涉及对象自身属性而不会遍历原型链的方法</p>
+<p>所以，如上 <code>programmer</code> 实例：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">programmer</span><span class="selector-class">.hasOwnProperty</span>(<span class="string">'sayAge'</span>) <span class="comment">// false</span></div><div class="line"><span class="selector-tag">programmer</span><span class="selector-class">.hasOwnProperty</span>(<span class="string">'sayName'</span>) <span class="comment">// false</span></div><div class="line"><span class="selector-tag">programmer</span><span class="selector-class">.hasOwnProperty</span>(<span class="string">'name'</span>) <span class="comment">// true</span></div><div class="line"><span class="selector-tag">programmer</span><span class="selector-class">.hasOwnProperty</span>(<span class="string">'age'</span>) <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>仅仅通过判断值是否为 undefined 还不足以检测一个属性是否存在，一个属性可能存在而其值恰好为 undefined</p>
+</blockquote>
+<h2 id="剖析开头案例"><a href="#剖析开头案例" class="headerlink" title="剖析开头案例"></a>剖析开头案例</h2><p><code>Thing1</code> 原型中含有一个属性 <code>foo</code>，值为 <code>bar</code>；<code>Thing2</code> 继承 <code>Thing1</code>，也即是 <code>Thing2</code> 的原型对象指向 <code>Thing1</code> 的原型，那么也就继承了 <code>foo</code> 属性；接着 <code>Thing2</code> 原型增加了一个 <code>logFoo</code> 方法。</p>
+<p>在 <code>Thing2</code> 构造函数中，第一次调用 <code>this.logFoo();</code> 时，查找 <code>foo</code> 属性，在自身对象中没有找到，接着往上找，<code>Object.getPrototypeOf(thing2).foo</code>，找到了，值为 <code>bar</code>。</p>
+<p>然后，执行 <code>Thing1.apply(this);</code>，相当于调用了父类 <code>Thing1</code> 的构造函数，此时为 <code>thing2</code> 实例增加了一个 <code>foo</code> 属性，值为 <code>foo</code>。</p>
+<p>最后，再一次调用 <code>this.logFoo();</code> ，查找 <code>foo</code> 属性，在自身对象中找到，值为 <code>foo</code>。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://coryrylan.com/blog/javascript-prototypal-inheritance" target="_blank" rel="external">JavaScript Prototypal Inheritance</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="external">MDN·继承与原型链</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/继承/" rel="tag">#继承</a>
+          
+            <a href="/tags/原型链/" rel="tag">#原型链</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/05/push-array-values-into-another-array/" rel="next" title="Push array values into another array">
+                <i class="fa fa-chevron-left"></i> Push array values into another array
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/17/JS继承与原型链/"
+     data-title="JS继承与原型链"
+     data-content=""
+     data-url="http://objcer.com/2017/02/17/JS继承与原型链/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/17/JS继承与原型链/"
+           data-title="JS继承与原型链" data-url="http://objcer.com/2017/02/17/JS继承与原型链/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.png"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于-proto-和-prototype"><span class="nav-number">1.</span> <span class="nav-text">关于 __proto__ 和 prototype</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于原型链的继承"><span class="nav-number">2.</span> <span class="nav-text">基于原型链的继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方式一"><span class="nav-number">2.1.</span> <span class="nav-text">方式一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方式二"><span class="nav-number">2.2.</span> <span class="nav-text">方式二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">2.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#剖析开头案例"><span class="nav-number">3.</span> <span class="nav-text">剖析开头案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"objcer"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
