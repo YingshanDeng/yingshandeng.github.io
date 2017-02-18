@@ -60,9 +60,6 @@ var a = new classA();
 
 a.__proto__ === classA.prototype // true
 ```
-我们已经知道函数中有一个特殊的属性叫做原型 `prototype`，这个特殊的属性和 `new` 运算符一起工作，使用 `new` 创建一个对象实例时，实例内部的 `__proto__` 属性就引用了这个原型。对象的 `__proto__` 指向自己构造函数的 `prototype`。`obj.__proto__.__proto__...` 的原型链由此产生，包括我们的操作符 `instanceof` 正是通过探测 `obj.__proto__.__proto__... === Constructor.prototype` 来验证 `obj` 是否是 `Constructor` 的实例
-
-对于函数，我们可以通过访问 `prototype` 属性来得知其原型，而对于对象实例，我们可以通过 Object.getPrototypeOf() 来获取，二者功能一致。
 
 当执行 `var a = new classA();` 时，JavaScript 实际执行的是：
 ```
