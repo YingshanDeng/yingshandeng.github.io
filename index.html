@@ -241,7 +241,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/02/17/JS继承与原型链/" itemprop="url">
+                <a class="post-title-link" href="/2017/02/17/JS-Inheritance-Prototype/" itemprop="url">
                   JS继承与原型链
                 </a>
               
@@ -285,8 +285,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/02/17/JS继承与原型链/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/17/JS继承与原型链/" itemprop="commentsCount"></span>
+                <a href="/2017/02/17/JS-Inheritance-Prototype/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/17/JS-Inheritance-Prototype/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -296,7 +296,7 @@
 
           
           
-             <span id="/2017/02/17/JS继承与原型链/" class="leancloud_visitors" data-flag-title="JS继承与原型链">
+             <span id="/2017/02/17/JS-Inheritance-Prototype/" class="leancloud_visitors" data-flag-title="JS继承与原型链">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -322,7 +322,7 @@
           <p>案例分析：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Thing1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.foo = <span class="string">'foo'</span></div><div class="line">&#125;</div><div class="line">Thing1.prototype.foo = <span class="string">"bar"</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Thing2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.logFoo(); <span class="comment">// log: bar</span></div><div class="line">  Thing1.apply(<span class="keyword">this</span>);</div><div class="line">  <span class="keyword">this</span>.logFoo(); <span class="comment">// log: foo</span></div><div class="line">&#125;</div><div class="line">Thing2.prototype = <span class="built_in">Object</span>.create(Thing1.prototype);</div><div class="line">Thing2.prototype.constructor = Thing2;</div><div class="line">Thing2.prototype.logFoo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.foo);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> thing2 = <span class="keyword">new</span> Thing2();</div></pre></td></tr></table></figure></p>
 <p>上面这个例子中，依次输出：’bar’, ‘foo’。其中涉及到 JavaScript 继承及原型链，本文介绍下其中涉及的概念和作用机制。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2017/02/17/JS继承与原型链/#more" rel="contents">
+            <a class="btn" href="/2017/02/17/JS-Inheritance-Prototype/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

@@ -87,14 +87,14 @@
 <meta name="description" content="案例分析：1234567891011121314151617function Thing1() &amp;#123;    this.foo = &apos;foo&apos;&amp;#125;Thing1.prototype.foo = &quot;bar&quot;;function Thing2() &amp;#123;  this.logFoo(); // log: bar  Thing1.apply(this);  this.logFoo(); /">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JS继承与原型链">
-<meta property="og:url" content="http://objcer.com/2017/02/17/JS继承与原型链/index.html">
+<meta property="og:url" content="http://objcer.com/2017/02/17/JS-Inheritance-Prototype/index.html">
 <meta property="og:site_name" content="Deng's Blog">
 <meta property="og:description" content="案例分析：1234567891011121314151617function Thing1() &amp;#123;    this.foo = &apos;foo&apos;&amp;#125;Thing1.prototype.foo = &quot;bar&quot;;function Thing2() &amp;#123;  this.logFoo(); // log: bar  Thing1.apply(this);  this.logFoo(); /">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/253EFEA4-F163-471A-87EC-78D7781F57C0.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png">
-<meta property="og:updated_time" content="2017-02-17T13:24:57.000Z">
+<meta property="og:updated_time" content="2017-02-18T16:52:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS继承与原型链">
 <meta name="twitter:description" content="案例分析：1234567891011121314151617function Thing1() &amp;#123;    this.foo = &apos;foo&apos;&amp;#125;Thing1.prototype.foo = &quot;bar&quot;;function Thing2() &amp;#123;  this.logFoo(); // log: bar  Thing1.apply(this);  this.logFoo(); /">
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://objcer.com/2017/02/17/JS继承与原型链/"/>
+  <link rel="canonical" href="http://objcer.com/2017/02/17/JS-Inheritance-Prototype/"/>
 
 
   <title> JS继承与原型链 | Deng's Blog </title>
@@ -286,8 +286,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/02/17/JS继承与原型链/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/17/JS继承与原型链/" itemprop="commentsCount"></span>
+                <a href="/2017/02/17/JS-Inheritance-Prototype/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/17/JS-Inheritance-Prototype/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -297,7 +297,7 @@
 
           
           
-             <span id="/2017/02/17/JS继承与原型链/" class="leancloud_visitors" data-flag-title="JS继承与原型链">
+             <span id="/2017/02/17/JS-Inheritance-Prototype/" class="leancloud_visitors" data-flag-title="JS继承与原型链">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -336,8 +336,6 @@
 </ul>
 <p>当你创建函数时，JS会为这个函数自动添加 <code>prototype</code> 属性，值是空对象。而一旦你把这个函数当作构造函数（constructor）调用（即通过new关键字调用），那么JS就会帮你创建该构造函数的实例，实例继承构造函数 <code>prototype</code> 的所有属性和方法（实例通过设置自己的 <code>__proto__</code> 指向承构造函数的 <code>prototype</code> 来实现这种继承）</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">classA</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> classA();</div><div class="line"></div><div class="line">a.__proto__ === classA.prototype <span class="comment">// true</span></div></pre></td></tr></table></figure>
-<p>我们已经知道函数中有一个特殊的属性叫做原型 <code>prototype</code>，这个特殊的属性和 <code>new</code> 运算符一起工作，使用 <code>new</code> 创建一个对象实例时，实例内部的 <code>__proto__</code> 属性就引用了这个原型。对象的 <code>__proto__</code> 指向自己构造函数的 <code>prototype</code>。<code>obj.__proto__.__proto__...</code> 的原型链由此产生，包括我们的操作符 <code>instanceof</code> 正是通过探测 <code>obj.__proto__.__proto__... === Constructor.prototype</code> 来验证 <code>obj</code> 是否是 <code>Constructor</code> 的实例</p>
-<p>对于函数，我们可以通过访问 <code>prototype</code> 属性来得知其原型，而对于对象实例，我们可以通过 Object.getPrototypeOf() 来获取，二者功能一致。</p>
 <p>当执行 <code>var a = new classA();</code> 时，JavaScript 实际执行的是：<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = new Object();</div><div class="line">a.<span class="string">[[Prototype]]</span> = classA.prototype;</div><div class="line">classA.call(a);</div></pre></td></tr></table></figure></p>
 <p>然后当你在访问实例的属性时，如 <code>a.someProp</code>，JavaScript 首先检查它们是否直接存在于该对象中（即是否是该对象的自身属性），如果没有，它会在其 <code>__proto__</code> 中查找，即 <code>Object.getPrototypeOf(a).someProp</code>，如果仍旧没有，它就会继续查找 <code>Object.getPrototypeOf(Object.getPrototypeOf(a)).someProp</code>，一直查找下去，直到它找到这个属性，或者 <code>Object.getPrototypeOf()</code> 返回 <code>null</code> 。</p>
 <h2 id="基于原型链的继承"><a href="#基于原型链的继承" class="headerlink" title="基于原型链的继承"></a>基于原型链的继承</h2><p>JavaScript 中通过原型链实现继承，其基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法。回顾一下构造函数(constructor)，原型(prototype)和实例(instance)的关系：</p>
@@ -419,10 +417,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2017/02/17/JS继承与原型链/"
+        <div class="ds-share flat" data-thread-key="2017/02/17/JS-Inheritance-Prototype/"
      data-title="JS继承与原型链"
      data-content=""
-     data-url="http://objcer.com/2017/02/17/JS继承与原型链/">
+     data-url="http://objcer.com/2017/02/17/JS-Inheritance-Prototype/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -449,8 +447,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/17/JS继承与原型链/"
-           data-title="JS继承与原型链" data-url="http://objcer.com/2017/02/17/JS继承与原型链/">
+      <div class="ds-thread" data-thread-key="2017/02/17/JS-Inheritance-Prototype/"
+           data-title="JS继承与原型链" data-url="http://objcer.com/2017/02/17/JS-Inheritance-Prototype/">
       </div>
     
   </div>
