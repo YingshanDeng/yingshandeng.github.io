@@ -40,9 +40,15 @@ test.call(obj, 2, 3) // 1 -- 2 -- 3
 ```
 var numbers = [5, 6, 2, 3, 7];
 
-var max = Math.max.apply(Math, numbers);
-var min = Math.min.apply(Math, numbers);
+var max = Math.max.apply(null, numbers);
+var min = Math.min.apply(null, numbers);
+
+// Object Spread Operator
+var max = Math.max(...numbers);
+var min = Math.min(...numbers);
 ```
+注意：这里并不需要指定 this，所以第一个参数为 null 或者 undefined；其实这里用 `apply` 只是为了方便传参而已，而使用 ES6 的 Object Spread Operator 也可以达到类似的效果
+
 > 但是当心：如果用上面的方式调用 apply, 你很可能会遇到方法参数个数越界的问题. 当你对一个方法传入非常多的参数 (比如超过1W多个参数) 时, 就非常有可能会导致越界问题, 这个临界值是根据不同的 JavaScript 引擎而定的。如果你的参数数组可能非常大, 那么推荐使用下面这种策略来处理: 将参数数组切块后循环传入目标方法:
 ```
 function minOfArray(arr) {
@@ -117,11 +123,11 @@ slice(arguments);
 ```
 2、获取数组中的最大、最小值
 ```
-var MAX = Function.prototype.apply.bind(Math.max, Math);
+var MAX = Function.prototype.apply.bind(Math.max, null);
 MAX([1, 2, 3]);
 
 // 等价于
-Math.max.apply(Math, [1, 2, 3])
+Math.max.apply(null, [1, 2, 3])
 ```
 
 ### 其他
