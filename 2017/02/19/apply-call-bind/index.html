@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="JavaScript 中的 apply、call、bind">
+<meta name="description" content="JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript 中的 apply、call、bind">
 <meta property="og:url" content="http://objcer.com/2017/02/19/apply-call-bind/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="JavaScript 中的 apply、call、bind">
-<meta property="og:updated_time" content="2017-02-21T12:50:54.000Z">
+<meta property="og:description" content="JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。">
+<meta property="og:updated_time" content="2017-02-22T09:59:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript 中的 apply、call、bind">
-<meta name="twitter:description" content="JavaScript 中的 apply、call、bind">
+<meta name="twitter:description" content="JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。">
 
 
 
@@ -314,7 +314,7 @@
       
 
       
-        <p>JavaScript 中的 apply、call、bind<br><a id="more"></a></p>
+        <p>JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。<br><a id="more"></a></p>
 <h2 id="call-和-apply"><a href="#call-和-apply" class="headerlink" title="call 和 apply"></a><code>call</code> 和 <code>apply</code></h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span>.<span class="title">call</span></span>(thisArg[, arg1[, arg2[, ...]]])</div><div class="line"><span class="function"><span class="keyword">fun</span>.<span class="title">apply</span></span>(thisArg[, argsArray])</div></pre></td></tr></table></figure>
 <p><code>call</code> 和 <code>apply</code> 方法类似，第一个参数 <code>thisArg</code> 指定函数运行时的 <code>this</code>，唯一的区别，就是call()方法接受的是若干个参数的列表，而apply()方法接受的是一个包含多个参数的数组。</p>
 <p>从语法中可以知道，这两个方法的作用就是调用函数并且指定上下文的 <code>this</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">arg1, arg2</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.x, <span class="string">'--'</span>, arg1, <span class="string">'--'</span>, arg2);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">1</span></div><div class="line">&#125;</div><div class="line">test(<span class="number">2</span>, <span class="number">3</span>) <span class="comment">// undefined -- 2 -- 3</span></div><div class="line">test.apply(obj, [<span class="number">2</span>, <span class="number">3</span>]) <span class="comment">// 1 -- 2 -- 3</span></div><div class="line">test.call(obj, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">// 1 -- 2 -- 3</span></div></pre></td></tr></table></figure></p>
@@ -379,6 +379,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/22/js-enumerable/" rel="prev" title="JS 属性的可枚举性">
+                JS 属性的可枚举性 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -469,7 +473,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -486,7 +490,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

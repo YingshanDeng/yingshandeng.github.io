@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Array," />
+  <meta name="keywords" content="枚举,enumerable,实例属性,原型属性," />
 
 
 
@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="问题描述：将一个数组的所有元素 push 到另一个数组中123456var a = [1, 2, 3],    b = [4, 5, 6];==&amp;gt;a = [1, 2, 3, 4, 5, 6]或者得到一个新的数组c = [1, 2, 3, 4, 5, 6]">
+<meta name="description" content="可枚举属性是指那些内部 “可枚举” 标志（enumerable）设置为 true 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 true，对于通过 Object.defineProperty ，Object.create 等定义的属性，该标识值默认为 false。可枚举的属性可以通过 for...in 循环进行遍历（除非该属性名是一个 Symbol）。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Push array values into another array">
-<meta property="og:url" content="http://objcer.com/2016/12/05/push-array-values-into-another-array/index.html">
+<meta property="og:title" content="JS 属性的可枚举性">
+<meta property="og:url" content="http://objcer.com/2017/02/22/js-enumerable/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="问题描述：将一个数组的所有元素 push 到另一个数组中123456var a = [1, 2, 3],    b = [4, 5, 6];==&amp;gt;a = [1, 2, 3, 4, 5, 6]或者得到一个新的数组c = [1, 2, 3, 4, 5, 6]">
-<meta property="og:updated_time" content="2016-12-05T10:59:52.000Z">
+<meta property="og:description" content="可枚举属性是指那些内部 “可枚举” 标志（enumerable）设置为 true 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 true，对于通过 Object.defineProperty ，Object.create 等定义的属性，该标识值默认为 false。可枚举的属性可以通过 for...in 循环进行遍历（除非该属性名是一个 Symbol）。">
+<meta property="og:updated_time" content="2017-02-22T09:59:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Push array values into another array">
-<meta name="twitter:description" content="问题描述：将一个数组的所有元素 push 到另一个数组中123456var a = [1, 2, 3],    b = [4, 5, 6];==&amp;gt;a = [1, 2, 3, 4, 5, 6]或者得到一个新的数组c = [1, 2, 3, 4, 5, 6]">
+<meta name="twitter:title" content="JS 属性的可枚举性">
+<meta name="twitter:description" content="可枚举属性是指那些内部 “可枚举” 标志（enumerable）设置为 true 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 true，对于通过 Object.defineProperty ，Object.create 等定义的属性，该标识值默认为 false。可枚举的属性可以通过 for...in 循环进行遍历（除非该属性名是一个 Symbol）。">
 
 
 
@@ -114,10 +114,10 @@
 
 
 
-  <link rel="canonical" href="http://objcer.com/2016/12/05/push-array-values-into-another-array/"/>
+  <link rel="canonical" href="http://objcer.com/2017/02/22/js-enumerable/"/>
 
 
-  <title> Push array values into another array | Deng's Blog </title>
+  <title> JS 属性的可枚举性 | Deng's Blog </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +239,7 @@
             
             
               
-                Push array values into another array
+                JS 属性的可枚举性
               
             
           </h1>
@@ -251,8 +251,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-12-05T17:51:31+08:00" content="2016-12-05">
-              2016-12-05
+            <time itemprop="dateCreated" datetime="2017-02-22T17:56:58+08:00" content="2017-02-22">
+              2017-02-22
             </time>
           </span>
 
@@ -281,8 +281,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/12/05/push-array-values-into-another-array/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/05/push-array-values-into-another-array/" itemprop="commentsCount"></span>
+                <a href="/2017/02/22/js-enumerable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/22/js-enumerable/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -292,7 +292,7 @@
 
           
           
-             <span id="/2016/12/05/push-array-values-into-another-array/" class="leancloud_visitors" data-flag-title="Push array values into another array">
+             <span id="/2017/02/22/js-enumerable/" class="leancloud_visitors" data-flag-title="JS 属性的可枚举性">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -314,20 +314,24 @@
       
 
       
-        <blockquote>
-<p>问题描述：将一个数组的所有元素 push 到另一个数组中<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">==&gt;</div><div class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</div><div class="line">或者得到一个新的数组</div><div class="line">c = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</div></pre></td></tr></table></figure></p>
-</blockquote>
+        <p>可枚举属性是指那些内部 “可枚举” 标志（<code>enumerable</code>）设置为 <code>true</code> 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 <code>true</code>，对于通过 <code>Object.defineProperty</code> ，<code>Object.create</code> 等定义的属性，该标识值默认为 <code>false</code>。可枚举的属性可以通过 <code>for...in</code> 循环进行遍历（除非该属性名是一个 <code>Symbol</code>）。</p>
 <a id="more"></a>
-<h2 id="方式一：使用-ES6-的-spread-operator-特性"><a href="#方式一：使用-ES6-的-spread-operator-特性" class="headerlink" title="方式一：使用 ES6 的 spread operator 特性"></a>方式一：使用 ES6 的 <code>spread operator</code> 特性</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">	b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">a.push(...b);</div><div class="line">console.log(a) <span class="comment">// a = [1, 2, 3, 4, 5, 6]</span></div></pre></td></tr></table></figure>
-<p>上面这段代码经过 babel 编译后，变成：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">a.push.apply(a, b);</div></pre></td></tr></table></figure></p>
-<p>所以，如果不想用 <code>spread operator</code> ES6 这个新的特性的话，也可以如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line"></div><div class="line">a.push.apply(a, b);</div><div class="line"><span class="comment">// 或者</span></div><div class="line">Array.prototype.push.apply(a, b);</div></pre></td></tr></table></figure></p>
-<h2 id="方式二：使用-concat-方法"><a href="#方式二：使用-concat-方法" class="headerlink" title="方式二：使用 concat 方法"></a>方式二：使用 <code>concat</code> 方法</h2><blockquote>
-<p>The concat() method is used to merge two or more arrays. This method does not change the existing arrays, but instead returns a new array.(合并两个或者数组，返回一个新的结果数组)<br><strong>Syntax</strong><br>var new_array = old_array.concat(value1[, value2[, …[, valueN]]])<br><strong>Parameters</strong><br>valueN: Arrays and/or values to concatenate into a new array.</p>
-</blockquote>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line"></div><div class="line">var c = a.concat(b);</div><div class="line"><span class="comment">// 或者</span></div><div class="line">var c = [].concat(a, b);</div><div class="line"></div><div class="line">console.log(c) <span class="comment">// c = [1, 2, 3, 4, 5, 6]</span></div></pre></td></tr></table></figure>
-<h2 id="方式三：使用数组构造函数-Array-constructor"><a href="#方式三：使用数组构造函数-Array-constructor" class="headerlink" title="方式三：使用数组构造函数 Array constructor"></a>方式三：使用数组构造函数 <code>Array constructor</code></h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">var c = [</div><div class="line">        ...a,</div><div class="line">        ...b</div><div class="line">    ];</div><div class="line"><span class="comment">//或者</span></div><div class="line">var c = new Array(...a, ...b);</div></pre></td></tr></table></figure>
-<p>上面这段代码经过 babel 编译后，变成：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">var c = [].concat(a, b);</div></pre></td></tr></table></figure>
+<h2 id="可枚举性-enumerable"><a href="#可枚举性-enumerable" class="headerlink" title="可枚举性 enumerable"></a>可枚举性 <code>enumerable</code></h2><p>可枚举性（<code>enumerable</code>）用来控制所描述的属性。具体来说，如果一个属性的 <code>enumerable</code> 为 <code>false</code>，下面三个操作不会取到该属性。</p>
+<ul>
+<li><code>for…in</code> 循环</li>
+<li><code>Object.keys</code> 方法</li>
+<li><code>JSON.stringify</code> 方法</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = <span class="built_in">Object</span>.create(<span class="built_in">Object</span>.prototype, &#123;</div><div class="line">    <span class="attr">a</span>: &#123;</div><div class="line">        <span class="attr">value</span>: <span class="number">1</span>,</div><div class="line">        <span class="attr">enumerable</span>: <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">b</span>: &#123;</div><div class="line">        <span class="attr">value</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">enumerable</span>: <span class="literal">false</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">c</span>: &#123;</div><div class="line">        <span class="attr">value</span>: <span class="number">3</span></div><div class="line">        <span class="comment">// enumerable 默认为 false</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"><span class="comment">// ① `for...in` 循环</span></div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj) &#123;</div><div class="line">    <span class="built_in">console</span>.log(key)</div><div class="line">&#125;</div><div class="line"><span class="comment">// log: a</span></div><div class="line"></div><div class="line"><span class="comment">// ② `Object.keys` 方法</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.keys(obj))</div><div class="line"><span class="comment">// log: ["a"]</span></div><div class="line"></div><div class="line"><span class="comment">// ③ `JSON.stringify` 方法</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(obj))</div><div class="line"><span class="comment">// log: &#123;"a":1&#125;</span></div></pre></td></tr></table></figure>
+<p>虽然 <code>enumerable</code> 为 <code>false</code> 的属性通过遍历操作无法获取到，但是我们还是可以直接获取到属性的值，例如 <code>obj.b</code></p>
+<h2 id="原型属性和实例属性"><a href="#原型属性和实例属性" class="headerlink" title="原型属性和实例属性"></a>原型属性和实例属性</h2><p>javascript 中属性可以分为：实例属性和原型属性。原型属性是定义在对象的原型(<code>prototype</code>)中的属性，而实例属性一方面来自构造的函数中，或者是构造函数实例化后添加的新属性。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">var o = &#123;</div><div class="line"><span class="attr">    d:</span> <span class="number">4</span></div><div class="line">&#125;</div><div class="line">var obj = Object.create(o, &#123;</div><div class="line"><span class="attr">    a:</span> &#123;</div><div class="line"><span class="attr">        value:</span> <span class="number">1</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line"><span class="attr">    b:</span> &#123;</div><div class="line"><span class="attr">        value:</span> <span class="number">2</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line"><span class="attr">    c:</span> &#123;</div><div class="line"><span class="attr">        value:</span> <span class="number">3</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>如上代码中 <code>obj</code> 的就包含了一个原型属性 <code>d</code>，还有三个实例属性 <code>a, b, c</code> (都是可枚举的属性)。<br>我们注意到 <code>for...in</code> 循环和 <code>Object.keys</code> 方法都可以对对象进行遍历操作，那么二者是否有啥区别呢？执行以下如下代码：<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="built_in">key</span> <span class="keyword">in</span> obj) &#123;</div><div class="line">    console.<span class="built_in">log</span>(<span class="built_in">key</span>)</div><div class="line">&#125;</div><div class="line">// <span class="built_in">log</span>: a b c d</div><div class="line"></div><div class="line">Object.keys(obj)</div><div class="line">// <span class="built_in">log</span>: [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>]</div></pre></td></tr></table></figure></p>
+<p>我们可以注意到：<code>for...in</code> 循环可以遍历对象中所有可枚举的对象属性，包括原型属性和实例属性(也就是继承的属性和对象自有属性)；而 <code>Object.keys</code> 方法只能遍历出实例属性(也就是对象本身自有的属性)。</p>
+<p>而通过 <code>hasOwnProperty</code> 方法就可以区分属性是否是原型属性还是实例属性。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">obj</span><span class="selector-class">.hasOwnProperty</span>(<span class="string">'a'</span>) <span class="comment">// true</span></div><div class="line"><span class="selector-tag">obj</span><span class="selector-class">.hasOwnProperty</span>(<span class="string">'d'</span>) <span class="comment">// false</span></div></pre></td></tr></table></figure></p>
+<p>而通过 <code>Object.getOwnPropertyNames(obj)</code> 方法返回一个由指定对象的所有自身属性的属性名（<strong>包括不可枚举属性</strong>）组成的数组，但不会获取原型链上的属性。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">var o = &#123;</div><div class="line"><span class="symbol">    d:</span> <span class="number">4</span></div><div class="line">&#125;</div><div class="line">var obj = Object.create(o, &#123;</div><div class="line"><span class="symbol">    a:</span> &#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">1</span>,</div><div class="line"><span class="symbol">        enumerable:</span> true</div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    b:</span> &#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">2</span>,</div><div class="line"><span class="symbol">        enumerable:</span> false</div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    c:</span> &#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">3</span></div><div class="line">        <span class="comment">// enumerable 默认为 false</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line">Object.getOwnPropertyNames(obj) <span class="comment">// ["a", "b", "c"]</span></div></pre></td></tr></table></figure></p>
+<hr>
+<p>补充一个知识点：ES6 class 类的内部所有定义的方法，都是不可枚举的（non-enumerable）；这一点和 ES5 有点差别（<a href="http://es6.ruanyifeng.com/#docs/class" target="_blank" rel="external">详细内容参考</a>）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</div><div class="line">    methoda() &#123;&#125;</div><div class="line">    methodb() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">B</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line">B.prototype.methoda = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</div><div class="line">B.prototype.methodb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">Object</span>.keys(A.prototype) <span class="comment">// []</span></div><div class="line"><span class="built_in">Object</span>.getOwnPropertyNames(A.prototype) <span class="comment">// ["constructor", "methoda", "methodb"]</span></div><div class="line"></div><div class="line"><span class="built_in">Object</span>.keys(B.prototype) <span class="comment">// ["methoda", "methodb"]</span></div><div class="line"><span class="built_in">Object</span>.getOwnPropertyNames(B.prototype) <span class="comment">// ["constructor", "methoda", "methodb"]</span></div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -350,7 +354,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Array/" rel="tag">#Array</a>
+            <a href="/tags/枚举/" rel="tag">#枚举</a>
+          
+            <a href="/tags/enumerable/" rel="tag">#enumerable</a>
+          
+            <a href="/tags/实例属性/" rel="tag">#实例属性</a>
+          
+            <a href="/tags/原型属性/" rel="tag">#原型属性</a>
           
         </div>
       
@@ -359,17 +369,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/06/Debouncing-and-Throttling/" rel="next" title="Debouncing and Throttling ">
-                <i class="fa fa-chevron-left"></i> Debouncing and Throttling 
+              <a href="/2017/02/19/apply-call-bind/" rel="next" title="JavaScript 中的 apply、call、bind">
+                <i class="fa fa-chevron-left"></i> JavaScript 中的 apply、call、bind
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/02/17/JS-Inheritance-Prototype/" rel="prev" title="JS继承与原型链">
-                JS继承与原型链 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -384,10 +390,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/12/05/push-array-values-into-another-array/"
-     data-title="Push array values into another array"
+        <div class="ds-share flat" data-thread-key="2017/02/22/js-enumerable/"
+     data-title="JS 属性的可枚举性"
      data-content=""
-     data-url="http://objcer.com/2016/12/05/push-array-values-into-another-array/">
+     data-url="http://objcer.com/2017/02/22/js-enumerable/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -414,8 +420,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/05/push-array-values-into-another-array/"
-           data-title="Push array values into another array" data-url="http://objcer.com/2016/12/05/push-array-values-into-another-array/">
+      <div class="ds-thread" data-thread-key="2017/02/22/js-enumerable/"
+           data-title="JS 属性的可枚举性" data-url="http://objcer.com/2017/02/22/js-enumerable/">
       </div>
     
   </div>
@@ -535,7 +541,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#方式一：使用-ES6-的-spread-operator-特性"><span class="nav-number">1.</span> <span class="nav-text">方式一：使用 ES6 的 spread operator 特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方式二：使用-concat-方法"><span class="nav-number">2.</span> <span class="nav-text">方式二：使用 concat 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方式三：使用数组构造函数-Array-constructor"><span class="nav-number">3.</span> <span class="nav-text">方式三：使用数组构造函数 Array constructor</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#可枚举性-enumerable"><span class="nav-number">1.</span> <span class="nav-text">可枚举性 enumerable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型属性和实例属性"><span class="nav-number">2.</span> <span class="nav-text">原型属性和实例属性</span></a></li></ol></div>
             
           </div>
         </section>
