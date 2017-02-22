@@ -5,7 +5,7 @@ categories: JS
 ---
 
 
-JavaScript 中的 apply、call、bind
+JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。
 <!-- more -->
 
 ## `call` 和 `apply`
