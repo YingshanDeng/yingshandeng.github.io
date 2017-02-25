@@ -1,0 +1,860 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Git," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="在开发过程中，常用的 git 命令和技巧整理如下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 的常用命令和技能">
+<meta property="og:url" content="http://objcer.com/2017/02/25/git-tips/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="在开发过程中，常用的 git 命令和技巧整理如下。">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/git-model@2x.png">
+<meta property="og:updated_time" content="2017-02-25T03:30:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git 的常用命令和技能">
+<meta name="twitter:description" content="在开发过程中，常用的 git 命令和技巧整理如下。">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/02/25/git-tips/"/>
+
+
+  <title> Git 的常用命令和技能 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Git 的常用命令和技能
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-25T11:27:43+08:00" content="2017-02-25">
+              2017-02-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/25/git-tips/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/25/git-tips/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/25/git-tips/" class="leancloud_visitors" data-flag-title="Git 的常用命令和技能">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在开发过程中，常用的 git 命令和技巧整理如下。</p>
+<a id="more"></a>
+<h2 id="Git基础"><a href="#Git基础" class="headerlink" title="Git基础"></a>Git基础</h2><p><img src="http://7vikhl.com1.z0.glb.clouddn.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png" alt=""></p>
+<h2 id="stash-储藏"><a href="#stash-储藏" class="headerlink" title="stash 储藏"></a>stash 储藏</h2><p>当你在某个分支上工作到一半时，需要切换到其他分支进行一些工作，但是你此时并不想提交当前工作了一半的内容时，你可以使用 <code>git stash</code> 这个命令解决你的问题。<a href="https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%82%A8%E8%97%8F%EF%BC%88Stashing%EF%BC%89" target="_blank" rel="external">参考文档</a></p>
+<h3 id="git-stash"><a href="#git-stash" class="headerlink" title="git stash"></a><code>git stash</code></h3><p><code>git stash</code> 可以获取你工作目录的中间状态——也就是你<strong>修改过的被追踪的文件</strong>和<strong>暂存的变更</strong>，并将它保存到一个未完结变更的堆栈中，随时可以重新应用。<br>注意：未被跟踪的文件在执行 <code>git stash</code> 时是不会被保存的。例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">On branch master</div><div class="line">Your branch is ahead of 'origin/master' by 5 commits.</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git push"</span> <span class="keyword">to</span> publish your <span class="keyword">local</span> commits)</div><div class="line">Changes <span class="keyword">to</span> be committed:</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</div><div class="line"></div><div class="line">	modified:   file.js</div><div class="line"></div><div class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</div><div class="line"></div><div class="line">	modified:   <span class="number">1.</span>html</div><div class="line"></div><div class="line">Untracked files:</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">include</span> <span class="keyword">in</span> what will be committed)</div><div class="line"></div><div class="line">	stash.txt</div></pre></td></tr></table></figure>
+<p>当前状态中</p>
+<pre><code>- 工作区：新增文件 stash.txt (**Untracked**)，修改文件 1.html
+- 暂存区：修改文件 file.js
+</code></pre><p>此时执行 <code>git stash</code>，其中未被跟踪（Untracked）的 stash.txt 是不会被保存的 （此时你需要先 <code>git add stash.txt</code>）</p>
+<h3 id="stash-的一些操作"><a href="#stash-的一些操作" class="headerlink" title="stash 的一些操作"></a>stash 的一些操作</h3><p>1、查看当前 stash 栈中的情况 : <code>git stash list</code><br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git stash <span class="built_in">list</span></div><div class="line">stash@&#123;<span class="number">0</span>&#125;: WIP <span class="keyword">on</span> master: <span class="number">049</span>d078 added <span class="keyword">the</span> index <span class="built_in">file</span></div><div class="line">stash@&#123;<span class="number">1</span>&#125;: WIP <span class="keyword">on</span> master: c264051 Revert <span class="string">"added file_size"</span></div><div class="line">stash@&#123;<span class="number">2</span>&#125;: WIP <span class="keyword">on</span> master: <span class="number">21</span>d80a5 added <span class="built_in">number</span> <span class="keyword">to</span> <span class="built_in">log</span></div></pre></td></tr></table></figure></p>
+<p>2、应用/移除 stash 栈中的储藏的内容<br>你可以在不同的分支应用 stash 储藏的内容；也可以在当前工作目录中包含了已修改和未提交的内容时，应用 stash 储藏的内容。</p>
+<p><code>git stash apply</code>: 应用最新 stash 储藏的内容<br><code>git stash apply stash@{2}</code>: 应用指定的 stash 储藏内容<br><code>git stash drop</code>: 移除最新 stash 储藏的内容<br><code>git stash drop stash@{2}</code>: 移除指定的 stash 储藏内容<br><code>git stash clear</code>: 清除 stash 栈中所有的内容</p>
+<p>3、取消储藏(Un-applying a Stash)<br>在应用了 stash 储藏后，进行了一些修改，此时又要取消之前应用的储藏的修改，可以通过以下命令实现：<br><code>git stash show -p stash@{0} | git apply -R</code><br>同样的，如果你沒有指定具体的某个储藏，Git 会选择最近的储藏:<br><code>git stash show -p | git apply -R</code></p>
+<p>4、从储藏中创建分支<br>恢复储藏的工作然后在新的分支上继续当时的工作<br><code>git stash branch testchanges</code></p>
+<h2 id="tag-标签"><a href="#tag-标签" class="headerlink" title="tag 标签"></a>tag 标签</h2><p>Git 可以对某一时间点上的版本打上标签。人们在发布某个软件版本（比如 v1.0 等等）的时候，经常这么做。</p>
+<blockquote>
+<p>关于如何软件开发过程中版本号如何定义，参考<a href="http://taobaofed.org/blog/2016/08/04/instructions-of-semver/" target="_blank" rel="external">论版本号的正确打开方式</a></p>
+</blockquote>
+<p>1、<strong>添加标签</strong><br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 添加了 v1.<span class="number">4</span> 标签，同时指定了标签说明：my <span class="keyword">version</span> <span class="number">1.4</span></div><div class="line">git <span class="keyword">tag</span> <span class="title">-a</span> v1.<span class="number">4</span> -m 'my <span class="keyword">version</span> <span class="number">1.4</span>'</div></pre></td></tr></table></figure></p>
+<p>在开发过程中，可能有时候会忘记打标签了，那么如果出现这种情况如何补救呢？<br>可以通过 <code>git log --pretty=oneline</code> 等方式找到需要打标签的那个 commit，然后执行：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// <span class="number">9</span>fceb02: commit 对应的 hash 值</div><div class="line">git <span class="keyword">tag</span> <span class="title">-a</span> v1.<span class="number">2</span> -m '补充<span class="keyword">tag</span>' <span class="number">9</span>fceb02</div></pre></td></tr></table></figure></p>
+<p>2、<strong>查看标签</strong><br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 列出当前已有的标签</div><div class="line">git <span class="keyword">tag</span></div><div class="line"><span class="title">// 用特定的搜索模式列出符合条件的标签</span></div><div class="line">git <span class="keyword">tag</span> <span class="title">-l</span> 'v1.<span class="number">4.2</span>.*’</div><div class="line">// 查看标签内容</div><div class="line">git show v1.<span class="number">4</span></div></pre></td></tr></table></figure></p>
+<p>3、<strong>推送标签</strong><br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 推送指定标签到远程</span></div><div class="line">git <span class="keyword">push</span> origin v1<span class="number">.5</span></div><div class="line"><span class="comment">// 一次性推送所有本地标签到远程</span></div><div class="line">git <span class="keyword">push</span> origin --tags</div></pre></td></tr></table></figure></p>
+<p>4、<strong>删除标签</strong><br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 删除本地标签</span></div><div class="line">git tag -d 标签名</div><div class="line"><span class="comment">// 删除远程标签</span></div><div class="line">git <span class="keyword">push</span> origin :refs<span class="regexp">/tags/</span>标签名</div></pre></td></tr></table></figure></p>
+<h2 id="git-revert-和-git-reset"><a href="#git-revert-和-git-reset" class="headerlink" title="git revert 和 git reset"></a><code>git revert</code> 和 <code>git reset</code></h2><p>1、<strong>git revert</strong><br>撤销某次操作(commit)，并把这次撤销当做一次新的提交，版本号递增，就是用一次新的提交(commit)来回滚之前的commit。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 撤销前一次 <span class="keyword">commit</span></div><div class="line">git revert <span class="keyword">HEAD</span></div><div class="line">// 撤销某一指定<span class="keyword">commit</span>（xxx 指某一次 <span class="keyword">commit</span> 的 <span class="keyword">hash</span> 值）</div><div class="line">git revert xxx</div></pre></td></tr></table></figure></p>
+<p>当然，如果执行了这个命令后出现冲突等问题，需要解决比较麻烦，后悔了，不想继续这个撤销过程了，那么可以通过 <code>git revert —abort</code> 就可以取消。</p>
+<p>2、<strong>git reset</strong><br><code>git reset</code> 是直接删除指定的 commit, 但是文件和修改会移动到 workspace 工作区，如果还想清除：<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git clean -df</div><div class="line">git checkout <span class="comment">-- .</span></div></pre></td></tr></table></figure></p>
+<p><code>git reset</code> 常用于代码回滚，譬如 <code>git reset xxx</code> 是将当期 HEAD 直接指向 hash 值为 xxx 的那个commit，xxx commit 之后的所有变更都移动到 workspace 工作区中，这样有点不好的是，会将 xxx commit 之后的所有 commit 都丢失掉。</p>
+<p>执行 <code>git reset</code> 后，如果后悔了，怎么办？<br>通过 <code>git reflog</code> 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code>git reset --hard xxx</code> 到那个 hash 即可。<br>那么如果在代码回滚的时候，想要保留回滚的那些变更，方便以后我们撤销这次回滚，怎么处理呢？就得用 <code>git revert</code> 了。<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">git</span> revert —-<span class="literal">no</span>-commit xxx..yyy</div><div class="line">git revert —-<span class="literal">no</span>-commit xxx^..yyy</div></pre></td></tr></table></figure></p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>xxx 是在 yyy 之前的提交</li>
+<li><code>xxx..yyy</code> 和 <code>xxx^..yyy</code> 的区别是，回滚操作中后者包含 xxx commit，而前者不包括 xxx commit.</li>
+</ul>
+<p>这个命令会将 xxx 到 yyy commit 之间变更的内容的 revert 放到暂存区，然后这时，需要手动对暂存区的这些 revert 内容进行一次提交，那么有了这个提交，就方便我们以后撤销这次回滚了。</p>
+<p>3、二者的区别：<br>git reset 是把HEAD向后移动了一下<br>git revert 是HEAD继续前进，只是新的 commit 的内容和要 revert 的内容正好相反，能够抵消要被revert的内容</p>
+<h2 id="git-flow"><a href="#git-flow" class="headerlink" title="git-flow"></a>git-flow</h2><blockquote>
+<p>关于 git 工作流可以参考:<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">A successful Git branching model</a></p>
+</blockquote>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/git-model@2x.png" alt=""></p>
+<ul>
+<li>项目仓库中一般包含四大类分支：master, hotfix, dev, feature。<ul>
+<li>master 主分支，用于项目发布，一般不直接在此分支上进行开发，仅在发布时，将开发分支 dev 代码合并进行发布</li>
+<li>dev 开发分支，每一个版本开发代码都在要合并到此分支</li>
+<li>feature 特性分支，不同的开发人员负责不同的特性开发，每一个特性可以单独一个分支，在各自分支上进行开发，减少干扰；特性分支开发完成后，需要合并到开发分支 dev 中</li>
+<li>hotfix 热更新分支，用于线上 bug 的紧急修复或者某一个紧急功能的上线，从 master 上创建的分支</li>
+</ul>
+</li>
+<li>各个分支之间的 merge 和 rebase<ul>
+<li>从 dev 开发分支更新 feature 特性分支: rebase</li>
+<li>feature 特性分支合并到 dev 开发分支: merge</li>
+<li>从 dev / hotfix 合并到 master: merge</li>
+<li>远程分支到本地分支(例如: remote dev –&gt; local dev): git pull -r</li>
+</ul>
+</li>
+<li>merge 和 rebase 的区别是会产生一个 merge commit，而这也是区分何时使用 merge 和 rebase 的关键：<ul>
+<li>从特性分支到开发分支，需要用 merge，产生一个额外的 merge commit 方便回滚</li>
+<li>远程分支到本地分支，就必须要用 rebase，否则会产生多余的 merge commit，显然是不需要的，想想同一个分支怎么需要合并操作呢？</li>
+<li>我们常用的 git pull 其实是包含着两个操作 git fetch + git merge</li>
+</ul>
+</li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>1、<strong>丢弃工作区 workspace 的修改</strong><br><code>git clean</code> removes all untracked files and <code>git checkout</code> clears all unstaged changes.<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git clean -df</div><div class="line">git checkout <span class="comment">-- .</span></div></pre></td></tr></table></figure></p>
+<p>2、<strong>撤销最后一个提交(last commit)</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 直接干掉最后一个<span class="keyword">commit</span>不留痕迹</div><div class="line">git <span class="keyword">reset</span> <span class="comment">--hard HEAD~1</span></div><div class="line">// 撤销最后一个<span class="keyword">commit</span>，并将该<span class="keyword">commit</span>中的变化保留在 workspace 工作区</div><div class="line">git <span class="keyword">reset</span> <span class="keyword">HEAD</span>~<span class="number">1</span></div><div class="line">// 撤销最后一个<span class="keyword">commit</span>，并将该<span class="keyword">commit</span>中的变化保留在 <span class="keyword">index</span> 暂存区</div><div class="line">git <span class="keyword">reset</span> <span class="comment">--soft HEAD~1</span></div></pre></td></tr></table></figure></p>
+<p><a href="http://stackoverflow.com/questions/927358/how-to-undo-last-commits-in-git" target="_blank" rel="external">参考链接</a><br>3、<strong>取消暂存区 index 中的变更</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 取消暂存区的某个文件（xxx：文件名）</div><div class="line">git <span class="keyword">reset</span> <span class="keyword">HEAD</span> xxx</div><div class="line">// 取消暂存区中的所有变更</div><div class="line">git <span class="keyword">reset</span> <span class="keyword">HEAD</span> .</div></pre></td></tr></table></figure></p>
+<p>4、<strong>取消工作区 workspace 中的变更</strong><br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 取消工作区中的某个文件（xxx：文件名）</div><div class="line">git checkout <span class="comment">-- xxx</span><span class="comment"></span></div><div class="line">// 取消工作区中的所有变更</div><div class="line">git checkout <span class="comment">-- .</span></div></pre></td></tr></table></figure></p>
+<p>5、<strong>删除远程分支</strong><br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin <span class="symbol">:branch-name</span></div></pre></td></tr></table></figure></p>
+<p>冒号前面的空格不能少，原理是把一个空分支push到server上，相当于删除该分支。<br>6、<strong>学习链接</strong><br><a href="https://github.com/521xueweihan/git-tips#%E8%81%94%E7%B3%BB%E6%88%91" target="_blank" rel="external">Git的奇技淫巧</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag">#Git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/22/js-enumerable/" rel="next" title="JS 属性的可枚举性">
+                <i class="fa fa-chevron-left"></i> JS 属性的可枚举性
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/25/git-tips/"
+     data-title="Git 的常用命令和技能"
+     data-content=""
+     data-url="http://objcer.com/2017/02/25/git-tips/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/25/git-tips/"
+           data-title="Git 的常用命令和技能" data-url="http://objcer.com/2017/02/25/git-tips/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.png"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git基础"><span class="nav-number">1.</span> <span class="nav-text">Git基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stash-储藏"><span class="nav-number">2.</span> <span class="nav-text">stash 储藏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-stash"><span class="nav-number">2.1.</span> <span class="nav-text">git stash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stash-的一些操作"><span class="nav-number">2.2.</span> <span class="nav-text">stash 的一些操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tag-标签"><span class="nav-number">3.</span> <span class="nav-text">tag 标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-revert-和-git-reset"><span class="nav-number">4.</span> <span class="nav-text">git revert 和 git reset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-flow"><span class="nav-number">5.</span> <span class="nav-text">git-flow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"objcer"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
