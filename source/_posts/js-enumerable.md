@@ -1,6 +1,6 @@
 title: JS 属性的可枚举性
 date: 2017-02-22 17:56:58
-tags: [枚举, enumerable, 实例属性, 原型属性]
+tags: [枚举, enumerable, 属性描述符, 实例属性, 原型属性]
 categories: JS
 ---
 
@@ -8,6 +8,50 @@ categories: JS
 可枚举属性是指那些内部 “可枚举” 标志（`enumerable`）设置为 `true` 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 `true`，对于通过 `Object.defineProperty` ，`Object.create` 等定义的属性，该标识值默认为 `false`。可枚举的属性可以通过 `for...in` 循环进行遍历（除非该属性名是一个 `Symbol`）。
 
 <!-- more -->
+
+## 属性描述符(Properties' descriptor)
+一个属性描述符是一个记录，由下面属性当中的某些组成的：
+- value // 该属性的值(仅针对数据属性描述符有效)
+- writable // 当且仅当属性的值可以被改变时为true。(仅针对数据属性描述有效)
+- configurable // 当且仅当指定对象的属性描述可以被改变或者属性可被删除时，为true。
+- enumerable // 当且仅当指定对象的属性可以被枚举出时，为 true。
+- get // 获取该属性的访问器函数（getter）。如果没有访问器， 该值为undefined。(仅针对包含访问器或设置器的属性描述有效)
+- set // 获取该属性的设置器函数（setter）。 如果没有设置器， 该值为undefined。(仅针对包含访问器或设置器的属性描述有效)
+
+如下两个方法在添加属性时，都可以指定属性描述符
+- `Object.create(proto, [ propertiesObject ])` 方法创建一个拥有指定原型和若干个指定属性的对象。
+- `Object.defineProperties(obj, props)` 方法在一个对象上添加或修改一个或者多个自有属性，并返回该对象。
+
+```
+var obj = Object.create(Object.prototype, {
+    a: {
+        configurable: true,
+        enumerable: true,
+        value: 1,
+        writable: true
+    }
+})
+
+Object.defineProperties(obj, {
+    b: {
+        configurable: true,
+        enumerable: true,
+        value: 2,
+        writable: true
+    }
+})
+```
+通过 `Object.getOwnPropertyDescriptor(obj, prop)` 方法可以返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性，也即是实例属性）
+```
+Object.getOwnPropertyDescriptor( obj , 'a' )
+// 输出：
+{
+    configurable:true
+    enumerable:true
+    value:1
+    writable:true
+}
+```
 
 ## 可枚举性 `enumerable`
 可枚举性（`enumerable`）用来控制所描述的属性。具体来说，如果一个属性的 `enumerable` 为 `false`，下面三个操作不会取到该属性。
