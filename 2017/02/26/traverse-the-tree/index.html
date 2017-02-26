@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="hexo," />
+  <meta name="keywords" content="递归遍历,非递归深度优先遍历,非递归广度优先遍历," />
 
 
 
@@ -84,22 +84,18 @@
 
 
 
-<meta name="description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
-
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
+<meta name="description" content="本文回顾一下遍历树的几种方式：递归遍历，非递归深度优先遍历，非递归广度优先遍历。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="你好，博客">
-<meta property="og:url" content="http://objcer.com/2016/07/16/hello-blog/index.html">
+<meta property="og:title" content="JS 中遍历树">
+<meta property="og:url" content="http://objcer.com/2017/02/26/traverse-the-tree/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
-
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
-<meta property="og:updated_time" content="2016-11-05T12:50:10.000Z">
+<meta property="og:description" content="本文回顾一下遍历树的几种方式：递归遍历，非递归深度优先遍历，非递归广度优先遍历。">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/D0A39C6C-2A93-4E2D-8FFD-C209BD563C69.png">
+<meta property="og:updated_time" content="2017-02-26T08:49:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="你好，博客">
-<meta name="twitter:description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
-
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
+<meta name="twitter:title" content="JS 中遍历树">
+<meta name="twitter:description" content="本文回顾一下遍历树的几种方式：递归遍历，非递归深度优先遍历，非递归广度优先遍历。">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/D0A39C6C-2A93-4E2D-8FFD-C209BD563C69.png">
 
 
 
@@ -120,10 +116,10 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
 
 
 
-  <link rel="canonical" href="http://objcer.com/2016/07/16/hello-blog/"/>
+  <link rel="canonical" href="http://objcer.com/2017/02/26/traverse-the-tree/"/>
 
 
-  <title> 你好，博客 | Deng's Blog </title>
+  <title> JS 中遍历树 | Deng's Blog </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -245,7 +241,7 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
             
             
               
-                你好，博客
+                JS 中遍历树
               
             
           </h1>
@@ -257,8 +253,8 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-16T16:14:51+08:00" content="2016-07-16">
-              2016-07-16
+            <time itemprop="dateCreated" datetime="2017-02-26T16:43:46+08:00" content="2017-02-26">
+              2017-02-26
             </time>
           </span>
 
@@ -271,8 +267,8 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/博客/" itemprop="url" rel="index">
-                    <span itemprop="name">博客</span>
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
                   </a>
                 </span>
 
@@ -287,8 +283,8 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/16/hello-blog/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/16/hello-blog/" itemprop="commentsCount"></span>
+                <a href="/2017/02/26/traverse-the-tree/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/26/traverse-the-tree/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -298,7 +294,7 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
 
           
           
-             <span id="/2016/07/16/hello-blog/" class="leancloud_visitors" data-flag-title="你好，博客">
+             <span id="/2017/02/26/traverse-the-tree/" class="leancloud_visitors" data-flag-title="JS 中遍历树">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -320,24 +316,15 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
       
 
       
-        <p> 本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。</p>
-<blockquote>
-<p><strong>TL;DR</strong><br>1、采用 <a href="https://hexo.io/zh-cn/" target="_blank" rel="external">Hexo</a> 作为博客框架<br>2、采用 <a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Next</a> 作为博客主题<br>3、使用 <a href="http://www.qiniu.com/" target="_blank" rel="external">七牛云存储</a> 作为图床，存放图片<br>4、使用 <a href="http://duoshuo.com/" target="_blank" rel="external">多说</a> 作为评论系统<br>5、使用 <a href="https://swiftype.com/" target="_blank" rel="external">Swiftype</a> 作为站内搜索 [<strong>已经失效🙄</strong>]<br>6、使用 <a href="https://leancloud.cn/" target="_blank" rel="external">leancloud</a> 为文章阅读次数统计</p>
-</blockquote>
+        <p>本文回顾一下遍历树的几种方式：递归遍历，非递归深度优先遍历，非递归广度优先遍历。</p>
 <a id="more"></a>
-<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p>1、命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 创建文章</span></div><div class="line">hexo new <span class="string">"My New Post"</span></div><div class="line"></div><div class="line"><span class="comment"># 启动服务器</span></div><div class="line">hexo server</div><div class="line"></div><div class="line"><span class="comment"># 部署</span></div><div class="line">hexo clean</div><div class="line">hexo generate</div><div class="line">hexo deploy</div></pre></td></tr></table></figure></p>
-<p>2、有关部署<br>本博客是托管在 Github 上 <a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a> 所以是通过 Git 的方式部署的。根据 Hexo 文档的介绍，需要先安装一个 package<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="keyword">install</span> hexo-deployer-git <span class="comment">--save</span></div></pre></td></tr></table></figure></p>
-<p>然后修改配置：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">deploy:</span></div><div class="line"><span class="symbol">  type:</span> git</div><div class="line"><span class="symbol">  repo:</span> <span class="params">&lt;repository url&gt;</span></div><div class="line"><span class="symbol">  branch:</span> [branch]</div></pre></td></tr></table></figure></p>
-<p>3、自定义域名</p>
-<ul>
-<li>DNS: 添加两个 A records: 192.30.252.153  192.30.252.154</li>
-<li>CNAME 文件，这文件需要放在部署文件的根目录，即 <code>public</code> 目录下。由于每次部署都需要重新生成该目录文件，那么这个文件要放到什么位置呢？<strong>这个文件需要放在 hexo folder/source文件夹根目录下</strong>。</li>
-</ul>
-<p>4、关于文章分类和标签<br>在其他系统中，分类和标签听起来很接近，但是在 Hexo 中两者有着明显的差别：分类具有顺序性和层次性，也就是说 Foo, Bar 不等于 Bar, Foo；而标签没有顺序和层次。<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">categories:</div><div class="line">  - Diary</div><div class="line"><span class="keyword">tags:</span></div><div class="line">  - tag1</div><div class="line">  - tag2</div></pre></td></tr></table></figure></p>
-<p>5、关于<a href="https://hexo.io/zh-cn/docs/writing.html" target="_blank" rel="external">创建文章</a><br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo <span class="keyword">new</span> [layout] &lt;<span class="built_in">title</span>&gt;</div></pre></td></tr></table></figure></p>
-<p>通过以上命令既可以创建一篇文章，其中 <code>layout</code> 只可以指定文章布局，包括 <code>post</code>、<code>page</code> 和 <code>draft</code>（默认是 <code>post</code>），分别对应不同的保存路径，其中需要留意的是 <code>post</code> 和 <code>draft</code>。其中前者会将文章进行展示发布，而后者只是草稿，并不进行展示。那么我们可以在编辑文章时，处于 <code>draft</code> 状态，在编辑完成后，需要发布时，才置为 <code>post</code> 状态。具体操作参考如下命令：<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># 创建一篇草稿</span></div><div class="line">hexo <span class="keyword">new</span> draft test-draft</div><div class="line"></div><div class="line"><span class="meta"># 通过 publish 命令将 draft 文章转换为 post 文章</span></div><div class="line">hexo publish draft test-draft</div><div class="line"></div><div class="line"><span class="meta"># 预览时添加 --draft 参数用于查看草稿文章</span></div><div class="line">hexo server --draft</div></pre></td></tr></table></figure></p>
-<h3 id="第三方服务集成"><a href="#第三方服务集成" class="headerlink" title="第三方服务集成"></a>第三方服务集成</h3><p>有关第三方服务在 Next 文档中有详细的介绍: <a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="external">第三方服务集成</a></p>
-<h3 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h3><p><a href="http://notes.iissnan.com/" target="_blank" rel="external">Next 作者博客</a></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/D0A39C6C-2A93-4E2D-8FFD-C209BD563C69.png" alt=""><br>如上图，在 JavaScript 中可以用 object 表示如下：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">let tree = &#123;</div><div class="line"><span class="symbol">    value:</span> <span class="number">0</span>,</div><div class="line"><span class="symbol">    children:</span> [&#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">11</span>,</div><div class="line"><span class="symbol">        children:</span> [&#123;</div><div class="line"><span class="symbol">        	value:</span> <span class="number">21</span>,</div><div class="line"><span class="symbol">        	children:</span> [&#123;</div><div class="line"><span class="symbol">        		value:</span> <span class="number">31</span>,</div><div class="line"><span class="symbol">        		children:</span> []</div><div class="line">        	&#125;, &#123;</div><div class="line"><span class="symbol">        		value:</span> <span class="number">32</span>,</div><div class="line"><span class="symbol">        		children:</span> []</div><div class="line">        	&#125;, &#123;</div><div class="line"><span class="symbol">        		value:</span> <span class="number">33</span>,</div><div class="line"><span class="symbol">        		children:</span> []</div><div class="line">        	&#125;]</div><div class="line">        &#125;, &#123;</div><div class="line"><span class="symbol">        	value:</span> <span class="number">22</span>,</div><div class="line"><span class="symbol">        	children:</span> []</div><div class="line">        &#125;]</div><div class="line">    &#125;, &#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">12</span>,</div><div class="line"><span class="symbol">        children:</span> [&#123;</div><div class="line"><span class="symbol">        	value:</span> <span class="number">23</span>,</div><div class="line"><span class="symbol">        	children:</span> []</div><div class="line">        &#125;, &#123;</div><div class="line"><span class="symbol">        	value:</span> <span class="number">24</span>,</div><div class="line"><span class="symbol">        	children:</span> []</div><div class="line">        &#125;]</div><div class="line">    &#125;, &#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">13</span>,</div><div class="line"><span class="symbol">        children:</span> []</div><div class="line">    &#125;]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="递归遍历"><a href="#递归遍历" class="headerlink" title="递归遍历"></a>递归遍历</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var recursiveTraverse = function (<span class="keyword">node</span><span class="title">, action</span>) &#123;</div><div class="line">	if (!<span class="keyword">node</span> <span class="title">|| !node</span>.children) &#123; return; &#125;</div><div class="line">	action(<span class="keyword">node</span>.<span class="title">value</span>);</div><div class="line">	<span class="keyword">node</span>.<span class="title">children</span>.forEach(function(item, index) &#123;</div><div class="line">		recursiveTraverse(item, action);</div><div class="line">	&#125;);</div><div class="line">&#125;</div><div class="line">// 递归实现</div><div class="line">recursiveTraverse(tree, console.log);</div></pre></td></tr></table></figure>
+<p>输出结果：<br>0<br>11<br>21<br>31<br>32<br>33<br>22<br>12<br>23<br>24<br>13</p>
+<h2 id="非递归深度优先遍历（借助栈实现）"><a href="#非递归深度优先遍历（借助栈实现）" class="headerlink" title="非递归深度优先遍历（借助栈实现）"></a>非递归深度优先遍历（借助栈实现）</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> nonRecursiveDepthFirstTraversal = <span class="function"><span class="keyword">function</span> (<span class="params">node, action</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (!node || !node.children) &#123; <span class="keyword">return</span>; &#125;</div><div class="line">	<span class="keyword">var</span> _stack = []; <span class="comment">// 借助一个栈</span></div><div class="line">	_stack.unshift(node);</div><div class="line"></div><div class="line">	<span class="keyword">while</span> (_stack.length) &#123;</div><div class="line">		<span class="keyword">let</span> _curNode = _stack.shift(); <span class="comment">// 推出栈顶元素</span></div><div class="line">		action(_curNode.value);</div><div class="line">		<span class="comment">// 将子节点依次放入到栈顶</span></div><div class="line">		<span class="comment">// _curNode.children.forEach(function (item, index) &#123;</span></div><div class="line">		<span class="comment">// 	_stack.unshift(item);</span></div><div class="line">		<span class="comment">// &#125;)</span></div><div class="line">		<span class="keyword">if</span> (_curNode.children.length) &#123;</div><div class="line">			_stack = _curNode.children.concat(_stack);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 非递归深度优先遍历</span></div><div class="line">nonRecursiveDepthFirstTraversal(tree, <span class="built_in">console</span>.log);</div></pre></td></tr></table></figure>
+<p>输出结果：<br>0<br>11<br>21<br>31<br>32<br>33<br>22<br>12<br>23<br>24<br>13</p>
+<h2 id="非递归广度优先遍历（借助队列实现）"><a href="#非递归广度优先遍历（借助队列实现）" class="headerlink" title="非递归广度优先遍历（借助队列实现）"></a>非递归广度优先遍历（借助队列实现）</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> nonRecursiveWidthFirstTraversal = <span class="function"><span class="keyword">function</span> (<span class="params">node, action</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (!node || !node.children) &#123; <span class="keyword">return</span>; &#125;</div><div class="line">	<span class="keyword">var</span> _queue = []; <span class="comment">// 借助一个队列</span></div><div class="line">	_queue.push(node);</div><div class="line">	<span class="keyword">while</span> (_queue.length) &#123;</div><div class="line">		<span class="keyword">let</span> _curNode = _queue.shift(); <span class="comment">// 推出队头元素</span></div><div class="line">		action(_curNode.value);</div><div class="line">		<span class="comment">// 将子节点依次推入队列中</span></div><div class="line">		<span class="comment">// _curNode.children.forEach(function (item, index) &#123;</span></div><div class="line">		<span class="comment">// 	_queue.push(item);</span></div><div class="line">		<span class="comment">// &#125;)</span></div><div class="line">		<span class="keyword">if</span> (_curNode.children.length) &#123;</div><div class="line">			_queue = _queue.concat(_curNode.children);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 非递归宽度优先遍历</span></div><div class="line">nonRecursiveWidthFirstTraversal(tree, <span class="built_in">console</span>.log);</div></pre></td></tr></table></figure>
+<p>输出结果：<br>0<br>11<br>12<br>13<br>21<br>22<br>23<br>24<br>31<br>32<br>33</p>
 
       
     </div>
@@ -360,7 +347,11 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag">#hexo</a>
+            <a href="/tags/递归遍历/" rel="tag">#递归遍历</a>
+          
+            <a href="/tags/非递归深度优先遍历/" rel="tag">#非递归深度优先遍历</a>
+          
+            <a href="/tags/非递归广度优先遍历/" rel="tag">#非递归广度优先遍历</a>
           
         </div>
       
@@ -369,13 +360,13 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/02/26/js-pass-by-value-or-by-reference/" rel="next" title="JS中是 pass by value 还是 pass by reference🤔">
+                <i class="fa fa-chevron-left"></i> JS中是 pass by value 还是 pass by reference🤔
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/25/DNS-Prefetching/" rel="prev" title="DNS Prefetching">
-                DNS Prefetching <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -390,10 +381,10 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/07/16/hello-blog/"
-     data-title="你好，博客"
+        <div class="ds-share flat" data-thread-key="2017/02/26/traverse-the-tree/"
+     data-title="JS 中遍历树"
      data-content=""
-     data-url="http://objcer.com/2016/07/16/hello-blog/">
+     data-url="http://objcer.com/2017/02/26/traverse-the-tree/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -420,8 +411,8 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/16/hello-blog/"
-           data-title="你好，博客" data-url="http://objcer.com/2016/07/16/hello-blog/">
+      <div class="ds-thread" data-thread-key="2017/02/26/traverse-the-tree/"
+           data-title="JS 中遍历树" data-url="http://objcer.com/2017/02/26/traverse-the-tree/">
       </div>
     
   </div>
@@ -541,7 +532,7 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo"><span class="nav-number">1.</span> <span class="nav-text">Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三方服务集成"><span class="nav-number">2.</span> <span class="nav-text">第三方服务集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#友情链接"><span class="nav-number">3.</span> <span class="nav-text">友情链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#递归遍历"><span class="nav-number">1.</span> <span class="nav-text">递归遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非递归深度优先遍历（借助栈实现）"><span class="nav-number">2.</span> <span class="nav-text">非递归深度优先遍历（借助栈实现）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非递归广度优先遍历（借助队列实现）"><span class="nav-number">3.</span> <span class="nav-text">非递归广度优先遍历（借助队列实现）</span></a></li></ol></div>
             
           </div>
         </section>
