@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="枚举,enumerable,实例属性,原型属性," />
+  <meta name="keywords" content="枚举,enumerable,属性描述符,实例属性,原型属性," />
 
 
 
@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://objcer.com/2017/02/22/js-enumerable/index.html">
 <meta property="og:site_name" content="Deng's Blog">
 <meta property="og:description" content="可枚举属性是指那些内部 “可枚举” 标志（enumerable）设置为 true 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 true，对于通过 Object.defineProperty ，Object.create 等定义的属性，该标识值默认为 false。可枚举的属性可以通过 for...in 循环进行遍历（除非该属性名是一个 Symbol）。">
-<meta property="og:updated_time" content="2017-02-22T09:59:26.000Z">
+<meta property="og:updated_time" content="2017-02-26T13:28:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS 属性的可枚举性">
 <meta name="twitter:description" content="可枚举属性是指那些内部 “可枚举” 标志（enumerable）设置为 true 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 true，对于通过 Object.defineProperty ，Object.create 等定义的属性，该标识值默认为 false。可枚举的属性可以通过 for...in 循环进行遍历（除非该属性名是一个 Symbol）。">
@@ -316,6 +316,22 @@
       
         <p>可枚举属性是指那些内部 “可枚举” 标志（<code>enumerable</code>）设置为 <code>true</code> 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 <code>true</code>，对于通过 <code>Object.defineProperty</code> ，<code>Object.create</code> 等定义的属性，该标识值默认为 <code>false</code>。可枚举的属性可以通过 <code>for...in</code> 循环进行遍历（除非该属性名是一个 <code>Symbol</code>）。</p>
 <a id="more"></a>
+<h2 id="属性描述符-Properties’-descriptor"><a href="#属性描述符-Properties’-descriptor" class="headerlink" title="属性描述符(Properties’ descriptor)"></a>属性描述符(Properties’ descriptor)</h2><p>一个属性描述符是一个记录，由下面属性当中的某些组成的：</p>
+<ul>
+<li>value // 该属性的值(仅针对数据属性描述符有效)</li>
+<li>writable // 当且仅当属性的值可以被改变时为true。(仅针对数据属性描述有效)</li>
+<li>configurable // 当且仅当指定对象的属性描述可以被改变或者属性可被删除时，为true。</li>
+<li>enumerable // 当且仅当指定对象的属性可以被枚举出时，为 true。</li>
+<li>get // 获取该属性的访问器函数（getter）。如果没有访问器， 该值为undefined。(仅针对包含访问器或设置器的属性描述有效)</li>
+<li>set // 获取该属性的设置器函数（setter）。 如果没有设置器， 该值为undefined。(仅针对包含访问器或设置器的属性描述有效)</li>
+</ul>
+<p>如下两个方法在添加属性时，都可以指定属性描述符</p>
+<ul>
+<li><code>Object.create(proto, [ propertiesObject ])</code> 方法创建一个拥有指定原型和若干个指定属性的对象。</li>
+<li><code>Object.defineProperties(obj, props)</code> 方法在一个对象上添加或修改一个或者多个自有属性，并返回该对象。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">var obj = Object.create(Object.prototype, &#123;</div><div class="line"><span class="attr">    a:</span> &#123;</div><div class="line"><span class="attr">        configurable:</span> <span class="literal">true</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span>,</div><div class="line"><span class="attr">        value:</span> <span class="number">1</span>,</div><div class="line"><span class="attr">        writable:</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">Object.defineProperties(obj, &#123;</div><div class="line"><span class="attr">    b:</span> &#123;</div><div class="line"><span class="attr">        configurable:</span> <span class="literal">true</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span>,</div><div class="line"><span class="attr">        value:</span> <span class="number">2</span>,</div><div class="line"><span class="attr">        writable:</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>通过 <code>Object.getOwnPropertyDescriptor(obj, prop)</code> 方法可以返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性，也即是实例属性）<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">Object</span><span class="selector-class">.getOwnPropertyDescriptor</span>( obj , <span class="string">'a'</span> )</div><div class="line"><span class="comment">// 输出：</span></div><div class="line">&#123;</div><div class="line">    <span class="attribute">configurable</span>:true</div><div class="line">    <span class="attribute">enumerable</span>:true</div><div class="line">    <span class="attribute">value</span>:<span class="number">1</span></div><div class="line">    <span class="attribute">writable</span>:true</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2 id="可枚举性-enumerable"><a href="#可枚举性-enumerable" class="headerlink" title="可枚举性 enumerable"></a>可枚举性 <code>enumerable</code></h2><p>可枚举性（<code>enumerable</code>）用来控制所描述的属性。具体来说，如果一个属性的 <code>enumerable</code> 为 <code>false</code>，下面三个操作不会取到该属性。</p>
 <ul>
 <li><code>for…in</code> 循环</li>
@@ -357,6 +373,8 @@
             <a href="/tags/枚举/" rel="tag">#枚举</a>
           
             <a href="/tags/enumerable/" rel="tag">#enumerable</a>
+          
+            <a href="/tags/属性描述符/" rel="tag">#属性描述符</a>
           
             <a href="/tags/实例属性/" rel="tag">#实例属性</a>
           
@@ -487,7 +505,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -545,7 +563,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#可枚举性-enumerable"><span class="nav-number">1.</span> <span class="nav-text">可枚举性 enumerable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型属性和实例属性"><span class="nav-number">2.</span> <span class="nav-text">原型属性和实例属性</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性描述符-Properties’-descriptor"><span class="nav-number">1.</span> <span class="nav-text">属性描述符(Properties’ descriptor)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可枚举性-enumerable"><span class="nav-number">2.</span> <span class="nav-text">可枚举性 enumerable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型属性和实例属性"><span class="nav-number">3.</span> <span class="nav-text">原型属性和实例属性</span></a></li></ol></div>
             
           </div>
         </section>
