@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="在 JavaScript 中函数传参是传值还是传引用呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。">
+<meta name="description" content="在 JavaScript 中是传值(pass by value)还是传引用(pass by reference)呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS中传参是 pass by value 还是 pass by reference🤔">
+<meta property="og:title" content="JS中是 pass by value 还是 pass by reference🤔">
 <meta property="og:url" content="http://objcer.com/2017/02/26/js-pass-by-value-or-by-reference/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="在 JavaScript 中函数传参是传值还是传引用呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。">
-<meta property="og:updated_time" content="2017-02-26T06:04:46.000Z">
+<meta property="og:description" content="在 JavaScript 中是传值(pass by value)还是传引用(pass by reference)呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。">
+<meta property="og:updated_time" content="2017-02-26T07:42:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JS中传参是 pass by value 还是 pass by reference🤔">
-<meta name="twitter:description" content="在 JavaScript 中函数传参是传值还是传引用呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。">
+<meta name="twitter:title" content="JS中是 pass by value 还是 pass by reference🤔">
+<meta name="twitter:description" content="在 JavaScript 中是传值(pass by value)还是传引用(pass by reference)呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。">
 
 
 
@@ -117,7 +117,7 @@
   <link rel="canonical" href="http://objcer.com/2017/02/26/js-pass-by-value-or-by-reference/"/>
 
 
-  <title> JS中传参是 pass by value 还是 pass by reference🤔 | Deng's Blog </title>
+  <title> JS中是 pass by value 还是 pass by reference🤔 | Deng's Blog </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +239,7 @@
             
             
               
-                JS中传参是 pass by value 还是 pass by reference🤔
+                JS中是 pass by value 还是 pass by reference🤔
               
             
           </h1>
@@ -292,7 +292,7 @@
 
           
           
-             <span id="/2017/02/26/js-pass-by-value-or-by-reference/" class="leancloud_visitors" data-flag-title="JS中传参是 pass by value 还是 pass by reference🤔">
+             <span id="/2017/02/26/js-pass-by-value-or-by-reference/" class="leancloud_visitors" data-flag-title="JS中是 pass by value 还是 pass by reference🤔">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -314,15 +314,15 @@
       
 
       
-        <p>在 JavaScript 中函数传参是传值还是传引用呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。</p>
+        <p>在 JavaScript 中是传值(pass by value)还是传引用(pass by reference)呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。</p>
 <a id="more"></a>
 <h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">changeStuff</span>(<span class="params">a, b, c</span>)</span></div><div class="line">&#123;</div><div class="line">  a = a * <span class="number">10</span>;</div><div class="line">  b.item = <span class="string">"changed"</span>;</div><div class="line">  c = &#123;<span class="attr">item</span>: <span class="string">"changed"</span>&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> num = <span class="number">10</span>;</div><div class="line"><span class="keyword">var</span> obj1 = &#123;<span class="attr">item</span>: <span class="string">"unchanged"</span>&#125;;</div><div class="line"><span class="keyword">var</span> obj2 = &#123;<span class="attr">item</span>: <span class="string">"unchanged"</span>&#125;;</div><div class="line"></div><div class="line">changeStuff(num, obj1, obj2);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(num); <span class="comment">// 10</span></div><div class="line"><span class="built_in">console</span>.log(obj1.item); <span class="comment">// changed</span></div><div class="line"><span class="built_in">console</span>.log(obj2.item); <span class="comment">// unchanged</span></div></pre></td></tr></table></figure>
 <p>假设：</p>
 <ul>
-<li>如果 JS 中传参仅仅是 pass by value，那么例子中，修改 <code>b.item</code> 就不会导致函数外 <code>obj1</code> 发生变化；</li>
-<li>如果 JS 中传参仅仅是 pass by reference，那么例子中，修改参数 <code>a</code> 也会生效，变量 <code>num</code> 就会变成 100；还有 <code>obj2.item</code> 也会变成 <code>changed</code>；</li>
+<li>如果 JS 中是 pass by value，那么例子中，修改 <code>b.item</code> 就不会导致函数外 <code>obj1</code> 发生变化；</li>
+<li>如果 JS 中是 pass by reference，那么例子中，修改参数 <code>a</code> 也会生效，变量 <code>num</code> 就会变成 100；还有 <code>obj2.item</code> 也会变成 <code>changed</code>；</li>
 </ul>
-<p><strong>那么 JS 中传参是哪种方式呢？答案是 pass by value，只不过对于引用类型，传递的 value 是其引用 reference。技术上，称之为 <a href="https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing" target="_blank" rel="external">call-by-sharing</a></strong></p>
+<p><strong>那么 JS 中到底是传值还是传引用呢？答案是 pass by value，只不过对于引用类型，传递的 value 是其引用 reference。技术上，称之为 <a href="https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing" target="_blank" rel="external">call-by-sharing</a></strong></p>
 <p>那么对于这个例子，这么解释就通了，<br>1、对于参数 <code>a</code> 传递的是原始类型，单纯的传递 value，所以，函数 <code>changeStuff</code> 中即使对其进行了修改，也不会影响函数外的 <code>num</code><br>2、对于参数 <code>b</code>, <code>c</code> 传递的是引用类型，那么就是传递了其引用，也即是 <code>b</code> 和 <code>obj1</code> 都指向了 <code>{item: &quot;unchanged&quot;}</code>，<code>c</code> 和 <code>obj2</code> 也是如此</p>
 <ul>
 <li><code>b.item = &quot;changed&quot;;</code> 是修改了其指向对象的的某一个属性，那么<code>b</code> 和 <code>obj1</code> 都同时指向的对象就发生变化，变成了 <code>{item: &quot;changed&quot;}</code></li>
@@ -396,7 +396,7 @@
     <div class="post-spread">
       
         <div class="ds-share flat" data-thread-key="2017/02/26/js-pass-by-value-or-by-reference/"
-     data-title="JS中传参是 pass by value 还是 pass by reference🤔"
+     data-title="JS中是 pass by value 还是 pass by reference🤔"
      data-content=""
      data-url="http://objcer.com/2017/02/26/js-pass-by-value-or-by-reference/">
   <div class="ds-share-inline">
@@ -426,7 +426,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2017/02/26/js-pass-by-value-or-by-reference/"
-           data-title="JS中传参是 pass by value 还是 pass by reference🤔" data-url="http://objcer.com/2017/02/26/js-pass-by-value-or-by-reference/">
+           data-title="JS中是 pass by value 还是 pass by reference🤔" data-url="http://objcer.com/2017/02/26/js-pass-by-value-or-by-reference/">
       </div>
     
   </div>
