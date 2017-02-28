@@ -4,6 +4,7 @@ tags: [深拷贝(deep clone), 浅拷贝(shallow clone)]
 categories: JS
 ---
 
+本文将对 JS 中的浅拷贝和深拷贝进行详细探究，并给出浅拷贝和深拷贝的各自实现方法。👊
 
 <!-- more -->
 
