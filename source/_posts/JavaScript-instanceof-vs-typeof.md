@@ -45,11 +45,24 @@ var arr = [], obj = {};
 Object.prototype.toString.call(arr) === '[object Array]' // true
 Object.prototype.toString.call(obj) === '[object Object]' // true
 ```
-- `instanceof`
+- ❗️~~`instanceof`~~
+**注意：** 使用 `instanceof` 判断时要特别注意：
 ```
 var arr = [], obj = {};
+// 以下两行代码都是返回 true
 arr instanceof Array // true
+arr instanceof Object // true
+
 obj instanceof Object // true
+
+// 判断是 `Array` 类型
+function _isArray(arr) {
+    return arr instanceof Array;
+}
+// 判断是 `Object` 类型
+function _isObject(obj) {
+    return obj instanceof Object && !(obj instanceof Array);
+}
 ```
 
 3、对正则表达式字面量的类型判断在某些浏览器中不符合标准：
