@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Array," />
+  <meta name="keywords" content="void 0,javascript:void(0)," />
 
 
 
@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="问题描述：将一个数组的所有元素 push 到另一个数组中123456var a = [1, 2, 3],    b = [4, 5, 6];==&amp;gt;a = [1, 2, 3, 4, 5, 6]或者得到一个新的数组c = [1, 2, 3, 4, 5, 6]">
+<meta name="description" content="或许我们都在代码中见到过 void 0 和 javascript:void(0)，这两个到底是什么含义呢？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Push array values into another array">
-<meta property="og:url" content="http://objcer.com/2016/12/05/push-array-values-into-another-array/index.html">
+<meta property="og:title" content="关于 'void 0' 和 'javascript:void(0)'❓">
+<meta property="og:url" content="http://objcer.com/2017/03/12/What-does-void-0-mean/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="问题描述：将一个数组的所有元素 push 到另一个数组中123456var a = [1, 2, 3],    b = [4, 5, 6];==&amp;gt;a = [1, 2, 3, 4, 5, 6]或者得到一个新的数组c = [1, 2, 3, 4, 5, 6]">
-<meta property="og:updated_time" content="2016-12-05T10:59:52.000Z">
+<meta property="og:description" content="或许我们都在代码中见到过 void 0 和 javascript:void(0)，这两个到底是什么含义呢？">
+<meta property="og:updated_time" content="2017-03-11T16:57:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Push array values into another array">
-<meta name="twitter:description" content="问题描述：将一个数组的所有元素 push 到另一个数组中123456var a = [1, 2, 3],    b = [4, 5, 6];==&amp;gt;a = [1, 2, 3, 4, 5, 6]或者得到一个新的数组c = [1, 2, 3, 4, 5, 6]">
+<meta name="twitter:title" content="关于 'void 0' 和 'javascript:void(0)'❓">
+<meta name="twitter:description" content="或许我们都在代码中见到过 void 0 和 javascript:void(0)，这两个到底是什么含义呢？">
 
 
 
@@ -114,10 +114,10 @@
 
 
 
-  <link rel="canonical" href="http://objcer.com/2016/12/05/push-array-values-into-another-array/"/>
+  <link rel="canonical" href="http://objcer.com/2017/03/12/What-does-void-0-mean/"/>
 
 
-  <title> Push array values into another array | Deng's Blog </title>
+  <title> 关于 'void 0' 和 'javascript:void(0)'❓ | Deng's Blog </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +239,7 @@
             
             
               
-                Push array values into another array
+                关于 'void 0' 和 'javascript:void(0)'❓
               
             
           </h1>
@@ -251,8 +251,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-12-05T17:51:31+08:00" content="2016-12-05">
-              2016-12-05
+            <time itemprop="dateCreated" datetime="2017-03-12T00:55:34+08:00" content="2017-03-12">
+              2017-03-12
             </time>
           </span>
 
@@ -281,8 +281,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/12/05/push-array-values-into-another-array/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/05/push-array-values-into-another-array/" itemprop="commentsCount"></span>
+                <a href="/2017/03/12/What-does-void-0-mean/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/12/What-does-void-0-mean/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -292,7 +292,7 @@
 
           
           
-             <span id="/2016/12/05/push-array-values-into-another-array/" class="leancloud_visitors" data-flag-title="Push array values into another array">
+             <span id="/2017/03/12/What-does-void-0-mean/" class="leancloud_visitors" data-flag-title="关于 'void 0' 和 'javascript:void(0)'❓">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -314,20 +314,28 @@
       
 
       
-        <blockquote>
-<p>问题描述：将一个数组的所有元素 push 到另一个数组中<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">==&gt;</div><div class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</div><div class="line">或者得到一个新的数组</div><div class="line">c = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</div></pre></td></tr></table></figure></p>
+        <p>或许我们都在代码中见到过 <code>void 0</code> 和 <code>javascript:void(0)</code>，这两个到底是什么含义呢？<br><a id="more"></a></p>
+<h2 id="void-0"><a href="#void-0" class="headerlink" title="void 0"></a><code>void 0</code></h2><p><code>void</code> 运算符会对给定的表达式进行求值，然后直接返回 undefined。<br><em>语法：</em><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> expression</div></pre></td></tr></table></figure></p>
+<p><em>例如：</em><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> <span class="number">0</span></div><div class="line"><span class="keyword">void</span> (<span class="number">0</span>)</div><div class="line"><span class="keyword">void</span> <span class="string">"hello"</span></div><div class="line"><span class="keyword">void</span> (<span class="keyword">new</span> <span class="built_in">Date</span>())</div><div class="line"><span class="comment">//all will return undefined</span></div></pre></td></tr></table></figure></p>
+<p>这似乎看起来没有什么用处，因为如果我们需要返回 <code>undefined</code>，那我们直接使用 <code>undefined</code> 就好了嘛。</p>
+<blockquote>
+<p>The global undefined property represents the primitive value undefined. It is one of JavaScript’s primitive types.</p>
 </blockquote>
-<a id="more"></a>
-<h2 id="方式一：使用-ES6-的-spread-operator-特性"><a href="#方式一：使用-ES6-的-spread-operator-特性" class="headerlink" title="方式一：使用 ES6 的 spread operator 特性"></a>方式一：使用 ES6 的 <code>spread operator</code> 特性</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">	b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">a.push(...b);</div><div class="line">console.log(a) <span class="comment">// a = [1, 2, 3, 4, 5, 6]</span></div></pre></td></tr></table></figure>
-<p>上面这段代码经过 babel 编译后，变成：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">a.push.apply(a, b);</div></pre></td></tr></table></figure></p>
-<p>所以，如果不想用 <code>spread operator</code> ES6 这个新的特性的话，也可以如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line"></div><div class="line">a.push.apply(a, b);</div><div class="line"><span class="comment">// 或者</span></div><div class="line">Array.prototype.push.apply(a, b);</div></pre></td></tr></table></figure></p>
-<h2 id="方式二：使用-concat-方法"><a href="#方式二：使用-concat-方法" class="headerlink" title="方式二：使用 concat 方法"></a>方式二：使用 <code>concat</code> 方法</h2><blockquote>
-<p>The concat() method is used to merge two or more arrays. This method does not change the existing arrays, but instead returns a new array.(合并两个或者数组，返回一个新的结果数组)<br><strong>Syntax</strong><br>var new_array = old_array.concat(value1[, value2[, …[, valueN]]])<br><strong>Parameters</strong><br>valueN: Arrays and/or values to concatenate into a new array.</p>
-</blockquote>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line"></div><div class="line">var c = a.concat(b);</div><div class="line"><span class="comment">// 或者</span></div><div class="line">var c = [].concat(a, b);</div><div class="line"></div><div class="line">console.log(c) <span class="comment">// c = [1, 2, 3, 4, 5, 6]</span></div></pre></td></tr></table></figure>
-<h2 id="方式三：使用数组构造函数-Array-constructor"><a href="#方式三：使用数组构造函数-Array-constructor" class="headerlink" title="方式三：使用数组构造函数 Array constructor"></a>方式三：使用数组构造函数 <code>Array constructor</code></h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">var c = [</div><div class="line">        ...a,</div><div class="line">        ...b</div><div class="line">    ];</div><div class="line"><span class="comment">//或者</span></div><div class="line">var c = new Array(...a, ...b);</div></pre></td></tr></table></figure>
-<p>上面这段代码经过 babel 编译后，变成：</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">    b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</div><div class="line">var c = [].concat(a, b);</div></pre></td></tr></table></figure>
+<p>没错，对于正常情况下，直接使用 <code>undefined</code> 比 <code>void 0</code> 更加简单而且浅显易懂；但是在 JavaScript 中有一点比较特殊：<code>undefined</code> 并不是保留关键字，它只是一个全局属性，也就是说 <code>undefined</code> 只是一个变量名而已，我们也可以对它进行赋值：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">alert(<span class="built_in">window</span>.hasOwnProperty(<span class="string">'undefined'</span>)); <span class="comment">// alerts "true"</span></div><div class="line"></div><div class="line">alert(<span class="literal">undefined</span>); <span class="comment">//alerts "undefined"</span></div><div class="line"><span class="keyword">var</span> <span class="literal">undefined</span> = <span class="string">"new value"</span>;</div><div class="line">alert(<span class="literal">undefined</span>) <span class="comment">// alerts "new value"</span></div></pre></td></tr></table></figure></p>
+<p>注意：这种情况已经得到改善了，现代浏览器中，<code>undefined</code> 作为全局属性只是可读（read-only），但是在局部作用域中，还是可以对其进行再赋值：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> <span class="literal">undefined</span> = <span class="string">'hello'</span>;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'---'</span>, <span class="literal">undefined</span>) <span class="comment">// --- hello</span></div><div class="line">&#125;</div><div class="line">test();</div></pre></td></tr></table></figure></p>
+<p>由于 <code>undefined</code> 值可能并不是 <code>undefined</code> 的问题，所以 <code>void 0</code> 就凸显作用了，<code>void 0</code> 使用返回 <code>undefined</code></p>
+<p>那么为什么会是 <code>void 0</code> 呢？能不能是 <code>void 100</code>，<code>void 200</code>，<code>void &quot;hello&quot;</code> 这些呢？当然也是可以的，如果你喜欢的话，使用 <code>void 0</code> 的好处是 0 简短且符合编程语言习惯。</p>
+<h2 id="javascript-void-0"><a href="#javascript-void-0" class="headerlink" title="javascript:void(0)"></a><code>javascript:void(0)</code></h2><p>在 <code>a</code> 标签（超链接）中，我们可能经常会遇到这种情况：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:void(0);"</span> &gt;</span>test<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>当用户点击一个以 javascript: URI 时，浏览器会对冒号后面的代码进行求值，例如：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:void(document.body.style.backgroundColor='green');"</span>&gt;</span></div><div class="line">  点击这个链接会让页面背景变成绿色。</div><div class="line"><span class="tag">&lt;/<span class="name">a</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>而 <code>void(0)</code> 始终返回  <code>undefined</code>，所以 <code>&lt;a href=&quot;javascript:void(0);&quot; &gt;test&lt;/a&gt;</code> 就创建了一个死超链接，点击后，不会发生任何事情。</p>
+<p><strong>注意</strong>，虽然这么做是可行的，但利用 javascript: 伪协议来执行 JavaScript 代码是不推荐的。</p>
+<p>如果想要一个链接点击后不做任何事情，或者响应点击而完成其他事情，可以设置其属性 href = “#”，然后绑定 <code>onclick</code> 事件，这样会有一个问题，就是当页面有滚动条时，点击后会返回到页面顶端，用户体验不好；当然有解决方法，我们可以在 <code>onclick</code> 事件中返回 <code>false</code> 即可。<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">a</span> href=<span class="string">"#"</span> onclick=<span class="string">"return false;"</span>&gt;test&lt;/<span class="keyword">a</span>&gt;<span class="comment"></span></div><div class="line">// 等价于</div><div class="line">&lt;<span class="keyword">a</span> href=<span class="string">"javascript:void(0);"</span> &gt;test&lt;/<span class="keyword">a</span>&gt;</div></pre></td></tr></table></figure></p>
+<p><code>href=&quot;javascript:void(0)&quot;</code> 与 <code>href=&quot;#&quot;</code> 的区别：</p>
+<ul>
+<li><code>javascript:void(0)</code> 仅仅表示一个死链接。</li>
+<li><code>#</code> 包含了一个位置信息，默认的锚是 <code>#top</code>，也就是网页的上端。在页面很长的时候会使用 <code>#</code> 来定位页面的具体位置，格式为：<code># + id</code>。</li>
+</ul>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://stackoverflow.com/questions/7452341/what-does-void-0-mean" target="_blank" rel="external">What does ‘void 0’ mean?</a><br><a href="http://stackoverflow.com/questions/1291942/what-does-javascriptvoid0-mean" target="_blank" rel="external">What does ‘javascript:void(0)’ mean?</a></p>
 
       
     </div>
@@ -350,7 +358,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Array/" rel="tag">#Array</a>
+            <a href="/tags/void-0/" rel="tag">#void 0</a>
+          
+            <a href="/tags/javascript-void-0/" rel="tag">#javascript:void(0)</a>
           
         </div>
       
@@ -359,17 +369,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/06/Debouncing-and-Throttling/" rel="next" title="Debouncing and Throttling ">
-                <i class="fa fa-chevron-left"></i> Debouncing and Throttling 
+              <a href="/2017/03/11/implement-the-array-map-reduce-filter-find-method/" rel="next" title="实现 map, reduce, filter, find 方法">
+                <i class="fa fa-chevron-left"></i> 实现 map, reduce, filter, find 方法
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/02/17/JS-Inheritance-Prototype/" rel="prev" title="JS继承与原型链">
-                JS继承与原型链 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -384,10 +390,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2016/12/05/push-array-values-into-another-array/"
-     data-title="Push array values into another array"
+        <div class="ds-share flat" data-thread-key="2017/03/12/What-does-void-0-mean/"
+     data-title="关于 'void 0' 和 'javascript:void(0)'❓"
      data-content=""
-     data-url="http://objcer.com/2016/12/05/push-array-values-into-another-array/">
+     data-url="http://objcer.com/2017/03/12/What-does-void-0-mean/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -414,8 +420,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/05/push-array-values-into-another-array/"
-           data-title="Push array values into another array" data-url="http://objcer.com/2016/12/05/push-array-values-into-another-array/">
+      <div class="ds-thread" data-thread-key="2017/03/12/What-does-void-0-mean/"
+           data-title="关于 'void 0' 和 'javascript:void(0)'❓" data-url="http://objcer.com/2017/03/12/What-does-void-0-mean/">
       </div>
     
   </div>
@@ -535,7 +541,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#方式一：使用-ES6-的-spread-operator-特性"><span class="nav-number">1.</span> <span class="nav-text">方式一：使用 ES6 的 spread operator 特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方式二：使用-concat-方法"><span class="nav-number">2.</span> <span class="nav-text">方式二：使用 concat 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方式三：使用数组构造函数-Array-constructor"><span class="nav-number">3.</span> <span class="nav-text">方式三：使用数组构造函数 Array constructor</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#void-0"><span class="nav-number">1.</span> <span class="nav-text">void 0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#javascript-void-0"><span class="nav-number">2.</span> <span class="nav-text">javascript:void(0)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
             
           </div>
         </section>
