@@ -255,6 +255,7 @@ Array.prototype._find = function(callback /*, thisArg*/) {
 }
 ```
 
+> 其中 `void 0` 可参考: [关于 'void 0' 和 'javascript:void(0)'❓](http://objcer.com/2017/03/12/What-does-void-0-mean/)
 
 
 
