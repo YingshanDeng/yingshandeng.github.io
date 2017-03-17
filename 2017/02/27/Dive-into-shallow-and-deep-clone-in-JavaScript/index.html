@@ -354,7 +354,7 @@
 </ul>
 <p>1、循环引用<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var o = &#123;</div><div class="line">    a: <span class="string">'a'</span>,</div><div class="line">    <span class="function"><span class="keyword">sub</span>: </span>&#123;</div><div class="line">        b: <span class="string">'b'</span></div><div class="line">    &#125;,</div><div class="line">    sub2: &#123;</div><div class="line">        c: <span class="string">'c'</span></div><div class="line">    &#125;</div><div class="line">&#125; ;</div><div class="line"></div><div class="line">o.loop = o ;</div></pre></td></tr></table></figure></p>
 <p>如上代码中，对象 <code>o</code> 有一个 <code>loop</code> 属性值执行自身，就构成了循环引用。此时通过上述的 <code>naiveDeepCopy</code> 方法深拷贝对象 <code>o</code>，由于没有循环引用的检测，就会 <code>o.loop.loop.loop.loop.loop...</code> 一直递归遍历下去，直到栈溢出。<br>所以在深拷贝方法中，必须对是否存在循环引用进行检测。</p>
-<p>2、闭包作用域<br>看一下如下代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myConstructor</span>(<span class="params"></span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">var</span> myPrivateVar = <span class="string">'secret'</span> ;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">myPublicVar</span>: <span class="string">'public!'</span> ,</div><div class="line">        <span class="attr">getMyPrivateVar</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> myPrivateVar ;</div><div class="line">        &#125; ,</div><div class="line">        setMyPrivateVar( value ) &#123;</div><div class="line">            myPrivateVar = value.toString() ;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> o = myContructor() ;</div></pre></td></tr></table></figure></p>
+<p>2、闭包作用域<br>看一下如下代码：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myConstructor</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">var</span> myPrivateVar = <span class="string">'secret'</span> ;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        myPublicVar: <span class="string">'public!'</span> ,</div><div class="line">        getMyPrivateVar: <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> myPrivateVar ;</div><div class="line">        &#125; ,</div><div class="line">        setMyPrivateVar( value ) &#123;</div><div class="line">            myPrivateVar = value.toString() ;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> o = myContructor() ;</div></pre></td></tr></table></figure></p>
 <p>对象 <code>o</code> 有三个属性，一个是字符串，另外两个是方法。方法中用到一个变量 <code>myPrivateVar</code>，存在于 <code>myConstructor()</code> 的函数作用域中，当 <code>myConstructor</code> 构造函数调用时，就创建了这个变量 <code>myPrivateVar</code>，然而这个变量并不是通过构造函数创建的对象 <code>o</code> 的属性，但是它任然可以被这两个方法使用。</p>
 <p>因此，如果尝试深拷贝对象 <code>o</code>，那么拷贝对象 <code>clone</code> 和被拷贝对象 <code>original</code> 中的方法都是引用相同的 <code>myPrivateVar</code> 变量。</p>
 <p>但是，由于并没有方式改变闭包的作用域，所以这种模式创建的对象不能正常深拷贝是可以接受的。</p>
@@ -514,7 +514,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -522,7 +522,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -531,7 +531,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

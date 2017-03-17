@@ -338,7 +338,7 @@ JS 中实现对象的监听目前主要有以下">
 <a id="more"></a>
 <h2 id="脏检查（dirty-check）"><a href="#脏检查（dirty-check）" class="headerlink" title="脏检查（dirty check）"></a>脏检查（dirty check）</h2><p>通过一个例子来阐述脏检查的原理：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> provider = &#123;</div><div class="line">  message: <span class="string">'Hello World'</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> consumer = <span class="built_in">document</span>.createElement(<span class="string">'p'</span>)</div><div class="line"></div><div class="line">observe(provider, <span class="string">'message'</span>, message =&gt; &#123;</div><div class="line">  consumer.innerHTML = message</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
 <p>定义一个 <code>provider</code> 对象作为生产者，DOM 节点 <code>consumer</code> 作为消费者，通过监听，生产者数据的变更会反映到消费者上，这样也就简单的实现了数据绑定，即生产者数据绑定到了消费者上。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span> (<span class="params">provider, prop, handler</span>) </span>&#123;</div><div class="line">  provider._handlers[prop] = handler</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span> <span class="params">(provider, prop, handler)</span> </span>&#123;</div><div class="line">  provider._handlers[prop] = handler</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>而其中监听函数 <code>observe</code> 只是将对某一个属性的监听回调 <code>handler</code> 保存起来，方便在该属性值发生变化时，执行该回调。</p>
 <p>接下来就是监听变化过程了，脏检查之所以称之为<em>脏</em>，是因为其不是直接监听属性是否发生了变更，而是通过一个循环检查，不断的遍历检查对象前后是否发生了变化，若是，则调用会回调函数 <code>handler</code>。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">digest</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  providers.forEach(digestProvider)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">digestProvider</span> (<span class="params">provider</span>) </span>&#123;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> provider._handlers) &#123;</div><div class="line">    <span class="keyword">if</span> (provider._prevValues[prop] !== provider[prop]) &#123;</div><div class="line">      provider._prevValues[prop] = provider[prop]</div><div class="line">      handler(provider[prop])</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>所以对于 <code>digest</code> 方法就需要循环进行调用，譬如使用 <code>setInterval</code> 或者 <code>requestAnimationFrame</code> 方法，显然这个过程会对性能产生影响，当监听的对象越来越多时尤其明显。</p>
@@ -512,7 +512,7 @@ JS 中实现对象的监听目前主要有以下">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -520,7 +520,7 @@ JS 中实现对象的监听目前主要有以下">
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -529,7 +529,7 @@ JS 中实现对象的监听目前主要有以下">
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
