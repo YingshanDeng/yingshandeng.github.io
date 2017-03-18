@@ -209,7 +209,19 @@ git checkout -- .
 git push origin :branch-name
 ```
 冒号前面的空格不能少，原理是把一个空分支push到server上，相当于删除该分支。
-6、**学习链接**
+6、**git cherry-pick**
+使用 `git cherry-pick` 命令可以把某个分支上的一个或者几个 commit 合并到另一个分支上
+```
+// 提取一个 commit
+git cherry-pick [commitID]
+
+// 提取一个 commit 到另一个 commit 之间的所有的 commit，不包括start-commitID，包括end-commitID
+git cherry-pick [start-commitID]..[end-commitID]
+
+// 提取一个 commit 到另一个 commit 之间的所有的 commit，既包括start-commitID，也包括end-commitID
+git cherry-pick start-commitID]^..[end-commitID]
+```
+7、**学习链接**
 [Git的奇技淫巧](https://github.com/521xueweihan/git-tips#%E8%81%94%E7%B3%BB%E6%88%91)
 
 
