@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="border-radius," />
+  <meta name="keywords" content="transition-timing-function," />
 
 
 
@@ -84,26 +84,30 @@
 
 
 
-<meta name="description" content="border-radius 用来设置边框圆角。当使用一个半径时确定一个圆形；当使用两个半径时确定一个椭圆，这个(椭)圆与边框的交集形成圆角效果。
-对于 border-radius 属性，我们最常见就是设置一个参数：123border-radius: 50px;// 或者border-radius: 50%;
-而这种用法其实就是为四个角都指定了相同的圆角半径，然而对于 border-radius 其">
+<meta name="description" content="在 CSS Animation 属性中可以设置和动画有关的参数，其中 transition-timing-function 是规定动画执行的速度曲线，常见的取值有两个：①步进函数 ②三次贝塞尔曲线
+
+Timing functions are either defined as a stepping function or a cubic Bézier curve.
+
+(W3C)The ‘trans">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于 CSS border-radius">
-<meta property="og:url" content="http://objcer.com/2017/03/17/css-border-radius/index.html">
+<meta property="og:title" content="关于 CSS transition-timing-function">
+<meta property="og:url" content="http://objcer.com/2017/03/18/css-transition-timing-function/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="border-radius 用来设置边框圆角。当使用一个半径时确定一个圆形；当使用两个半径时确定一个椭圆，这个(椭)圆与边框的交集形成圆角效果。
-对于 border-radius 属性，我们最常见就是设置一个参数：123border-radius: 50px;// 或者border-radius: 50%;
-而这种用法其实就是为四个角都指定了相同的圆角半径，然而对于 border-radius 其">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/FC08A931-6DE4-4CE0-A6F8-4F1B523E2007.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/33F068D3-6BC7-4EE1-94BD-1B83632382FA.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/D6EBFB3B-41B5-4249-84C6-5F1773F8C480.png">
-<meta property="og:updated_time" content="2017-03-17T15:07:38.000Z">
+<meta property="og:description" content="在 CSS Animation 属性中可以设置和动画有关的参数，其中 transition-timing-function 是规定动画执行的速度曲线，常见的取值有两个：①步进函数 ②三次贝塞尔曲线
+
+Timing functions are either defined as a stepping function or a cubic Bézier curve.
+
+(W3C)The ‘trans">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/step.png">
+<meta property="og:updated_time" content="2017-03-18T08:50:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于 CSS border-radius">
-<meta name="twitter:description" content="border-radius 用来设置边框圆角。当使用一个半径时确定一个圆形；当使用两个半径时确定一个椭圆，这个(椭)圆与边框的交集形成圆角效果。
-对于 border-radius 属性，我们最常见就是设置一个参数：123border-radius: 50px;// 或者border-radius: 50%;
-而这种用法其实就是为四个角都指定了相同的圆角半径，然而对于 border-radius 其">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/FC08A931-6DE4-4CE0-A6F8-4F1B523E2007.png">
+<meta name="twitter:title" content="关于 CSS transition-timing-function">
+<meta name="twitter:description" content="在 CSS Animation 属性中可以设置和动画有关的参数，其中 transition-timing-function 是规定动画执行的速度曲线，常见的取值有两个：①步进函数 ②三次贝塞尔曲线
+
+Timing functions are either defined as a stepping function or a cubic Bézier curve.
+
+(W3C)The ‘trans">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/step.png">
 
 
 
@@ -124,10 +128,10 @@
 
 
 
-  <link rel="canonical" href="http://objcer.com/2017/03/17/css-border-radius/"/>
+  <link rel="canonical" href="http://objcer.com/2017/03/18/css-transition-timing-function/"/>
 
 
-  <title> 关于 CSS border-radius | Deng's Blog </title>
+  <title> 关于 CSS transition-timing-function | Deng's Blog </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -249,7 +253,7 @@
             
             
               
-                关于 CSS border-radius
+                关于 CSS transition-timing-function
               
             
           </h1>
@@ -261,8 +265,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-17T21:46:43+08:00" content="2017-03-17">
-              2017-03-17
+            <time itemprop="dateCreated" datetime="2017-03-18T16:48:37+08:00" content="2017-03-18">
+              2017-03-18
             </time>
           </span>
 
@@ -291,8 +295,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/03/17/css-border-radius/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/17/css-border-radius/" itemprop="commentsCount"></span>
+                <a href="/2017/03/18/css-transition-timing-function/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/18/css-transition-timing-function/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -302,7 +306,7 @@
 
           
           
-             <span id="/2017/03/17/css-border-radius/" class="leancloud_visitors" data-flag-title="关于 CSS border-radius">
+             <span id="/2017/03/18/css-transition-timing-function/" class="leancloud_visitors" data-flag-title="关于 CSS transition-timing-function">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -324,27 +328,24 @@
       
 
       
-        <p><code>border-radius</code> 用来设置边框圆角。当使用一个半径时确定一个圆形；当使用两个半径时确定一个椭圆，这个(椭)圆与边框的交集形成圆角效果。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/FC08A931-6DE4-4CE0-A6F8-4F1B523E2007.png" alt=""></p>
-<p>对于 <code>border-radius</code> 属性，我们最常见就是设置一个参数：<br><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">border-radius</span>: <span class="number">50px</span>;</div><div class="line"><span class="comment">// 或者</span></div><div class="line"><span class="attribute">border-radius</span>: <span class="number">50%</span>;</div></pre></td></tr></table></figure></p>
-<p>而这种用法其实就是为四个角都指定了相同的圆角半径，然而对于 <code>border-radius</code> 其实有更加灵活的用法，可以分别设置四个角不同的圆角效果。</p>
-<a id="more"></a>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><code>border-radius</code> 是一个简写属性，分别设置了：</p>
+        <p>在 CSS Animation 属性中可以设置和动画有关的参数，其中 transition-timing-function 是规定动画执行的速度曲线，常见的取值有两个：①步进函数 ②三次贝塞尔曲线</p>
+<blockquote>
+<p>Timing functions are either defined as a stepping function or a cubic Bézier curve.</p>
+</blockquote>
+<p><a href="https://www.w3.org/TR/2012/WD-css3-transitions-20120403/#transition-timing-function-property" target="_blank" rel="external">(W3C)The ‘transition-timing-function’ Property</a><br><a id="more"></a></p>
+<p>平时使用过程中，大多都是用 linear ease ease-in ease-out ease-in-out cubic-bezier(n,n,n,n) 这几个参数，这些方式过渡动画，会在每个关键帧之间插入补间动画，所以看起来动画的效果是平滑连贯的。</p>
+<p>例如：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// html</span></div><div class="line">&lt;<span class="selector-tag">div</span> class=<span class="string">"box"</span>&gt;&lt;/div&gt;</div><div class="line"><span class="comment">// css</span></div><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">	<span class="attribute">position</span>: absolute;</div><div class="line">	<span class="attribute">left</span>: <span class="number">0px</span>;</div><div class="line">	<span class="attribute">width</span>: <span class="number">150px</span>;</div><div class="line">	<span class="attribute">height</span>: <span class="number">150px</span>;</div><div class="line">	<span class="attribute">background</span>: gray;</div><div class="line">	<span class="attribute">animation</span>: move <span class="number">2s</span> linear forwards;</div><div class="line">&#125;</div><div class="line">@keyframes move &#123;</div><div class="line">	<span class="number">0%</span> &#123;</div><div class="line">		<span class="attribute">left</span>: <span class="number">0px</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="number">100%</span> &#123;</div><div class="line">		<span class="attribute">left</span>: <span class="number">600px</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>该例子中，div 节点就会匀速从左向右移动。</p>
+<p>然而对于有些动画效果是不需要连贯的，只需要在关键帧之间跳跃，称之为逐帧动画；这个时候就应该使用 steps 方式过渡，可以指定的参数包括：<code>step-start | step-end | steps(&lt;integer&gt;[, [ start | end ] ]?)</code></p>
 <ul>
-<li>border-top-left-radius</li>
-<li>border-top-right-radius</li>
-<li>border-bottom-right-radius</li>
-<li>border-bottom-left-radius</li>
+<li><code>steps(&lt;integer&gt;[, [ start | end ] ]?)</code> 可以传入两个参数，第一个是大于0的整数，它是将间隔动画，也即是<strong>两个关键帧</strong>，等分成指定数目的小间隔动画；第二个参数，可以接受 start 和 end 两个值，指定在每个间隔的终点或是起点发生阶跃变化，默认为 end</li>
+<li><code>step-start</code> 等同于 <code>steps(1,start)</code>：动画分成1步，动画执行时以 <strong>间隔终点</strong> 为起点开始变化；</li>
+<li><code>step-end</code> 等同于 <code>steps(1,end)</code>：动画分成一步，动画执行时以 <strong>间隔起点</strong> 为起点开始变化。</li>
 </ul>
-<p>1、<code>border-radius</code> 可以分别指定1，2，3，4个值，值的类型可以是 length 或者 percentage。</p>
-<ul>
-<li>指定一个值：四个角都设定相同的圆角值</li>
-<li>指定两个值：参数一指定 top-left 和 bottom-right；参数二指定 top-right 和 bottom-left</li>
-<li>指定三个值：参数一指定 top-left；参数二指定 top-right 和 bottom-left；参数三指定 bottom-right</li>
-<li>指定四个值：四个参数分别指定 top-left，top-right，bottom-right，bottom-left（顺时针方向）</li>
-</ul>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/33F068D3-6BC7-4EE1-94BD-1B83632382FA.png" alt=""></p>
-<p>2、<code>border-radius</code> 可以为圆角指定两个半径，上述我们谈到的都是指定了一个圆角半径，那么就是一个正圆形；而指定两个半径，那么就是一个椭圆形。用法是通过一个斜线分割开，斜线左方是 x 轴方向的半径，右方是 y 轴方向的半径。当然，斜线左右两侧可以分别指定 1，2，3，4 个参数，所以有较多的组合。<br>例如：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/D6EBFB3B-41B5-4249-84C6-5F1773F8C480.png" alt=""></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius" target="_blank" rel="external">MDN border-radius</a></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/step.png" alt=""></p>
+<p>例如：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// html</span></div><div class="line">&lt;<span class="selector-tag">div</span> class=<span class="string">"box"</span>&gt;&lt;/div&gt;</div><div class="line"><span class="comment">// css</span></div><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">	<span class="attribute">position</span>: absolute;</div><div class="line">	<span class="attribute">left</span>: <span class="number">0px</span>;</div><div class="line">	<span class="attribute">width</span>: <span class="number">150px</span>;</div><div class="line">	<span class="attribute">height</span>: <span class="number">150px</span>;</div><div class="line">	<span class="attribute">background</span>: gray;</div><div class="line">	<span class="attribute">animation</span>: move <span class="number">2s</span> steps(<span class="number">2</span>, start) forwards;</div><div class="line">&#125;</div><div class="line">@keyframes move &#123;</div><div class="line">	<span class="number">0%</span> &#123;</div><div class="line">		<span class="attribute">left</span>: <span class="number">0px</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="number">100%</span> &#123;</div><div class="line">		<span class="attribute">left</span>: <span class="number">600px</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>该例子中，div 节点移动变化：<code>300px --&gt; 600px</code>。如果修改成 <code>animation: move 2s steps(2, end) forwards;</code>，那么 div 节点移动变化：<code>0px --&gt; 300px --&gt; 600px</code></p>
+<p>逐帧动画例子可以参考: <a href="http://www.jianshu.com/p/05c5a9b302d2" target="_blank" rel="external">css逐帧动画</a></p>
 
       
     </div>
@@ -367,7 +368,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/border-radius/" rel="tag">#border-radius</a>
+            <a href="/tags/transition-timing-function/" rel="tag">#transition-timing-function</a>
           
         </div>
       
@@ -376,17 +377,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/12/What-does-void-0-mean/" rel="next" title="关于 'void 0' 和 'javascript:void(0)'❓">
-                <i class="fa fa-chevron-left"></i> 关于 'void 0' 和 'javascript:void(0)'❓
+              <a href="/2017/03/17/css-border-radius/" rel="next" title="关于 CSS border-radius">
+                <i class="fa fa-chevron-left"></i> 关于 CSS border-radius
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/18/css-transition-timing-function/" rel="prev" title="关于 CSS transition-timing-function">
-                关于 CSS transition-timing-function <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -401,10 +398,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2017/03/17/css-border-radius/"
-     data-title="关于 CSS border-radius"
+        <div class="ds-share flat" data-thread-key="2017/03/18/css-transition-timing-function/"
+     data-title="关于 CSS transition-timing-function"
      data-content=""
-     data-url="http://objcer.com/2017/03/17/css-border-radius/">
+     data-url="http://objcer.com/2017/03/18/css-transition-timing-function/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -431,8 +428,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/03/17/css-border-radius/"
-           data-title="关于 CSS border-radius" data-url="http://objcer.com/2017/03/17/css-border-radius/">
+      <div class="ds-thread" data-thread-key="2017/03/18/css-transition-timing-function/"
+           data-title="关于 CSS transition-timing-function" data-url="http://objcer.com/2017/03/18/css-transition-timing-function/">
       </div>
     
   </div>
@@ -552,7 +549,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">2.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>
