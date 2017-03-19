@@ -1,0 +1,817 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="闭包," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="JS 中闭包是一种特殊的对象。 它由两部分构成：函数，以及创建该函数的环境。环境由闭包创建时在作用域中的任何局部变量组成。简单的理解：在一个函数中创建了另一个函数，也就创建了一个闭包。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="闭包（closures）">
+<meta property="og:url" content="http://objcer.com/2017/03/19/closures/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="JS 中闭包是一种特殊的对象。 它由两部分构成：函数，以及创建该函数的环境。环境由闭包创建时在作用域中的任何局部变量组成。简单的理解：在一个函数中创建了另一个函数，也就创建了一个闭包。">
+<meta property="og:updated_time" content="2017-03-19T13:59:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="闭包（closures）">
+<meta name="twitter:description" content="JS 中闭包是一种特殊的对象。 它由两部分构成：函数，以及创建该函数的环境。环境由闭包创建时在作用域中的任何局部变量组成。简单的理解：在一个函数中创建了另一个函数，也就创建了一个闭包。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/03/19/closures/"/>
+
+
+  <title> 闭包（closures） | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                闭包（closures）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-19T21:58:11+08:00" content="2017-03-19">
+              2017-03-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/19/closures/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/19/closures/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/19/closures/" class="leancloud_visitors" data-flag-title="闭包（closures）">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JS 中闭包是一种特殊的对象。 <strong>它由两部分构成：函数，以及创建该函数的环境。环境由闭包创建时在作用域中的任何局部变量组成。</strong>简单的理解：在一个函数中创建了另一个函数，也就创建了一个闭包。</p>
+<a id="more"></a>
+<p>👇下面将通过一些闭包使用例子来理解闭包这个概念。</p>
+<h2 id="闭包概念"><a href="#闭包概念" class="headerlink" title="闭包概念"></a>闭包概念</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> name = <span class="string">'Cony'</span>;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(name)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> displayName = init();</div><div class="line">displayName();</div></pre></td></tr></table></figure>
+<p>在这个例子中，<code>init</code> 函数执行后返回的匿名函数 <code>displayName</code> 就是一个闭包，由 <code>displayName</code> 函数和闭包创建时存在的 <code>Cony</code> 字符串形成。</p>
+<p>其中有两点需要注意：</p>
+<ul>
+<li>闭包可以获取引用到创建时所在环境的局部变量</li>
+<li><code>init</code> 函数执行后，其中的局部变量并不会马上被释放，所以在稍后闭包函数执行过程中可以被引用到（这一点可能和其他编程语言有点区别，例如C语言中，函数执行完毕，其中的局部变量就被释放了）</li>
+</ul>
+<h2 id="闭包引用创建环境中的局部变量"><a href="#闭包引用创建环境中的局部变量" class="headerlink" title="闭包引用创建环境中的局部变量"></a>闭包引用创建环境中的局部变量</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> num = <span class="number">12</span>;</div><div class="line">    <span class="keyword">var</span> log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(num)</div><div class="line">    &#125;</div><div class="line">    num ++;</div><div class="line">    <span class="keyword">return</span> log;</div><div class="line">&#125;</div><div class="line"></div><div class="line">init()(); <span class="comment">// 13</span></div></pre></td></tr></table></figure>
+<p>这个例子说明闭包函数在使用局部变量时是通过引用传递，而非值传递。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(num)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> num = <span class="number">12</span>;</div><div class="line">    <span class="keyword">return</span> log;</div><div class="line">&#125;</div><div class="line"></div><div class="line">init()(); <span class="comment">// 12</span></div></pre></td></tr></table></figure>
+<p>这个例子说明，闭包函数可以使用创建时所在环境的所有局部变量，即便是在其后声明定义的。</p>
+<blockquote>
+<p>这个例子中涉及 variable hoisting（变量提升），可以参考 <a href="https://bitsofco.de/variable-and-function-hoisting-in-es2015/" target="_blank" rel="external">Variable and Function Hoisting in ES2015</a></p>
+</blockquote>
+<h2 id="在循环中创建闭包"><a href="#在循环中创建闭包" class="headerlink" title="在循环中创建闭包"></a>在循环中创建闭包</h2><figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">buildList</span>(<span class="params">list</span>) </span>&#123;</div><div class="line">    <span class="built_in">var</span> result = [];</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">list</span>.length; i++) &#123;</div><div class="line">        <span class="built_in">var</span> item = <span class="string">'item'</span> + i;</div><div class="line">        result.push( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(item + <span class="string">' '</span> + <span class="built_in">list</span>[i])&#125; );</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">testList</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">var</span> fnlist = buildList([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]);</div><div class="line">    <span class="comment">// Using j only to help prevent confusion -- could use i.</span></div><div class="line">    <span class="keyword">for</span> (<span class="built_in">var</span> j = <span class="number">0</span>; j &lt; fnlist.length; j++) &#123;</div><div class="line">        fnlist[j]();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">testList()</div></pre></td></tr></table></figure>
+<p>这个例子中， <code>buildList</code> 函数接收一个数组，然后为每一个数组元素创建一个闭包函数，返回闭包函数数组。期望中，<code>testList</code> 函数执行后，输出：<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">item0 </span><span class="number">1</span></div><div class="line"><span class="keyword">item1 </span><span class="number">2</span></div><div class="line"><span class="keyword">item2 </span><span class="number">3</span></div></pre></td></tr></table></figure></p>
+<p>但是上面这段代码却重复输出3次：<code>item2 undefined</code>，这是为什么呢？🤔<br><em>分析一下：</em><br>在 <code>buildList</code> 函数中的 <code>for</code> 循环为 <code>result</code> 数组添加三个匿名函数，也就是闭包函数，这三个闭包函数创建时所在的环境相同，共享其中的局部变量（<code>item</code>，<code>i</code> 和 <code>list</code>）。值得注意的是，在函数 <code>buildList</code> 执行结束后， 局部变量 <code>item</code> 的值变成了 <code>item2</code>，<code>i</code> 的值已经变成 3，所以 <code>list[i]</code> 的值就是 <code>undefined</code>。所以在 <code>testList</code> 函数执行闭包函数 <code>fnlist[j]()</code> 时，每一次的输出结果都是相同的 <code>item2 undefined</code>。</p>
+<p>那么要如何修改，才能得到我们期望中的结果呢？方式有好多种，简单罗列两种。<br>1、使用 ES6 <code>let</code> 代替 <code>var</code><br><figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 在 buildList 函数中，将其中的两处 var 替换成 let</span></div><div class="line"><span class="keyword">for</span> (<span class="built_in">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">list</span>.length; i++) &#123;</div><div class="line">    <span class="built_in">var</span> item = <span class="string">'item'</span> + i;</div><div class="line">    result.push( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(item + <span class="string">' '</span> + <span class="built_in">list</span>[i])&#125; );</div><div class="line">&#125;</div><div class="line">--&gt;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="built_in">list</span>.length; i++) &#123;</div><div class="line">    <span class="keyword">let</span> item = <span class="string">'item'</span> + i;</div><div class="line">    result.push( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(item + <span class="string">' '</span> + <span class="built_in">list</span>[i])&#125; );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2、通过闭包解决<br><figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">buildList</span>(<span class="params">list</span>) </span>&#123;</div><div class="line">    <span class="built_in">var</span> result = [];</div><div class="line">    <span class="keyword">for</span> (<span class="built_in">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">list</span>.length; i++) &#123;</div><div class="line">        (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="built_in">var</span> index = i;</div><div class="line">            <span class="built_in">var</span> item = <span class="string">'item'</span> + index;</div><div class="line">            result.push( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="built_in">console</span>.log(item + <span class="string">' '</span> + <span class="built_in">list</span>[index])&#125; );</div><div class="line">        &#125;)();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们知道，闭包函数可以引用创建时所在环境的局部变量，这里通过闭包，<code>for</code> 循环中每一个闭包引用的 <code>index</code> 都不同，都是单独的，这样，代码就如我们预期的结果运行。</p>
+<h2 id="用闭包模拟私有属性和私有方法"><a href="#用闭包模拟私有属性和私有方法" class="headerlink" title="用闭包模拟私有属性和私有方法"></a>用闭包模拟私有属性和私有方法</h2><p>在 JS 中并不支持私有属性和方法，但是通过闭包可以模拟实现。通过闭包来定义公共接口，并隐藏私有方法和变量，这也称之为模块模式（module pattern）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Counter = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> privateCounter = <span class="number">0</span>;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">_changeBy</span>(<span class="params">val</span>) </span>&#123;</div><div class="line">        privateCounter += val;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="attr">increment</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            _changeBy(<span class="number">1</span>);</div><div class="line">        &#125;,</div><div class="line">        <span class="attr">decrement</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            _changeBy(<span class="number">-1</span>);</div><div class="line">        &#125;,</div><div class="line">        <span class="attr">value</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> privateCounter;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
+<p>其中 <code>privateCounter</code> 和 <code>_changeBy</code> 分别为私有变量和私有方法，无法通过 <code>Counter</code> 直接访问；而 <code>increment</code> <code>decrement</code> <code>value</code> 均为公共接口。</p>
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><p>在 <a href="http://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html" target="_blank" rel="external">学习Javascript闭包（Closure）</a> 这篇文章最后提到两个例子，引用到此处，以下两段代码分别输出什么，其中也涉及到 <code>this</code> 关键字的问题。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;</div><div class="line"><span class="keyword">var</span> object = &#123;</div><div class="line">    <span class="attr">name</span>: <span class="string">"My Object"</span>,</div><div class="line">    <span class="attr">getNameFunc</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">        &#125;</div><div class="line">        ;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(object.getNameFunc()());</div></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;</div><div class="line"><span class="keyword">var</span> object = &#123;</div><div class="line">    <span class="attr">name</span>: <span class="string">"My Object"</span>,</div><div class="line">    <span class="attr">getNameFunc</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> that.name;</div><div class="line">        &#125;</div><div class="line">        ;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(object.getNameFunc()());</div></pre></td></tr></table></figure>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://stackoverflow.com/questions/111102/how-do-javascript-closures-work?answertab=votes#tab-top" target="_blank" rel="external">JavaScript Closures for Beginners</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/闭包/" rel="tag">#闭包</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/18/css-transition-timing-function/" rel="next" title="关于 CSS transition-timing-function">
+                <i class="fa fa-chevron-left"></i> 关于 CSS transition-timing-function
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/19/closures/"
+     data-title="闭包（closures）"
+     data-content=""
+     data-url="http://objcer.com/2017/03/19/closures/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/19/closures/"
+           data-title="闭包（closures）" data-url="http://objcer.com/2017/03/19/closures/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包概念"><span class="nav-number">1.</span> <span class="nav-text">闭包概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包引用创建环境中的局部变量"><span class="nav-number">2.</span> <span class="nav-text">闭包引用创建环境中的局部变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在循环中创建闭包"><span class="nav-number">3.</span> <span class="nav-text">在循环中创建闭包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用闭包模拟私有属性和私有方法"><span class="nav-number">4.</span> <span class="nav-text">用闭包模拟私有属性和私有方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考题"><span class="nav-number">5.</span> <span class="nav-text">思考题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"objcer"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
