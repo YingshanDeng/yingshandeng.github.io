@@ -153,7 +153,6 @@ var object = {
         return function() {
             return this.name;
         }
-        ;
     }
 };
 console.log(object.getNameFunc()());
@@ -168,7 +167,6 @@ var object = {
         return function() {
             return that.name;
         }
-        ;
     }
 };
 console.log(object.getNameFunc()());
