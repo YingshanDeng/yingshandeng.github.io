@@ -1,0 +1,824 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="this," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="this 是 Javascript 语言的一个关键字。 它代表函数运行时，自动生成的一个内部对象，只能在函数内部使用。而这个内部对象 this 指向谁有时却让我们很困惑。在绝大多数情况下，函数的调用方式决定了 this 的值。this 不能在执行期间被赋值，在每次函数被调用时 this 的值也可能会不同。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="详解 javascript this 关键字">
+<meta property="og:url" content="http://objcer.com/2017/03/26/javascript-this-keyword/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="this 是 Javascript 语言的一个关键字。 它代表函数运行时，自动生成的一个内部对象，只能在函数内部使用。而这个内部对象 this 指向谁有时却让我们很困惑。在绝大多数情况下，函数的调用方式决定了 this 的值。this 不能在执行期间被赋值，在每次函数被调用时 this 的值也可能会不同。">
+<meta property="og:updated_time" content="2017-03-26T10:49:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="详解 javascript this 关键字">
+<meta name="twitter:description" content="this 是 Javascript 语言的一个关键字。 它代表函数运行时，自动生成的一个内部对象，只能在函数内部使用。而这个内部对象 this 指向谁有时却让我们很困惑。在绝大多数情况下，函数的调用方式决定了 this 的值。this 不能在执行期间被赋值，在每次函数被调用时 this 的值也可能会不同。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/03/26/javascript-this-keyword/"/>
+
+
+  <title> 详解 javascript this 关键字 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                详解 javascript this 关键字
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-26T17:02:09+08:00" content="2017-03-26">
+              2017-03-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/26/javascript-this-keyword/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/26/javascript-this-keyword/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/26/javascript-this-keyword/" class="leancloud_visitors" data-flag-title="详解 javascript this 关键字">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>this</code> 是 Javascript 语言的一个关键字。 它代表函数运行时，自动生成的一个内部对象，只能在函数内部使用。而这个内部对象 this 指向谁有时却让我们很困惑。在绝大多数情况下，函数的调用方式决定了 this 的值。this 不能在执行期间被赋值，在每次函数被调用时 this 的值也可能会不同。</p>
+<a id="more"></a>
+<h2 id="this-指向谁"><a href="#this-指向谁" class="headerlink" title="this 指向谁"></a>this 指向谁</h2><h3 id="Function-Invocation-Pattern"><a href="#Function-Invocation-Pattern" class="headerlink" title="Function Invocation Pattern"></a>Function Invocation Pattern</h3><p>诸如 <code>foo()</code> 的调用形式被称为 Function Invocation Pattern，是函数最直接的使用形式，注意这里的 foo 是作为单独的变量出现，而不是属性。在这种模式下，foo 函数体中的 this 永远为 Global 对象，在浏览器中就是 window 对象。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 例子1：</span></div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.a, <span class="keyword">this</span> === <span class="built_in">window</span>)</div><div class="line">&#125;</div><div class="line">foo() <span class="comment">// 1 true</span></div><div class="line"></div><div class="line"><span class="comment">// 例子2：</span></div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'foo: '</span>, <span class="keyword">this</span>.a, <span class="keyword">this</span> === <span class="built_in">window</span>)</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'bar: '</span>, <span class="keyword">this</span>.a, <span class="keyword">this</span> === <span class="built_in">window</span>)</div><div class="line">    &#125;</div><div class="line">    bar() <span class="comment">// bar:  1 true</span></div><div class="line">&#125;</div><div class="line">foo() <span class="comment">// foo:  1 true</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>需要注意的是：在严格模式(‘use strict’)中的默认的 this 不再是 window，而是 undefined.</p>
+</blockquote>
+<h3 id="Method-Invocation-Pattern"><a href="#Method-Invocation-Pattern" class="headerlink" title="Method Invocation Pattern"></a>Method Invocation Pattern</h3><p>诸如 <code>foo.bar()</code> 的调用形式被称为 Method Invocation Pattern，注意其特点是被调用的函数作为一个对象的属性出现，必然会有“.”或者“[]”这样的关键符号。在这种模式下，bar 函数体中的this永远为“.”或“[”前的那个对象，如下面例中就 <code>foo</code> 函数中 <code>this</code> 就是指向 <code>obj</code> 对象。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">a</span>: <span class="number">1</span>,</div><div class="line">    <span class="attr">foo</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.a, <span class="keyword">this</span> === obj) <span class="comment">// 1 true</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">obj.foo();</div></pre></td></tr></table></figure></p>
+<h3 id="Constructor-Pattern"><a href="#Constructor-Pattern" class="headerlink" title="Constructor Pattern"></a>Constructor Pattern</h3><p><code>new foo()</code> 这种形式的调用被称为 Constructor Pattern，其关键字 <code>new</code> 就很能说明问题，当一个函数被作为一个构造函数来使用（使用new关键字），它的 <code>this</code> 与即将被创建的新对象绑定。如下面例子中，<code>foo</code> 函数内部的 <code>this</code> 永远是 <code>new foo()</code> 返回的对象。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.a = <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> f = <span class="keyword">new</span> foo();</div><div class="line"><span class="built_in">console</span>.log(f.a) <span class="comment">// 1</span></div></pre></td></tr></table></figure></p>
+<h3 id="Apply-Pattern"><a href="#Apply-Pattern" class="headerlink" title="Apply Pattern"></a>Apply Pattern</h3><p><code>foo.call(thisObject)</code> 和 <code>foo.apply(thisObject)</code> 的形式被称为 Apply Pattern，使用了内置的 <code>call</code> 和 <code>apply</code> 函数。在这种模式下，<code>call</code> 和 <code>apply</code> 的第一个参数就是 <code>foo</code> 函数体内的 <code>this</code>，如果 <code>thisObject</code> 是 <code>null</code> 或 <code>undefined</code>，那么会变成 Global 对象。<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">(c, d)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.a + <span class="keyword">this</span>.b + c + d;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    a: <span class="number">1</span>,</div><div class="line">    b: <span class="number">2</span></div><div class="line">&#125;</div><div class="line">add.call(obj, <span class="number">3</span>) <span class="comment">// 6</span></div><div class="line">add.apply(obj, [<span class="number">3</span>, <span class="number">4</span>]) <span class="comment">// 10</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>this 对象只会在一个函数中需要确定，如果是在全局域下，this 永远为 Global 对象，在浏览器中通常就是 window 对象。<br>应用以上4种方式，确定一个函数是使用什么样的 Pattern 进行调用的，就能很容易确定 this 是什么。另外，this 是永远不会延作用域链或原型链出现一个“查找”的过程的，只会在函数调用时就可以完全确认。</p>
+</blockquote>
+<h3 id="常见例子"><a href="#常见例子" class="headerlink" title="常见例子"></a>常见例子</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">20</span>,</div><div class="line">    <span class="attr">f</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</div><div class="line">        <span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</div><div class="line">        &#125;</div><div class="line">        foo(); <span class="comment">// (2)</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">obj.f(); <span class="comment">// (1)</span></div></pre></td></tr></table></figure>
+<p>其中两处调用(1)、(2) 分别输出： 20、10；</p>
+<ul>
+<li>(1): <code>obj.f()</code> 调用，被调用的函数 <code>f</code> 作为 <code>obj</code> 对象的属性出现，属于 Method Invocation Pattern，<code>f</code> 函数内的 <code>this</code> 指向 <code>obj</code>, 所以 <code>f</code> 函数中输出 <code>this.x</code> 为20</li>
+<li>(2): <code>f</code> 函数中调用 <code>foo</code> 函数时是作为单独的变量出现，而非某个对象的属性，属于 Function Invocation Pattern，所以其中 <code>this</code> 指向全局变量 window, 输出 <code>this.x</code> 时找到全局变量中 <code>x</code> 的值 10，所以输出为 10</li>
+</ul>
+<p>那么如果也希望(2)处调用输出 20，要如何修改呢？👇<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">x</span>: <span class="number">20</span>,</div><div class="line">    <span class="attr">f</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</div><div class="line">        <span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">        <span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(that.x);</div><div class="line">        &#125;</div><div class="line">        foo(); <span class="comment">// (2)</span></div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">obj.f(); <span class="comment">// (1)</span></div></pre></td></tr></table></figure></p>
+<h2 id="bind-函数和箭头函数"><a href="#bind-函数和箭头函数" class="headerlink" title="bind 函数和箭头函数"></a>bind 函数和箭头函数</h2><h3 id="bind-函数"><a href="#bind-函数" class="headerlink" title="bind 函数"></a>bind 函数</h3><p>ES5 引入了 <code>bind</code> 方法来设置函数的 <code>this</code> 值，而不用考虑函数如何被调用的。调用 <code>f.bind(someObject)</code> 会创建一个与 f 具有相同函数体和作用域的函数，但是在这个新函数中，this 将永久地被绑定到了 bind 的第一个参数，无论这个函数是如何被调用的。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.a;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> bar = foo.bind(&#123;</div><div class="line">    <span class="attr">a</span>: <span class="string">'hello'</span></div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(bar()) <span class="comment">// hello</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">var</span> o = &#123;</div><div class="line">    <span class="attr">a</span>: <span class="string">'world'</span>,</div><div class="line">    <span class="attr">foo</span>: foo,</div><div class="line">    <span class="attr">bar</span>: bar</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(o.foo(), o.bar()) <span class="comment">// world hello</span></div></pre></td></tr></table></figure></p>
+<h3 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h3><p>箭头函数在设计中使用的是 Lexical this，即<strong>这个函数被创建时的所在环境的 this 就是函数内部的 this</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">printThis</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> print = <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="keyword">this</span>);</div><div class="line">    print();</div><div class="line">&#125;</div><div class="line">printThis.call([<span class="number">1</span>]); <span class="comment">// [1]</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">printThis</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> print = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>)</div><div class="line">    &#125;</div><div class="line">    print();</div><div class="line">&#125;</div><div class="line">printThis.call([<span class="number">1</span>]); <span class="comment">// window</span></div></pre></td></tr></table></figure>
+<h2 id="DOM事件处理函数中的-this"><a href="#DOM事件处理函数中的-this" class="headerlink" title="DOM事件处理函数中的 this"></a>DOM事件处理函数中的 this</h2><p>为 DOM 元素添加事件处理函数大致有以下两种方式：</p>
+<h3 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h3><p><code>element.onclick = doSomething;</code>，函数被用作事件处理函数时，它的this指向触发事件的元素<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">'btn1'</span>&gt;</span>click me! btn1<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">'btn2'</span>&gt;</span>click me! btn2<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">clickHandler</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.id)</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> btn1Element = <span class="built_in">document</span>.getElementById(<span class="string">'btn1'</span>),</div><div class="line">	btn2Element = <span class="built_in">document</span>.getElementById(<span class="string">'btn2'</span>);</div><div class="line">btn1Element.onclick = clickHandler;</div><div class="line">btn2Element.onclick = clickHandler;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>在这个例子中，点击 button 之后，会执行其 <code>onclick</code> 事件回调函数 <code>clickHandler</code>，执行时，函数中的 <code>this</code> 都会指向触发事件的 button 元素（<code>onclick</code> 是 button 元素的一个属性）</p>
+<h3 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h3><p><code>&lt;element onclick=&quot;doSomething()&quot;&gt;</code>，在内联事件处理函数中的 <code>this</code>，并不指向触发事件的元素<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">'btn1'</span> <span class="attr">onclick</span>=<span class="string">"clickHandler()"</span>&gt;</span>click me! btn1<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">'btn2'</span> <span class="attr">onclick</span>=<span class="string">"clickHandler()"</span>&gt;</span>click me! btn2<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">clickHandler</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>, <span class="keyword">this</span>.id)</div><div class="line">&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>在这个例子中，点击 button 之后，会执行 <code>clickHandler()</code> 函数，这属于 Function Invocation Pattern，所以此时函数中的 <code>this</code> 指向为 windows（严格模式下为 undefined）</p>
+<p>如果希望在内联事件处理函数中的 <code>this</code> 也指向该元素，那么我们可以用 <code>bind</code> 函数指定其 <code>this</code> 值。</p>
+<blockquote>
+<p>当然也可以使用 <code>call</code> 或者 <code>apply</code> 方法。<a href="http://objcer.com/2017/02/19/apply-call-bind/">JavaScript 中的 apply、call、bind</a></p>
+</blockquote>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">button</span> id=<span class="string">'btn1'</span> <span class="keyword">onclick</span>=<span class="string">"clickHandler.bind(this)()"</span>&gt;click me! btn1&lt;/<span class="keyword">button</span>&gt;</div><div class="line">&lt;<span class="keyword">button</span> id=<span class="string">'btn1'</span> <span class="keyword">onclick</span>=<span class="string">"clickHandler.call(this)"</span>&gt;click me! btn1&lt;/<span class="keyword">button</span>&gt;</div><div class="line">&lt;<span class="keyword">button</span> id=<span class="string">'btn1'</span> <span class="keyword">onclick</span>=<span class="string">"clickHandler.apply(this)"</span>&gt;click me! btn1&lt;/<span class="keyword">button</span>&gt;</div></pre></td></tr></table></figure>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>通过以上两种方式为 DOM 元素添加事件处理函数后，我们可以输出看看：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> btn1Element = <span class="built_in">document</span>.getElementById(<span class="string">'btn1'</span>);</div><div class="line"><span class="built_in">console</span>.log(btn1Element.onclick)</div></pre></td></tr></table></figure></p>
+<ul>
+<li><p>方式一输出：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">clickHandler</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.id)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>方式二输出：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onclick</span><span class="params">(event)</span> </span>&#123;</div><div class="line">  clickHandler()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>通过以上也很好说明了，前者中的 <code>this</code> 指向触发事件的 DOM 元素；而后者中的 <code>this</code> 指向全局对象 window</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过以上的了解，不同方式为 DOM 元素添加事件处理函数，函数中的 <code>this</code> 指向可能不同，需要特别留意。</p>
+<p>通过以下方式添加的事件处理函数，<code>this</code> 都正常指向 DOM 元素：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">element</span>.onclick = doSomething</div><div class="line"><span class="keyword">element</span>.addEventListener(<span class="string">'click'</span>,doSomething, <span class="literal">false</span>)</div><div class="line"><span class="keyword">element</span>.onclick = <span class="function"><span class="keyword">function</span> () &#123; <span class="title">this</span>.<span class="title">style</span>.<span class="title">color</span> = <span class="string">'#cc0000'</span>; &#125;</span></div><div class="line">&lt;<span class="keyword">element</span> onclick=<span class="string">"this.style.color = '#cc0000';"</span>&gt;</div><div class="line">&lt;<span class="keyword">element</span> onclick=<span class="string">"doSomething.bind(this)()"</span>&gt;</div><div class="line">&lt;<span class="keyword">element</span> onclick=<span class="string">"doSomething.call(this)"</span>&gt;</div><div class="line">&lt;<span class="keyword">element</span> onclick=<span class="string">"doSomething.apply(this)"</span>&gt;</div></pre></td></tr></table></figure></p>
+<p>而通过以下方式添加的事件处理函数，<code>this</code> 并不指向 DOM 元素：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">element</span>.onclick = <span class="function"><span class="keyword">function</span> () &#123; <span class="title">doSomething</span>() &#125;</span></div><div class="line"><span class="keyword">element</span>.attachEvent(<span class="string">'onclick'</span>, doSomething)</div><div class="line">&lt;<span class="keyword">element</span> onclick=<span class="string">"doSomething()"</span>&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="external">MDN this</a><br><a href="http://www.quirksmode.org/js/this.html" target="_blank" rel="external">The this keyword</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/this/" rel="tag">#this</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/25/getting-start-phonegap/" rel="next" title="PhoneGap 入门踩坑">
+                <i class="fa fa-chevron-left"></i> PhoneGap 入门踩坑
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#this-指向谁"><span class="nav-number">1.</span> <span class="nav-text">this 指向谁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Function-Invocation-Pattern"><span class="nav-number">1.1.</span> <span class="nav-text">Function Invocation Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Method-Invocation-Pattern"><span class="nav-number">1.2.</span> <span class="nav-text">Method Invocation Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Constructor-Pattern"><span class="nav-number">1.3.</span> <span class="nav-text">Constructor Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Apply-Pattern"><span class="nav-number">1.4.</span> <span class="nav-text">Apply Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见例子"><span class="nav-number">1.5.</span> <span class="nav-text">常见例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bind-函数和箭头函数"><span class="nav-number">2.</span> <span class="nav-text">bind 函数和箭头函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bind-函数"><span class="nav-number">2.1.</span> <span class="nav-text">bind 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#箭头函数"><span class="nav-number">2.2.</span> <span class="nav-text">箭头函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM事件处理函数中的-this"><span class="nav-number">3.</span> <span class="nav-text">DOM事件处理函数中的 this</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方式一"><span class="nav-number">3.1.</span> <span class="nav-text">方式一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方式二"><span class="nav-number">3.2.</span> <span class="nav-text">方式二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#区别"><span class="nav-number">3.3.</span> <span class="nav-text">区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/03/26/javascript-this-keyword/';
+      var disqus_title = "详解 javascript this 关键字";
+      var disqus_url = 'http://objcer.com/2017/03/26/javascript-this-keyword/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
