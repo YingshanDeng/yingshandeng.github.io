@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="DNS Prefetching," />
+  <meta name="keywords" content="Promise," />
 
 
 
@@ -84,24 +84,16 @@
 
 
 
-<meta name="description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
-
-参考文章: 官方文档">
+<meta name="description" content="了解 ES6 Promise">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DNS Prefetching">
-<meta property="og:url" content="http://objcer.com/2016/09/25/DNS-Prefetching/index.html">
+<meta property="og:title" content="关于 ES6 Promise">
+<meta property="og:url" content="http://objcer.com/2017/05/07/About-Promise/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
-
-参考文章: 官方文档">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png">
-<meta property="og:updated_time" content="2016-11-05T12:50:13.000Z">
+<meta property="og:description" content="了解 ES6 Promise">
+<meta property="og:updated_time" content="2017-05-07T10:04:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DNS Prefetching">
-<meta name="twitter:description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
-
-参考文章: 官方文档">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png">
+<meta name="twitter:title" content="关于 ES6 Promise">
+<meta name="twitter:description" content="了解 ES6 Promise">
 
 
 
@@ -122,10 +114,10 @@
 
 
 
-  <link rel="canonical" href="http://objcer.com/2016/09/25/DNS-Prefetching/"/>
+  <link rel="canonical" href="http://objcer.com/2017/05/07/About-Promise/"/>
 
 
-  <title> DNS Prefetching | Deng's Blog </title>
+  <title> 关于 ES6 Promise | Deng's Blog </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -247,7 +239,7 @@
             
             
               
-                DNS Prefetching
+                关于 ES6 Promise
               
             
           </h1>
@@ -259,8 +251,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-25T17:39:24+08:00" content="2016-09-25">
-              2016-09-25
+            <time itemprop="dateCreated" datetime="2017-05-07T18:03:15+08:00" content="2017-05-07">
+              2017-05-07
             </time>
           </span>
 
@@ -273,8 +265,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/HTML/" itemprop="url" rel="index">
-                    <span itemprop="name">HTML</span>
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
                   </a>
                 </span>
 
@@ -289,8 +281,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/25/DNS-Prefetching/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/09/25/DNS-Prefetching/" itemprop="commentsCount"></span>
+                <a href="/2017/05/07/About-Promise/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/07/About-Promise/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -300,7 +292,7 @@
 
           
           
-             <span id="/2016/09/25/DNS-Prefetching/" class="leancloud_visitors" data-flag-title="DNS Prefetching">
+             <span id="/2017/05/07/About-Promise/" class="leancloud_visitors" data-flag-title="关于 ES6 Promise">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -322,35 +314,27 @@
       
 
       
-        <p>在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。</p>
+        <p>了解 ES6 Promise<br><a id="more"></a></p>
+<h2 id="串行-Promise"><a href="#串行-Promise" class="headerlink" title="串行 Promise"></a>串行 Promise</h2><p>Promise 有一个 <code>Promise.all</code> 方法，接收一个 Promise 对象数组作参数，<strong>并行</strong>执行其中的 Promise 对象，当这个数组中的所有 Promise 对象都 <code>resolve</code> 或者某一个 Promise 对象 <code>reject</code> 时，调用 <code>then</code> 方法。</p>
+<p>但是，如果需要进行在 A 处理完成之后，再开始 B 的处理，对于这种串行顺序处理，Promise 并没有提供支持。那我们只能自己解决。</p>
+<h3 id="重复使用多个-then-实现"><a href="#重复使用多个-then-实现" class="headerlink" title="重复使用多个 then 实现"></a>重复使用多个 <code>then</code> 实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getPromise</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'promise: '</span>, name);</div><div class="line">            resolve();</div><div class="line">        &#125;, <span class="number">2000</span>);</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">getPromise(<span class="string">'one'</span>).then(getPromise.bind(<span class="literal">undefined</span>, <span class="string">'two'</span>));</div></pre></td></tr></table></figure>
+<p>注意：通过 <code>new</code> 实例化一个 Promise 的时候，promise 已经开始执行，所以我们都是通过使用一个函数，返回一个 Promise 对象</p>
+<p>通过使用 <code>then</code> 将两个 Promise 串联起来，使其顺序执行，但是随着串行处理的 Promise 增多，需要不断增加 <code>then</code> 方法的调用，在实际使用过程中并不方便。我们可以通过 <code>for</code> 循环解决这个问题。</p>
+<h3 id="通过-for-循环实现"><a href="#通过-for-循环实现" class="headerlink" title="通过 for 循环实现"></a>通过 <code>for</code> 循环实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ps = [</div><div class="line">    getPromise.bind(<span class="literal">undefined</span>, <span class="string">'one'</span>),</div><div class="line">    getPromise.bind(<span class="literal">undefined</span>, <span class="string">'two'</span>)</div><div class="line">]</div><div class="line"><span class="keyword">var</span> promise = <span class="built_in">Promise</span>.resolve();</div><div class="line">ps.forEach(<span class="function">(<span class="params">p</span>) =&gt;</span> &#123;</div><div class="line">    promise = promise.then(p);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>注意：数组中的元素都是返回 Promise 对象的函数</p>
+<p>这种处理方式需要一个中间变量 <code>promise</code>，通过不断覆盖 <code>promise</code> 变量的值，达到 <code>promise1.then(promise2)</code> 的累积效果。但是由于多使用了一个中间变量，代码显得不够简洁。</p>
+<h3 id="通过-Array-prototype-reduce-实现"><a href="#通过-Array-prototype-reduce-实现" class="headerlink" title="通过 Array.prototype.reduce 实现"></a>通过 <code>Array.prototype.reduce</code> 实现</h3><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var ps = [</div><div class="line">    getPromise.bind(<span class="literal">undefined</span>, <span class="string">'one'</span>),</div><div class="line">    getPromise.bind(<span class="literal">undefined</span>, <span class="string">'two'</span>)</div><div class="line">]</div><div class="line">ps.reduce(<span class="function"><span class="params">(promise, p)</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> promise.<span class="keyword">then</span>(p);</div><div class="line">&#125;, Promise.resolve())</div></pre></td></tr></table></figure>
+<p>这种实现串行 Promise 就显得很简洁了吧，在实际开发应用中大多也用此方式 👊</p>
 <blockquote>
-<p>参考文章: <a href="https://www.chromium.org/developers/design-documents/dns-prefetching" target="_blank" rel="external">官方文档</a></p>
+<p>关于 reduce 用法，参考 <a href="http://objcer.com/2017/03/11/implement-the-array-map-reduce-filter-find-method/#more">实现 map, reduce, filter, find 方法</a></p>
 </blockquote>
-<a id="more"></a>
-<h3 id="DNS-解析方式"><a href="#DNS-解析方式" class="headerlink" title="DNS 解析方式"></a>DNS 解析方式</h3><p>1、自动获取: 会把当前页面中所有带 <code>href</code> 属性的超链接进行 DNS 解析</p>
+<h3 id="定义串行-Promise-函数"><a href="#定义串行-Promise-函数" class="headerlink" title="定义串行 Promise 函数"></a>定义串行 Promise 函数</h3><p>在应用开发过程中，许多需要 Promise 串行执行，例如多个网络请求串行时，我们就可以通过如下方式进行，该方法接收一个接收一个函数数组，数组中的函数元素都返回一个 Promise 对象，并将每一个 Promise 对象 <code>resolve</code> 的执行结果存储在一个数组中，等所有的 Promise 对象 <code>resolve</code> 之后，将结果数组返回。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> sequencePromise(tasks) &#123;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">_recordResults</span>(<span class="params">resultArray, result</span>) </span>&#123;</div><div class="line">        resultArray.push(result);</div><div class="line">        <span class="keyword">return</span> resultArray;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">let</span> pushResult = _recordResults.bind(<span class="literal">null</span>, []);</div><div class="line">    <span class="keyword">return</span> tasks.reduce(<span class="function">(<span class="params">promise, task</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> promise.then(task).then(pushResult);</div><div class="line">    &#125;, <span class="built_in">Promise</span>.resolve())</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="可取消的-Promise"><a href="#可取消的-Promise" class="headerlink" title="可取消的 Promise"></a>可取消的 Promise</h2><p>Promise 并没有提供 <code>cancel</code> 的接口，但是我们可以对其进行封装实现 Promise 可取消(cancelable).</p>
 <blockquote>
-<p>Chromium uses the “href” attribute of hyperlinks to find host names to prefetch</p>
+<p>参考自：<a href="https://facebook.github.io/react/blog/2015/12/16/ismounted-antipattern.html" target="_blank" rel="external">isMounted is an Antipattern</a></p>
 </blockquote>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">a</span> href=<span class="string">"http://www.objcer.com"</span>&gt;<span class="keyword">a</span>&lt;/<span class="keyword">a</span>&gt;</div></pre></td></tr></table></figure>
-<p>2、手动获取</p>
-<blockquote>
-<p>However, some of those hyperlinks may be redirects, for example if the site is trying to count how many times the link is clicked.  In those situations, the “true” targeted domain is not necessarily discernible by examining the content of a web page, and so Chromium not able to prefetch the final targeted domain</p>
-</blockquote>
-<p>但是，如果有些超链接做了重定向，那么在这时自动解析DNS就无法得到正确的 IP 地址，那么就应该手动设置，将实际要DNS解析的域名写到 link 标签的 <code>href</code> 属性中。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"dns-prefetch"</span> <span class="attr">href</span>=<span class="string">"//host_name_to_prefetch.com"</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>我们可以注意到百度页面 head 中就包含了如下一段 DNS 预加载的 link 标签：</p>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png" alt=""></p>
-<h3 id="DNS-Prefetch-Control"><a href="#DNS-Prefetch-Control" class="headerlink" title="DNS Prefetch Control"></a>DNS Prefetch Control</h3><blockquote>
-<ul>
-<li>By default, Chromium does not prefetch host names in hyperlinks that appear in HTTPS pages.</li>
-<li>To allow webmasters to control whether DNS prefetch is enabled or disabled, Chromium includes a DNS Prefetch Control mechanism. It can be used to turn DNS prefetch on for HTTPS pages, or turn it off for HTTP pages.</li>
-</ul>
-</blockquote>
-<p>超链接在 https 下是不会启用 DNS 预解析的，但是浏览器提供了一个开关来设置是否在 HTTPS 下启用预解析，是否在 HTTP 下关闭预解析。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"x-dns-prefetch-control"</span> <span class="attr">content</span>=<span class="string">"on"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"x-dns-prefetch-control"</span> <span class="attr">content</span>=<span class="string">"off"</span>&gt;</span></div></pre></td></tr></table></figure>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1、DNS prefetching is an attempt to resolve domain names before a user tries to follow a link. This is done using the computer’s normal DNS resolution mechanism;</p>
-<p>2、 Chromium currently employs 8 completely asynchronous worker threads to do nothing but perform DNS prefetch resolution.</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://www.jianshu.com/p/c3a14a853c79" target="_blank" rel="external">参考链接1</a><br><a href="https://segmentfault.com/a/1190000003944417" target="_blank" rel="external">参考链接2</a></p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">const makeCancelable = <span class="function"><span class="params">(promise)</span> =&gt;</span> &#123;</div><div class="line">    let hasCanceled_ = <span class="literal">false</span>;</div><div class="line"></div><div class="line">    const wrappedPromise = <span class="keyword">new</span> Promise(<span class="function"><span class="params">(resolve, reject)</span> =&gt;</span> &#123;</div><div class="line">        promise.<span class="keyword">then</span>(<span class="function"><span class="params">(val)</span> =&gt;</span></div><div class="line">            hasCanceled_ ? reject(&#123;isCanceled: <span class="literal">true</span>&#125;) : resolve(val)</div><div class="line">        );</div><div class="line">        promise.<span class="keyword">catch</span>(<span class="function"><span class="params">(error)</span> =&gt;</span></div><div class="line">              hasCanceled_ ? reject(&#123;isCanceled: <span class="literal">true</span>&#125;) : reject(error)</div><div class="line">        );</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        promise: wrappedPromise,</div><div class="line">        cancel() &#123;</div><div class="line">          hasCanceled_ = <span class="literal">true</span>;</div><div class="line">        &#125;,</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>测试例子🌰：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var cancelablePromise = makeCancelable(<span class="keyword">new</span> Promise(<span class="function"><span class="params">(resolve, reject)</span> =&gt;</span> &#123;</div><div class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        resolve(<span class="string">'ok'</span>);</div><div class="line">    &#125;, <span class="number">3000</span>)</div><div class="line">&#125;));</div><div class="line"></div><div class="line">cancelablePromise</div><div class="line">    .promise</div><div class="line">    .<span class="keyword">then</span>(<span class="function"><span class="params">(value)</span> =&gt;</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'---resolve---'</span>, value);</div><div class="line">    &#125;)</div><div class="line">    .<span class="keyword">catch</span>(<span class="function"><span class="params">(reason)</span> =&gt;</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'---cancel---'</span>, reason.isCanceled);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line"><span class="regexp">//</span> cancelablePromise.cancel()</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -373,7 +357,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/DNS-Prefetching/" rel="tag">#DNS Prefetching</a>
+            <a href="/tags/Promise/" rel="tag">#Promise</a>
           
         </div>
       
@@ -382,17 +366,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/16/hello-blog/" rel="next" title="你好，博客">
-                <i class="fa fa-chevron-left"></i> 你好，博客
+              <a href="/2017/04/19/About-ES6-Module/" rel="next" title="关于 ES6 Module">
+                <i class="fa fa-chevron-left"></i> 关于 ES6 Module
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/11/06/Debouncing-and-Throttling/" rel="prev" title="Debouncing and Throttling ">
-                Debouncing and Throttling  <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -542,7 +522,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS-解析方式"><span class="nav-number">1.</span> <span class="nav-text">DNS 解析方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS-Prefetch-Control"><span class="nav-number">2.</span> <span class="nav-text">DNS Prefetch Control</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#串行-Promise"><span class="nav-number">1.</span> <span class="nav-text">串行 Promise</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重复使用多个-then-实现"><span class="nav-number">1.1.</span> <span class="nav-text">重复使用多个 then 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-for-循环实现"><span class="nav-number">1.2.</span> <span class="nav-text">通过 for 循环实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-Array-prototype-reduce-实现"><span class="nav-number">1.3.</span> <span class="nav-text">通过 Array.prototype.reduce 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义串行-Promise-函数"><span class="nav-number">1.4.</span> <span class="nav-text">定义串行 Promise 函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可取消的-Promise"><span class="nav-number">2.</span> <span class="nav-text">可取消的 Promise</span></a></li></ol></div>
             
           </div>
         </section>
@@ -669,9 +649,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'objcer';
-      var disqus_identifier = '2016/09/25/DNS-Prefetching/';
-      var disqus_title = "DNS Prefetching";
-      var disqus_url = 'http://objcer.com/2016/09/25/DNS-Prefetching/';
+      var disqus_identifier = '2017/05/07/About-Promise/';
+      var disqus_title = "关于 ES6 Promise";
+      var disqus_url = 'http://objcer.com/2017/05/07/About-Promise/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
