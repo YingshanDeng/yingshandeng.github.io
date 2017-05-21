@@ -4,8 +4,8 @@ tags: Promise
 categories: JS
 ---
 
+![](http://7vikhl.com1.z0.glb.clouddn.com/do-you-promise.png)
 
-了解 ES6 Promise
 <!-- more -->
 
 ## 串行 Promise
