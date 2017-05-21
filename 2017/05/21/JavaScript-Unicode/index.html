@@ -1,0 +1,829 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Unicode," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript Unicode 编码那些事">
+<meta property="og:url" content="http://objcer.com/2017/05/21/JavaScript-Unicode/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/IMG_1915.PNG">
+<meta property="og:updated_time" content="2017-05-21T08:40:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript Unicode 编码那些事">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/IMG_1915.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/05/21/JavaScript-Unicode/"/>
+
+
+  <title> JavaScript Unicode 编码那些事 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript Unicode 编码那些事
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-21T16:36:57+08:00" content="2017-05-21">
+              2017-05-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/21/JavaScript-Unicode/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/21/JavaScript-Unicode/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/05/21/JavaScript-Unicode/" class="leancloud_visitors" data-flag-title="JavaScript Unicode 编码那些事">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/IMG_1915.PNG" alt=""><br><a id="more"></a></p>
+<h2 id="BMP-Basic-Multilingual-Plane-字符"><a href="#BMP-Basic-Multilingual-Plane-字符" class="headerlink" title="BMP(Basic Multilingual Plane)字符"></a>BMP(Basic Multilingual Plane)字符</h2><p>Unicode 是目前绝大多数程序使用的字符编码。Unicode 标识符通过一个明确的名字和一个整数来作为它的码点/码位 (code point)。比如，“©️” 字符可以用“版权标志” 和码位 U+00A9 (0xA9，也可以写作十进制 169) 来表示。</p>
+<p><strong>码点/码位</strong>是为每一个字符提供一个全局唯一的标识符，一个码位映射一个字符，码位值的范围是从U+0000到U+10FFFF，可以表示超过110万个符号。</p>
+<p>Unicode 字符分为 17 组平面，每个平面拥有 2^16 (65,536) 个码位。每一个码位都可以用 16 进制 xy0000 到 xyFFFF 来表示，这里的 xy 是表示一个 16 进制的值，从 00 到 10。</p>
+<p>而当 xy 是 00 (码点范围是从U+0000到U+FFFF) 的时候，也就是 Unicode 最前 2^16 (65,536) 个字符，被称为<strong>基本平面 BMP(Basic Multilingual Plane)</strong>，最常见的字符都在这个平面上，这也是 Unicode 最先定义和最先公布的一个平面。</p>
+<p>其余 16 个平面（U+100000 到 U+10FFFF）称为<strong>补充平面</strong>，也称之为补充字符，相对于 BMP 字符而言，这些字符称之为非 BMP 字符。</p>
+<h2 id="UTF-16-和-UCS-2"><a href="#UTF-16-和-UCS-2" class="headerlink" title="UTF-16 和 UCS-2"></a>UTF-16 和 UCS-2</h2><h3 id="UTF-16"><a href="#UTF-16" class="headerlink" title="UTF-16"></a>UTF-16</h3><p>UTF-16 对于 BMP 字符的码位，用 2 个字节进行编码；而非 BMP 字符的码位，用 4 个字节组成代理对（surrogate pair）来表示。</p>
+<p>关于<strong>代理对</strong>：前两个字节称为高位代理或者顶部代理，<strong>范围在 0xD800 到 0xDBFF 之间</strong>；后两个字节称为低位代理或者尾部代理，<strong>范围在 0xDC00 到 0xDFFF 之间</strong>。</p>
+<p><strong>码位（code points）和代理对（surrogate pairs）之间的转换：</strong><br>假设：一个码位 C 大于 0xFFFF 的编码使用代理对 <h, l=""> 来表示的公式为：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">H = Math.floor((C - <span class="number">0x10000</span>) / <span class="number">0x400</span>) + <span class="number">0xD800</span></div><div class="line">L = (C - <span class="number">0x10000</span>) % <span class="number">0x400</span> + <span class="number">0xDC00</span></div></pre></td></tr></table></figure></h,></p>
+<p>转换公式变换后，比如从代理对 <h, l=""> 转换成一个 Unicode 码位 C，可以使用公式：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">C = (H - <span class="number">0xD800</span>) * <span class="number">0x400</span> + L - <span class="number">0xDC00</span> + <span class="number">0x10000</span></div></pre></td></tr></table></figure></h,></p>
+<h3 id="UCS-2"><a href="#UCS-2" class="headerlink" title="UCS-2"></a>UCS-2</h3><p>UCS(Universal Character Set) 通用字符集，是一个 ISO 标准，UCS-2 用 2 个字节表示 BMP 字符的码点，UCS-2 是一个过时的编码方式，因为它只能编码基本平面 BMP 的码点，在 BMP 字符的编码上，与 UTF-16 是一致的，所以可以认为是UTF-16的一个子集。</p>
+<h3 id="JavaScript-是用哪一种编码方式的呢？"><a href="#JavaScript-是用哪一种编码方式的呢？" class="headerlink" title="JavaScript 是用哪一种编码方式的呢？"></a>JavaScript 是用哪一种编码方式的呢？</h3><p>那么 JavaScript 是用哪一种编码方式的呢？UTF-16 还是 UCS-2 呢？答案是：UCS-2<br>基于如下年表：</p>
+<ul>
+<li>1990 UCS-2 诞生</li>
+<li>1995.5 JavaScript 诞生</li>
+<li>1996.7 UTF-16 诞生</li>
+</ul>
+<p>所以 JS 诞生之时 UTF-16 还没有问世，所以只能用 来处理字符，而这也为字符处理留下了隐患，而后来通过不断完善，譬如引入 UTF-16 将问题一步步解决。</p>
+<h2 id="JavaScript-字符处理"><a href="#JavaScript-字符处理" class="headerlink" title="JavaScript 字符处理"></a>JavaScript 字符处理</h2><h3 id="length-属性"><a href="#length-属性" class="headerlink" title="length 属性"></a>length 属性</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">char</span> = <span class="string">'💩'</span></div><div class="line"><span class="keyword">char</span>.length === <span class="number">2</span> <span class="comment">// true</span></div><div class="line"></div><div class="line"><span class="keyword">char</span>.charCodeAt(<span class="number">0</span>).toString(<span class="number">16</span>) <span class="comment">// d83d</span></div><div class="line"><span class="keyword">char</span>.charCodeAt(<span class="number">1</span>).toString(<span class="number">16</span>) <span class="comment">// dca9</span></div><div class="line"><span class="keyword">char</span> === <span class="string">'\ud83d\udca9'</span> <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p><strong>分析：</strong><br>由于 💩 这个 emoji 在 JS中编码为 <code>\ud83d\udca9</code>，而 JS 认为每两个字节即表示一个字符，所以 💩 这个 emoji 字符的字符长度就为 2。所以在输入框长度限制时就会有问题，譬如：输入长度限制 20，但是输入 10 个 emoji 后，字符串长度就达到 20 了。</p>
+<p><strong>解决方法：</strong><br>上一节中，了解到 UTF-16 使用代理对，通过四个字节来表示非 BMP 字符，前两个字节和后两个字节都有各自的范围，所以：<br><figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> regexAstralSymbols = <span class="regexp">/[\uD800-\uDBFF][\uDC00-\uDFFF]/g</span>; <span class="comment">// 匹配UTF-16的代理对</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">countSymbols</span>(<span class="params">string</span>) </span>&#123;</div><div class="line">    <span class="comment">// 把代理对改为一个BMP的字符，这时候取长度就正常</span></div><div class="line">    <span class="keyword">return</span> <span class="built_in">string</span>.replace(regexAstralSymbols, <span class="string">'_'</span>).length;</div><div class="line">&#125;</div><div class="line">countSymbols(<span class="string">'💩'</span>); <span class="comment">// 1</span></div></pre></td></tr></table></figure></p>
+<h3 id="反转字符串"><a href="#反转字符串" class="headerlink" title="反转字符串"></a>反转字符串</h3><p>对于反转字符串，我们可以很快的写出如下函数：<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function <span class="built_in">reverse</span>(<span class="built_in">str</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">str</span>.<span class="built_in">split</span>(<span class="string">''</span>).<span class="built_in">reverse</span>().<span class="built_in">join</span>(<span class="string">''</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>进行一下测试：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">reverse</span><span class="params">(<span class="string">'123'</span>)</span></span> <span class="comment">// "321"</span></div><div class="line"><span class="function"><span class="title">reverse</span><span class="params">(<span class="string">'💩'</span>)</span></span> <span class="comment">// "��"</span></div></pre></td></tr></table></figure></p>
+<p><strong>分析：</strong><br>� 的 Unicode 码位是 U+FFFD，通常用来表示 Unicode 转换时无法识别的字符（也就是乱码）。当💩（\ud83d\udca9）通过上述方法反转时，变成\udca9\ud83d，不是一个合法的代理对（高低字节范围不同），同时 Unicode 规定代理对范围内的码位不能单独出现，所以 js 只能用 � 表示了。</p>
+<p><strong>解决方法：</strong><br>ES6 中数组新增了静态方法 <code>Array.from</code>，此方法支持对代理对的解析<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function">function <span class="title">reverse</span>(<span class="params"><span class="keyword">string</span></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> Array.<span class="keyword">from</span>(<span class="keyword">string</span>).reverse().<span class="keyword">join</span>(<span class="string">''</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><code>Array.from</code> 方法的作用是将一个 <code>array-like</code> 或者 <code>iterable object</code> 转换成一个 Array 对象。最常见的是 <code>NodeList</code> 和函数参数 <code>arguments</code>，在实际开发过程中，需要将它们转换成数组：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 以往的解决方法：</span></div><div class="line"><span class="keyword">var</span> imgs = [].slice.call(<span class="built_in">document</span>.querySelectorAll(<span class="string">'img'</span>));</div><div class="line"><span class="keyword">var</span> args = [].slice.call(<span class="built_in">arguments</span>);</div><div class="line"></div><div class="line"><span class="comment">// 现在有了 `Array.from` 我们就可以这样：</span></div><div class="line"><span class="keyword">var</span> imgs = <span class="built_in">Array</span>.from(<span class="built_in">document</span>.querySelectorAll(<span class="string">'img'</span>));</div><div class="line"><span class="keyword">var</span> args = <span class="built_in">Array</span>.from(<span class="built_in">arguments</span>);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="关于-charCodeAt-和-codePointAt"><a href="#关于-charCodeAt-和-codePointAt" class="headerlink" title="关于 charCodeAt 和 codePointAt"></a>关于 <code>charCodeAt</code> 和 <code>codePointAt</code></h3><blockquote>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/charCodeAt" target="_blank" rel="external">Mozilla</a>文档说明： The <strong>charCodeAt()</strong> method returns an integer between 0 and 65535 representing the UTF-16 code unit at the given index (the UTF-16 code unit matches the Unicode code point for code points representable in a single UTF-16 code unit, but might also be the first code unit of a surrogate pair for code points not representable in a single UTF-16 code unit, e.g. Unicode code points &gt; 0x10000). If you want the entire code point value, use <strong>codePointAt()</strong>.</p>
+</blockquote>
+<p>理解一下：UTF-16 编码方式对于 BMP 字符，使用两个字节就可以表示，这两个字节表示一个 <code>code unit</code>；对于非 BMP 字符，则需要 4 个字节组成的代理对来表示，这四个字节则表示两个 <code>code unit</code>。所以一个码位 (code point) 由一个或者两个 <code>code unit</code> 组成</p>
+<ul>
+<li><p><code>charCodeAt</code> 方法接收一个 <code>index</code> 参数，返回指定位置上的 <code>code unit</code> 的整数值，范围是 0 到 65535。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">char</span> = 'a'; <span class="comment">// BMP 字符</span></div><div class="line"><span class="keyword">char</span>.charCodeAt(0).<span class="keyword">toString</span>(16); <span class="comment">// 61</span></div><div class="line"><span class="keyword">char</span>.charCodeAt(1).<span class="keyword">toString</span>(16); <span class="comment">// NaN</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> <span class="keyword">char</span> = '💩'; <span class="comment">// 非BMP 字符</span></div><div class="line"><span class="keyword">char</span>.charCodeAt(0).<span class="keyword">toString</span>(16); <span class="comment">// d83d</span></div><div class="line"><span class="keyword">char</span>.charCodeAt(1).<span class="keyword">toString</span>(16); <span class="comment">// dca9</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><code>codePointAt</code> 方法同样接收一个 <code>index</code> 参数，返回从指定位置开始，整个码位(code point)的值。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">char</span> = 'a'; <span class="comment">// BMP 字符</span></div><div class="line"><span class="keyword">char</span>.codePointAt(0).<span class="keyword">toString</span>(16); <span class="comment">// 61</span></div><div class="line"><span class="keyword">char</span>.codePointAt(1).<span class="keyword">toString</span>(16); <span class="comment">// NaN</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> <span class="keyword">char</span> = '💩'; <span class="comment">// 非BMP 字符</span></div><div class="line"><span class="keyword">char</span>.codePointAt(0).<span class="keyword">toString</span>(16); <span class="comment">// 1f4a9</span></div><div class="line"><span class="keyword">char</span>.codePointAt(1).<span class="keyword">toString</span>(16); <span class="comment">// dca9</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>通过上述的代码示例中，我们发现：<br>对于 BMP 字符，<code>charCodeAt</code> 和 <code>codePointAt</code> 的行为一致，都是返回整个字符的码位 (code point)；<br>对于非 BMP 字符，<code>charCodeAt</code> 通过指定参数，返回不同位置上的 <code>code unit</code> 值；而 <code>codePointAt</code> 当参数为 0 时，返回整个字符的码位 (code point)，当参数为 1 时，返回的是低位代理 <code>code unit</code> 的值。</p>
+<p>通过 <code>codePointAt</code> 方法，我们可以判断一个字符是两个字节(16位)表示，还是四个字节(32位)表示：<br><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="keyword">is</span><span class="number">32</span>Bit(c) &#123;</div><div class="line">    <span class="keyword">return</span> c.codePointAt(<span class="number">0</span>) &gt; <span class="number">0</span>xFFFF;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">is</span><span class="number">32</span>Bit(<span class="string">'A'</span>) <span class="comment">// false</span></div><div class="line"><span class="keyword">is</span><span class="number">32</span>Bit(<span class="string">'💩'</span>) <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
+<h3 id="码位和字符转换"><a href="#码位和字符转换" class="headerlink" title="码位和字符转换"></a>码位和字符转换</h3><p><code>charCodeAt</code> 方法可以获取 BMP 字符的码位；<code>codePointAt</code> 方法可以获取 BMP 和非 BMP 字符的码位。反之，如何将一个码位转换成字符呢？</p>
+<p><code>charCodeAt</code> 和 <code>codePointAt</code> 对应着的有 <code>fromCharCode</code> 和 <code>fromCodePoint</code> 这两个方法，同样的，<code>fromCharCode</code> 只能讲一个 BMP 字符的码位转换回字符，对于非 BMP 字符的码位就无能为力了，得使用 <code>fromCodePoint</code> 方法。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> c = <span class="string">'a'</span>;</div><div class="line"><span class="keyword">var</span> d = <span class="string">'💩'</span>;</div><div class="line"><span class="built_in">String</span>.fromCharCode(c.charCodeAt(<span class="number">0</span>)) <span class="comment">// a</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(d.charCodeAt(<span class="number">0</span>)) <span class="comment">// �</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(d.codePointAt(<span class="number">0</span>)) <span class="comment">// 💩</span></div></pre></td></tr></table></figure>
+<p>在 ES5 中允许通过 <code>\u</code> 加上码位组成的编码序列来表示 16 位的 Unicode BMP 字符，即：<code>\uXXXX</code>。例如：<code>\u0061</code> 表示字符 <code>a</code><br><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">console.<span class="built-in">log</span>(<span class="string">'\u0061'</span>) <span class="comment">// a</span></div></pre></td></tr></table></figure></p>
+<p>当然这只是对于 BMP 字符有效，对于非 BMP 字符，码位范围大于 <code>OxFFFF</code> 时，这种表示方式就有问题了，例如<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">console.<span class="built-in">log</span>(<span class="string">'\u1f4a9'</span>) <span class="comment">// Ὂ9</span></div></pre></td></tr></table></figure></p>
+<p><code>1f4a9</code> 是 emoji 💩 的码位，因为 Unicode 的编码序列总是包含 16 位，所以 JS 会把 <code>\u1f4a9</code> 分成两个字符 <code>\u1f4a</code> 和 <code>9</code>，所以最终输出：<code>Ὂ9</code> 两个字符。</p>
+<p>ES6 通过扩展 Unicode 的编码序列解决了这个问题，将码位置于花括号内，即：<code>\u{XXXXX}</code>，可表示任何字符的码位。<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">console.<span class="built-in">log</span>(<span class="string">'\u&#123;0061&#125;'</span>) <span class="comment">// a</span></div><div class="line">console.<span class="built-in">log</span>(<span class="string">'\u&#123;1f4a9&#125;'</span>) <span class="comment">// 💩</span></div></pre></td></tr></table></figure></p>
+<h3 id="正则匹配-u-修饰符"><a href="#正则匹配-u-修饰符" class="headerlink" title="正则匹配 u 修饰符"></a>正则匹配 <code>u</code> 修饰符</h3><p>正则表达式也是基于两个字节(16位)，一个 code unit 来表示单个字符的，那么对于非 BMP 字符，例如：emoji 💩 就会被认为是两个字符，在正则匹配中就会遇到问题。例如：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">char</span> = '💩';</div><div class="line">console.<span class="built_in">log</span>(<span class="keyword">char</span>.length) <span class="comment">// 2</span></div><div class="line">console.<span class="built_in">log</span>(/^.$/.<span class="keyword">test</span>(<span class="keyword">char</span>)); <span class="comment">// false</span></div></pre></td></tr></table></figure></p>
+<p>在正则中，<code>.</code> 小数点，是用于匹配除换行符之外的任何单个字符，但是对于非 BMP 字符 💩 JS 把它认为是两个字符，所以匹配失败。<br>ES6 为正则表达式定义了一个新的修饰符，<code>u</code> 也即 Unicode。当一个正则表达式设置了 <code>u</code> 修饰符时，它将切换模式为工作在字符串，而不是 code unit。这意味着正则表达式在包含非 BMP 字符的字符串中不会迷惑。<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">console.<span class="built_in">log</span>(/^.$/<span class="keyword">u</span>.<span class="keyword">test</span>(<span class="keyword">char</span>)); <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://cookfront.github.io/2015/06/04/es6-string/" target="_blank" rel="external">每天学点ES6－字符串</a><br><a href="http://www.alloyteam.com/2016/12/javascript-has-a-unicode-sinkhole/" target="_blank" rel="external">Javascript有个Unicode的天坑</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Unicode/" rel="tag">#Unicode</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/07/About-Promise/" rel="next" title="关于 ES6 Promise">
+                <i class="fa fa-chevron-left"></i> 关于 ES6 Promise
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BMP-Basic-Multilingual-Plane-字符"><span class="nav-number">1.</span> <span class="nav-text">BMP(Basic Multilingual Plane)字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF-16-和-UCS-2"><span class="nav-number">2.</span> <span class="nav-text">UTF-16 和 UCS-2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UTF-16"><span class="nav-number">2.1.</span> <span class="nav-text">UTF-16</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UCS-2"><span class="nav-number">2.2.</span> <span class="nav-text">UCS-2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript-是用哪一种编码方式的呢？"><span class="nav-number">2.3.</span> <span class="nav-text">JavaScript 是用哪一种编码方式的呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript-字符处理"><span class="nav-number">3.</span> <span class="nav-text">JavaScript 字符处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#length-属性"><span class="nav-number">3.1.</span> <span class="nav-text">length 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反转字符串"><span class="nav-number">3.2.</span> <span class="nav-text">反转字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于-charCodeAt-和-codePointAt"><span class="nav-number">3.3.</span> <span class="nav-text">关于 charCodeAt 和 codePointAt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#码位和字符转换"><span class="nav-number">3.4.</span> <span class="nav-text">码位和字符转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则匹配-u-修饰符"><span class="nav-number">3.5.</span> <span class="nav-text">正则匹配 u 修饰符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/05/21/JavaScript-Unicode/';
+      var disqus_title = "JavaScript Unicode 编码那些事";
+      var disqus_url = 'http://objcer.com/2017/05/21/JavaScript-Unicode/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

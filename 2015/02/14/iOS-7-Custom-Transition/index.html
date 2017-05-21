@@ -1,0 +1,832 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS 7," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="iOS 7 中为 ViewControllers 间（Navigation Push / Pop  或者  Modal Present / Dismiss）的切换和交互增加了特性，你可以自定义切换的动画效果和切换过程的交互动作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 7 Custom Transition">
+<meta property="og:url" content="http://objcer.com/2015/02/14/iOS-7-Custom-Transition/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="iOS 7 中为 ViewControllers 间（Navigation Push / Pop  或者  Modal Present / Dismiss）的切换和交互增加了特性，你可以自定义切换的动画效果和切换过程的交互动作">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/demo.gif">
+<meta property="og:updated_time" content="2017-03-12T05:31:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 7 Custom Transition">
+<meta name="twitter:description" content="iOS 7 中为 ViewControllers 间（Navigation Push / Pop  或者  Modal Present / Dismiss）的切换和交互增加了特性，你可以自定义切换的动画效果和切换过程的交互动作">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/demo.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2015/02/14/iOS-7-Custom-Transition/"/>
+
+
+  <title> iOS 7 Custom Transition | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS 7 Custom Transition
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-02-14T20:37:02+08:00" content="2015-02-14">
+              2015-02-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/14/iOS-7-Custom-Transition/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/02/14/iOS-7-Custom-Transition/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/02/14/iOS-7-Custom-Transition/" class="leancloud_visitors" data-flag-title="iOS 7 Custom Transition">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>iOS 7 中为 ViewControllers 间（Navigation Push / Pop  或者  Modal Present / Dismiss）的切换和交互增加了特性，你可以<strong>自定义切换的动画效果</strong>和<strong>切换过程的交互动作</strong></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="API-介绍"><a href="#API-介绍" class="headerlink" title="API 介绍"></a>API 介绍</h2><blockquote>
+<p>相关的内容都定义在： <code>UIVIewControllerTransitioning.h</code>  文件中</p>
+</blockquote>
+<p>0、<code>@protocol UIViewControllerContextTransitioning</code></p>
+<p>这个协议的接口中定义了一些 ViewControllers 之间切换上下文（动画+交互）中所需的相关信息。</p>
+<p>一般来说，The UIViewControllerContextTransitioning protocol can be adopted by <strong>custom container controllers</strong>。我们平时只需关注其中的方法，拿来用就好了。</p>
+<p>例如：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 切换交互动作相关的方法</span></div><div class="line">- (<span class="keyword">void</span>)updateInteractiveTransition:(<span class="built_in">CGFloat</span>)percentComplete;</div><div class="line">- (<span class="keyword">void</span>)finishInteractiveTransition;</div><div class="line">- (<span class="keyword">void</span>)cancelInteractiveTransition;</div><div class="line"><span class="comment">// 根据 key 值获取 toVC 和 fromVC</span></div><div class="line">- (<span class="built_in">UIViewController</span> *)viewControllerForKey:(<span class="built_in">NSString</span> *)key;</div><div class="line"><span class="comment">// 获取 toVC 和 fromVC 的 Frame</span></div><div class="line">- (<span class="built_in">CGRect</span>)initialFrameForViewController:(<span class="built_in">UIViewController</span> *)vc;</div><div class="line">- (<span class="built_in">CGRect</span>)finalFrameForViewController:(<span class="built_in">UIViewController</span> *)vc;</div><div class="line">......</div></pre></td></tr></table></figure></p>
+<p>1、 <code>@protocol UIViewControllerAnimatedTransitioning</code></p>
+<p>这个协议的接口负责切换过程的动画效果。一般的，我们可以通过创建一个（subclass of NSObject）类实现这个接口，然后通过该类对象来使用自定义的动画效果。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 动画时间</span></div><div class="line">- (<span class="built_in">NSTimeInterval</span>)transitionDuration:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext;</div><div class="line"><span class="comment">// 动画内容</span></div><div class="line">- (<span class="keyword">void</span>)animateTransition:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext;</div><div class="line"><span class="comment">// 以上两个方法必须实现，下面的方法可选。</span></div><div class="line"><span class="keyword">@optional</span></div><div class="line"><span class="comment">// This is a convenience and if implemented will be invoked by the system when the transition context's completeTransition: method is invoked.</span></div><div class="line">- (<span class="keyword">void</span>)animationEnded:(<span class="built_in">BOOL</span>) transitionCompleted;</div></pre></td></tr></table></figure>
+<p>2、 <code>UIViewControllerInteractiveTransitioning</code></p>
+<p>这个协议的接口负责切换过程的交互动作。这个接口比较简单，我们只需在 ：<code>- (void)startInteractiveTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;</code> 方法中实现所需的切换交互动作即可。</p>
+<p>当然其中还有两个可选实现方法：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">CGFloat</span>)completionSpeed;</div><div class="line">- (<span class="built_in">UIViewAnimationCurve</span>)completionCurve;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>Note</strong>: 一般来说 view controller 间的动画切换都是通过某些手势来实现的。通常用到的时 <strong>Pan</strong> 手势。</p>
+</blockquote>
+<p>3、 <code>UIPercentDrivenInteractiveTransition</code></p>
+<p>系统已经为我们实现了一个交互动作 – 百分比切换动作，这个类实现了 <code>UIViewControllerInteractiveTransitioning</code> 接口，我们可以直接创建这个类对象进行使用（一般都是结合 Pan 手势使用）</p>
+<p>其中比较重要的方法有：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 更新交互动作的完成比例</span></div><div class="line">- (<span class="keyword">void</span>)updateInteractiveTransition:(<span class="built_in">CGFloat</span>)percentComplete;</div><div class="line"><span class="comment">// 取消交互动作</span></div><div class="line">- (<span class="keyword">void</span>)cancelInteractiveTransition;</div><div class="line"><span class="comment">// 完成交互动作</span></div><div class="line">- (<span class="keyword">void</span>)finishInteractiveTransition;</div><div class="line">......</div></pre></td></tr></table></figure></p>
+<p>4、 <code>UIViewControllerTransitioningDelegate</code></p>
+<p>这个协议负责向系统返回切换的动画效果和切换的交互动作。我们在需要进行 Custom Transition 的 view controller 中实现这个接口，返回相应的对象即可。（一般来说，在  Modal Present / Dismiss 切换中实现以下协议）<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@optional</span></div><div class="line"><span class="comment">// 动画效果</span></div><div class="line">- (<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animationControllerForPresentedController:(<span class="built_in">UIViewController</span> *)presented presentingController:(<span class="built_in">UIViewController</span> *)presenting sourceController:(<span class="built_in">UIViewController</span> *)source;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animationControllerForDismissedController:(<span class="built_in">UIViewController</span> *)dismissed;</div><div class="line"></div><div class="line"><span class="comment">// 交互动作</span></div><div class="line">- (<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerInteractiveTransitioning</span>&gt;)interactionControllerForPresentation:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animator;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerInteractiveTransitioning</span>&gt;)interactionControllerForDismissal:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animator;</div><div class="line"></div><div class="line"><span class="comment">// iOS 8 新增</span></div><div class="line">- (<span class="built_in">UIPresentationController</span> *)presentationControllerForPresentedViewController:(<span class="built_in">UIViewController</span> *)presented presentingViewController:(<span class="built_in">UIViewController</span> *)presenting sourceViewController:(<span class="built_in">UIViewController</span> *)source <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">8</span>_0);</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure></p>
+<p>5、<code>UINavigationControllerDelegate</code></p>
+<p>对于 Navigation Controller 中的（Push / Pop）切换，我们需要实现该协议，选择性实现以下的方法：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 交互动作</span></div><div class="line">- (<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerInteractiveTransitioning</span>&gt;)navigationController:(<span class="built_in">UINavigationController</span> *)navigationController</div><div class="line">                          interactionControllerForAnimationController:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;) animationController <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0);</div><div class="line"><span class="comment">// 切换动画</span></div><div class="line">- (<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)navigationController:(<span class="built_in">UINavigationController</span> *)navigationController</div><div class="line">                                   animationControllerForOperation:(<span class="built_in">UINavigationControllerOperation</span>)operation</div><div class="line">                                                fromViewController:(<span class="built_in">UIViewController</span> *)fromVC</div><div class="line">                                                  toViewController:(<span class="built_in">UIViewController</span> *)toVC  <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0);</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>题外话</strong>：我们注意到以上 API 接口中，很多都是委托协议。那么有一点值得提示的是，我们在 Modal Present / Dismiss 时，当要进行 Dismiss 时候，苹果建议也是用委托的方式进行（此处不展开）。</p>
+<p> <a href="https://developer.apple.com/library/ios/featuredarticles/ViewControllerPGforiPhoneOS/ModalViewControllers/ModalViewControllers.html#//apple_ref/doc/uid/TP40007457-CH111-SW14" target="_blank" rel="external">Apple 官方文档</a></p>
+<p> When it comes time to dismiss a presented view controller, the preferred approach is to let the presenting view controller dismiss it. In other words, whenever possible, the same view controller that presented the view controller should also take responsibility for dismissing it. Although there are several techniques for notifying the presenting view controller that its presented view controller should be dismissed, the preferred technique is delegation.</p>
+</blockquote>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><blockquote>
+<p><strong>说明</strong>：从 iOS 7 开始 Navigation Controller 附赠了一个从屏幕左侧边缘右滑返回的手势，但是仅限于屏幕左侧边缘，那么如何扩大到整个屏幕呢？当然，有了以上这些强有力的 API ，我们是可以实现的。</p>
+</blockquote>
+<p><a href="https://github.com/YingshanDeng/CustomTransitionDemo" target="_blank" rel="external">demo下载链接</a></p>
+<p>效果如下：</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/demo.gif" alt="demo效果"></p>
+<p>1、基础代码（项目中包含两个VC：FirstViewController SecondViewController）<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions &#123;</div><div class="line">    <span class="comment">// Override point for customization after application launch.</span></div><div class="line">    <span class="keyword">self</span>.window = [[<span class="built_in">UIWindow</span> alloc] initWithFrame:[[<span class="built_in">UIScreen</span> mainScreen] bounds]];</div><div class="line">    FirstViewController *firstVC = [[FirstViewController alloc] init];</div><div class="line">    <span class="built_in">UINavigationController</span> *naviController = [[<span class="built_in">UINavigationController</span> alloc] initWithRootViewController:firstVC];</div><div class="line">    <span class="keyword">self</span>.window.rootViewController = naviController;</div><div class="line">    [<span class="keyword">self</span>.window makeKeyAndVisible];</div><div class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>其中 FirstViewController 视图中有一个 btn 用于跳转到 SecondViewController<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="comment">// Do any additional setup after loading the view.</span></div><div class="line">    [<span class="keyword">self</span>.view setBackgroundColor:[<span class="built_in">UIColor</span> whiteColor]];</div><div class="line">    <span class="keyword">self</span>.title = <span class="string">@"FirstVC"</span>;</div><div class="line"></div><div class="line">    <span class="built_in">CGRect</span> rect = [[<span class="built_in">UIScreen</span> mainScreen] bounds];</div><div class="line">    <span class="built_in">UIButton</span> *btn = [<span class="built_in">UIButton</span> buttonWithType:<span class="built_in">UIButtonTypeRoundedRect</span>];</div><div class="line">    btn.layer.bounds = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">50</span>);</div><div class="line">    btn.layer.position = <span class="built_in">CGPointMake</span>(rect.size.width / <span class="number">2</span>, rect.size.height / <span class="number">2</span>);</div><div class="line">    [btn setTitle:<span class="string">@"Click -- Push"</span> forState:<span class="built_in">UIControlStateNormal</span>];</div><div class="line">    [btn addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(btnPressed:) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];</div><div class="line">    [<span class="keyword">self</span>.view addSubview:btn];</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)btnPressed:(<span class="built_in">UIButton</span> *)btn</div><div class="line">&#123;</div><div class="line">    SecondViewController *secondVC = [[SecondViewController alloc] init];</div><div class="line">    [<span class="keyword">self</span>.navigationController pushViewController:secondVC animated:<span class="literal">YES</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2、定制 Pan 手势，我们只在 Pan 手势是向右滑动的时候才做响应。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> *  指定 pan 的方向</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) PanDirection direction;</div><div class="line"><span class="comment">/**</span></div><div class="line"> *  该标志用于判断是否当前正在滑动中</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> dragging;</div></pre></td></tr></table></figure>
+<p>注意：<code>#import &lt;UIKit/UIGestureRecognizerSubclass.h&gt;</code><br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)touchesBegan:(<span class="built_in">NSSet</span> *)touches withEvent:(<span class="built_in">UIEvent</span> *)event</div><div class="line">&#123;</div><div class="line">    [<span class="keyword">super</span> touchesBegan:touches withEvent:event];</div><div class="line">    <span class="keyword">self</span>.dragging = <span class="literal">NO</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)touchesMoved:(<span class="built_in">NSSet</span> *)touches withEvent:(<span class="built_in">UIEvent</span> *)event</div><div class="line">&#123;</div><div class="line">    [<span class="keyword">super</span> touchesMoved:touches withEvent:event];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.state == <span class="built_in">UIGestureRecognizerStateFailed</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">CGPoint</span> velocity = [<span class="keyword">self</span> velocityInView:<span class="keyword">self</span>.view];</div><div class="line"></div><div class="line">    <span class="comment">// 只检测一次</span></div><div class="line">    <span class="keyword">if</span> (!<span class="keyword">self</span>.dragging)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">NSDictionary</span> *velocities = @&#123;</div><div class="line">                                     @(PanDirectionRight) : @(velocity.x),</div><div class="line">                                     @(PanDirectionDown) : @(velocity.y),</div><div class="line">                                     @(PanDirectionLeft) : @(-velocity.x),</div><div class="line">                                     @(PanDirectionUp) : @(-velocity.y)</div><div class="line">                                     &#125;;</div><div class="line">        <span class="built_in">NSArray</span> *keysSorted = [velocities keysSortedByValueUsingSelector:<span class="keyword">@selector</span>(compare:)];</div><div class="line"></div><div class="line">        <span class="comment">// 如果 pan 的方向和指定的方向不同，那么状态为 fail</span></div><div class="line">        <span class="keyword">if</span> ([[keysSorted lastObject] integerValue] != <span class="keyword">self</span>.direction)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">self</span>.state = <span class="built_in">UIGestureRecognizerStateFailed</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">self</span>.dragging = <span class="literal">YES</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3、定制切换动画效果<br>为 UIView 添加了一个扩展方法：使得 pop 出的视图在左侧边缘添加一个阴影，且随着移动渐变。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)addLeftSideShadowWithFading</div><div class="line">&#123;</div><div class="line">    <span class="comment">// 在视图的左侧边缘添加一个阴影效果</span></div><div class="line">    <span class="built_in">CGFloat</span> shadowWidth = <span class="number">4.0</span>f;</div><div class="line">    <span class="built_in">CGFloat</span> shadowVerticalPadding = <span class="number">-20.0</span>f;</div><div class="line">    <span class="built_in">CGFloat</span> shadowHeight = <span class="built_in">CGRectGetHeight</span>(<span class="keyword">self</span>.frame) - <span class="number">2</span> * shadowVerticalPadding;</div><div class="line">    <span class="built_in">CGRect</span> shadowRect = <span class="built_in">CGRectMake</span>(-shadowWidth, shadowVerticalPadding, shadowWidth, shadowHeight);</div><div class="line">    <span class="built_in">UIBezierPath</span> *shadowPath = [<span class="built_in">UIBezierPath</span> bezierPathWithRect:shadowRect];</div><div class="line">    <span class="keyword">self</span>.layer.shadowPath = [shadowPath <span class="built_in">CGPath</span>];</div><div class="line">    <span class="keyword">self</span>.layer.shadowOpacity = <span class="number">0.1</span>f;</div><div class="line"></div><div class="line">    <span class="comment">// 在动画执行过程中，阴影透明度降低</span></div><div class="line">    <span class="built_in">CGFloat</span> toValue = <span class="number">0.0</span>f;</div><div class="line">    <span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"shadowOpacity"</span>];</div><div class="line">    animation.fromValue = @(<span class="keyword">self</span>.layer.shadowOpacity);</div><div class="line">    animation.toValue = @(toValue);</div><div class="line">    [<span class="keyword">self</span>.layer addAnimation:animation forKey:<span class="literal">nil</span>];</div><div class="line">    <span class="keyword">self</span>.layer.shadowOpacity = toValue;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>接着就是实现 <code>UIViewControllerAnimatedTransitioning</code> 协议中的方法了<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">NSTimeInterval</span>)transitionDuration:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> [transitionContext isInteractive] ? <span class="number">0.4</span>f : <span class="number">0.5</span>f;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 注意： 这个动画是应用于 pop view controller 的时候，所以 fromVC 是需要 pop 的 VC (位于上层)，而 toVC 是需要展现的 VC (位于下层)。</span></div><div class="line">- (<span class="keyword">void</span>)animateTransition:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext</div><div class="line">&#123;</div><div class="line">    <span class="built_in">UIViewController</span> *toViewController = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</div><div class="line">    <span class="built_in">UIViewController</span> *fromViewController = [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextFromViewControllerKey</span>];</div><div class="line">    <span class="comment">// toVC 置于 fromVC 的下面</span></div><div class="line">    [[transitionContext containerView] insertSubview:toViewController.view belowSubview:fromViewController.view];</div><div class="line"></div><div class="line">    <span class="comment">// 增加视觉效果：toVC 从左往右移动。那么先做一个左移动</span></div><div class="line">    <span class="built_in">CGFloat</span> toViewControllerXTranslation = - <span class="built_in">CGRectGetWidth</span>([transitionContext containerView].bounds) * <span class="number">0.3</span>f;</div><div class="line">    toViewController.view.transform = <span class="built_in">CGAffineTransformMakeTranslation</span>(toViewControllerXTranslation, <span class="number">0</span>);</div><div class="line"></div><div class="line"></div><div class="line">    <span class="comment">// 为 fromVC 添加一个左侧阴影</span></div><div class="line">    [fromViewController.view addLeftSideShadowWithFading];</div><div class="line">    <span class="built_in">BOOL</span> previousClipsToBounds = fromViewController.view.clipsToBounds;</div><div class="line">    fromViewController.view.clipsToBounds = <span class="literal">NO</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 为 toVC 添加一个视图 -- 用于视觉效果（蒙层）</span></div><div class="line">    <span class="built_in">UIView</span> *dimmingView = [[<span class="built_in">UIView</span> alloc] initWithFrame:toViewController.view.bounds];</div><div class="line">    dimmingView.backgroundColor = [<span class="built_in">UIColor</span> colorWithWhite:<span class="number">0.0</span>f alpha:<span class="number">0.1</span>f];</div><div class="line">    [toViewController.view addSubview:dimmingView];</div><div class="line"></div><div class="line">    [<span class="built_in">UIView</span> animateWithDuration:[<span class="keyword">self</span> transitionDuration:transitionContext] delay:<span class="number">0</span> options:<span class="built_in">UIViewAnimationOptionCurveLinear</span> animations:^&#123;</div><div class="line"></div><div class="line">        toViewController.view.transform = <span class="built_in">CGAffineTransformIdentity</span>;</div><div class="line">        fromViewController.view.transform = <span class="built_in">CGAffineTransformMakeTranslation</span>(toViewController.view.frame.size.width, <span class="number">0</span>);</div><div class="line">        dimmingView.alpha = <span class="number">0.0</span>f;</div><div class="line"></div><div class="line">    &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</div><div class="line">        [dimmingView removeFromSuperview];</div><div class="line">        fromViewController.view.transform = <span class="built_in">CGAffineTransformIdentity</span>;</div><div class="line">        fromViewController.view.clipsToBounds = previousClipsToBounds;</div><div class="line">        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];</div><div class="line"></div><div class="line">    &#125;];</div><div class="line"></div><div class="line">    <span class="keyword">self</span>.toViewController = toViewController;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)animationEnded:(<span class="built_in">BOOL</span>)transitionCompleted</div><div class="line">&#123;</div><div class="line">    <span class="comment">// 当切换动画取消时，重置 toViewController 的 transform</span></div><div class="line">    <span class="keyword">if</span> (!transitionCompleted)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">self</span>.toViewController.view.transform = <span class="built_in">CGAffineTransformIdentity</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3、添加 Pan 手势 和  <code>UINavigationControllerDelegate</code> 委托方法中的处理</p>
+<p>我们创建一个类：<br><code>@interface SwipeToPop : NSObject &lt;UINavigationControllerDelegate&gt;</code></p>
+<p>我们传入一个 NavigationController 对象，然后为其添加 Pan 手势</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">instancetype</span>)initWithNavigationController:(<span class="built_in">UINavigationController</span> *)navigationController</div><div class="line">&#123;</div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">self</span>.naviController = navigationController;</div><div class="line"></div><div class="line">        <span class="comment">// pan 手势</span></div><div class="line">        DirectionalPanGesture *panGesture = [[DirectionalPanGesture alloc] initWithTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(handlePanGesture:)];</div><div class="line">        panGesture.maximumNumberOfTouches = <span class="number">1</span>;</div><div class="line">        <span class="comment">// 指定向右滑动才响应</span></div><div class="line">        panGesture.direction = PanDirectionRight;</div><div class="line">        <span class="keyword">self</span>.panGesture = panGesture;</div><div class="line">        [<span class="keyword">self</span>.naviController.view addGestureRecognizer:panGesture];</div><div class="line"></div><div class="line">        <span class="comment">// pop 动画效果</span></div><div class="line">        <span class="keyword">self</span>.popAnimation = [[PopAnimation alloc] init];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)handlePanGesture:(<span class="built_in">UIPanGestureRecognizer</span> *)recognizer</div><div class="line">&#123;</div><div class="line">    <span class="built_in">UIView</span> *view = <span class="keyword">self</span>.naviController.view;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (recognizer.state == <span class="built_in">UIGestureRecognizerStateBegan</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">self</span>.naviController.viewControllers.count &gt; <span class="number">1</span> &amp;&amp; !<span class="keyword">self</span>.duringAnimation)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">self</span>.interaction = [[<span class="built_in">UIPercentDrivenInteractiveTransition</span> alloc] init];</div><div class="line">            <span class="keyword">self</span>.interaction.completionCurve = <span class="built_in">UIViewAnimationCurveEaseOut</span>;</div><div class="line"></div><div class="line">            [<span class="keyword">self</span>.naviController popViewControllerAnimated:<span class="literal">YES</span>];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (recognizer.state == <span class="built_in">UIGestureRecognizerStateChanged</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">CGPoint</span> translation = [recognizer translationInView:view];</div><div class="line">        <span class="comment">// 更新交互动作完成百分比</span></div><div class="line">        <span class="built_in">CGFloat</span> d = translation.x &gt; <span class="number">0</span> ? translation.x / <span class="built_in">CGRectGetWidth</span>(view.bounds) : <span class="number">0</span>;</div><div class="line">        [<span class="keyword">self</span>.interaction updateInteractiveTransition:d];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (recognizer.state == <span class="built_in">UIGestureRecognizerStateCancelled</span>)</div><div class="line">    &#123;</div><div class="line">        [<span class="keyword">self</span>.interaction cancelInteractiveTransition];</div><div class="line">        <span class="keyword">self</span>.interaction = <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (recognizer.state == <span class="built_in">UIGestureRecognizerStateEnded</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> ([recognizer velocityInView:view].x &gt; <span class="number">0</span>)</div><div class="line">        &#123;</div><div class="line">            [<span class="keyword">self</span>.interaction finishInteractiveTransition];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            [<span class="keyword">self</span>.interaction cancelInteractiveTransition];</div><div class="line">            <span class="keyword">self</span>.duringAnimation = <span class="literal">NO</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">self</span>.interaction = <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后，实现 <code>UINavigationControllerDelegate</code> 的委托方法<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#pragma mark - UINavigationControllerDelegate</span></div><div class="line">- (<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)navigationController:(<span class="built_in">UINavigationController</span> *)navigationController animationControllerForOperation:(<span class="built_in">UINavigationControllerOperation</span>)operation fromViewController:(<span class="built_in">UIViewController</span> *)fromVC toViewController:(<span class="built_in">UIViewController</span> *)toVC</div><div class="line">&#123;</div><div class="line">    <span class="comment">// 当事进行 pop 的时候，才返回动画</span></div><div class="line">    <span class="keyword">if</span> (operation == <span class="built_in">UINavigationControllerOperationPop</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.popAnimation;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerInteractiveTransitioning</span>&gt;)navigationController:(<span class="built_in">UINavigationController</span> *)navigationController interactionControllerForAnimationController:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animationController</div><div class="line">&#123;</div><div class="line">    <span class="comment">// 返回切换交互动作</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>.interaction;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)navigationController:(<span class="built_in">UINavigationController</span> *)navigationController willShowViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (animated)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">self</span>.duringAnimation = <span class="literal">YES</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)navigationController:(<span class="built_in">UINavigationController</span> *)navigationController didShowViewController:(<span class="built_in">UIViewController</span> *)viewController animated:(<span class="built_in">BOOL</span>)animated</div><div class="line">&#123;</div><div class="line">    <span class="keyword">self</span>.duringAnimation = <span class="literal">NO</span>;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (navigationController.viewControllers.count &lt;= <span class="number">1</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">self</span>.panGesture.enabled = <span class="literal">NO</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">self</span>.panGesture.enabled = <span class="literal">YES</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>最后在 FirstViewController 中补充：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// navigation delegate</span></div><div class="line"><span class="keyword">self</span>.naviDelegate = [[SwipeToPop alloc] initWithNavigationController:<span class="keyword">self</span>.navigationController];</div><div class="line"><span class="keyword">self</span>.navigationController.delegate = <span class="keyword">self</span>.naviDelegate;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p><a href="iOS7中的ViewController切换">iOS7中的ViewController切换 </a><br><a href="https://github.com/fastred/SloppySwiper" target="_blank" rel="external">Github SloppySwiper</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS-7/" rel="tag">#iOS 7</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/17/iOS-7-UIKit-Dynamic/" rel="prev" title="iOS 7 UIKit Dynamic">
+                iOS 7 UIKit Dynamic <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-介绍"><span class="nav-number">1.</span> <span class="nav-text">API 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo"><span class="nav-number">2.</span> <span class="nav-text">Demo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接："><span class="nav-number">3.</span> <span class="nav-text">参考链接：</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2015/02/14/iOS-7-Custom-Transition/';
+      var disqus_title = "iOS 7 Custom Transition";
+      var disqus_url = 'http://objcer.com/2015/02/14/iOS-7-Custom-Transition/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,803 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Promise," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="了解 ES6 Promise">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 ES6 Promise">
+<meta property="og:url" content="http://objcer.com/2017/05/07/About-Promise/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="了解 ES6 Promise">
+<meta property="og:updated_time" content="2017-05-07T10:04:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于 ES6 Promise">
+<meta name="twitter:description" content="了解 ES6 Promise">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/05/07/About-Promise/"/>
+
+
+  <title> 关于 ES6 Promise | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于 ES6 Promise
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-07T18:03:15+08:00" content="2017-05-07">
+              2017-05-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/07/About-Promise/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/07/About-Promise/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/05/07/About-Promise/" class="leancloud_visitors" data-flag-title="关于 ES6 Promise">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>了解 ES6 Promise<br><a id="more"></a></p>
+<h2 id="串行-Promise"><a href="#串行-Promise" class="headerlink" title="串行 Promise"></a>串行 Promise</h2><p>Promise 有一个 <code>Promise.all</code> 方法，接收一个 Promise 对象数组作参数，<strong>并行</strong>执行其中的 Promise 对象，当这个数组中的所有 Promise 对象都 <code>resolve</code> 或者某一个 Promise 对象 <code>reject</code> 时，调用 <code>then</code> 方法。</p>
+<p>但是，如果需要进行在 A 处理完成之后，再开始 B 的处理，对于这种串行顺序处理，Promise 并没有提供支持。那我们只能自己解决。</p>
+<h3 id="重复使用多个-then-实现"><a href="#重复使用多个-then-实现" class="headerlink" title="重复使用多个 then 实现"></a>重复使用多个 <code>then</code> 实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getPromise</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'promise: '</span>, name);</div><div class="line">            resolve();</div><div class="line">        &#125;, <span class="number">2000</span>);</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">getPromise(<span class="string">'one'</span>).then(getPromise.bind(<span class="literal">undefined</span>, <span class="string">'two'</span>));</div></pre></td></tr></table></figure>
+<p>注意：通过 <code>new</code> 实例化一个 Promise 的时候，promise 已经开始执行，所以我们都是通过使用一个函数，返回一个 Promise 对象</p>
+<p>通过使用 <code>then</code> 将两个 Promise 串联起来，使其顺序执行，但是随着串行处理的 Promise 增多，需要不断增加 <code>then</code> 方法的调用，在实际使用过程中并不方便。我们可以通过 <code>for</code> 循环解决这个问题。</p>
+<h3 id="通过-for-循环实现"><a href="#通过-for-循环实现" class="headerlink" title="通过 for 循环实现"></a>通过 <code>for</code> 循环实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ps = [</div><div class="line">    getPromise.bind(<span class="literal">undefined</span>, <span class="string">'one'</span>),</div><div class="line">    getPromise.bind(<span class="literal">undefined</span>, <span class="string">'two'</span>)</div><div class="line">]</div><div class="line"><span class="keyword">var</span> promise = <span class="built_in">Promise</span>.resolve();</div><div class="line">ps.forEach(<span class="function">(<span class="params">p</span>) =&gt;</span> &#123;</div><div class="line">    promise = promise.then(p);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>注意：数组中的元素都是返回 Promise 对象的函数</p>
+<p>这种处理方式需要一个中间变量 <code>promise</code>，通过不断覆盖 <code>promise</code> 变量的值，达到 <code>promise1.then(promise2)</code> 的累积效果。但是由于多使用了一个中间变量，代码显得不够简洁。</p>
+<h3 id="通过-Array-prototype-reduce-实现"><a href="#通过-Array-prototype-reduce-实现" class="headerlink" title="通过 Array.prototype.reduce 实现"></a>通过 <code>Array.prototype.reduce</code> 实现</h3><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var ps = [</div><div class="line">    getPromise.bind(<span class="literal">undefined</span>, <span class="string">'one'</span>),</div><div class="line">    getPromise.bind(<span class="literal">undefined</span>, <span class="string">'two'</span>)</div><div class="line">]</div><div class="line">ps.reduce(<span class="function"><span class="params">(promise, p)</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> promise.<span class="keyword">then</span>(p);</div><div class="line">&#125;, Promise.resolve())</div></pre></td></tr></table></figure>
+<p>这种实现串行 Promise 就显得很简洁了吧，在实际开发应用中大多也用此方式 👊</p>
+<blockquote>
+<p>关于 reduce 用法，参考 <a href="http://objcer.com/2017/03/11/implement-the-array-map-reduce-filter-find-method/#more">实现 map, reduce, filter, find 方法</a></p>
+</blockquote>
+<h3 id="定义串行-Promise-函数"><a href="#定义串行-Promise-函数" class="headerlink" title="定义串行 Promise 函数"></a>定义串行 Promise 函数</h3><p>在应用开发过程中，许多需要 Promise 串行执行，例如多个网络请求串行时，我们就可以通过如下方式进行，该方法接收一个接收一个函数数组，数组中的函数元素都返回一个 Promise 对象，并将每一个 Promise 对象 <code>resolve</code> 的执行结果存储在一个数组中，等所有的 Promise 对象 <code>resolve</code> 之后，将结果数组返回。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> sequencePromise(tasks) &#123;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">_recordResults</span>(<span class="params">resultArray, result</span>) </span>&#123;</div><div class="line">        resultArray.push(result);</div><div class="line">        <span class="keyword">return</span> resultArray;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">let</span> pushResult = _recordResults.bind(<span class="literal">null</span>, []);</div><div class="line">    <span class="keyword">return</span> tasks.reduce(<span class="function">(<span class="params">promise, task</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">return</span> promise.then(task).then(pushResult);</div><div class="line">    &#125;, <span class="built_in">Promise</span>.resolve())</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="可取消的-Promise"><a href="#可取消的-Promise" class="headerlink" title="可取消的 Promise"></a>可取消的 Promise</h2><p>Promise 并没有提供 <code>cancel</code> 的接口，但是我们可以对其进行封装实现 Promise 可取消(cancelable).</p>
+<blockquote>
+<p>参考自：<a href="https://facebook.github.io/react/blog/2015/12/16/ismounted-antipattern.html" target="_blank" rel="external">isMounted is an Antipattern</a></p>
+</blockquote>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">const makeCancelable = <span class="function"><span class="params">(promise)</span> =&gt;</span> &#123;</div><div class="line">    let hasCanceled_ = <span class="literal">false</span>;</div><div class="line"></div><div class="line">    const wrappedPromise = <span class="keyword">new</span> Promise(<span class="function"><span class="params">(resolve, reject)</span> =&gt;</span> &#123;</div><div class="line">        promise.<span class="keyword">then</span>(<span class="function"><span class="params">(val)</span> =&gt;</span></div><div class="line">            hasCanceled_ ? reject(&#123;isCanceled: <span class="literal">true</span>&#125;) : resolve(val)</div><div class="line">        );</div><div class="line">        promise.<span class="keyword">catch</span>(<span class="function"><span class="params">(error)</span> =&gt;</span></div><div class="line">              hasCanceled_ ? reject(&#123;isCanceled: <span class="literal">true</span>&#125;) : reject(error)</div><div class="line">        );</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        promise: wrappedPromise,</div><div class="line">        cancel() &#123;</div><div class="line">          hasCanceled_ = <span class="literal">true</span>;</div><div class="line">        &#125;,</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>测试例子🌰：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var cancelablePromise = makeCancelable(<span class="keyword">new</span> Promise(<span class="function"><span class="params">(resolve, reject)</span> =&gt;</span> &#123;</div><div class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        resolve(<span class="string">'ok'</span>);</div><div class="line">    &#125;, <span class="number">3000</span>)</div><div class="line">&#125;));</div><div class="line"></div><div class="line">cancelablePromise</div><div class="line">    .promise</div><div class="line">    .<span class="keyword">then</span>(<span class="function"><span class="params">(value)</span> =&gt;</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'---resolve---'</span>, value);</div><div class="line">    &#125;)</div><div class="line">    .<span class="keyword">catch</span>(<span class="function"><span class="params">(reason)</span> =&gt;</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'---cancel---'</span>, reason.isCanceled);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line"><span class="regexp">//</span> cancelablePromise.cancel()</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Promise/" rel="tag">#Promise</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/19/About-ES6-Module/" rel="next" title="关于 ES6 Module">
+                <i class="fa fa-chevron-left"></i> 关于 ES6 Module
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/21/JavaScript-Unicode/" rel="prev" title="JavaScript Unicode 编码那些事">
+                JavaScript Unicode 编码那些事 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#串行-Promise"><span class="nav-number">1.</span> <span class="nav-text">串行 Promise</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重复使用多个-then-实现"><span class="nav-number">1.1.</span> <span class="nav-text">重复使用多个 then 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-for-循环实现"><span class="nav-number">1.2.</span> <span class="nav-text">通过 for 循环实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-Array-prototype-reduce-实现"><span class="nav-number">1.3.</span> <span class="nav-text">通过 Array.prototype.reduce 实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义串行-Promise-函数"><span class="nav-number">1.4.</span> <span class="nav-text">定义串行 Promise 函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可取消的-Promise"><span class="nav-number">2.</span> <span class="nav-text">可取消的 Promise</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/05/07/About-Promise/';
+      var disqus_title = "关于 ES6 Promise";
+      var disqus_url = 'http://objcer.com/2017/05/07/About-Promise/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

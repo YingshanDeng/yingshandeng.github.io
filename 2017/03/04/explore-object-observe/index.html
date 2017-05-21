@@ -1,0 +1,848 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="对象监听,数据绑定,脏检查,存取器方法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them.
+
+在前端组件化框架中，基本都有涉及到数据绑定，而数据绑定过程中对对象的监听是怎么实现的呢？本文将对此进行探究。🤓
+JS 中实现对象的监听目前主要有以下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="探究JS对象监听">
+<meta property="og:url" content="http://objcer.com/2017/03/04/explore-object-observe/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="Data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them.
+
+在前端组件化框架中，基本都有涉及到数据绑定，而数据绑定过程中对对象的监听是怎么实现的呢？本文将对此进行探究。🤓
+JS 中实现对象的监听目前主要有以下">
+<meta property="og:updated_time" content="2017-03-04T07:52:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="探究JS对象监听">
+<meta name="twitter:description" content="Data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them.
+
+在前端组件化框架中，基本都有涉及到数据绑定，而数据绑定过程中对对象的监听是怎么实现的呢？本文将对此进行探究。🤓
+JS 中实现对象的监听目前主要有以下">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/03/04/explore-object-observe/"/>
+
+
+  <title> 探究JS对象监听 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                探究JS对象监听
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-04T15:50:26+08:00" content="2017-03-04">
+              2017-03-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/04/explore-object-observe/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/04/explore-object-observe/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/04/explore-object-observe/" class="leancloud_visitors" data-flag-title="探究JS对象监听">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them.</p>
+</blockquote>
+<p>在前端组件化框架中，基本都有涉及到数据绑定，而数据绑定过程中对对象的监听是怎么实现的呢？本文将对此进行探究。🤓</p>
+<p>JS 中实现对象的监听目前主要有以下几种实现方案：</p>
+<ul>
+<li><strong>脏检查（dirty check）</strong></li>
+<li><strong>存取器方法（accessor method）</strong>: <code>Object.defineProperty</code> ES5</li>
+<li><code>Proxy</code>: ES6 支持较差【Proxies are one of the few non polyfillable additions.（babel不支持转换）】</li>
+<li><code>Object.observe</code>: ES7，已经移出草案，不支持</li>
+<li><code>object.watch</code>: 目前只有基于gecko的浏览器如火狐支持,官方建议仅供调试用<br>其中前两种方式是主流。</li>
+</ul>
+<a id="more"></a>
+<h2 id="脏检查（dirty-check）"><a href="#脏检查（dirty-check）" class="headerlink" title="脏检查（dirty check）"></a>脏检查（dirty check）</h2><p>通过一个例子来阐述脏检查的原理：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> provider = &#123;</div><div class="line">  message: <span class="string">'Hello World'</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> consumer = <span class="built_in">document</span>.createElement(<span class="string">'p'</span>)</div><div class="line"></div><div class="line">observe(provider, <span class="string">'message'</span>, message =&gt; &#123;</div><div class="line">  consumer.innerHTML = message</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>定义一个 <code>provider</code> 对象作为生产者，DOM 节点 <code>consumer</code> 作为消费者，通过监听，生产者数据的变更会反映到消费者上，这样也就简单的实现了数据绑定，即生产者数据绑定到了消费者上。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span> <span class="params">(provider, prop, handler)</span> </span>&#123;</div><div class="line">  provider._handlers[prop] = handler</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而其中监听函数 <code>observe</code> 只是将对某一个属性的监听回调 <code>handler</code> 保存起来，方便在该属性值发生变化时，执行该回调。</p>
+<p>接下来就是监听变化过程了，脏检查之所以称之为<em>脏</em>，是因为其不是直接监听属性是否发生了变更，而是通过一个循环检查，不断的遍历检查对象前后是否发生了变化，若是，则调用会回调函数 <code>handler</code>。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">digest</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  providers.forEach(digestProvider)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">digestProvider</span> (<span class="params">provider</span>) </span>&#123;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> provider._handlers) &#123;</div><div class="line">    <span class="keyword">if</span> (provider._prevValues[prop] !== provider[prop]) &#123;</div><div class="line">      provider._prevValues[prop] = provider[prop]</div><div class="line">      handler(provider[prop])</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以对于 <code>digest</code> 方法就需要循环进行调用，譬如使用 <code>setInterval</code> 或者 <code>requestAnimationFrame</code> 方法，显然这个过程会对性能产生影响，当监听的对象越来越多时尤其明显。</p>
+<p>脏检查应该是实现对象监听比较成熟和完整的解决方案。可以参考以下两个项目:</p>
+<ul>
+<li><a href="https://github.com/Polymer/observe-js" target="_blank" rel="external">Polymer/observe-js</a></li>
+<li><a href="https://github.com/MaxArt2501/object-observe" target="_blank" rel="external">MaxArt2501/object-observe</a></li>
+</ul>
+<p>而对于前者，也是 <a href="https://www.polymer-project.org/1.0/" target="_blank" rel="external">Polymer</a> 框架中使用的监听方案，在其 <code>observe-js-behavior.html</code> 文件中我们也发现了循环检测的代码：<br><figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Poll observe-js all the time</span></div><div class="line">setInterval(<span class="keyword">Platform</span>.performMicrotaskCheckpoint, <span class="number">125</span>);</div></pre></td></tr></table></figure></p>
+<h2 id="存取器方法（accessor-method）"><a href="#存取器方法（accessor-method）" class="headerlink" title="存取器方法（accessor method）"></a>存取器方法（accessor method）</h2><p>这种方式是通过重写对象（<code>Object</code>类型）属性的 <code>set</code> 和 <code>get</code> 方法，在 <code>setter</code> 方法中执行相应的监听回调（callback）来实现的。</p>
+<p>对对象的监听需要考虑 <code>Object</code> 类型和 <code>Array</code> 类型这两种类型<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 情况一：obj1 只包含 `Object` 类型</span></div><div class="line"><span class="selector-tag">var</span> obj1 = &#123;</div><div class="line">	<span class="selector-tag">a</span>: <span class="number">1</span>,</div><div class="line">	<span class="selector-tag">b</span>: <span class="number">2</span>,</div><div class="line">	c: &#123;</div><div class="line">		d: <span class="number">3</span>,</div><div class="line">		e: <span class="number">4</span></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 情况二：obj2 包含 `Object` 类型和 `Array` 类型</span></div><div class="line"><span class="selector-tag">var</span> obj2 = &#123;</div><div class="line">	<span class="selector-tag">a</span>: <span class="number">1</span>,</div><div class="line">	<span class="selector-tag">b</span>: <span class="number">2</span>,</div><div class="line">	c: [<span class="number">3</span>, <span class="number">4</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1"></a>Step 1</h3><p>首先我们考虑情况一，对象中不包含 <code>Array</code> 类型<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Observer</span> (<span class="params">obj, callback</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> observe = <span class="function"><span class="keyword">function</span> (<span class="params">obj, path</span>) </span>&#123;</div><div class="line">		<span class="keyword">let</span> type = <span class="built_in">Object</span>.prototype.toString.call(obj);</div><div class="line">		<span class="comment">// Object</span></div><div class="line">		<span class="keyword">if</span>(type === <span class="string">'[object Object]'</span>) &#123;</div><div class="line">			observeObject(obj, path);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> observeObject = <span class="function"><span class="keyword">function</span> (<span class="params">obj, path</span>) </span>&#123;</div><div class="line">		<span class="comment">// for...in 可以遍历对象的实例属性和原型属性，而 Object.keys 只遍历实例属性</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> obj) &#123;</div><div class="line">			<span class="comment">// 注意这里不要用 var</span></div><div class="line">			<span class="keyword">let</span> value = obj[prop],</div><div class="line">				_path = path.slice(); <span class="comment">// 主要对 path 数组进行一次拷贝</span></div><div class="line">				_path.push(prop); <span class="comment">// 记录路径</span></div><div class="line">			<span class="built_in">Object</span>.defineProperty(obj, prop, &#123;</div><div class="line">				<span class="attr">set</span>: <span class="function"><span class="keyword">function</span>(<span class="params">newVle</span>) </span>&#123;</div><div class="line">					callback(_path, newVle, value);</div><div class="line">					value = newVle;</div><div class="line">				&#125;,</div><div class="line">				<span class="attr">get</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">					<span class="keyword">return</span> value;</div><div class="line">				&#125;</div><div class="line">			&#125;);</div><div class="line">			<span class="comment">// 递归</span></div><div class="line">			observe(value, _path);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	observe(obj, []);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>📌注意</strong></p>
+<ul>
+<li><code>for...in</code> 和 <code>Object.keys</code> 的区别，<a href="http://objcer.com/2017/02/22/js-enumerable/">参考链接</a></li>
+<li><code>for...in</code> 循环中，变量定义不能使用 <code>var</code>，需要使用 <code>let</code> 或者用闭包，如下<figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">for</span> (let prop <span class="keyword">in</span> obj) &#123;</div><div class="line">    (<span class="function"><span class="keyword">function</span></span>() &#123;</div><div class="line">        <span class="keyword">var</span> value = obj[prop],</div><div class="line">            _path = path.slice();</div><div class="line">        _path.push(prop); <span class="comment">// 记录路径</span></div><div class="line">        Object.defineProperty(obj, prop, &#123;</div><div class="line">            <span class="keyword">set</span>: <span class="type">function</span>(<span class="keyword">new</span><span class="type">Vle</span>) &#123;</div><div class="line">                <span class="keyword">callback</span>(_path, <span class="keyword">new</span><span class="type">Vle</span>, value);</div><div class="line">                value = <span class="keyword">new</span><span class="type">Vle</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="keyword">get</span>: <span class="type">function</span>() &#123;</div><div class="line">                <span class="keyword">return</span> value;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        <span class="comment">// 递归</span></div><div class="line">        observe(value, _path);</div><div class="line">    &#125;)()</div><div class="line">&#125;</div><div class="line">...</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>测试代码：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">	a: <span class="type">1</span>,</div><div class="line">	b: <span class="type">2</span>,</div><div class="line">	c: <span class="type"></span>&#123;</div><div class="line">		d: <span class="type">3</span>,</div><div class="line">		e: <span class="type">4</span></div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">new</span> <span class="type">Observer</span>(obj, (path, <span class="keyword">new</span><span class="type">Vle</span>, oldVle) =&gt; &#123;</div><div class="line">	console.log(`path: <span class="type"></span>$&#123;path&#125;, <span class="keyword">new</span><span class="type">Value</span>: $&#123;<span class="keyword">new</span><span class="type">Vle</span>&#125;, oldValue: <span class="type"></span>$&#123;oldVle&#125;`)</div><div class="line">&#125;);</div><div class="line"></div><div class="line">obj.a = <span class="number">5</span>; <span class="comment">// log: path: a, newValue: 5, oldValue: 1</span></div><div class="line">obj.c.d = <span class="number">6</span>; <span class="comment">// log: path: c,d, newValue: 6, oldValue: 3</span></div></pre></td></tr></table></figure></p>
+<p><strong>💣局限性</strong><br>通过 <code>Object.defineProperty</code> 实现对对象的监听，我们是在 <code>set</code> 方法中做文章，那么监听的情况也就只限于对象属性的修改（modify），如果对对象属性的增删（add/delete），那么就无能为力了。</p>
+<h3 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2"></a>Step 2</h3><p>接着我们考虑情况二，对象中包含 <code>Object</code> 类型和 <code>Array</code> 类型<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Observer</span> (<span class="params">obj, callback</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> observe = <span class="function"><span class="keyword">function</span> (<span class="params">obj, path</span>) </span>&#123;</div><div class="line">		<span class="keyword">let</span> type = <span class="built_in">Object</span>.prototype.toString.call(obj);</div><div class="line">		<span class="keyword">if</span>(type === <span class="string">'[object Object]'</span> || type== <span class="string">'[object Array]'</span>) &#123;</div><div class="line">			observeObject(obj, path);</div><div class="line">			<span class="keyword">if</span> (type === <span class="string">'[object Array]'</span>) &#123;</div><div class="line">				observeArrayPreparation(obj, path);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> observeObject = <span class="function"><span class="keyword">function</span> (<span class="params">obj, path</span>) </span>&#123;</div><div class="line">		<span class="comment">// for...in 可以遍历对象的实例属性和原型属性，而 Object.keys 只遍历实例属性</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">let</span> prop <span class="keyword">in</span> obj) &#123;</div><div class="line">			<span class="comment">// 注意：不能用 var</span></div><div class="line">			<span class="keyword">let</span> value = obj[prop],</div><div class="line">				_path = path.slice(); <span class="comment">// 主要对 path 数组进行一次拷贝</span></div><div class="line">			 _path.push(prop); <span class="comment">// 记录路径</span></div><div class="line">			<span class="built_in">Object</span>.defineProperty(obj, prop, &#123;</div><div class="line">				<span class="attr">set</span>: <span class="function"><span class="keyword">function</span>(<span class="params">newVle</span>) </span>&#123;</div><div class="line">					callback(_path, newVle, value);</div><div class="line">					value = newVle;</div><div class="line">				&#125;,</div><div class="line">				<span class="attr">get</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">					<span class="keyword">return</span> value;</div><div class="line">				&#125;</div><div class="line">			&#125;);</div><div class="line">			<span class="comment">// 递归</span></div><div class="line">			observe(value, _path);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> observeArrayPreparation = <span class="function"><span class="keyword">function</span> (<span class="params">arr, path</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> _props = [<span class="string">'push'</span>, <span class="string">'pop'</span>, <span class="string">'shift'</span>, <span class="string">'unshift'</span>, <span class="string">'splice'</span>, <span class="string">'sort'</span>, <span class="string">'reverse'</span>];</div><div class="line">		<span class="keyword">var</span> _newProto = <span class="built_in">Object</span>.create(<span class="built_in">Array</span>.prototype);</div><div class="line">		_props.forEach(<span class="function">(<span class="params">prop</span>) =&gt;</span> &#123;</div><div class="line">			<span class="built_in">Object</span>.defineProperty(_newProto, prop, &#123;</div><div class="line">				<span class="attr">value</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 注意：数组方法的参数个数不确定，所以此处暂不处理</span></div><div class="line">					<span class="keyword">var</span> _path = path.slice();</div><div class="line">					_path.push(prop);</div><div class="line">					<span class="comment">// 注意：此处只返回 path</span></div><div class="line">					callback(_path);</div><div class="line">					<span class="built_in">Array</span>.prototype[prop].apply(arr, <span class="built_in">arguments</span>);</div><div class="line">				&#125;</div><div class="line">			&#125;)</div><div class="line">		&#125;);</div><div class="line">		arr.__proto__ = _newProto;</div><div class="line">	&#125;</div><div class="line">	observe(obj, []);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>涉及到数组类型，解决的方法是，重新封装一下数组的操作方法 <code>[&#39;push&#39;, &#39;pop&#39;, &#39;shift&#39;, &#39;unshift&#39;, &#39;splice&#39;, &#39;sort&#39;, &#39;reverse&#39;]</code>，在其中调用相应的监听回调</p>
+<p>测试代码：<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">	a: <span class="type">1</span>,</div><div class="line">	b: <span class="type">2</span>,</div><div class="line">	c: <span class="type"></span>[<span class="number">3</span>, <span class="number">4</span>]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">new</span> <span class="type">Observer</span>(obj, (path, <span class="keyword">new</span><span class="type">Vle</span>, oldVle) =&gt; &#123;</div><div class="line">	console.log(`path: <span class="type"></span>$&#123;path&#125;, <span class="keyword">new</span><span class="type">Value</span>: $&#123;<span class="keyword">new</span><span class="type">Vle</span>&#125;, oldValue: <span class="type"></span>$&#123;oldVle&#125;`)</div><div class="line">&#125;);</div><div class="line"></div><div class="line">obj.c.push(<span class="number">5</span>); <span class="comment">// path: c,push, newValue: undefined, oldValue: undefined</span></div></pre></td></tr></table></figure></p>
+<p><strong>📌注意</strong></p>
+<ul>
+<li>由于数组不同操作方法的参数个数不同，所以在重新定义时需要对此进行判断处理，此处暂不处理，监听回调也只返回 path 路径</li>
+<li>上述对数组的处理还存在很多问题，譬如测试代码中，新添加的 <code>5</code> 这个值并没有进行监听，如果此时对 <code>obj.c[2]</code> 进行修改，那么发现并没有回调监听函数；所以此处只提供一个思路。</li>
+</ul>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.risingstack.com/writing-a-javascript-framework-data-binding-dirty-checking/" target="_blank" rel="external">Writing a JavaScript Framework - Introduction to Data Binding, beyond Dirty Checking</a><br><a href="https://blog.risingstack.com/writing-a-javascript-framework-data-binding-es6-proxy/" target="_blank" rel="external">Writing a JavaScript Framework - Data Binding with ES6 Proxies</a></p>
+<hr>
+<p><strong>TODO：</strong></p>
+<ul>
+<li>脏检查实现代码整理</li>
+<li>Proxy 实现</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/对象监听/" rel="tag">#对象监听</a>
+          
+            <a href="/tags/数据绑定/" rel="tag">#数据绑定</a>
+          
+            <a href="/tags/脏检查/" rel="tag">#脏检查</a>
+          
+            <a href="/tags/存取器方法/" rel="tag">#存取器方法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/28/JavaScript-instanceof-vs-typeof/" rel="next" title="JavaScript typeof vs instanceof🤔">
+                <i class="fa fa-chevron-left"></i> JavaScript typeof vs instanceof🤔
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/11/implement-the-array-map-reduce-filter-find-method/" rel="prev" title="实现 map, reduce, filter, find 方法">
+                实现 map, reduce, filter, find 方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#脏检查（dirty-check）"><span class="nav-number">1.</span> <span class="nav-text">脏检查（dirty check）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存取器方法（accessor-method）"><span class="nav-number">2.</span> <span class="nav-text">存取器方法（accessor method）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-1"><span class="nav-number">2.1.</span> <span class="nav-text">Step 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-2"><span class="nav-number">2.2.</span> <span class="nav-text">Step 2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/03/04/explore-object-observe/';
+      var disqus_title = "探究JS对象监听";
+      var disqus_url = 'http://objcer.com/2017/03/04/explore-object-observe/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

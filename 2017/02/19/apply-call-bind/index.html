@@ -1,0 +1,809 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="apply,call,bind," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 中的 apply、call、bind">
+<meta property="og:url" content="http://objcer.com/2017/02/19/apply-call-bind/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。">
+<meta property="og:updated_time" content="2017-02-22T09:59:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript 中的 apply、call、bind">
+<meta name="twitter:description" content="JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/02/19/apply-call-bind/"/>
+
+
+  <title> JavaScript 中的 apply、call、bind | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript 中的 apply、call、bind
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-19T16:45:07+08:00" content="2017-02-19">
+              2017-02-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/19/apply-call-bind/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/19/apply-call-bind/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/19/apply-call-bind/" class="leancloud_visitors" data-flag-title="JavaScript 中的 apply、call、bind">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JavaScript 中的 apply、call、bind 都可以指定函数执行上下文，本文将简要理解和分析其中的异同。<br><a id="more"></a></p>
+<h2 id="call-和-apply"><a href="#call-和-apply" class="headerlink" title="call 和 apply"></a><code>call</code> 和 <code>apply</code></h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span>.<span class="title">call</span></span>(thisArg[, arg1[, arg2[, ...]]])</div><div class="line"><span class="function"><span class="keyword">fun</span>.<span class="title">apply</span></span>(thisArg[, argsArray])</div></pre></td></tr></table></figure>
+<p><code>call</code> 和 <code>apply</code> 方法类似，第一个参数 <code>thisArg</code> 指定函数运行时的 <code>this</code>，唯一的区别，就是call()方法接受的是若干个参数的列表，而apply()方法接受的是一个包含多个参数的数组。</p>
+<p>从语法中可以知道，这两个方法的作用就是调用函数并且指定上下文的 <code>this</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">arg1, arg2</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.x, <span class="string">'--'</span>, arg1, <span class="string">'--'</span>, arg2);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">1</span></div><div class="line">&#125;</div><div class="line">test(<span class="number">2</span>, <span class="number">3</span>) <span class="comment">// undefined -- 2 -- 3</span></div><div class="line">test.apply(obj, [<span class="number">2</span>, <span class="number">3</span>]) <span class="comment">// 1 -- 2 -- 3</span></div><div class="line">test.call(obj, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">// 1 -- 2 -- 3</span></div></pre></td></tr></table></figure></p>
+<h3 id="使用-call-和-apply-的例子"><a href="#使用-call-和-apply-的例子" class="headerlink" title="使用 call 和 apply 的例子"></a>使用 <code>call</code> 和 <code>apply</code> 的例子</h3><h3 id="使用-call-方法调用父构造函数"><a href="#使用-call-方法调用父构造函数" class="headerlink" title="使用 call 方法调用父构造函数"></a>使用 <code>call</code> 方法调用父构造函数</h3><p>在一个子构造函数中，你可以通过调用父构造函数的 <code>call</code> 方法来实现继承，可以参考这篇文章中的例子: <a href="http://objcer.com/2017/02/17/JS-Inheritance-Prototype/">JS继承与原型链</a></p>
+<h3 id="apply-允许你在某些本来需要写成遍历数组变量的任务中使用内建的函数"><a href="#apply-允许你在某些本来需要写成遍历数组变量的任务中使用内建的函数" class="headerlink" title="apply 允许你在某些本来需要写成遍历数组变量的任务中使用内建的函数"></a><code>apply</code> 允许你在某些本来需要写成遍历数组变量的任务中使用内建的函数</h3><p>例如查找数组中的最大、最小值<br><figure class="highlight q"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> numbers = [<span class="number">5</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">7</span>];</div><div class="line"></div><div class="line"><span class="built_in">var</span> <span class="built_in">max</span> = Math.<span class="built_in">max</span>.apply(<span class="built_in">null</span>, numbers);</div><div class="line"><span class="built_in">var</span> <span class="built_in">min</span> = Math.<span class="built_in">min</span>.apply(<span class="built_in">null</span>, numbers);</div><div class="line"></div><div class="line"><span class="comment">// Object Spread Operator</span></div><div class="line"><span class="built_in">var</span> <span class="built_in">max</span> = Math.<span class="built_in">max</span>(...numbers);</div><div class="line"><span class="built_in">var</span> <span class="built_in">min</span> = Math.<span class="built_in">min</span>(...numbers);</div></pre></td></tr></table></figure></p>
+<p>注意：这里并不需要指定 this，所以第一个参数为 null 或者 undefined；其实这里用 <code>apply</code> 只是为了方便传参而已，而使用 ES6 的 Object Spread Operator 也可以达到类似的效果</p>
+<blockquote>
+<p>但是当心：如果用上面的方式调用 apply, 你很可能会遇到方法参数个数越界的问题. 当你对一个方法传入非常多的参数 (比如超过1W多个参数) 时, 就非常有可能会导致越界问题, 这个临界值是根据不同的 JavaScript 引擎而定的。如果你的参数数组可能非常大, 那么推荐使用下面这种策略来处理: 将参数数组切块后循环传入目标方法:<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function minOfArray(arr) &#123;</div><div class="line">  <span class="built_in">var</span> <span class="built_in">min</span> = Infinity;</div><div class="line">  <span class="built_in">var</span> QUANTUM = <span class="number">32768</span>;</div><div class="line"></div><div class="line">  <span class="keyword">for</span> (<span class="built_in">var</span> i = <span class="number">0</span>, len = arr.<span class="built_in">length</span>; i &lt; len; i += QUANTUM) &#123;</div><div class="line">    <span class="built_in">var</span> submin = Math.<span class="built_in">min</span>.<span class="built_in">apply</span>(null, arr.slice(i, Math.<span class="built_in">min</span>(i + QUANTUM, len)));</div><div class="line">    <span class="built_in">min</span> = Math.<span class="built_in">min</span>(submin, <span class="built_in">min</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="built_in">return</span> <span class="built_in">min</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">var</span> <span class="built_in">min</span> = minOfArray([<span class="number">5</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">7</span>]);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="在”monkey-patching”中使用-apply"><a href="#在”monkey-patching”中使用-apply" class="headerlink" title="在”monkey-patching”中使用 apply"></a>在”monkey-patching”中使用 <code>apply</code></h3><blockquote>
+<p>动态修改已有的方法，称之为猴子补丁</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> originalfoo = someobject.foo;</div><div class="line">someobject.foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">//在调用函数前干些什么</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="built_in">arguments</span>);</div><div class="line">  <span class="comment">//像正常调用这个函数一样来进行调用：</span></div><div class="line">  originalfoo.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>);</div><div class="line">  <span class="comment">//在这里做一些调用之后的事情。</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a><code>bind</code></h2><p><code>bind</code> 函数同样也是修改函数的 <code>this</code> 指向，然后返回一个新的函数，称之为绑定函数。<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fun</span>.<span class="title">bind</span></span>(thisArg[, arg1[, arg2[, ...]]])</div></pre></td></tr></table></figure></p>
+<p><code>bind</code> 的第一个参数将作为它运行时的 this, 之后的一序列参数将会在传递的实参前传入作为它的参数。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">12</span>,</div><div class="line">  <span class="attr">method</span>: <span class="function"><span class="keyword">function</span>(<span class="params">value1, value2</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.x, <span class="string">'---'</span>, value1, <span class="string">'---'</span>, value2)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> k = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">13</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> kmethod = obj.method.bind(k, <span class="string">'value1'</span>);</div><div class="line">kmethod(<span class="string">'value2'</span>);  <span class="comment">// log: 13 "---" "value1" "---" "value2"</span></div></pre></td></tr></table></figure></p>
+<h3 id="使用-bind-快捷调用"><a href="#使用-bind-快捷调用" class="headerlink" title="使用 bind 快捷调用"></a>使用 <code>bind</code> 快捷调用</h3><p>1、用 <code>Array.prototype.slice</code> 来将一个类似于数组的对象（array-like object）转换成一个真正的数组<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line">  <span class="keyword">var</span> arr = slice.apply(<span class="built_in">arguments</span>);</div><div class="line">  <span class="built_in">console</span>.log(arr);</div><div class="line">&#125;</div><div class="line"></div><div class="line">test(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</div></pre></td></tr></table></figure></p>
+<p>用 bind() 可以使这个过程变得简单。在下面这段代码里面，slice 是 Function.prototype 的 call() 方法的绑定函数，并且将 Array.prototype 的 slice() 方法作为 this 的值。这意味着我们压根儿用不着上面那个 apply() 调用了。<br><figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// same as "slice" in the previous example</span></div><div class="line"><span class="keyword">var</span> unboundSlice = <span class="keyword">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">Function</span>.<span class="title">prototype</span>.<span class="title">call</span>.<span class="title">bind</span><span class="params">(unboundSlice)</span>;</span></div><div class="line"></div><div class="line">slice(arguments);</div></pre></td></tr></table></figure></p>
+<p>2、获取数组中的最大、最小值<br><figure class="highlight monkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var <span class="built_in">MAX</span> = <span class="function"><span class="keyword">Function</span>.<span class="title">prototype</span>.<span class="title">apply</span>.<span class="title">bind</span>(</span>Math.<span class="built_in">max</span>, <span class="literal">null</span>);</div><div class="line"><span class="built_in">MAX</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</div><div class="line"></div><div class="line">// 等价于</div><div class="line">Math.<span class="built_in">max</span>.apply(<span class="literal">null</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</div></pre></td></tr></table></figure></p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><code>call</code> 和 <code>apply</code> 函数都是立即执行的，但是 <code>bind</code> 并不是立即执行的，而是返回一个 wrapped apply function。<br><code>bind</code> 函数内部实现：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bind</span>(<span class="params">func, context</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> func.apply(context, <span class="built_in">arguments</span>);</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>看到一个有意思的问题：如果一个函数多次绑定，那么实际上哪一次绑定会生效呢？例如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">log</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.x)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> obj1 = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">1</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> obj2 = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">2</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> obj3 = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">3</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> _log = obj.log.bind(obj1).bind(obj2).bind(obj3);</div><div class="line">_log(); <span class="comment">// 输出：1</span></div></pre></td></tr></table></figure></p>
+<p>显然是第一次绑定生效，其后的绑定都是无效的。原因是 <code>bind</code> 函数返回一个闭包，多次绑定就形成了嵌套，显然嵌套在最里面的生效了，也就是第一次绑定。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="external">Function.prototype.call()</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="external">Function.prototype.apply()</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Example:_Creating_shortcuts" target="_blank" rel="external">Function.prototype.bind()</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/apply/" rel="tag">#apply</a>
+          
+            <a href="/tags/call/" rel="tag">#call</a>
+          
+            <a href="/tags/bind/" rel="tag">#bind</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/17/JS-Inheritance-Prototype/" rel="next" title="JS继承与原型链">
+                <i class="fa fa-chevron-left"></i> JS继承与原型链
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/22/js-enumerable/" rel="prev" title="JS 属性的可枚举性">
+                JS 属性的可枚举性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#call-和-apply"><span class="nav-number">1.</span> <span class="nav-text">call 和 apply</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法"><span class="nav-number">1.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-call-和-apply-的例子"><span class="nav-number">1.2.</span> <span class="nav-text">使用 call 和 apply 的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-call-方法调用父构造函数"><span class="nav-number">1.3.</span> <span class="nav-text">使用 call 方法调用父构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apply-允许你在某些本来需要写成遍历数组变量的任务中使用内建的函数"><span class="nav-number">1.4.</span> <span class="nav-text">apply 允许你在某些本来需要写成遍历数组变量的任务中使用内建的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在”monkey-patching”中使用-apply"><span class="nav-number">1.5.</span> <span class="nav-text">在”monkey-patching”中使用 apply</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bind"><span class="nav-number">2.</span> <span class="nav-text">bind</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-bind-快捷调用"><span class="nav-number">2.1.</span> <span class="nav-text">使用 bind 快捷调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">2.2.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/02/19/apply-call-bind/';
+      var disqus_title = "JavaScript 中的 apply、call、bind";
+      var disqus_url = 'http://objcer.com/2017/02/19/apply-call-bind/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,824 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="枚举,enumerable,属性描述符,实例属性,原型属性," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="可枚举属性是指那些内部 “可枚举” 标志（enumerable）设置为 true 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 true，对于通过 Object.defineProperty ，Object.create 等定义的属性，该标识值默认为 false。可枚举的属性可以通过 for...in 循环进行遍历（除非该属性名是一个 Symbol）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS 属性的可枚举性">
+<meta property="og:url" content="http://objcer.com/2017/02/22/js-enumerable/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:description" content="可枚举属性是指那些内部 “可枚举” 标志（enumerable）设置为 true 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 true，对于通过 Object.defineProperty ，Object.create 等定义的属性，该标识值默认为 false。可枚举的属性可以通过 for...in 循环进行遍历（除非该属性名是一个 Symbol）。">
+<meta property="og:updated_time" content="2017-02-26T13:28:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS 属性的可枚举性">
+<meta name="twitter:description" content="可枚举属性是指那些内部 “可枚举” 标志（enumerable）设置为 true 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 true，对于通过 Object.defineProperty ，Object.create 等定义的属性，该标识值默认为 false。可枚举的属性可以通过 for...in 循环进行遍历（除非该属性名是一个 Symbol）。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/02/22/js-enumerable/"/>
+
+
+  <title> JS 属性的可枚举性 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JS 属性的可枚举性
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-22T17:56:58+08:00" content="2017-02-22">
+              2017-02-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/22/js-enumerable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/22/js-enumerable/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/22/js-enumerable/" class="leancloud_visitors" data-flag-title="JS 属性的可枚举性">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>可枚举属性是指那些内部 “可枚举” 标志（<code>enumerable</code>）设置为 <code>true</code> 的属性，对于通过直接的赋值和属性初始化的属性，该标识值默认为即为 <code>true</code>，对于通过 <code>Object.defineProperty</code> ，<code>Object.create</code> 等定义的属性，该标识值默认为 <code>false</code>。可枚举的属性可以通过 <code>for...in</code> 循环进行遍历（除非该属性名是一个 <code>Symbol</code>）。</p>
+<a id="more"></a>
+<h2 id="属性描述符-Properties’-descriptor"><a href="#属性描述符-Properties’-descriptor" class="headerlink" title="属性描述符(Properties’ descriptor)"></a>属性描述符(Properties’ descriptor)</h2><p>一个属性描述符是一个记录，由下面属性当中的某些组成的：</p>
+<ul>
+<li>value // 该属性的值(仅针对数据属性描述符有效)</li>
+<li>writable // 当且仅当属性的值可以被改变时为true。(仅针对数据属性描述有效)</li>
+<li>configurable // 当且仅当指定对象的属性描述可以被改变或者属性可被删除时，为true。</li>
+<li>enumerable // 当且仅当指定对象的属性可以被枚举出时，为 true。</li>
+<li>get // 获取该属性的访问器函数（getter）。如果没有访问器， 该值为undefined。(仅针对包含访问器或设置器的属性描述有效)</li>
+<li>set // 获取该属性的设置器函数（setter）。 如果没有设置器， 该值为undefined。(仅针对包含访问器或设置器的属性描述有效)</li>
+</ul>
+<p>如下两个方法在添加属性时，都可以指定属性描述符</p>
+<ul>
+<li><code>Object.create(proto, [ propertiesObject ])</code> 方法创建一个拥有指定原型和若干个指定属性的对象。</li>
+<li><code>Object.defineProperties(obj, props)</code> 方法在一个对象上添加或修改一个或者多个自有属性，并返回该对象。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">var obj = Object.create(Object.prototype, &#123;</div><div class="line"><span class="attr">    a:</span> &#123;</div><div class="line"><span class="attr">        configurable:</span> <span class="literal">true</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span>,</div><div class="line"><span class="attr">        value:</span> <span class="number">1</span>,</div><div class="line"><span class="attr">        writable:</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">Object.defineProperties(obj, &#123;</div><div class="line"><span class="attr">    b:</span> &#123;</div><div class="line"><span class="attr">        configurable:</span> <span class="literal">true</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span>,</div><div class="line"><span class="attr">        value:</span> <span class="number">2</span>,</div><div class="line"><span class="attr">        writable:</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>通过 <code>Object.getOwnPropertyDescriptor(obj, prop)</code> 方法可以返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性，也即是实例属性）<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">Object</span><span class="selector-class">.getOwnPropertyDescriptor</span>( obj , <span class="string">'a'</span> )</div><div class="line"><span class="comment">// 输出：</span></div><div class="line">&#123;</div><div class="line">    <span class="attribute">configurable</span>:true</div><div class="line">    <span class="attribute">enumerable</span>:true</div><div class="line">    <span class="attribute">value</span>:<span class="number">1</span></div><div class="line">    <span class="attribute">writable</span>:true</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="可枚举性-enumerable"><a href="#可枚举性-enumerable" class="headerlink" title="可枚举性 enumerable"></a>可枚举性 <code>enumerable</code></h2><p>可枚举性（<code>enumerable</code>）用来控制所描述的属性。具体来说，如果一个属性的 <code>enumerable</code> 为 <code>false</code>，下面三个操作不会取到该属性。</p>
+<ul>
+<li><code>for…in</code> 循环</li>
+<li><code>Object.keys</code> 方法</li>
+<li><code>JSON.stringify</code> 方法</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = <span class="built_in">Object</span>.create(<span class="built_in">Object</span>.prototype, &#123;</div><div class="line">    <span class="attr">a</span>: &#123;</div><div class="line">        <span class="attr">value</span>: <span class="number">1</span>,</div><div class="line">        <span class="attr">enumerable</span>: <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">b</span>: &#123;</div><div class="line">        <span class="attr">value</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">enumerable</span>: <span class="literal">false</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">c</span>: &#123;</div><div class="line">        <span class="attr">value</span>: <span class="number">3</span></div><div class="line">        <span class="comment">// enumerable 默认为 false</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"><span class="comment">// ① `for...in` 循环</span></div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj) &#123;</div><div class="line">    <span class="built_in">console</span>.log(key)</div><div class="line">&#125;</div><div class="line"><span class="comment">// log: a</span></div><div class="line"></div><div class="line"><span class="comment">// ② `Object.keys` 方法</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.keys(obj))</div><div class="line"><span class="comment">// log: ["a"]</span></div><div class="line"></div><div class="line"><span class="comment">// ③ `JSON.stringify` 方法</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(obj))</div><div class="line"><span class="comment">// log: &#123;"a":1&#125;</span></div></pre></td></tr></table></figure>
+<p>虽然 <code>enumerable</code> 为 <code>false</code> 的属性通过遍历操作无法获取到，但是我们还是可以直接获取到属性的值，例如 <code>obj.b</code></p>
+<h2 id="原型属性和实例属性"><a href="#原型属性和实例属性" class="headerlink" title="原型属性和实例属性"></a>原型属性和实例属性</h2><p>javascript 中属性可以分为：实例属性和原型属性。原型属性是定义在对象的原型(<code>prototype</code>)中的属性，而实例属性一方面来自构造的函数中，或者是构造函数实例化后添加的新属性。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">var o = &#123;</div><div class="line"><span class="attr">    d:</span> <span class="number">4</span></div><div class="line">&#125;</div><div class="line">var obj = Object.create(o, &#123;</div><div class="line"><span class="attr">    a:</span> &#123;</div><div class="line"><span class="attr">        value:</span> <span class="number">1</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line"><span class="attr">    b:</span> &#123;</div><div class="line"><span class="attr">        value:</span> <span class="number">2</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line"><span class="attr">    c:</span> &#123;</div><div class="line"><span class="attr">        value:</span> <span class="number">3</span>,</div><div class="line"><span class="attr">        enumerable:</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>如上代码中 <code>obj</code> 的就包含了一个原型属性 <code>d</code>，还有三个实例属性 <code>a, b, c</code> (都是可枚举的属性)。<br>我们注意到 <code>for...in</code> 循环和 <code>Object.keys</code> 方法都可以对对象进行遍历操作，那么二者是否有啥区别呢？执行以下如下代码：<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="built_in">key</span> <span class="keyword">in</span> obj) &#123;</div><div class="line">    console.<span class="built_in">log</span>(<span class="built_in">key</span>)</div><div class="line">&#125;</div><div class="line">// <span class="built_in">log</span>: a b c d</div><div class="line"></div><div class="line">Object.keys(obj)</div><div class="line">// <span class="built_in">log</span>: [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>]</div></pre></td></tr></table></figure></p>
+<p>我们可以注意到：<code>for...in</code> 循环可以遍历对象中所有可枚举的对象属性，包括原型属性和实例属性(也就是继承的属性和对象自有属性)；而 <code>Object.keys</code> 方法只能遍历出实例属性(也就是对象本身自有的属性)。</p>
+<p>而通过 <code>hasOwnProperty</code> 方法就可以区分属性是否是原型属性还是实例属性。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">obj</span><span class="selector-class">.hasOwnProperty</span>(<span class="string">'a'</span>) <span class="comment">// true</span></div><div class="line"><span class="selector-tag">obj</span><span class="selector-class">.hasOwnProperty</span>(<span class="string">'d'</span>) <span class="comment">// false</span></div></pre></td></tr></table></figure></p>
+<p>而通过 <code>Object.getOwnPropertyNames(obj)</code> 方法返回一个由指定对象的所有自身属性的属性名（<strong>包括不可枚举属性</strong>）组成的数组，但不会获取原型链上的属性。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">var o = &#123;</div><div class="line"><span class="symbol">    d:</span> <span class="number">4</span></div><div class="line">&#125;</div><div class="line">var obj = Object.create(o, &#123;</div><div class="line"><span class="symbol">    a:</span> &#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">1</span>,</div><div class="line"><span class="symbol">        enumerable:</span> true</div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    b:</span> &#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">2</span>,</div><div class="line"><span class="symbol">        enumerable:</span> false</div><div class="line">    &#125;,</div><div class="line"><span class="symbol">    c:</span> &#123;</div><div class="line"><span class="symbol">        value:</span> <span class="number">3</span></div><div class="line">        <span class="comment">// enumerable 默认为 false</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line">Object.getOwnPropertyNames(obj) <span class="comment">// ["a", "b", "c"]</span></div></pre></td></tr></table></figure></p>
+<hr>
+<p>补充一个知识点：ES6 class 类的内部所有定义的方法，都是不可枚举的（non-enumerable）；这一点和 ES5 有点差别（<a href="http://es6.ruanyifeng.com/#docs/class" target="_blank" rel="external">详细内容参考</a>）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</div><div class="line">    methoda() &#123;&#125;</div><div class="line">    methodb() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">B</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line">B.prototype.methoda = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</div><div class="line">B.prototype.methodb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">Object</span>.keys(A.prototype) <span class="comment">// []</span></div><div class="line"><span class="built_in">Object</span>.getOwnPropertyNames(A.prototype) <span class="comment">// ["constructor", "methoda", "methodb"]</span></div><div class="line"></div><div class="line"><span class="built_in">Object</span>.keys(B.prototype) <span class="comment">// ["methoda", "methodb"]</span></div><div class="line"><span class="built_in">Object</span>.getOwnPropertyNames(B.prototype) <span class="comment">// ["constructor", "methoda", "methodb"]</span></div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/枚举/" rel="tag">#枚举</a>
+          
+            <a href="/tags/enumerable/" rel="tag">#enumerable</a>
+          
+            <a href="/tags/属性描述符/" rel="tag">#属性描述符</a>
+          
+            <a href="/tags/实例属性/" rel="tag">#实例属性</a>
+          
+            <a href="/tags/原型属性/" rel="tag">#原型属性</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/19/apply-call-bind/" rel="next" title="JavaScript 中的 apply、call、bind">
+                <i class="fa fa-chevron-left"></i> JavaScript 中的 apply、call、bind
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/25/git-tips/" rel="prev" title="Git 的常用命令和技能">
+                Git 的常用命令和技能 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性描述符-Properties’-descriptor"><span class="nav-number">1.</span> <span class="nav-text">属性描述符(Properties’ descriptor)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可枚举性-enumerable"><span class="nav-number">2.</span> <span class="nav-text">可枚举性 enumerable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型属性和实例属性"><span class="nav-number">3.</span> <span class="nav-text">原型属性和实例属性</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/02/22/js-enumerable/';
+      var disqus_title = "JS 属性的可枚举性";
+      var disqus_url = 'http://objcer.com/2017/02/22/js-enumerable/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
