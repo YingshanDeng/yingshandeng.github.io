@@ -84,16 +84,15 @@
 
 
 
-<meta name="description" content="了解 ES6 Promise">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于 ES6 Promise">
 <meta property="og:url" content="http://objcer.com/2017/05/07/About-Promise/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="了解 ES6 Promise">
-<meta property="og:updated_time" content="2017-05-07T10:04:51.000Z">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/do-you-promise.png">
+<meta property="og:updated_time" content="2017-05-21T08:50:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于 ES6 Promise">
-<meta name="twitter:description" content="了解 ES6 Promise">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/do-you-promise.png">
 
 
 
@@ -314,7 +313,8 @@
       
 
       
-        <p>了解 ES6 Promise<br><a id="more"></a></p>
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/do-you-promise.png" alt=""></p>
+<a id="more"></a>
 <h2 id="串行-Promise"><a href="#串行-Promise" class="headerlink" title="串行 Promise"></a>串行 Promise</h2><p>Promise 有一个 <code>Promise.all</code> 方法，接收一个 Promise 对象数组作参数，<strong>并行</strong>执行其中的 Promise 对象，当这个数组中的所有 Promise 对象都 <code>resolve</code> 或者某一个 Promise 对象 <code>reject</code> 时，调用 <code>then</code> 方法。</p>
 <p>但是，如果需要进行在 A 处理完成之后，再开始 B 的处理，对于这种串行顺序处理，Promise 并没有提供支持。那我们只能自己解决。</p>
 <h3 id="重复使用多个-then-实现"><a href="#重复使用多个-then-实现" class="headerlink" title="重复使用多个 then 实现"></a>重复使用多个 <code>then</code> 实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getPromise</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'promise: '</span>, name);</div><div class="line">            resolve();</div><div class="line">        &#125;, <span class="number">2000</span>);</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">getPromise(<span class="string">'one'</span>).then(getPromise.bind(<span class="literal">undefined</span>, <span class="string">'two'</span>));</div></pre></td></tr></table></figure>
