@@ -1,6 +1,9 @@
-title: JS 数组排序
-tags:
+title: JS 数组排序 sort 方法
+date: 2017-05-21 16:42:51
+tags: Array.prototype.sort
+categories: JS
 ---
+
 *[问题引入]:*在推特上看到有人发了这样一段代码
 ```
 var a = [0, -1, -2, 1];
@@ -28,7 +31,7 @@ scores.sort(); // [1, 10, 21, 8]
 var scores = ['1', '10', '21', '8'];
 scores.sort();
 ```
-> 关于码点，参考文章：[]()
+> 关于码点，参考文章：[JavaScript Unicode 编码那些事](http://objcer.com/2017/05/21/JavaScript-Unicode/)
 
 ```
 '1'.codePointAt(0) // 49
