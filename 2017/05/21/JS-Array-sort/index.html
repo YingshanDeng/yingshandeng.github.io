@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Array.prototype.sort," />
 
 
 
@@ -84,16 +84,21 @@
 
 
 
-<meta name="description" content="公司产品在线文章编辑器 写得 今年需要进行移动 APP 的开发，经过考察决定使用 PhoneGap，尽量重用原有的 web 代码，打包成移动 APP。在接下来一段时间将对这个框架进行一些学习。">
+<meta name="description" content="[问题引入]:在推特上看到有人发了这样一段代码123var a = [0, -1, -2, 1];var b = a.sort();console.log(b);
+输出的结果竟然是：[-1, -2, 0, 1]显然该推友对 Array.prototype.sort 用法不熟悉导致的误解。🤓">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PhoneGap 入门踩坑">
-<meta property="og:url" content="http://objcer.com/2017/03/25/getting-start-phonegap/index.html">
+<meta property="og:title" content="JS 数组排序 sort 方法">
+<meta property="og:url" content="http://objcer.com/2017/05/21/JS-Array-sort/index.html">
 <meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="公司产品在线文章编辑器 写得 今年需要进行移动 APP 的开发，经过考察决定使用 PhoneGap，尽量重用原有的 web 代码，打包成移动 APP。在接下来一段时间将对这个框架进行一些学习。">
-<meta property="og:updated_time" content="2017-03-25T08:28:48.000Z">
+<meta property="og:description" content="[问题引入]:在推特上看到有人发了这样一段代码123var a = [0, -1, -2, 1];var b = a.sort();console.log(b);
+输出的结果竟然是：[-1, -2, 0, 1]显然该推友对 Array.prototype.sort 用法不熟悉导致的误解。🤓">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/440px-Sorting_stability_playing_cards.svg.png">
+<meta property="og:updated_time" content="2017-05-21T08:45:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PhoneGap 入门踩坑">
-<meta name="twitter:description" content="公司产品在线文章编辑器 写得 今年需要进行移动 APP 的开发，经过考察决定使用 PhoneGap，尽量重用原有的 web 代码，打包成移动 APP。在接下来一段时间将对这个框架进行一些学习。">
+<meta name="twitter:title" content="JS 数组排序 sort 方法">
+<meta name="twitter:description" content="[问题引入]:在推特上看到有人发了这样一段代码123var a = [0, -1, -2, 1];var b = a.sort();console.log(b);
+输出的结果竟然是：[-1, -2, 0, 1]显然该推友对 Array.prototype.sort 用法不熟悉导致的误解。🤓">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/440px-Sorting_stability_playing_cards.svg.png">
 
 
 
@@ -114,10 +119,10 @@
 
 
 
-  <link rel="canonical" href="http://objcer.com/2017/03/25/getting-start-phonegap/"/>
+  <link rel="canonical" href="http://objcer.com/2017/05/21/JS-Array-sort/"/>
 
 
-  <title> PhoneGap 入门踩坑 | Deng's Blog </title>
+  <title> JS 数组排序 sort 方法 | Deng's Blog </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +244,7 @@
             
             
               
-                PhoneGap 入门踩坑
+                JS 数组排序 sort 方法
               
             
           </h1>
@@ -251,8 +256,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-25T16:27:07+08:00" content="2017-03-25">
-              2017-03-25
+            <time itemprop="dateCreated" datetime="2017-05-21T16:42:51+08:00" content="2017-05-21">
+              2017-05-21
             </time>
           </span>
 
@@ -265,8 +270,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/PhoneGap/" itemprop="url" rel="index">
-                    <span itemprop="name">PhoneGap</span>
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
                   </a>
                 </span>
 
@@ -281,8 +286,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/03/25/getting-start-phonegap/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/25/getting-start-phonegap/" itemprop="commentsCount"></span>
+                <a href="/2017/05/21/JS-Array-sort/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/21/JS-Array-sort/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -292,7 +297,7 @@
 
           
           
-             <span id="/2017/03/25/getting-start-phonegap/" class="leancloud_visitors" data-flag-title="PhoneGap 入门踩坑">
+             <span id="/2017/05/21/JS-Array-sort/" class="leancloud_visitors" data-flag-title="JS 数组排序 sort 方法">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -314,32 +319,25 @@
       
 
       
-        <p>公司产品在线文章编辑器 <a href="https://d.wps.cn/home.html" target="_blank" rel="external">写得</a> 今年需要进行移动 APP 的开发，经过考察决定使用 PhoneGap，尽量重用原有的 web 代码，打包成移动 APP。在接下来一段时间将对这个框架进行一些学习。</p>
-<a id="more"></a>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="http://phonegap.com/" target="_blank" rel="external">PhoneGap</a> 是一个跨平台的移动 app 开发框架，可以把 html css js 写的页面打包成跨平台的可以安装的移动 app，并且可以调用原生的几乎所有的功能，比如摄像头，联系人，加速度等。</p>
-<p>📌 PhoneGap 和 Cordova 的关系？<br>Cordova 是 PhoneGap 贡献给 Apache 后的开源项目，是从 PhoneGap 中抽离出的核心代码，是驱动 PhoneGap 的核心引擎。有点类似 Webkit 和 Google Chrome 的关系。</p>
+        <p><em>[问题引入]:</em>在推特上看到有人发了这样一段代码<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">0</span>, <span class="number">-1</span>, <span class="number">-2</span>, <span class="number">1</span>];</div><div class="line">var b = a.sort();</div><div class="line">console.log(b);</div></pre></td></tr></table></figure></p>
+<p>输出的结果竟然是：<code>[-1, -2, 0, 1]</code><br>显然该推友对 <code>Array.prototype.sort</code> 用法不熟悉导致的误解。🤓<br><a id="more"></a></p>
+<h2 id="Array-prototype-sort"><a href="#Array-prototype-sort" class="headerlink" title="Array.prototype.sort"></a><code>Array.prototype.sort</code></h2><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">arr</span><span class="selector-class">.sort</span>()</div><div class="line"></div><div class="line"><span class="selector-tag">arr</span><span class="selector-class">.sort</span>(<span class="selector-tag">compareFunction</span>)</div></pre></td></tr></table></figure>
+<p><code>sort</code> 方法对数组中的元素进行排序，返回数组；可以指定排序顺序比较函数，如果省略，那么默认排序顺序是根据字符串 Unicode 码点<strong>升序排列</strong>。<br>通过一个例子理解一下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var scores = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">21</span>, <span class="number">8</span>];</div><div class="line">scores.sort(); <span class="comment">// [1, 10, 21, 8]</span></div></pre></td></tr></table></figure></p>
+<p>我们对数组 <code>scores</code> 进行排序，没有指明 <code>compareFunction</code> ，那么元素会按照转换为的字符串的诸个字符的 Unicode 码点进行升序排列。相当于是<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scores = [<span class="string">'1'</span>, <span class="string">'10'</span>, <span class="string">'21'</span>, <span class="string">'8'</span>];</div><div class="line">scores.sort();</div></pre></td></tr></table></figure></p>
 <blockquote>
-<p><a href="http://phonegap.com/blog/2012/03/19/phonegap-cordova-and-whate28099s-in-a-name/" target="_blank" rel="external">PhoneGap, Cordova, and what’s in a name?</a><br>PhoneGap is a distribution of Apache Cordova. You can think of Apache Cordova as the engine that powers PhoneGap, similar to how WebKit is the engine that powers Chrome or Safari.</p>
+<p>关于码点，参考文章：<a href="http://objcer.com/2017/05/21/JavaScript-Unicode/">JavaScript Unicode 编码那些事</a></p>
 </blockquote>
-<h2 id="搭建开发环境"><a href="#搭建开发环境" class="headerlink" title="搭建开发环境"></a>搭建开发环境</h2><ol>
-<li><p>全局安装 <code>phonegap</code></p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="selector-tag">i</span> -g phonegap</div></pre></td></tr></table></figure>
-</li>
-<li><p>常用命令</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 创建一个app</div><div class="line">phonegap <span class="built_in">create</span> path/<span class="built_in">to</span>/my-app<span class="comment"></span></div><div class="line">// 添加 iOS 平台项目</div><div class="line">phonegap <span class="built_in">platform</span> <span class="built_in">add</span> ios <span class="comment">--save</span><span class="comment"></span></div><div class="line">// 更新 iOS 项目代码文件</div><div class="line">phonegap <span class="built_in">prepare</span> ios<span class="comment"></span></div><div class="line">// 启动浏览器调试服务</div><div class="line">phonegap serve<span class="comment"></span></div><div class="line">// iOS 模拟器中运行</div><div class="line">phonegap run ios <span class="comment">--emulator</span></div><div class="line">phonegap run ios <span class="comment">--emulator --target='iPhone-SE, 10.2'</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>在 iOS 模拟器中调试</p>
-</li>
-</ol>
-<p>虽然 PhoneGap 也提供了在浏览器中调试页面的命令 <code>phonegap serve</code> 但是在移动开发过程中，有些例如沙盒，ImagePicker 等的调试，就需要用模拟器来进行。除了通过如上 <code>phonegap run ios --emulator</code> 命令启模拟器之外，我们还可以用 Xcode 打开 <code>platforms/ios/</code> 目录中的 <code>xcworkspace</code> 然后运行跑出模拟器。</p>
-<p>然后我们可以通过 Safari 调试工具对模拟器中的网页进行调试。</p>
-<p>❗️有一个需要注意的技巧：点击 Xcode 中 run 跑出模拟器，如果我们的前端代码有问题，出错的话，就会在出错出中断执行，但是在 Xcode 中的调试输出和 Safari 的调试输出中都没有错误信息，所以我们有时候可能并不会发觉出错了，或者不知道哪里出了问题。解决这个问题比较简单，我们只需要在 Safari 调试页面中 reload 一下页面即可。</p>
-<ul>
-<li>方法一：<br>通常我们都是使用 Sublime Text 或者 Actom 这类编辑器来编写代码。编辑后，我们需要 <code>phonegap prepare ios</code> 来更新 iOS 项目，然后在 Xcode 中重新运行。重复如此的步骤，显然不是太方便。</li>
-<li>方法二：<br>我们知道在 PhoneGap 打包移动应用，是把网页代码放在应用中，通过 file 协议进行加载，这样我们每次修改了页面，就需要通过 <code>phonegap prepare ios</code> 来更新 iOS 项目，然后需要 Xcode 重新运行。那如果我们把网页文件的引用修改成请求我们本地的 server 这样我们每次修改了文件，就只需要 reload 模拟器中的页面就可以了。</li>
-</ul>
-<p>①启动本地 server<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">const gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>)</div><div class="line">const browserSync = <span class="built_in">require</span>(<span class="string">'browser-sync'</span>)</div><div class="line"></div><div class="line">gulp.task(<span class="string">'debug'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">	browserSync(&#123;</div><div class="line">        port: <span class="number">8082</span>,</div><div class="line">        logPrefix: <span class="string">'WPS Writer'</span>,</div><div class="line">        open: <span class="literal">false</span>,</div><div class="line">        server: &#123;</div><div class="line">            baseDir: [<span class="string">'www'</span>],</div><div class="line">            directory: <span class="literal">true</span></div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<p>②网页文件引用路径修改<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"scripts/index.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">变成--&gt;</div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://localhost:8082/scripts/index.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">'<span class="number">1</span>'.codePointAt(<span class="number">0</span>) <span class="comment">// 49</span></div><div class="line">'<span class="number">8</span>'.codePointAt(<span class="number">0</span>) <span class="comment">// 56</span></div></pre></td></tr></table></figure>
+<p>字符 <code>1</code> 的码点比字符 <code>8</code> 的码点小，所以 <code>10</code> 排在 <code>8</code> 前面。同理也就可以解释文章开头的例子了。</p>
+<h2 id="compareFunction"><a href="#compareFunction" class="headerlink" title="compareFunction"></a><code>compareFunction</code></h2><p>比较函数格式如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function compare(a, b) &#123;</div><div class="line">    <span class="keyword">if</span> (a <span class="keyword">is</span> less than b <span class="keyword">by</span> some ordering criterion) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (a <span class="keyword">is</span> greater than b <span class="keyword">by</span> the ordering criterion) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// a must be equal to b</span></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>有点需要注意的是，比较函数必须返回 -1 或者 0 或者 1；而不能返回 true 或者 false。</p>
+<p>为了实现元素为数字的数组按照数值升序排列，我们就需要传入一个比较函数 <code>compareFunction</code>，如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scores = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">21</span>, <span class="number">8</span>];</div><div class="line">scores.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b) <span class="comment">// 升序排列</span></div><div class="line">scores.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> b - a) <span class="comment">// 降序排列</span></div></pre></td></tr></table></figure></p>
+<p>通过比较函数，我们也可以对对象数组按照某个属性进行排序，很方便。</p>
+<h2 id="sort-排序不一定是稳定的"><a href="#sort-排序不一定是稳定的" class="headerlink" title="sort 排序不一定是稳定的"></a>sort 排序不一定是稳定的</h2><blockquote>
+<p>Quicksort is generally considered to be efficient and fast and so is used by V8 as the implementation for Array.prototype.sort() on arrays with more than 23 items. For less than 23 items, V8 uses insertion sort[2]. Merge sort is a competitor of quicksort as it is also efficient and fast but has the added benefit of being stable. This is why Mozilla and Safari use it for their implementation of Array.prototype.sort().</p>
+</blockquote>
+<p>关于排序是否稳定，参考: <a href="http://imweb.io/topic/565cf7253ad940357eb99881" target="_blank" rel="external">维基百科</a><br>这个图也能很好的理解<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/440px-Sorting_stability_playing_cards.svg.png" alt=""></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank" rel="external">MDN Array.prototype.sort</a></p>
 
       
     </div>
@@ -360,22 +358,24 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Array-prototype-sort/" rel="tag">#Array.prototype.sort</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/19/closures/" rel="next" title="闭包（closures）">
-                <i class="fa fa-chevron-left"></i> 闭包（closures）
+              <a href="/2017/05/21/JavaScript-Unicode/" rel="next" title="JavaScript Unicode 编码那些事">
+                <i class="fa fa-chevron-left"></i> JavaScript Unicode 编码那些事
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/26/javascript-this-keyword/" rel="prev" title="详解 javascript this 关键字">
-                详解 javascript this 关键字 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -525,7 +525,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建开发环境"><span class="nav-number">2.</span> <span class="nav-text">搭建开发环境</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-prototype-sort"><span class="nav-number">1.</span> <span class="nav-text">Array.prototype.sort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compareFunction"><span class="nav-number">2.</span> <span class="nav-text">compareFunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sort-排序不一定是稳定的"><span class="nav-number">3.</span> <span class="nav-text">sort 排序不一定是稳定的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
             
           </div>
         </section>
@@ -652,9 +652,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'objcer';
-      var disqus_identifier = '2017/03/25/getting-start-phonegap/';
-      var disqus_title = "PhoneGap 入门踩坑";
-      var disqus_url = 'http://objcer.com/2017/03/25/getting-start-phonegap/';
+      var disqus_identifier = '2017/05/21/JS-Array-sort/';
+      var disqus_title = "JS 数组排序 sort 方法";
+      var disqus_url = 'http://objcer.com/2017/05/21/JS-Array-sort/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
