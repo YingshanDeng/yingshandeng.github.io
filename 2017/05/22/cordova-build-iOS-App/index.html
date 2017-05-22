@@ -1,0 +1,889 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="cordova-build," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cordova 打包应用 - iOS篇">
+<meta property="og:url" content="http://objcer.com/2017/05/22/cordova-build-iOS-App/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/ios.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/iOS-dev-center.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Code%20Signing%20Identity.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Certificates.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Bundle%20ID.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Provisioning%20Profiles.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Xcode-debug.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Code%20Sign%20Identity.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/GUID.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/TeamID.jpg">
+<meta property="og:updated_time" content="2017-05-22T03:55:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cordova 打包应用 - iOS篇">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/ios.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/05/22/cordova-build-iOS-App/"/>
+
+
+  <title> Cordova 打包应用 - iOS篇 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Cordova 打包应用 - iOS篇
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-22T11:53:18+08:00" content="2017-05-22">
+              2017-05-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Cordova/" itemprop="url" rel="index">
+                    <span itemprop="name">Cordova</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/22/cordova-build-iOS-App/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/22/cordova-build-iOS-App/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/05/22/cordova-build-iOS-App/" class="leancloud_visitors" data-flag-title="Cordova 打包应用 - iOS篇">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/ios.jpg" alt=""></p>
+<a id="more"></a>
+<h2 id="苹果开发知识储备"><a href="#苹果开发知识储备" class="headerlink" title="苹果开发知识储备"></a>苹果开发知识储备</h2><p><img src="http://7vikhl.com1.z0.glb.clouddn.com/iOS-dev-center.jpg" alt=""></p>
+<h3 id="Certificates"><a href="#Certificates" class="headerlink" title="Certificates"></a>Certificates</h3><p>Certificates 证书，是用来给应用程序签名(code sign)，证明应用程序的合法性和完整性。对于想要安装到真机调试或者发布到应用商店的应用程序，只有经过签名，才能保证其来源可靠，并且代码完整，未经篡改的。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Code%20Signing%20Identity.jpg" alt=""><br>在Xcode Build Setting 的 Code Signing Identity 中，你可以设置用于为代码签名的证书。</p>
+<ul>
+<li>申请一个 Certificate 之前，需要先申请一个 Certificate Signing Request (CSR) 文件，而这个过程中实际上是生成了一对公钥和私钥，保存在你 Mac 的 Keychain 中。<strong>代码签名正是使用这种基于非对称秘钥的加密方式，用私钥进行签名，用公钥进行验证。</strong></li>
+<li>如下图所示，在你 Mac 的 keychain 的 login 中存储着相关的公钥和私钥，而证书中包含了公钥。用私钥来进行签名，<strong>苹果就可以用证书中的公钥来进行验证</strong>，确保是你对代码进行了签名，而不是别人冒充你，同时也确保代码的完整性等。</li>
+<li>当你想与其他人或其他设备共享证书时，导出证书（.p12类型），把私钥传给它就可以了。</li>
+</ul>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/Certificates.png" alt=""><br>证书主要分为两类：Development 和 Production，Development 证书用来开发和调试应用程序，Production 主要用来分发应用程序。</p>
+<h3 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h3><p>App ID 用于标识一个或者一组 App，App ID 应该是和 Xcode 中的 Bundle ID 是一致的或者匹配的。App ID主要有以下两种：</p>
+<ul>
+<li>An Explicit App ID Matches a Single App：唯一的App ID，这种App ID用于唯一标识一个应用程序，例如 <code>com.ABC.demo1</code>，标识 Bundle ID 为 <code>com.ABC.demo1</code> 的程序。</li>
+<li>Wildcard App IDs Match Multiple Apps：通配符App ID，用于标识一组应用程序。例如 <code>*</code> 可以表示所有应用程序，而 <code>com.ABC.*</code> 可以表示以 <code>com.ABC</code> 开头的所有应用程序。</li>
+</ul>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/Bundle%20ID.jpg" alt=""></p>
+<h3 id="Devices"><a href="#Devices" class="headerlink" title="Devices"></a>Devices</h3><p>Device 是指运行 iOS 系统用于开发调试 App 的设备。每台 Apple 设备使用 UDID 来唯一标识。设备的 UDID 可通过 <code>iTunes-&gt;Summary</code> 或者 <code>Xcode-&gt;Window-&gt;Devices</code> 获取。</p>
+<h3 id="Provisioning-Profiles"><a href="#Provisioning-Profiles" class="headerlink" title="Provisioning Profiles"></a>Provisioning Profiles</h3><p>一个 Provisioning Profile 文件包含了上述的所有内容：<strong>证书、App ID、设备</strong>。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Provisioning%20Profiles.png" alt=""></p>
+<p>在打包应用程序或者在真机上运行调试一个应用程序的过程：</p>
+<ul>
+<li>使用 Certificates 证书来进行签名，用于标识该应用程序合法性和完整性</li>
+<li>指明该应用程序的 App ID，并且验证与 Bundle ID 是否一致</li>
+<li>到真机中运行调试该应用程序，确认该设备是否能够用来运行</li>
+</ul>
+<p>Provisioning Profile 把这些信息全部打包在一起，在打包时嵌入 <code>.ipa</code> 的包里。如上所述，在一台设备上运行应用程序的过程如下：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png" alt=""></p>
+<p>与 Certificates 证书一样，Provisioning Profile 也分为 Development 和 Distribution 两种：</p>
+<ul>
+<li>Development</li>
+<li>Distribution: In House、Ad Hoc、App Store</li>
+</ul>
+<p>注：使用 Development Provisioning Profiles 打包的应用程序在设备中运行，要求该设备 UDID 必须绑定添加到该 Provisioning Profiles 中，否则无法在该设备中运行。解决方法是：绑定添加该设备 UDID，更新 Provisioning Profiles，重新打包。</p>
+<h2 id="Xcode-调试"><a href="#Xcode-调试" class="headerlink" title="Xcode 调试"></a>Xcode 调试</h2><h3 id="Xcode-模拟器调试"><a href="#Xcode-模拟器调试" class="headerlink" title="Xcode 模拟器调试"></a>Xcode 模拟器调试</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 添加/移除 iOS 项目</span></div><div class="line">phonegap <span class="built_in">platform</span> <span class="built_in">add</span> ios</div><div class="line">phonegap <span class="built_in">platform</span> remove ios</div><div class="line"><span class="comment"># 更新 iOS 项目</span></div><div class="line">phonegap <span class="built_in">prepare</span> ios</div></pre></td></tr></table></figure>
+<p>在 <code>/platforms/ios</code> 目录下双击打开 <code>.xcworkspace</code> 文件，Xcode 中选择对应的模拟器即可运行。</p>
+<h3 id="Xcode-真机调试"><a href="#Xcode-真机调试" class="headerlink" title="Xcode 真机调试"></a>Xcode 真机调试</h3><p>Xcode 真机调试需要申请 Certificates 证书，然后添加调试设备 UDID，生成 Provisioning Profiles（Development 类型），下载到电脑中，双击安装。<br>苹果设备连接电脑，Xcode -&gt; Build Settings 设置 Code Signing Identity 和 Provisioning Profiles，设置完成后，选择该设备运行即可。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Xcode-debug.jpg" alt=""></p>
+<p>当然 <a href="http://www.jianshu.com/p/351be39f959e" target="_blank" rel="external">Xcode7以后，无证书也能真机编译调试！</a></p>
+<h2 id="应用打包"><a href="#应用打包" class="headerlink" title="应用打包"></a>应用打包</h2><blockquote>
+<p>cordova iOS 应用打包 <a href="https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app" target="_blank" rel="external">参考文档</a></p>
+</blockquote>
+<p>使用 Development 和 Distribution 的 Certificates 和 Provisioning Profiles 对应用程序进行打包的区别是：Development 打出来的包可以进行应用调试，譬如我们可以通过 Safari 对网页进行调试。</p>
+<p>cordova 提供了一套打包解决方案，在项目<strong>根目录</strong>添加 <code>build.json</code> 文件，配置文件中需要指定的参数包括：</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Code Sign Identity</td>
+<td>–codeSignIdentity</td>
+<td>Code signing identity to use for signing.</td>
+</tr>
+<tr>
+<td>Provisioning Profile</td>
+<td>–provisioningProfile</td>
+<td>GUID of the provisioning profile to be used for signing. It is copied here on your Mac: <code>~/Library/MobileDevice/Provisioning\ Profiles/</code>.</td>
+</tr>
+<tr>
+<td>Code Sign Resource Rules</td>
+<td>–codesignResourceRules    (Optional)</td>
+<td>Used to control which files in a bundle should be sealed by a code signature. For more details, read The OS X Code Signing In Depth article.</td>
+</tr>
+<tr>
+<td>Development Team</td>
+<td>–developmentTeam</td>
+<td>This is new for Xcode 8. The development team (Team ID) to use for code signing. You would use this setting and a simplified Code Sign Identity (i.e. just ‘iPhone Developer’) to sign your apps, you do not need to provide a Provisioning Profile.</td>
+</tr>
+<tr>
+<td>Packaging Type</td>
+<td>–packageType</td>
+<td>This will determine what type of build is generated by Xcode. Valid options are development (the default), enterprise, ad-hoc, and app-store.</td>
+</tr>
+</tbody>
+</table>
+<p>解释一下需要用到的四个参数：</p>
+<ul>
+<li><strong>Code Sign Identity</strong>：应用程序签名时使用的证书标识。如下图<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Code%20Sign%20Identity.jpg" alt=""></li>
+<li><strong>Provisioning Profile</strong>：Provisioning Profile 的 GUID。进入 <code>~/Library/MobileDevice/Provisioning\ Profiles/</code> 目录，即可获取到对应 Provisioning Profile 的 GUID<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/GUID.jpg" alt=""></li>
+<li><strong>Development Team</strong>：开发团队 ID<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/TeamID.jpg" alt=""></li>
+<li><strong>Packaging Type</strong>：打包类型，包括：development、enterprise, ad-hoc, 和 app-store</li>
+</ul>
+<p><code>build.json</code> 配置如下：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"ios"</span>: &#123;</div><div class="line">        <span class="attr">"debug"</span>: &#123;</div><div class="line">            <span class="attr">"codeSignIdentity"</span>: <span class="string">"iPhone Developer: Deng Yingshan (Z7********)"</span>,</div><div class="line">            <span class="attr">"provisioningProfile"</span>: <span class="string">"91840e00-****-****-****-************"</span>,</div><div class="line">            <span class="attr">"developmentTeam"</span>: <span class="string">"32********"</span>,</div><div class="line">            <span class="attr">"packageType"</span>: <span class="string">"development"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"release"</span>: &#123;</div><div class="line">            <span class="attr">"codeSignIdentity"</span>: <span class="string">"iPhone Distribution: Zhuhai Kingsoft Office Software Co., Ltd."</span>,</div><div class="line">            <span class="attr">"provisioningProfile"</span>: <span class="string">"ce06cf9c-****-****-****-************"</span>,</div><div class="line">            <span class="attr">"packageType"</span>: <span class="string">"enterprise"</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>❗️注意：</strong></p>
+<ul>
+<li>签名证书 Identity 一定要和 Provisioning Profiles GUID 对应上，否则打包不成功</li>
+<li>打包类型 enterprise 即为使用 in house 类型的 Distribution Provisioning Profiles</li>
+</ul>
+<h3 id="Development"><a href="#Development" class="headerlink" title="Development"></a>Development</h3><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">cordova</span> <span class="comment">build</span> <span class="comment">ios</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">device</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">debug</span></div></pre></td></tr></table></figure>
+<ul>
+<li>打 Development 必须使用 Development 类型的 Certificates 和 Provisioning Profiles。</li>
+<li>配置文件中，在 <code>debug</code> 属性配置参数；打包命令指定 <code>--debug</code>。</li>
+</ul>
+<h3 id="Distribution"><a href="#Distribution" class="headerlink" title="Distribution"></a>Distribution</h3><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">cordova</span> <span class="comment">build</span> <span class="comment">ios</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">device</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">release</span></div></pre></td></tr></table></figure>
+<ul>
+<li>打 Distribution 必须使用 Distribution 类型的 Certificates 和 Provisioning Profiles。</li>
+<li>配置文件中，在 <code>release</code> 属性配置参数；打包命令指定 <code>--release</code>。</li>
+<li>由于 Distribution 类型包括：In House、Ad Hoc、App Store 三种，对应在配置文件中的 <code>packageType</code> 分别为：<code>enterprise</code>, <code>ad-hoc</code>, 和 <code>app-store</code></li>
+</ul>
+<p>最终打包成功后，我们在 <code>platforms/ios/build/device</code> 目录下找到 <code>.ipa</code> 文件</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app" target="_blank" rel="external">Signing an App</a><br><a href="http://www.cnblogs.com/cywin888/p/3263027.html" target="_blank" rel="external">关于Certificate、Provisioning Profile、App ID的介绍及其之间的关系</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cordova-build/" rel="tag">#cordova-build</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/21/JS-Array-sort/" rel="next" title="JS 数组排序 sort 方法">
+                <i class="fa fa-chevron-left"></i> JS 数组排序 sort 方法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#苹果开发知识储备"><span class="nav-number">1.</span> <span class="nav-text">苹果开发知识储备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Certificates"><span class="nav-number">1.1.</span> <span class="nav-text">Certificates</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Identifiers"><span class="nav-number">1.2.</span> <span class="nav-text">Identifiers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Devices"><span class="nav-number">1.3.</span> <span class="nav-text">Devices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Provisioning-Profiles"><span class="nav-number">1.4.</span> <span class="nav-text">Provisioning Profiles</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Xcode-调试"><span class="nav-number">2.</span> <span class="nav-text">Xcode 调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Xcode-模拟器调试"><span class="nav-number">2.1.</span> <span class="nav-text">Xcode 模拟器调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Xcode-真机调试"><span class="nav-number">2.2.</span> <span class="nav-text">Xcode 真机调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用打包"><span class="nav-number">3.</span> <span class="nav-text">应用打包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Development"><span class="nav-number">3.1.</span> <span class="nav-text">Development</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Distribution"><span class="nav-number">3.2.</span> <span class="nav-text">Distribution</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/05/22/cordova-build-iOS-App/';
+      var disqus_title = "Cordova 打包应用 - iOS篇";
+      var disqus_url = 'http://objcer.com/2017/05/22/cordova-build-iOS-App/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
