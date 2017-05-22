@@ -1,7 +1,7 @@
 title: JavaScript Unicode 编码那些事
 date: 2017-05-21 16:36:57
-tags: Unicode
-categories: JS
+tags: [BMP, charCodeAt, codePointAt]
+categories: Unicode
 ---
 
 
