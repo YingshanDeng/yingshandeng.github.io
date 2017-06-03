@@ -1,0 +1,894 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Push Notification," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cordova 远程推送 - iOS篇">
+<meta property="og:url" content="http://objcer.com/2017/06/04/cordova-register-and-receive-push-notifications-iOS/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/iOS-PUsh-Notifications.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/82BDFC5F-339D-4402-8719-5197D0246305.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Managing%20the%20device%20token.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Remote%20notification%20path%20from%20provider%20to%20device.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/apns-app.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/CreateCertificate.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/aps.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/capabilities.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/build-settings.jpg">
+<meta property="og:updated_time" content="2017-06-03T17:05:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cordova 远程推送 - iOS篇">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/iOS-PUsh-Notifications.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/06/04/cordova-register-and-receive-push-notifications-iOS/"/>
+
+
+  <title> Cordova 远程推送 - iOS篇 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Cordova 远程推送 - iOS篇
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-04T01:03:12+08:00" content="2017-06-04">
+              2017-06-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Cordova/" itemprop="url" rel="index">
+                    <span itemprop="name">Cordova</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/04/cordova-register-and-receive-push-notifications-iOS/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/04/cordova-register-and-receive-push-notifications-iOS/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/06/04/cordova-register-and-receive-push-notifications-iOS/" class="leancloud_visitors" data-flag-title="Cordova 远程推送 - iOS篇">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/iOS-PUsh-Notifications.png" alt=""></p>
+<a id="more"></a>
+<h2 id="APNs"><a href="#APNs" class="headerlink" title="APNs"></a>APNs</h2><blockquote>
+<p>APNs(<em>Apple Push Notification service</em>) <a href="https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1" target="_blank" rel="external">官方文档 Overview</a></p>
+</blockquote>
+<h3 id="推送原理"><a href="#推送原理" class="headerlink" title="推送原理"></a>推送原理</h3><p>当 Provider 远程服务器需要向 App 推送一条消息时，并不是直接往 App 推送消息，而是推送苹果 APNs 服务器上，而苹果的 APNs 服务器再通过与设备建立长连接进而把消息推送到我们的设备上。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/82BDFC5F-339D-4402-8719-5197D0246305.png" alt=""></p>
+<p>由此：APNs 推送就划分成两部分：</p>
+<ul>
+<li>Provider-to-APNs connection (服务端交互)</li>
+<li>APNs-to-device connection (客户端交互)</li>
+</ul>
+<h3 id="deviceToken"><a href="#deviceToken" class="headerlink" title="deviceToken"></a>deviceToken</h3><p>1、当一个 App 注册接收远程通知时，系统会发送请求到 APNs 服务器，APNs 服务器收到此请求会生成一个<strong>独一无二</strong>的 deviceToken，发送到对应请求的 App 上。然后 App 把此 deviceToken 发送给我们自己的服务器 Provider。</p>
+<blockquote>
+<p>❗️一个 deviceToken 可以唯一标识某个设备上的某个 App，可以理解成：<strong>deviceToken = device UUID + App Bundle ID</strong></p>
+</blockquote>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/Managing%20the%20device%20token.png" alt=""></p>
+<p>2、Provider 给我们的设备推送通知的时候，必须包含此 deviceToken。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Remote%20notification%20path%20from%20provider%20to%20device.png" alt=""></p>
+<h3 id="推送消息-Payload"><a href="#推送消息-Payload" class="headerlink" title="推送消息 Payload"></a>推送消息 Payload</h3><blockquote>
+<p><a href="https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW1" target="_blank" rel="external">Creating the Remote Notification Payload</a></p>
+</blockquote>
+<p>1、Payload 消息大小</p>
+<ul>
+<li>For regular remote notifications, the maximum size is 4KB (4096 bytes)</li>
+<li>For Voice over Internet Protocol (VoIP) notifications, the maximum size is 5KB (5120 bytes)</li>
+<li>If you are using the legacy APNs binary interface to send notifications instead of an HTTP/2 request, the maximum payload size is 2KB (2048 bytes)</li>
+</ul>
+<p>当 Payload 负载大小超过规定的负载大小时，APNs 会拒绝发送此消息。</p>
+<p>2、Payload 消息格式<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// 以下为 Payload 常用字段，详细请参考官方文档</div><div class="line">&#123;</div><div class="line">    <span class="string">"aps"</span> : &#123;</div><div class="line">        <span class="string">"alert"</span>              :   &#123;   // <span class="type">string</span> <span class="keyword">or</span> dictionary</div><div class="line">            <span class="string">"title"</span>          :   "<span class="type">string</span><span class="string">",</span></div><div class="line">            "<span class="keyword">body</span><span class="string">"           :   "</span>string<span class="string">"</span></div><div class="line">        &#125;,</div><div class="line">        "badge<span class="string">"              :    number,</span></div><div class="line">        "sound<span class="string">"              :    "</span>string<span class="string">"</span></div><div class="line">    &#125;,</div><div class="line">    "acme1<span class="string">" : [ "</span>foo<span class="string">",  "</span>bar<span class="string">" ]</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>aps：推送消息必须有的 key<ul>
+<li>alert：推送消息包含此 key 值，系统就会根据用户的设置展示标准的推送信息<ul>
+<li>title：简短描述此调推送消息的目的</li>
+<li>body：推送的内容</li>
+</ul>
+</li>
+<li>badge：在 app 图标上显示消息数量，缺少此 key ，消息数量就不会改变，消除标记时把此 key 对应的 value 设置为0</li>
+<li>sound：设置推送声音的key值，系统默认提示声音对应的 value 值为 default</li>
+</ul>
+</li>
+<li>acme: 以 <code>acme</code> 作为前缀，表示自定义数据</li>
+</ul>
+<p>例如：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"aps"</span> : &#123;</div><div class="line">        <span class="attr">"alert"</span>: <span class="string">"This is a notification"</span>,</div><div class="line">        <span class="attr">"badge"</span>: <span class="number">1</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"acme-data"</span>: [ <span class="string">"foo"</span>,  <span class="string">"bar"</span> ]</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"aps"</span> : &#123;</div><div class="line">        <span class="attr">"alert"</span>: &#123;</div><div class="line">            <span class="attr">"title"</span>: <span class="string">"This is Title"</span>,</div><div class="line">            <span class="attr">"body"</span>: <span class="string">"This is Body"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"badge"</span>: <span class="number">1</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"acme-data"</span>: [ <span class="string">"foo"</span>,  <span class="string">"bar"</span> ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3、当设备处于离线 offline 状态时，APNs 会为保留 Provider 所推送的最后一条通知，当设备转换为连网状态时，APNs则把其保留的最后一条通知推送给我们的设备；如果设备长时间离线，那么最后一条通知也有可能被丢弃。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="http://7vikhl.com1.z0.glb.clouddn.com/apns-app.png" alt=""></p>
+<ul>
+<li>① App 向系统发起请求</li>
+<li>② 系统向 APNs 发送注册远程推送请求</li>
+<li>③ APNs 生成 deviceToken 并返回</li>
+<li>④ App 将 deviceToken 发送给服务器 Provider</li>
+<li>⑤ 从推送管理平台向 Provider 发出推送消息指令</li>
+<li>⑥ Provider 推送消息给 APNs</li>
+<li>⑦ APNs 推送消息给 App</li>
+</ul>
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h2><p>Cordova 项目要集成远程推送功能，需要用到 <a href="https://github.com/phonegap/phonegap-plugin-push" target="_blank" rel="external">phonegap-plugin-push</a> 这个插件，该插件提供了对多个平台的推送支持，当然包括 iOS 和 Android，下面以 iOS 项目为例，详细介绍整个安装过程。</p>
+<blockquote>
+<p>iOS 安装过程：<a href="https://github.com/phonegap/phonegap-plugin-push/blob/master/docs/INSTALLATION.md#ios-details" target="_blank" rel="external">参考文档</a></p>
+</blockquote>
+<p>❗️注意：</p>
+<ul>
+<li>以下安装过程需要<strong>翻墙</strong></li>
+<li>该插件要求 cordova 版本至少 6.1.0，否则要么更新 cordova 或者下载时指定该插件版本号：<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cordova plugin <span class="keyword">add</span> phonegap-plugin-<span class="keyword">push</span><span class="subst">@1</span><span class="number">.8</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>执行安装命令：<br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  wps-<span class="built_in">writer</span> git:(feature/<span class="keyword">edit</span>) cordova plugin add phonegap-plugin-<span class="keyword">push</span></div><div class="line">Fetching plugin <span class="string">"phonegap-plugin-push@1.10.4"</span> via npm</div><div class="line">Installing <span class="string">"phonegap-plugin-push"</span> <span class="keyword">for</span> browser</div><div class="line">Installing <span class="string">"phonegap-plugin-push"</span> <span class="keyword">for</span> ios</div><div class="line">Failed to install 'phonegap-plugin-<span class="keyword">push</span>':undefined</div><div class="line"><span class="built_in">Error</span>: CocoaPods was <span class="keyword">not</span> found. Please install version <span class="number">1.0</span><span class="number">.1</span> <span class="keyword">or</span> greater from https:<span class="comment">//cocoapods.org/</span></div></pre></td></tr></table></figure></p>
+<p>提示我们要安装 CocoaPods，执行如下命令进行安装：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  wps-writer git:(feature/edit) ✗ sudo gem <span class="keyword">install</span> cocoapods</div><div class="line"><span class="keyword">ERROR</span>:  Could <span class="keyword">not</span> find a valid gem <span class="string">'cocoapods'</span> (&gt;= <span class="number">0</span>), here <span class="keyword">is</span> why:</div><div class="line">          Unable <span class="keyword">to</span> download <span class="keyword">data</span> <span class="keyword">from</span> https://ruby.taobao.org/ - Errno::ECONNRESET: <span class="keyword">Connection</span> <span class="keyword">reset</span> <span class="keyword">by</span> peer - SSL_connect (https://ruby.taobao.org/specs<span class="number">.4</span><span class="number">.8</span>.gz)</div></pre></td></tr></table></figure></p>
+<p>根据错误提示我们知道，从淘宝 Ruby 的软件源中找不到 cocoapods，我们需要增加 gem 源<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># 增加/删除 gem 源</span></div><div class="line">gem sources --<span class="keyword">add</span> https:<span class="comment">//rubygems.org/</span></div><div class="line">gem sources --<span class="keyword">remove</span> https:<span class="comment">//rubygems.org/</span></div><div class="line"><span class="meta"># 查看 gem 源</span></div><div class="line">gem sources -l</div></pre></td></tr></table></figure></p>
+<p>安装完 CocoaPods 之后，重新安装插件：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">➜  wps-writer git:(feature/edit) cordova plugin add phonegap-plugin-push</div><div class="line">Fetching plugin <span class="string">"phonegap-plugin-push@1.10.4"</span> via npm</div><div class="line">Installing <span class="string">"phonegap-plugin-push"</span> <span class="keyword">for</span> browser</div><div class="line">Installing <span class="string">"phonegap-plugin-push"</span> <span class="keyword">for</span> ios</div><div class="line">Failed to install <span class="string">'phonegap-plugin-push'</span>:Error: pod: Command failed with exit <span class="selector-tag">code</span> <span class="number">1</span></div><div class="line">    at ChildProcess<span class="selector-class">.whenDone</span> (/Users/YingshanDeng/Documents/WebPS/wps-writer/platforms/ios/cordova/node_modules/cordova-common/src/superspawn<span class="selector-class">.js</span>:<span class="number">169</span>:<span class="number">23</span>)</div><div class="line">    at emitTwo (events<span class="selector-class">.js</span>:<span class="number">100</span>:<span class="number">13</span>)</div><div class="line">    at ChildProcess<span class="selector-class">.emit</span> (events<span class="selector-class">.js</span>:<span class="number">185</span>:<span class="number">7</span>)</div><div class="line">    at maybeClose (internal/child_process<span class="selector-class">.js</span>:<span class="number">827</span>:<span class="number">16</span>)</div><div class="line">    at Process<span class="selector-class">.ChildProcess</span>._handle<span class="selector-class">.onexit</span> (internal/child_process<span class="selector-class">.js</span>:<span class="number">211</span>:<span class="number">5</span>)</div><div class="line">Error: pod: Command failed with exit <span class="selector-tag">code</span> <span class="number">1</span></div></pre></td></tr></table></figure></p>
+<p>安装文档中也可以找到 <a href="https://github.com/phonegap/phonegap-plugin-push/blob/master/docs/INSTALLATION.md#common-cocoapod-installation-issues" target="_blank" rel="external">解决这个问题</a> 的介绍：</p>
+<ul>
+<li>进入 <code>platforms/ios</code> iOS 项目根目录，执行 <code>pod repo update</code></li>
+<li>重新安装该插件</li>
+</ul>
+<p>但是执行 <code>pod repo update</code> 实在是太慢了💩，不能忍。我们可以通过如下方法进行解决：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo rm -fr ~/.cocoapods/repos/<span class="keyword">master</span></div><div class="line"><span class="title">pod</span> setup</div></pre></td></tr></table></figure></p>
+<p>执行 <code>pod setup</code> 会 Specs 整个仓库 clone 到本地，这个仓库是是所有 Pods 的索引，就是一个容器，所有公开的 Pods 都在这里面。整个下载大小约 400M 所以需要点时间 🤣</p>
+<p>下载完毕后，我们再进入 iOS 项目中执行 <code>pod repo update</code> 就很快了。以上操作都顺利完成后，重新安装该插件：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 先移除后添加</div><div class="line">cordova <span class="keyword">plugin</span> <span class="keyword">rm</span> phonegap-<span class="keyword">plugin</span>-push</div><div class="line">cordova <span class="keyword">plugin</span> add phonegap-<span class="keyword">plugin</span>-push</div></pre></td></tr></table></figure></p>
+<p>不出意外就安装成功了 ✌️。</p>
+<p>总结一下其实就是两点：</p>
+<ul>
+<li><code>sudo gem install cocoapods</code></li>
+<li><code>pod setup</code></li>
+</ul>
+<h2 id="使用插件"><a href="#使用插件" class="headerlink" title="使用插件"></a>使用插件</h2><blockquote>
+<p><a href="https://github.com/phonegap/phonegap-plugin-push/blob/master/docs/API.md#pushnotificationinitoptions" target="_blank" rel="external">API 文档</a></p>
+</blockquote>
+<p>插件在全局添加了一个 PushNotification 类。</p>
+<h3 id="PushNotification-init-options"><a href="#PushNotification-init-options" class="headerlink" title="PushNotification.init(options)"></a><code>PushNotification.init(options)</code></h3><p>推送初始化，通过传入配置信息，包含各个平台相应的设置，返回 <code>PushNotification</code> 实例<br>❗️注意：</p>
+<ul>
+<li>必须在 <code>deviceready</code> 事件回调中调用 <code>PushNotification.init()</code></li>
+<li>每一次 App 启动，都需要调用 <code>PushNotification.init()</code>，因为 App 对应的推送服务 registration ID 可能发生变化（对于 iOS 即是 deviceToken）</li>
+</ul>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"> push = PushNotification.init(&#123;</div><div class="line">    <span class="comment">// android: &#123;</span></div><div class="line">    <span class="comment">// &#125;,</span></div><div class="line">    <span class="comment">// browser: &#123;</span></div><div class="line">    <span class="comment">// &#125;,</span></div><div class="line"><span class="symbol">    ios:</span> &#123;</div><div class="line"><span class="symbol">        alert:</span> <span class="string">"true"</span>, <span class="comment">// 弹出通知提示</span></div><div class="line"><span class="symbol">        badge:</span> <span class="string">"true"</span>, <span class="comment">// 应用图标右上角数字标记</span></div><div class="line"><span class="symbol">        sound:</span> <span class="string">"true"</span>, <span class="comment">// 通知提示音</span></div><div class="line"><span class="symbol">        clearBadge:</span> <span class="string">"true"</span> <span class="comment">// 应用打开后清除图标标记</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="事件监听-push-on-event-callback"><a href="#事件监听-push-on-event-callback" class="headerlink" title="事件监听 push.on(event, callback)"></a>事件监听 <code>push.on(event, callback)</code></h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ① 注册通知成功回调，返回的 registrationId</span></div><div class="line"><span class="comment">// 对于 iOS，向 APNs 注册远程推送，返回的 deviceToken 即 registrationId</span></div><div class="line">push.<span class="keyword">on</span>(<span class="string">'registration'</span>, (<span class="built_in">data</span>) =&gt; &#123;</div><div class="line">    console.<span class="keyword">log</span>(<span class="string">'---registration---'</span>, <span class="built_in">data</span>.registrationId)</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// ② 接收到远程推送消息的回调</span></div><div class="line">push.<span class="keyword">on</span>(<span class="string">'notification'</span>, (<span class="built_in">data</span>) =&gt; &#123;</div><div class="line">    <span class="comment">// data.message,</span></div><div class="line">    <span class="comment">// data.title,</span></div><div class="line">    <span class="comment">// data.count,</span></div><div class="line">    <span class="comment">// data.sound,</span></div><div class="line">    <span class="comment">// data.image,</span></div><div class="line">    <span class="comment">// data.additionalData</span></div><div class="line">    console.<span class="keyword">log</span>(<span class="string">'---notification---'</span>, <span class="built_in">data</span>)</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// ③ 内部错误回调</span></div><div class="line">push.<span class="keyword">on</span>(<span class="string">'error'</span>, (e) =&gt; &#123;</div><div class="line">    <span class="comment">// e.message</span></div><div class="line">    console.<span class="keyword">log</span>(<span class="string">'---notification error---'</span>, e.message);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="PushNotification-hasPermission"><a href="#PushNotification-hasPermission" class="headerlink" title="PushNotification.hasPermission"></a><code>PushNotification.hasPermission</code></h3><p>检查 App 是否授权允许推送通知<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">checkPermission: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">        PushNotification.hasPermission(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">            <span class="comment">// resolve(isEnabled)</span></div><div class="line">            resolve(data.isEnabled);</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="get-setApplicationIconBadgeNumber"><a href="#get-setApplicationIconBadgeNumber" class="headerlink" title="get/setApplicationIconBadgeNumber"></a><code>get/setApplicationIconBadgeNumber</code></h3><p>获取/设置应用图标标记数字<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">setIconBadgeNumber(count) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">        <span class="comment">// resolve()</span></div><div class="line">        push.setApplicationIconBadgeNumber(resolve, reject, count);</div><div class="line">    &#125;);</div><div class="line">&#125;,</div><div class="line">getIconBadgeNumber() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">        <span class="comment">// resolve(count)</span></div><div class="line">        push.getApplicationIconBadgeNumber(resolve, reject);</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="badge-自增问题-🤖"><a href="#badge-自增问题-🤖" class="headerlink" title="badge 自增问题 🤖"></a>badge 自增问题 🤖</h3><p>通常来说，应用在接收到一条推送消息通知的时候，图标标记 badge 就应该加一；当打开应用的时候，badge 清零。</p>
+<p>我们知道通过设置 Payload 消息中的 <code>badge</code> 字段，可以设置应用接收到推送消息时，图标标记设置的数值（<code>badge</code> 字段为零即为清空图标标记数字）；而在 PushNotification 插件初始化时通过配置传入 <code>clearBadge</code> 可以设置打开应用时，图标标记清零。</p>
+<p>但是能否做到接收到推送消息时，badge 显示数值自增一呢？就目前 PushNotification 插件来说，并不能做到。而对于微信或者 QQ 这类应用的图标 badge 数值提示的是未读消息数，其设置逻辑应该是通过服务端维护的。</p>
+<p>对于图标标记的设置，参考了一些 App 的做法：</p>
+<ul>
+<li>设置 <code>badge</code> 字段为 1</li>
+<li>不展示图标标记（设置 <code>badge</code> 字段为 0 或者 PushNotification 插件初始化是 <code>badge</code> 设置为 <code>false</code>）</li>
+</ul>
+<h2 id="推送证书"><a href="#推送证书" class="headerlink" title="推送证书"></a>推送证书</h2><p>具备接收远程推送的应用打包时需要使用推送证书，同样也区分开发证书和发布证书。</p>
+<h3 id="导出推送证书"><a href="#导出推送证书" class="headerlink" title="导出推送证书"></a>导出推送证书</h3><p>登录 <a href="https://developer.apple.com" target="_blank" rel="external">苹果开发者中心</a> 在 <code>Certificates, Identifiers &amp; Profiles -&gt; Identifiers -&gt; App IDs</code>，找到应用对应的 App ID，点击 <code>Edit</code> 对 Push Notifications 进行配置导出 certificate 证书。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/CreateCertificate.png" alt=""></p>
+<p>双击安装证书如下：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/aps.png" alt=""></p>
+<p>同时我们也需要更新下载 Provisioning Profile 文件。</p>
+<h3 id="Xcode-真机调试推送配置"><a href="#Xcode-真机调试推送配置" class="headerlink" title="Xcode 真机调试推送配置"></a>Xcode 真机调试推送配置</h3><p>1、target -&gt; Capabilities<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/capabilities.jpg" alt=""></p>
+<p>2、target -&gt; Build Settings -&gt; Signings<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/build-settings.jpg" alt=""></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.jianshu.com/p/4b947569a548" target="_blank" rel="external">iOS推送之远程推送（iOS Notification Of Remote Notification）</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Push-Notification/" rel="tag">#Push Notification</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/22/Unicode-spaces/" rel="next" title="Unicode 之神奇的空格">
+                <i class="fa fa-chevron-left"></i> Unicode 之神奇的空格
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">54</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#APNs"><span class="nav-number">1.</span> <span class="nav-text">APNs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推送原理"><span class="nav-number">1.1.</span> <span class="nav-text">推送原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deviceToken"><span class="nav-number">1.2.</span> <span class="nav-text">deviceToken</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推送消息-Payload"><span class="nav-number">1.3.</span> <span class="nav-text">推送消息 Payload</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装插件"><span class="nav-number">2.</span> <span class="nav-text">安装插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用插件"><span class="nav-number">3.</span> <span class="nav-text">使用插件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PushNotification-init-options"><span class="nav-number">3.1.</span> <span class="nav-text">PushNotification.init(options)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件监听-push-on-event-callback"><span class="nav-number">3.2.</span> <span class="nav-text">事件监听 push.on(event, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PushNotification-hasPermission"><span class="nav-number">3.3.</span> <span class="nav-text">PushNotification.hasPermission</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-setApplicationIconBadgeNumber"><span class="nav-number">3.4.</span> <span class="nav-text">get/setApplicationIconBadgeNumber</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#badge-自增问题-🤖"><span class="nav-number">3.5.</span> <span class="nav-text">badge 自增问题 🤖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推送证书"><span class="nav-number">4.</span> <span class="nav-text">推送证书</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#导出推送证书"><span class="nav-number">4.1.</span> <span class="nav-text">导出推送证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Xcode-真机调试推送配置"><span class="nav-number">4.2.</span> <span class="nav-text">Xcode 真机调试推送配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/06/04/cordova-register-and-receive-push-notifications-iOS/';
+      var disqus_title = "Cordova 远程推送 - iOS篇";
+      var disqus_url = 'http://objcer.com/2017/06/04/cordova-register-and-receive-push-notifications-iOS/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
