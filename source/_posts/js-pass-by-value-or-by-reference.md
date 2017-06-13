@@ -79,7 +79,7 @@ a[2] = "5";   // a is now ["1", "4", "5"]; c still has the value
 console.log(b, c.foo); // "2" "bar"
 ```
 ## 其他
-前段时间在微博上看到[阮一峰微博上说，函数参数默认值不是传值调用](http://weibo.com/1400854834/ErIrQ0BYg?type=comment#_rnd1488085633169)，例子如下：
+1、前段时间在微博上看到[阮一峰微博上说，函数参数默认值不是传值调用](http://weibo.com/1400854834/ErIrQ0BYg?type=comment#_rnd1488085633169)，例子如下：
 ```
 let x = 99;
 function foo(p = x + 1) {
@@ -106,6 +106,9 @@ setTimeout(() => {
 }, 3000)
 ```
 可以发现，代码执行过程中，虽然外部 `x` 发生了变化，但是输出的值还一直是 100。
+
+2、pass by value 和 pass by reference 的区别
+![](http://7vikhl.com1.z0.glb.clouddn.com/pass-by-reference-vs-pass-by-value-animation.gif)
 
 ## 参考链接
 [Javascript by reference vs. by value](http://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value?answertab=votes#tab-top)
