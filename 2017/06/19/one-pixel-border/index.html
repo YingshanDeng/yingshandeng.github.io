@@ -1,0 +1,818 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="devicePixelRatio," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="高清屏一像素边框问题">
+<meta property="og:url" content="http://objcer.com/2017/06/19/one-pixel-border/index.html">
+<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/retinaDisplayMagnified_1159x285@2x.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/F115E87F-990C-4957-B007-26F8B844287D.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/AF218F20-056F-4CB4-8A1F-2949C6913DCD.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/9C362BA4-4C66-4590-BED9-6DCE84EA2232.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/BED6EAE5-B9D5-45B2-A22E-A1B698ECFED1.png">
+<meta property="og:updated_time" content="2017-06-19T13:27:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高清屏一像素边框问题">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/retinaDisplayMagnified_1159x285@2x.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/06/19/one-pixel-border/"/>
+
+
+  <title> 高清屏一像素边框问题 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                高清屏一像素边框问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-06-19T21:24:02+08:00" content="2017-06-19">
+              2017-06-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index">
+                    <span itemprop="name">CSS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/19/one-pixel-border/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/19/one-pixel-border/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/06/19/one-pixel-border/" class="leancloud_visitors" data-flag-title="高清屏一像素边框问题">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/retinaDisplayMagnified_1159x285@2x.png" alt=""><br><a id="more"></a></p>
+<h2 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h2><p>在 iPhone 设备（Retina屏）上一像素边框设置有问题</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/F115E87F-990C-4957-B007-26F8B844287D.png" alt=""></p>
+<p>如上图右所示，UI 要求效果的边框是 1px；如上图左所示，开发出来的效果边框为 2px（膜拜一下UI的像素眼 👍🏿）。设置边框的代码很简单，如下：<br><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#e1e0e0</span>;</div></pre></td></tr></table></figure></p>
+<p>那问题该如何解决呢 🤔</p>
+<h2 id="基本概念-术语"><a href="#基本概念-术语" class="headerlink" title="基本概念(术语)"></a>基本概念(术语)</h2><h3 id="device-pixel-physical-pixel"><a href="#device-pixel-physical-pixel" class="headerlink" title="device pixel / physical pixel"></a>device pixel / physical pixel</h3><p>设备像素（或物理像素）是<strong>显示屏中最小的物理单元</strong>。 每个像素点根据操作系统的指示设置自己的颜色和亮度。</p>
+<h3 id="density-independent-pixel-DIP"><a href="#density-independent-pixel-DIP" class="headerlink" title="density-independent pixel(DIP)"></a>density-independent pixel(DIP)</h3><p>设备无关像素(也叫密度无关像素)，可以认为是<strong>计算机坐标系统中得一个点</strong>，这个点代表一个可以由程序使用的虚拟像素，然后由相关系统转换为物理像素。</p>
+<h3 id="CSS-pixel"><a href="#CSS-pixel" class="headerlink" title="CSS pixel"></a>CSS pixel</h3><p>CSS 像素是浏览器使用的抽象单元，用于精确地，一致地在网页上绘制内容。 通常，<strong>CSS 像素被称为与设备无关的像素（DIP）</strong>。</p>
+<h3 id="devicePixelRatio"><a href="#devicePixelRatio" class="headerlink" title="devicePixelRatio"></a>devicePixelRatio</h3><p>设备像素和设备无关像素之间存在着一定的对应关系，这就是 devicePixelRatio（设备像素比）</p>
+<blockquote>
+<p>devicePixelRatio is the ratio between physical pixels and device-independent pixels (dips) on the device.</p>
+</blockquote>
+<p><strong>devicePixelRatio = device pixels / dips</strong></p>
+<p><code>devicePixelRatio</code> 值为 1 的屏幕称之为标准屏；目前，大部分移动设备都是高清屏，即 <code>devicePixelRatio</code> 值大于 1 的屏幕，对于苹果设备来说，我们经常听到 Retina 视网膜屏，其中 iPhone6/6s/7 的 <code>devicePixelRatio</code> 值为 2；而 iPhone6 plus/6s plus/7 plus 的 <code>devicePixelRatio</code> 值为 3。</p>
+<p>通过一个例子进一步理解其中的关系：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/AF218F20-056F-4CB4-8A1F-2949C6913DCD.png" alt=""></p>
+<p>假设我们需要绘制如下这个 <code>div</code> 节点，<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="selector-tag">div</span> <span class="attribute">height</span>=<span class="string">"2"</span> width=<span class="string">"2"</span>&gt;&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<ul>
+<li><code>div</code> 节点宽度和高度都是 <code>2px</code>，这里的 <code>2px</code> 指的就是 CSS pixel，而 CSS pixel 是抽象的单位，所以不管在标准屏，还是高清屏，其 CSS pixel 都是 <code>2px</code></li>
+<li>1 CSS pixel 等同于 1 DIP</li>
+<li>device pixels = devicePixelRatio * dips<ul>
+<li>在标准屏（<code>devicePixelRatio</code> 值为 1）中绘制这个节点时，节点的设备像素为 <code>2px * 2px</code></li>
+<li>在高清屏（<code>devicePixelRatio</code> 值为 2）中绘制这个节点时，节点的设备像素为 <code>4px * 4px</code></li>
+</ul>
+</li>
+<li>高清屏中节点的面积是标准屏中的 4 倍</li>
+</ul>
+<p>在网页中，我们可以通过 JS 获取 <code>devicePixelRatio</code><br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.devicePixelRatio)</div></pre></td></tr></table></figure></p>
+<p>在 CSS 媒体查询（media query）中也可以用到 <code>devicePixelRatio</code><br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@media</span> only screen and (<span class="attribute">-webkit-min-device-pixel-ratio</span>: <span class="number">2</span>),</div><div class="line"><span class="variable">@media</span> only screen and (<span class="attribute">min-device-pixel-ratio</span>: <span class="number">2</span>) &#123;</div><div class="line">	<span class="comment">/* TODO ... */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="解决一像素边框问题"><a href="#解决一像素边框问题" class="headerlink" title="解决一像素边框问题"></a>解决一像素边框问题</h2><h3 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h3><p>了解了以上这些基本概念，我就知道设置边框一像素 <code>border: 1px solid #e1e0e0;</code> ，在高清屏中展示大于一像素的原因了，因为 <code>devicePixelRatio</code> 这个家伙导致的，由此我们会快就写出如下解决方案：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#e1e0e0</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@media</span> only screen and (<span class="attribute">-webkit-min-device-pixel-ratio</span>: <span class="number">2</span>),</div><div class="line"><span class="variable">@media</span> only screen and (<span class="attribute">min-device-pixel-ratio</span>: <span class="number">2</span>) &#123;</div><div class="line">    <span class="selector-tag">div</span> &#123;</div><div class="line">        <span class="attribute">border</span>: <span class="number">0.5px</span> solid <span class="number">#e1e0e0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@media</span> only screen and (<span class="attribute">-webkit-min-device-pixel-ratio</span>: <span class="number">3</span>),</div><div class="line"><span class="variable">@media</span> only screen and (<span class="attribute">min-device-pixel-ratio</span>: <span class="number">3</span>) &#123;</div><div class="line">    <span class="selector-tag">div</span> &#123;</div><div class="line">        <span class="attribute">border</span>: <span class="number">0.3333px</span> solid <span class="number">#e1e0e0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在 <code>devicePixelRatio</code> 为 2 的时候，设置边框为 <code>0.5px</code>；在 <code>devicePixelRatio</code> 为 2 的时候，设置边框为 <code>0.3333px</code>。但是要注意有些 Retina 屏的浏览器可能不认识 <code>0.5px</code> 的边框，将会把它解析成 <code>0px</code>，这样就没有边框了。</p>
+<h3 id="终极解决方案"><a href="#终极解决方案" class="headerlink" title="终极解决方案"></a>终极解决方案</h3><p>利用伪元素 <code>before/after</code>  <code>transform</code> 来实现，其浏览器兼容性非常好 👍<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">div</span> <span class="built_in">class</span>=<span class="string">"onePixelBorder"</span>&gt;</div><div class="line">    One Pixel Border</div><div class="line">&lt;/<span class="keyword">div</span>&gt;</div></pre></td></tr></table></figure></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/9C362BA4-4C66-4590-BED9-6DCE84EA2232.png" alt=""></p>
+<p>单一边框：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.onePixelBorder</span> &#123;</div><div class="line">    <span class="attribute">position</span>: relative;</div><div class="line">    <span class="attribute">display</span>: inline-block;</div><div class="line">    <span class="attribute">font-size</span>: <span class="number">40px</span>;</div><div class="line">    <span class="attribute">color</span>: <span class="number">#2C2C2C</span>;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">    <span class="attribute">content</span>: <span class="string">''</span>;</div><div class="line">    <span class="attribute">position</span>: absolute;</div><div class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">bottom</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">1px</span>;</div><div class="line">    <span class="attribute">background-color</span>: <span class="number">#2C2C2C</span>;</div><div class="line">    <span class="attribute">-webkit-transform-origin</span>: center bottom;</div><div class="line">    <span class="attribute">transform-origin</span>: center bottom;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">media</span> only screen and (-webkit-min-device-pixel-ratio: <span class="number">2</span>),</div><div class="line">@media only screen and (min-device-pixel-ratio: <span class="number">2</span>) &#123;</div><div class="line">    <span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">scaleY</span>(.5);</div><div class="line">        <span class="attribute">transform</span>: <span class="built_in">scaleY</span>(.5);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">@<span class="keyword">media</span> only screen and (-webkit-min-device-pixel-ratio: <span class="number">3</span>),</div><div class="line">@media only screen and (min-device-pixel-ratio: <span class="number">3</span>) &#123;</div><div class="line">    <span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">scaleY</span>(.333);</div><div class="line">        <span class="attribute">transform</span>: <span class="built_in">scaleY</span>(.333);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>四边边框：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.onePixelBorder</span> &#123;</div><div class="line">    <span class="attribute">position</span>: relative;</div><div class="line">    <span class="attribute">display</span>: inline-block;</div><div class="line">    <span class="attribute">font-size</span>: <span class="number">40px</span>;</div><div class="line">    <span class="attribute">color</span>: <span class="number">#2C2C2C</span>;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">    <span class="attribute">content</span>: <span class="string">''</span>;</div><div class="line">    <span class="attribute">position</span>: absolute;</div><div class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#2C2C2C</span>;</div><div class="line">    <span class="attribute">-webkit-transform-origin</span>: left top;</div><div class="line">    <span class="attribute">transform-origin</span>: left top;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">media</span> only screen and (-webkit-min-device-pixel-ratio: <span class="number">2</span>),</div><div class="line">@media only screen and (min-device-pixel-ratio: <span class="number">2</span>) &#123;</div><div class="line">    <span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">        <span class="attribute">width</span>: <span class="number">200%</span>;</div><div class="line">        <span class="attribute">height</span>: <span class="number">200%</span>;</div><div class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">scale</span>(.5);</div><div class="line">        <span class="attribute">transform</span>: <span class="built_in">scale</span>(.5);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">@<span class="keyword">media</span> only screen and (-webkit-min-device-pixel-ratio: <span class="number">3</span>),</div><div class="line">@media only screen and (min-device-pixel-ratio: <span class="number">3</span>) &#123;</div><div class="line">    <span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">        <span class="attribute">width</span>: <span class="number">300%</span>;</div><div class="line">        <span class="attribute">height</span>: <span class="number">300%</span>;</div><div class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">scale</span>(.333);</div><div class="line">        <span class="attribute">transform</span>: <span class="built_in">scale</span>(.333);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意到以上通过 CSS 媒体查询获知当前屏幕的 <code>devicePixelRatio</code>，然后针对不同的 <code>devicePixelRatio</code> 进行处理。还有一种另一种方式，通过 JS 在 HTML 节点添加 class 表征不同的 <code>devicePixelRatio</code>，例如在 framework7 框架中， HTML 节点就添加了 <code>devicePixelRatio</code> 有关的 class:</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/BED6EAE5-B9D5-45B2-A22E-A1B698ECFED1.png" alt=""></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.smashingmagazine.com/2012/08/towards-retina-web/" target="_blank" rel="external">Towards A Retina Web</a><br><a href="https://www.quirksmode.org/blog/archives/2012/07/more_about_devi.html" target="_blank" rel="external">More about devicePixelRatio</a><br><a href="https://jinlong.github.io/2015/05/24/css-retina-hairlines/" target="_blank" rel="external">Retina屏的移动设备如何实现真正1px的线？</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/devicePixelRatio/" rel="tag">#devicePixelRatio</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/18/cordova-hot-code-push/" rel="next" title="Cordova 代码热更新">
+                <i class="fa fa-chevron-left"></i> Cordova 代码热更新
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#发现问题"><span class="nav-number">1.</span> <span class="nav-text">发现问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念-术语"><span class="nav-number">2.</span> <span class="nav-text">基本概念(术语)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#device-pixel-physical-pixel"><span class="nav-number">2.1.</span> <span class="nav-text">device pixel / physical pixel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#density-independent-pixel-DIP"><span class="nav-number">2.2.</span> <span class="nav-text">density-independent pixel(DIP)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS-pixel"><span class="nav-number">2.3.</span> <span class="nav-text">CSS pixel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#devicePixelRatio"><span class="nav-number">2.4.</span> <span class="nav-text">devicePixelRatio</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决一像素边框问题"><span class="nav-number">3.</span> <span class="nav-text">解决一像素边框问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析问题"><span class="nav-number">3.1.</span> <span class="nav-text">分析问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#终极解决方案"><span class="nav-number">3.2.</span> <span class="nav-text">终极解决方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/06/19/one-pixel-border/';
+      var disqus_title = "高清屏一像素边框问题";
+      var disqus_url = 'http://objcer.com/2017/06/19/one-pixel-border/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
