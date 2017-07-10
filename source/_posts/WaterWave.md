@@ -4,17 +4,12 @@ tags: iOS动画
 categories: iOS
 ---
 
-
-> 这篇文章带来一个水波纹动画效果，实现相对简单。
+这篇文章带来一个水波纹动画效果，实现相对简单。效果如下：
+![水波纹效果图](http://7vikhl.com1.z0.glb.clouddn.com/water-wave.gif)
 
 <!--more-->
 
-效果如下：
-
-![水波纹效果图](http://7vikhl.com1.z0.glb.clouddn.com/water-wave.gif)
-
 ## 实现思路
-
 1、正弦函数（sin）
 
 ![sin](http://7vikhl.com1.z0.glb.clouddn.com/sin-cos.png)
@@ -23,36 +18,35 @@ categories: iOS
 
 对于： `y = sin(x)` `y = A sin (a x + b)` 通过 A  a  b 三个参数，对 sin 函数的形状进行相应的变换。
 
-`y = sin(x)` --> 在 x 轴方向平移 `|b|` 个单位（左加右减）
---> `y = sin(x + b)` --> 横坐标伸长（0 < a < 1）或者缩短（a > 1)  `1/a` 倍
--->`y = sin(ax + b)` -->  纵坐标伸长（A > 1）或者缩短（0 < A < 1） `A` 倍
--->`y = Asin(ax + b)`
+`y = sin(x)`
+- 在 x 轴方向平移 `|b|` 个单位（左加右减）--> `y = sin(x + b)`
+- 横坐标伸长（0 < a < 1）或者缩短（a > 1)  `1/a` 倍 -->`y = sin(ax + b)`
+- 纵坐标伸长（A > 1）或者缩短（0 < A < 1） `A` 倍 -->`y = Asin(ax + b)`
 
 这里动画的实现就是利用这三个参数的变化产生的。
 
 2、`CAShapeLayer`  -- 绘制水波
 
-我们通过 `CAShapeLayer`  传入路径，对水波纹进行绘制。绘制代码如下：
+我们通过 `CAShapeLayer` 传入路径(UIBezierPath)，对水波纹进行绘制。绘制代码如下：
 
 ``` objc
 - (CGPathRef)waterWavePath
 {
-    CGMutablePathRef path = CGPathCreateMutable();
-
-    CGPathMoveToPoint(path, nil, 0, self.waterWaveHeight);
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(0, self.waterWaveHeight)];
 
     CGFloat y = 0.0f;
     for (float x = 0; x <= ScreenRect.size.width; x ++)
     {
         y= self.zoomY * sin( x / 180 * M_PI - 4 * self.translateX / M_PI ) * 5 + self.waterWaveHeight;
-        CGPathAddLineToPoint(path, nil, x, y);
+        [path addLineToPoint:CGPointMake(x, y)];
     }
+    [path addLineToPoint:CGPointMake(ScreenRect.size.width, ScreenRect.size.height)];
+    [path addLineToPoint:CGPointMake(0, ScreenRect.size.height)];
+    [path addLineToPoint:CGPointMake(0, self.waterWaveHeight)];
+    [path closePath];
 
-    CGPathAddLineToPoint(path, nil, ScreenRect.size.width, ScreenRect.size.height);
-    CGPathAddLineToPoint(path, nil, 0, ScreenRect.size.height);
-    CGPathAddLineToPoint(path, nil, 0, self.waterWaveHeight);
-
-    return (CGPathRef)path;
+    return [path CGPath];
 }
 ```
 
@@ -98,12 +92,9 @@ CADisplayLink以特定模式注册到runloop后，每当屏幕显示内容刷新
         }
     }
 
-    // 内存释放问题 -- 重要
-    CGPathRelease(self.shapeLayer.path);
     self.shapeLayer.path = [self waterWavePath];
 }
 ```
-
 
 ## 代码链接
 

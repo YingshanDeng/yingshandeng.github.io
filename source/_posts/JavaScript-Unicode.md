@@ -18,7 +18,7 @@ Unicode 字符分为 17 组平面，每个平面拥有 2^16 (65,536) 个码位�
 
 而当 xy 是 00 (码点范围是从U+0000到U+FFFF) 的时候，也就是 Unicode 最前 2^16 (65,536) 个字符，被称为**基本平面 BMP(Basic Multilingual Plane)**，最常见的字符都在这个平面上，这也是 Unicode 最先定义和最先公布的一个平面。
 
-其余 16 个平面（U+100000 到 U+10FFFF）称为**补充平面**，也称之为补充字符，相对于 BMP 字符而言，这些字符称之为非 BMP 字符。
+其余 16 个平面（U+100000 到 U+10FFFF）称为**补充平面(supplementary planes, or astral planes)**，也称之为补充字符，相对于 BMP 字符而言，这些字符称之为非 BMP 字符。要区分是非 BMP 字符很简单：其码位需要超过 4 位 16 进制表示
 
 ## UTF-16 和 UCS-2
 
@@ -36,6 +36,21 @@ L = (C - 0x10000) % 0x400 + 0xDC00
 转换公式变换后，比如从代理对 <H, L> 转换成一个 Unicode 码位 C，可以使用公式：
 ```
 C = (H - 0xD800) * 0x400 + L - 0xDC00 + 0x10000
+```
+
+代码实现如下：
+```
+// codePoint > 0xFFFF
+function getSurrogates(codePoint) {
+  var high = Math.floor((codePoint - 0x10000) / 0x400) + 0xD800;
+  var low = (codePoint - 0x10000) % 0x400 + 0xDC00;
+  return [high, low];
+}
+
+function getCodePoint(high, low) {
+  var codePoint = (high - 0xD800) * 0x400 + low - 0xDC00 + 0x10000;
+  return codePoint;
+}
 ```
 
 ### UCS-2
