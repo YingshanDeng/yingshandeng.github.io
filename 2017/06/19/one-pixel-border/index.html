@@ -74,6 +74,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
 
 
 
@@ -84,10 +86,11 @@
 
 
 
+<meta name="keywords" content="devicePixelRatio">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高清屏一像素边框问题">
 <meta property="og:url" content="http://objcer.com/2017/06/19/one-pixel-border/index.html">
-<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/retinaDisplayMagnified_1159x285@2x.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/F115E87F-990C-4957-B007-26F8B844287D.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/AF218F20-056F-4CB4-8A1F-2949C6913DCD.png">
@@ -332,7 +335,7 @@
 <p><strong>devicePixelRatio = device pixels / dips</strong></p>
 <p><code>devicePixelRatio</code> 值为 1 的屏幕称之为标准屏；目前，大部分移动设备都是高清屏，即 <code>devicePixelRatio</code> 值大于 1 的屏幕，对于苹果设备来说，我们经常听到 Retina 视网膜屏，其中 iPhone6/6s/7 的 <code>devicePixelRatio</code> 值为 2；而 iPhone6 plus/6s plus/7 plus 的 <code>devicePixelRatio</code> 值为 3。</p>
 <p>通过一个例子进一步理解其中的关系：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/AF218F20-056F-4CB4-8A1F-2949C6913DCD.png" alt=""></p>
-<p>假设我们需要绘制如下这个 <code>div</code> 节点，<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="selector-tag">div</span> <span class="attribute">height</span>=<span class="string">"2"</span> width=<span class="string">"2"</span>&gt;&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<p>假设我们需要绘制如下这个 <code>div</code> 节点，<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div <span class="attribute">height</span>=<span class="string">"2"</span> <span class="attribute">width</span>=<span class="string">"2"</span>&gt;&lt;/div&gt;</div></pre></td></tr></table></figure></p>
 <ul>
 <li><code>div</code> 节点宽度和高度都是 <code>2px</code>，这里的 <code>2px</code> 指的就是 CSS pixel，而 CSS pixel 是抽象的单位，所以不管在标准屏，还是高清屏，其 CSS pixel 都是 <code>2px</code></li>
 <li>1 CSS pixel 等同于 1 DIP</li>
@@ -392,6 +395,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/03/cordova-android-development-environment/" rel="prev" title="Cordova 开发环境 - Android 篇">
+                Cordova 开发环境 - Android 篇 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -466,7 +473,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-count">36</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -483,7 +490,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">60</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -491,6 +498,13 @@
 
         </nav>
 
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
         
 
         <div class="links-of-author motion-element">

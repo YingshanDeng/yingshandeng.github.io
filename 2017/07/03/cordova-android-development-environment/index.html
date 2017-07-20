@@ -1,0 +1,838 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cordova 开发环境 - Android 篇">
+<meta property="og:url" content="http://objcer.com/2017/07/03/cordova-android-development-environment/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/android-banner.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/3B19ED97-CE3F-45A9-8518-C08D779F7FA3.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/03E0830C-F5BB-4EC5-AC41-50A604A3E532.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/36CDAE13-BEBC-42D2-9226-A53DF0CEE4B1.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/8FA1EB72-12AE-4984-AA64-2C7022B1F00E.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/B378E60C-01E5-43AE-8EA1-02999501F241.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/917006D3-5881-4A6F-814F-0B3BB54383D7.png">
+<meta property="og:updated_time" content="2017-07-20T11:46:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cordova 开发环境 - Android 篇">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/android-banner.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/07/03/cordova-android-development-environment/"/>
+
+
+  <title> Cordova 开发环境 - Android 篇 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Cordova 开发环境 - Android 篇
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-07-03T22:14:19+08:00" content="2017-07-03">
+              2017-07-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Cordova/" itemprop="url" rel="index">
+                    <span itemprop="name">Cordova</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/03/cordova-android-development-environment/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/07/03/cordova-android-development-environment/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/07/03/cordova-android-development-environment/" class="leancloud_visitors" data-flag-title="Cordova 开发环境 - Android 篇">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/android-banner.jpg" alt=""><br><a id="more"></a></p>
+<h2 id="安装-IDE-Android-Studio"><a href="#安装-IDE-Android-Studio" class="headerlink" title="安装 IDE (Android Studio)"></a>安装 IDE (Android Studio)</h2><p>安装 Android Studio, SDK, Android Virtual Device (AVD，安卓模拟器)</p>
+<ul>
+<li>下载链接：<a href="https://developer.android.com/studio/index.html?hl=zh-cn" target="_blank" rel="external">Android Studio</a></li>
+<li>下载安装全程需要<strong>翻墙</strong></li>
+<li>安装 Android Studio 完成后，创建一个 HelloWorld 程序到模拟器中运行，这个过程中，按照提示进行下载安装即可</li>
+</ul>
+<h2 id="真机运行"><a href="#真机运行" class="headerlink" title="真机运行"></a>真机运行</h2><p>手机通过 USB 连接电脑后，运行时，选择对应的设备即可运行，以下罗列几点真机运行中遇到的问题和技巧</p>
+<h3 id="解决：DELETE-FAILED-INTERNAL-ERROR-Error-while-Installing-APK"><a href="#解决：DELETE-FAILED-INTERNAL-ERROR-Error-while-Installing-APK" class="headerlink" title="解决：DELETE_FAILED_INTERNAL_ERROR Error while Installing APK"></a>解决：<em>DELETE_FAILED_INTERNAL_ERROR Error while Installing APK</em></h3><p>安卓真机（小米4C）通过 USB 连接电脑后，运行，可能会出现如下问题：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/3B19ED97-CE3F-45A9-8518-C08D779F7FA3.png" alt=""><br>点击 OK 继续，会出现如下错误：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DELETE_FAILED_INTERNAL_ERROR</div><div class="line"><span class="keyword">Error </span>while Installing APKs</div></pre></td></tr></table></figure></p>
+<p>参考链接：<a href="https://stackoverflow.com/questions/38892270/delete-failed-internal-error-error-while-installing-apk" target="_blank" rel="external">DELETE_FAILED_INTERNAL_ERROR Error while Installing APK</a> 大致有两种解决方案：</p>
+<ul>
+<li>操作步骤：Android Studio &gt; Preferences &gt;  Build, Execution, Deployment &gt; Instant Run &gt; <strong>Uncheck : Enable Instant Run</strong>（此处理方式会禁用 Instant Run 功能）<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/03E0830C-F5BB-4EC5-AC41-50A604A3E532.png" alt=""></li>
+<li>由于调试设备是小米，所以还可以：设置 &gt; 更多设置 &gt; 开发者选项 &gt; <strong>去掉：启动 MIUI 优化</strong> &gt; 关闭并重启</li>
+</ul>
+<h3 id="ADB-无线调试"><a href="#ADB-无线调试" class="headerlink" title="ADB 无线调试"></a>ADB 无线调试</h3><p>Android ADB 提供了无线调试的功能</p>
+<blockquote>
+<p><a href="https://developer.android.com/studio/command-line/adb.html?hl=zh-cn#Enabling" target="_blank" rel="external">Android 调试桥</a></p>
+</blockquote>
+<h4 id="解决：zsh-command-not-found-adb"><a href="#解决：zsh-command-not-found-adb" class="headerlink" title="解决：zsh: command not found: adb"></a>解决：<code>zsh: command not found: adb</code></h4><p>解决步骤：<br>1️⃣ 执行如下命令往 .bash_profile 添加两个路径<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">"export PATH=\$PATH:/Users/<span class="variable">$&#123;USER&#125;</span>/Library/Android/sdk/platform-tools/"</span> &gt;&gt; ~/.bash_profile</div><div class="line"><span class="built_in">echo</span> <span class="string">"export PATH=\$PATH:/Users/<span class="variable">$&#123;USER&#125;</span>/Library/Android/sdk/tools/"</span> &gt;&gt; ~/.bash_profile</div></pre></td></tr></table></figure></p>
+<p>执行后 <code>.bash_profile</code> 文件：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export PATH=<span class="variable">$PATH</span><span class="symbol">:/Users/YingshanDeng/Library/Android/sdk/platform-tools/</span></div><div class="line">export PATH=<span class="variable">$PATH</span><span class="symbol">:/Users/YingshanDeng/Library/Android/sdk/tools/</span></div></pre></td></tr></table></figure></p>
+<p>2️⃣ 执行 <code>source .bash_profile</code> 使其生效，此时我们在终端中输入 <code>adb</code> 会发现该命令生效了<br>3️⃣ 由于我的终端使用的是 zsh，所以需要再处理一下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> 打开 .zshrc</span></div><div class="line">open .zshrc</div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"> 在文件末尾添加</span></div><div class="line">source ~/.bash_profile</div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"> 保存，重启终端即可</span></div></pre></td></tr></table></figure></p>
+<h4 id="AndroidWiFiADB-插件"><a href="#AndroidWiFiADB-插件" class="headerlink" title="AndroidWiFiADB 插件"></a>AndroidWiFiADB 插件</h4><p>直接使用还是不够方便，推荐使用 <strong>AndroidWiFiADB 插件</strong>，项目地址：<a href="https://github.com/pedrovgs/AndroidWiFiADB" target="_blank" rel="external">AndroidWiFiADB</a></p>
+<p>安装方式：</p>
+<ul>
+<li>Preferences -&gt; Settings -&gt; Plugins-&gt; Browse Repositories</li>
+<li>输入: Android WiFi ADB 进行搜索，安装后重启</li>
+</ul>
+<p>如何使用：</p>
+<ul>
+<li>先将手机通过 USB 连接电脑，而且保证手机和电脑连接同一 WiFi，点击 AndroidWiFiADB 插件按键，会在右下角弹气泡提示是否连接成功，连接成功后即可断开 USB 连接线，享受无线提示</li>
+<li>在使用过程中，要确保手机和电脑连接的同一 WiFi</li>
+<li>可以通过 AndroidWiFiADB 设备面板查看设备及设置连接状态</li>
+</ul>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/36CDAE13-BEBC-42D2-9226-A53DF0CEE4B1.png" alt=""></p>
+<h2 id="Chrome-远程调试模拟器-真机"><a href="#Chrome-远程调试模拟器-真机" class="headerlink" title="Chrome 远程调试模拟器/真机"></a>Chrome 远程调试模拟器/真机</h2><blockquote>
+<p><a href="https://developers.google.com/web/tools/chrome-devtools/remote-debugging/?hl=zh-cn" target="_blank" rel="external">远程调试 Android 设备使用入门</a></p>
+</blockquote>
+<p>操作步骤：</p>
+<ul>
+<li>随便在某个页面打开调试页面，如下图找到 <strong>Remote devices</strong><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/8FA1EB72-12AE-4984-AA64-2C7022B1F00E.png" alt=""></li>
+<li>确保已勾选 <strong>Discover USB devices</strong><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/B378E60C-01E5-43AE-8EA1-02999501F241.png" alt=""></li>
+<li>如下图找到对应的模拟器或者真机，点击 <strong>Inspect</strong> 按键就可以打开调试界面<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/917006D3-5881-4A6F-814F-0B3BB54383D7.png" alt=""></li>
+</ul>
+<h2 id="其他问题记录"><a href="#其他问题记录" class="headerlink" title="其他问题记录"></a>其他问题记录</h2><p>1、Android Studio 导入项目卡在 <em>Building gradle project info</em> 的解决方法：</p>
+<ul>
+<li><a href="http://www.jianshu.com/p/1311562bbfd4" target="_blank" rel="external">修改项目中gradle-wrapper.properties文件中的distributionUrl</a></li>
+<li>从一个能打开项目根目录拷贝 <code>gradle</code> 文件夹覆盖当前项目根目录中的 <code>gradle</code> 文件夹</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/19/one-pixel-border/" rel="next" title="高清屏一像素边框问题">
+                <i class="fa fa-chevron-left"></i> 高清屏一像素边框问题
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/20/explore-emoji-length/" rel="prev" title="探究 emoji 字符长度">
+                探究 emoji 字符长度 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-IDE-Android-Studio"><span class="nav-number">1.</span> <span class="nav-text">安装 IDE (Android Studio)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#真机运行"><span class="nav-number">2.</span> <span class="nav-text">真机运行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决：DELETE-FAILED-INTERNAL-ERROR-Error-while-Installing-APK"><span class="nav-number">2.1.</span> <span class="nav-text">解决：DELETE_FAILED_INTERNAL_ERROR Error while Installing APK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ADB-无线调试"><span class="nav-number">2.2.</span> <span class="nav-text">ADB 无线调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解决：zsh-command-not-found-adb"><span class="nav-number">2.2.1.</span> <span class="nav-text">解决：zsh: command not found: adb</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AndroidWiFiADB-插件"><span class="nav-number">2.2.2.</span> <span class="nav-text">AndroidWiFiADB 插件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chrome-远程调试模拟器-真机"><span class="nav-number">3.</span> <span class="nav-text">Chrome 远程调试模拟器/真机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他问题记录"><span class="nav-number">4.</span> <span class="nav-text">其他问题记录</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/07/03/cordova-android-development-environment/';
+      var disqus_title = "Cordova 开发环境 - Android 篇";
+      var disqus_url = 'http://objcer.com/2017/07/03/cordova-android-development-environment/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

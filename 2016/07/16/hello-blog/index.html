@@ -74,6 +74,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
 
 
 
@@ -84,22 +86,17 @@
 
 
 
-<meta name="description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
-
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
+<meta name="description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。  TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
+<meta name="keywords" content="hexo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="你好，博客">
 <meta property="og:url" content="http://objcer.com/2016/07/16/hello-blog/index.html">
-<meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
-
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。  TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
 <meta property="og:updated_time" content="2016-11-05T12:50:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="你好，博客">
-<meta name="twitter:description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。
-
-TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
+<meta name="twitter:description" content="本文仅简单记录在创建博客过程中相关的内容，方便日后重建博客，有关细节检索等。  TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使用 七牛云存储 作为图床，存放图片4、使用 多说 作为评论系统5、使用 Swiftype 作为站内搜索 [已经失效🙄]6、使用 leancloud 为文章阅读次数统计">
 
 
 
@@ -335,7 +332,7 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
 </ul>
 <p>4、关于文章分类和标签<br>在其他系统中，分类和标签听起来很接近，但是在 Hexo 中两者有着明显的差别：分类具有顺序性和层次性，也就是说 Foo, Bar 不等于 Bar, Foo；而标签没有顺序和层次。<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">categories:</div><div class="line">  - Diary</div><div class="line"><span class="keyword">tags:</span></div><div class="line">  - tag1</div><div class="line">  - tag2</div></pre></td></tr></table></figure></p>
 <p>5、关于<a href="https://hexo.io/zh-cn/docs/writing.html" target="_blank" rel="external">创建文章</a><br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo <span class="keyword">new</span> [layout] &lt;<span class="built_in">title</span>&gt;</div></pre></td></tr></table></figure></p>
-<p>通过以上命令既可以创建一篇文章，其中 <code>layout</code> 只可以指定文章布局，包括 <code>post</code>、<code>page</code> 和 <code>draft</code>（默认是 <code>post</code>），分别对应不同的保存路径，其中需要留意的是 <code>post</code> 和 <code>draft</code>。其中前者会将文章进行展示发布，而后者只是草稿，并不进行展示。那么我们可以在编辑文章时，处于 <code>draft</code> 状态，在编辑完成后，需要发布时，才置为 <code>post</code> 状态。具体操作参考如下命令：<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># 创建一篇草稿</span></div><div class="line">hexo <span class="keyword">new</span> draft test-draft</div><div class="line"></div><div class="line"><span class="meta"># 通过 publish 命令将 draft 文章转换为 post 文章</span></div><div class="line">hexo publish draft test-draft</div><div class="line"></div><div class="line"><span class="meta"># 预览时添加 --draft 参数用于查看草稿文章</span></div><div class="line">hexo server --draft</div></pre></td></tr></table></figure></p>
+<p>通过以上命令既可以创建一篇文章，其中 <code>layout</code> 只可以指定文章布局，包括 <code>post</code>、<code>page</code> 和 <code>draft</code>（默认是 <code>post</code>），分别对应不同的保存路径，其中需要留意的是 <code>post</code> 和 <code>draft</code>。其中前者会将文章进行展示发布，而后者只是草稿，并不进行展示。那么我们可以在编辑文章时，处于 <code>draft</code> 状态，在编辑完成后，需要发布时，才置为 <code>post</code> 状态。具体操作参考如下命令：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 创建一篇草稿</span></div><div class="line">hexo new draft test-draft</div><div class="line"></div><div class="line"><span class="comment"># 通过 publish 命令将 draft 文章转换为 post 文章</span></div><div class="line">hexo publish draft test-draft</div><div class="line"></div><div class="line"><span class="comment"># 预览时添加 --draft 参数用于查看草稿文章</span></div><div class="line">hexo<span class="built_in"> server </span>--draft</div></pre></td></tr></table></figure></p>
 <h3 id="第三方服务集成"><a href="#第三方服务集成" class="headerlink" title="第三方服务集成"></a>第三方服务集成</h3><p>有关第三方服务在 Next 文档中有详细的介绍: <a href="http://theme-next.iissnan.com/third-party-services.html" target="_blank" rel="external">第三方服务集成</a></p>
 <h3 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h3><p><a href="http://notes.iissnan.com/" target="_blank" rel="external">Next 作者博客</a></p>
 
@@ -454,7 +451,7 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-count">36</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -471,7 +468,7 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">60</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -479,6 +476,13 @@ TL;DR1、采用 Hexo 作为博客框架2、采用 Next 作为博客主题3、使
 
         </nav>
 
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
         
 
         <div class="links-of-author motion-element">

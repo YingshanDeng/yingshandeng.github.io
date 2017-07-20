@@ -74,6 +74,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
 
 
 
@@ -85,10 +87,11 @@
 
 
 <meta name="description" content="问题引入：最近在 Babel 编译时遇到一个问题，对 ES6 Module 编译的问题，本文将对解决该问题过程中关于 ES6 Module 有关内容进行记录和介绍。">
+<meta name="keywords" content="Module,Babel,exports,module.exports">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于 ES6 Module">
 <meta property="og:url" content="http://objcer.com/2017/04/19/About-ES6-Module/index.html">
-<meta property="og:site_name" content="Deng's Blog">
+<meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="问题引入：最近在 Babel 编译时遇到一个问题，对 ES6 Module 编译的问题，本文将对解决该问题过程中关于 ES6 Module 有关内容进行记录和介绍。">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/exports&module.exports.png">
 <meta property="og:updated_time" content="2017-05-02T13:20:01.000Z">
@@ -324,7 +327,7 @@
 <li>CMD (Common Module Definition): 是 SeaJS 在推广过程中对模块定义的规范化，和 AMD 有些类似，参考：<a href="https://github.com/seajs/seajs/issues/277" target="_blank" rel="external">与 RequireJS 的异同</a></li>
 <li>UMD (Universal Module Definition): 兼容了 AMD 和 CommonJS，同时还支持老式的“全局”变量规范，使得模块化代码可以在前端浏览器和后台服务端中运行</li>
 </ul>
-<h2 id="问题阐述及解决"><a href="#问题阐述及解决" class="headerlink" title="问题阐述及解决"></a>问题阐述及解决</h2><p>在 <code>test.js</code> 文件中，有如下一行代码：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="number">23</span>;</div></pre></td></tr></table></figure></p>
+<h2 id="问题阐述及解决"><a href="#问题阐述及解决" class="headerlink" title="问题阐述及解决"></a>问题阐述及解决</h2><p>在 <code>test.js</code> 文件中，有如下一行代码：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="builtin-name">export</span><span class="built_in"> default </span>23;</div></pre></td></tr></table></figure></p>
 <p>在 <code>gulpfile.js</code> 文件中，有如下任务对其进行编译：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>)</div><div class="line"><span class="keyword">const</span> $ = <span class="built_in">require</span>(<span class="string">'gulp-load-plugins'</span>)();</div><div class="line"></div><div class="line">gulp.task(<span class="string">'babel'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> gulp.src([<span class="string">'src/test.js'</span>])</div><div class="line">        .pipe($.babel(&#123;</div><div class="line">            <span class="attr">presets</span>: [<span class="string">'es2015'</span>]</div><div class="line">        &#125;))</div><div class="line">        .pipe(gulp.dest(<span class="string">'bin/'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
 <p>执行 <code>gulp babel</code> 编译后，结果为：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">"use strict"</span>;</div><div class="line"></div><div class="line"><span class="built_in">Object</span>.defineProperty(exports, <span class="string">"__esModule"</span>, &#123;</div><div class="line">  <span class="attr">value</span>: <span class="literal">true</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">exports.default = <span class="number">23</span>;</div></pre></td></tr></table></figure></p>
 <p>那么使用过程中会遇到什么问题呢？<br>例如，我们在 <code>node.js</code> 文件中有如下代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="built_in">require</span>(<span class="string">'./test.js'</span>); <span class="comment">// &#123; default: 23 &#125;</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'---'</span>, a);</div></pre></td></tr></table></figure></p>
@@ -474,7 +477,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-count">36</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -491,7 +494,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">60</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -499,6 +502,13 @@
 
         </nav>
 
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
         
 
         <div class="links-of-author motion-element">

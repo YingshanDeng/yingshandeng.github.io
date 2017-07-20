@@ -74,6 +74,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
 
 
 
@@ -84,23 +86,18 @@
 
 
 
-<meta name="description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
-
-参考文章: 官方文档">
+<meta name="description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。  参考文章: 官方文档">
+<meta name="keywords" content="DNS Prefetching">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DNS Prefetching">
 <meta property="og:url" content="http://objcer.com/2016/09/25/DNS-Prefetching/index.html">
-<meta property="og:site_name" content="Deng's Blog">
-<meta property="og:description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
-
-参考文章: 官方文档">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。  参考文章: 官方文档">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png">
 <meta property="og:updated_time" content="2016-11-05T12:50:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DNS Prefetching">
-<meta name="twitter:description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。
-
-参考文章: 官方文档">
+<meta name="twitter:description" content="在浏览器访问一个域名的时候，都会经过一个域名解析的过程，也就是 DNS。域名解析需要消耗时间，如何减少解析等待时间，也是前端页面优化的一个课题。DNS 预加载 (DNS Prefetching) 作为现代浏览器的一大特性，可以减少用户的等待时间，提升用户体验，是Web页面性能优化的一个方式。  参考文章: 官方文档">
 <meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png">
 
 
@@ -337,7 +334,7 @@
 <p>However, some of those hyperlinks may be redirects, for example if the site is trying to count how many times the link is clicked.  In those situations, the “true” targeted domain is not necessarily discernible by examining the content of a web page, and so Chromium not able to prefetch the final targeted domain</p>
 </blockquote>
 <p>但是，如果有些超链接做了重定向，那么在这时自动解析DNS就无法得到正确的 IP 地址，那么就应该手动设置，将实际要DNS解析的域名写到 link 标签的 <code>href</code> 属性中。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"dns-prefetch"</span> <span class="attr">href</span>=<span class="string">"//host_name_to_prefetch.com"</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;link <span class="attribute">rel</span>=<span class="string">"dns-prefetch"</span> <span class="attribute">href</span>=<span class="string">"//host_name_to_prefetch.com"</span>&gt;</div></pre></td></tr></table></figure>
 <p>我们可以注意到百度页面 head 中就包含了如下一段 DNS 预加载的 link 标签：</p>
 <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png" alt=""></p>
 <h3 id="DNS-Prefetch-Control"><a href="#DNS-Prefetch-Control" class="headerlink" title="DNS Prefetch Control"></a>DNS Prefetch Control</h3><blockquote>
@@ -347,7 +344,7 @@
 </ul>
 </blockquote>
 <p>超链接在 https 下是不会启用 DNS 预解析的，但是浏览器提供了一个开关来设置是否在 HTTPS 下启用预解析，是否在 HTTP 下关闭预解析。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"x-dns-prefetch-control"</span> <span class="attr">content</span>=<span class="string">"on"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"x-dns-prefetch-control"</span> <span class="attr">content</span>=<span class="string">"off"</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;meta <span class="attribute">http-equiv</span>=<span class="string">"x-dns-prefetch-control"</span> <span class="attribute">content</span>=<span class="string">"on"</span>&gt;</div><div class="line">&lt;meta <span class="attribute">http-equiv</span>=<span class="string">"x-dns-prefetch-control"</span> <span class="attribute">content</span>=<span class="string">"off"</span>&gt;</div></pre></td></tr></table></figure>
 <h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1、DNS prefetching is an attempt to resolve domain names before a user tries to follow a link. This is done using the computer’s normal DNS resolution mechanism;</p>
 <p>2、 Chromium currently employs 8 completely asynchronous worker threads to do nothing but perform DNS prefetch resolution.</p>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://www.jianshu.com/p/c3a14a853c79" target="_blank" rel="external">参考链接1</a><br><a href="https://segmentfault.com/a/1190000003944417" target="_blank" rel="external">参考链接2</a></p>
@@ -467,7 +464,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-count">36</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -484,7 +481,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">60</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -492,6 +489,13 @@
 
         </nav>
 
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
         
 
         <div class="links-of-author motion-element">
