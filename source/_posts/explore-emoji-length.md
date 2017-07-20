@@ -1,6 +1,9 @@
 title: 探究 emoji 字符长度
-tags:
+date: 2017-07-20 19:41:38
+tags: unicode-emoji
+categories: Unicode
 ---
+
 ![](http://7vikhl.com1.z0.glb.clouddn.com/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png)
 我们注意到在 Twitter，微博，谷歌翻译的输入框中输入 emoji 字符，都不能正确的判断字符个数。🤷‍
 在阅读本文之前，需要先对 Unicode 编码有所了解，参考: [JavaScript Unicode 编码那些事](http://objcer.com/2017/05/21/JavaScript-Unicode/)
@@ -107,8 +110,8 @@ console.log(family.join(''))
 ```
 
 ## 解决字符长度终极解决方案
-```
-```
+我们找到一段正则表达式，可以用于匹配 Unicode 字符；然后封装成 [EmojiCharString](https://github.com/YingshanDeng/EmojiCharString) 类库，详细介绍参考该仓库 README 👉
+
 
 ## 参考链接
 [JavaScript has a Unicode problem](https://mathiasbynens.be/notes/javascript-unicode)
