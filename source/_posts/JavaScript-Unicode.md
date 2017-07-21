@@ -90,6 +90,13 @@ function countSymbols(string) {
 }
 countSymbols('💩'); // 1
 ```
+----
+❗️**注意：**字符串中包含有 emoji 字符时，此解决方法只适用于一部分 emoji，例如：
+```
+countSymbols('1️⃣') // 3
+countSymbols('👨‍👩‍👦‍👦') // 7
+```
+**关于正确计算 emoji 字符的问题请参考文章：[探究 emoji 字符长度](http://objcer.com/2017/07/20/explore-emoji-length/) 文章给出探究分析过程，并提供了 [EmojiCharString](https://github.com/YingshanDeng/EmojiCharString) 类库，用于彻底解决此问题 🤓**
 
 ### 反转字符串
 对于反转字符串，我们可以很快的写出如下函数：
