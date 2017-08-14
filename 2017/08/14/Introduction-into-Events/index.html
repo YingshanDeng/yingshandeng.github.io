@@ -1,0 +1,849 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="事件捕获,事件冒泡," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="keywords" content="事件捕获,事件冒泡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript DOM 事件模型">
+<meta property="og:url" content="http://objcer.com/2017/08/14/Introduction-into-Events/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/js-event.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/eventflow@2x.png">
+<meta property="og:updated_time" content="2017-08-14T11:41:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript DOM 事件模型">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/js-event.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/08/14/Introduction-into-Events/"/>
+
+
+  <title> Javascript DOM 事件模型 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Javascript DOM 事件模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-08-14T19:39:01+08:00" content="2017-08-14">
+              2017-08-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/08/14/Introduction-into-Events/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/14/Introduction-into-Events/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/08/14/Introduction-into-Events/" class="leancloud_visitors" data-flag-title="Javascript DOM 事件模型">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/js-event.jpg" alt=""><br><a id="more"></a></p>
+<h2 id="Bubbling-and-capturing"><a href="#Bubbling-and-capturing" class="headerlink" title="Bubbling and capturing"></a>Bubbling and capturing</h2><p>Javascript DOM 事件流存在如下三个阶段：</p>
+<ul>
+<li>事件捕获阶段 Capturing phase – <strong>the event goes down to the element.</strong></li>
+<li>处于目标阶段 Target phase – the event reached the target element.</li>
+<li>事件冒泡阶段 Bubbling phase – <strong>the event bubbles up from the element.</strong></li>
+</ul>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/eventflow@2x.png" alt=""></p>
+<p><strong>Javascript DOM 标准事件流的触发的先后顺序为：先捕获再冒泡。</strong>点击 <code>&lt;td&gt;</code> DOM 节点时，事件传播顺序：首先是事件捕获阶段，从上向下传播；然后到达点击事件目标节点；最后是冒泡阶段，从下向上传播。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">addEventListener(<span class="string">type:</span> DOMString, <span class="string">callback:</span> EventListener, capture?: <span class="keyword">boolean</span>)</div></pre></td></tr></table></figure>
+<p>DOM 节点添加事件监听方法 <code>addEventListener</code> 中第三个参数可以指定是该监听是添加在事件捕获阶段或者是事件冒泡阶段，默认为 <code>false</code>，即事件冒泡阶段；显式指定为 <code>true</code>，即事件捕获阶段。</p>
+<p>实际应用中，为 DOM 元素添加事件监听绝大多数都是添加到事件冒泡阶段，很少会用到事件捕获。我们通过 <code>on&lt;event&gt;-property</code> HTML 属性添加的事件监听默认也是添加到事件冒泡阶段</p>
+<p>注意到事件流处理有三个阶段，其中第二个阶段：处于目标阶段，并不单独处理，事件捕获阶段和冒泡阶段的添加的监听处理就包含了这个阶段。</p>
+<h3 id="并非所有的事件都支持冒泡"><a href="#并非所有的事件都支持冒泡" class="headerlink" title="并非所有的事件都支持冒泡"></a>并非所有的事件都支持冒泡</h3><blockquote>
+<p>❗ <strong>Almost</strong> all events bubble.</p>
+</blockquote>
+<p>注意关键字 “almost”，所以并不是所有的事件都支持冒泡。在 wiki <a href="https://en.wikipedia.org/wiki/DOM_events#Events" target="_blank" rel="external">DOM_events</a> 中我们就可以找到一些不支持冒泡的事件，例如 <code>focus</code>、<code>blur</code> 等等<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">a.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(event.bubbles) <span class="regexp">//</span> &gt; <span class="literal">true</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line">a.addEventListener(<span class="string">'focus'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(event.bubbles) <span class="regexp">//</span> &gt; <span class="literal">false</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>我们可以通过 <code>event.bubbles</code> 来判断是否支持事件冒泡</p>
+<h3 id="三个常用方法"><a href="#三个常用方法" class="headerlink" title="三个常用方法"></a>三个常用方法</h3><ul>
+<li><p><code>event.stopPropagation</code> 阻止捕获和冒泡阶段中当前事件的进一步传播<br>在事件监听回调中调用此方法，若是捕获阶段，则停止向下传递事件；若是冒泡阶段，则停止向上传递事件。</p>
+</li>
+<li><p><code>event.stopImmediatePropagation</code> 阻止调用相同事件的其他侦听器<br>如果某个元素有多个相同类型事件的事件监听函数, 则当该类型的事件触发时, 多个事件监听函数将按照顺序依次执行. 如果某个监听函数执行了 <code>event.stopImmediatePropagation()</code> 方法, 则除了该事件的冒泡行为被阻止之外(event.stopPropagation方法的作用), 该元素绑定的后序相同类型事件的监听函数的执行也将被阻止。例子：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">    <span class="built_in">document</span>.querySelector(<span class="string">"p"</span>).addEventListener(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span></div><div class="line">    &#123;</div><div class="line">        alert(<span class="string">"我是p元素上被绑定的第一个监听函数"</span>);</div><div class="line">    &#125;, <span class="literal">false</span>);</div><div class="line">    <span class="built_in">document</span>.querySelector(<span class="string">"p"</span>).addEventListener(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span></div><div class="line">    &#123;</div><div class="line">        alert(<span class="string">"我是p元素上被绑定的第二个监听函数"</span>);</div><div class="line">        event.stopImmediatePropagation();</div><div class="line">        <span class="comment">//执行stopImmediatePropagation方法,阻止click事件冒泡,并且阻止p元素上绑定的其他click事件的事件监听函数的执行.</span></div><div class="line">    &#125;, <span class="literal">false</span>);</div><div class="line">    <span class="built_in">document</span>.querySelector(<span class="string">"p"</span>).addEventListener(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span></div><div class="line">    &#123;</div><div class="line">        alert(<span class="string">"我是p元素上被绑定的第三个监听函数"</span>);</div><div class="line">        <span class="comment">//该监听函数排在上个函数后面,该函数不会被执行.</span></div><div class="line">    &#125;, <span class="literal">false</span>);</div><div class="line">    <span class="built_in">document</span>.querySelector(<span class="string">"div"</span>).addEventListener(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span></div><div class="line">    &#123;</div><div class="line">        alert(<span class="string">"我是div元素,我是p元素的上层元素"</span>);</div><div class="line">        <span class="comment">//p元素的click事件没有向上冒泡,该函数不会被执行.</span></div><div class="line">    &#125;, <span class="literal">false</span>);</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><code>event.preventDefault</code> 如果事件可取消，则取消该事件，而不停止事件的进一步传播。</p>
+<ul>
+<li>在事件触发后的任何阶段调用 <code>preventDefault</code> 方法来取消该事件, <strong>意味着该事件的所有默认动作都不会发生.</strong> 例如可以利用 <code>preventDefault()</code> 方法来阻止一个 <code>input</code> 元素内非法字符的输入等等</li>
+<li>调用事件的 <code>preventDefault()</code> 方法后,会引起该事件的 <code>event.defaultPrevented</code> 属性值变为 <code>true</code></li>
+<li>可以查看 <code>event.cancelable</code> 属性来判断一个事件的默认动作是否可以被取消. 在 <code>cancelable</code> 属性为 <code>false</code> 的事件上调用 <code>preventDefault</code> 方法没有任何效果</li>
+<li><code>preventDefault</code> 方法<strong>不会阻止该事件的进一步冒泡</strong>. <code>event.stopPropagation</code> 方法才有这样的功能</li>
+</ul>
+</li>
+</ul>
+<h3 id="event-target-和-event-currentTarget"><a href="#event-target-和-event-currentTarget" class="headerlink" title="event.target 和 event.currentTarget"></a><code>event.target</code> 和 <code>event.currentTarget</code></h3><blockquote>
+<p>The most deeply nested element that caused the event is called a target element, accessible as event.target.<br>Note the differences from this (=event.currentTarget):</p>
+<ul>
+<li>event.target – is the “target” element that initiated the event, it doesn’t change through the bubbling process.</li>
+<li>this – is the “current” element, the one that has a currently running handler on it.</li>
+</ul>
+</blockquote>
+<ul>
+<li><code>event.target</code> – 指向触发事件的元素，在事件冒泡过程中该值不变</li>
+<li><code>event.currentTarget</code> = this – 事件绑定的当前元素</li>
+</ul>
+<p>只有被点击的那个目标元素的 <code>event.target</code> 才会等于 <code>event.currentTarget</code>，看如下例子<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"outer"</span>&gt;</span></div><div class="line">  outer</div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"inner"</span>&gt;</span>inner<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">var</span> outerEl = <span class="built_in">document</span>.querySelector(<span class="string">'.outer'</span>);</div><div class="line">  <span class="keyword">var</span> innerEl = <span class="built_in">document</span>.querySelector(<span class="string">'.inner'</span>);</div><div class="line"></div><div class="line">  innerEl.addEventListener(<span class="string">'click'</span>, (event) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'inner'</span>, event.target, event.currentTarget)</div><div class="line">  &#125;);</div><div class="line">  outerEl.addEventListener(<span class="string">'click'</span>, (event) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'outer'</span>, event.target, event.currentTarget)</div><div class="line">  &#125;);</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>点击 inner 节点，执行结果：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">inner &lt;<span class="keyword">div</span> <span class="built_in">class</span>=​<span class="string">"inner"</span>&gt;​inner​&lt;/<span class="keyword">div</span>&gt;​ &lt;<span class="keyword">div</span> <span class="built_in">class</span>=​<span class="string">"inner"</span>&gt;​inner​&lt;/<span class="keyword">div</span>&gt;​</div><div class="line">outer &lt;<span class="keyword">div</span> <span class="built_in">class</span>=​<span class="string">"inner"</span>&gt;​inner​&lt;/<span class="keyword">div</span>&gt;​ &lt;<span class="keyword">div</span> <span class="built_in">class</span>=​<span class="string">"outer"</span>&gt;​…​&lt;/<span class="keyword">div</span>&gt;​</div></pre></td></tr></table></figure></p>
+<h2 id="执行顺序的问题"><a href="#执行顺序的问题" class="headerlink" title="执行顺序的问题"></a>执行顺序的问题</h2><p>我们知道，Javascript DOM 标准事件流的触发的先后顺序为：先捕获再冒泡。如果 DOM 节点同时绑定两个事件监听，一个用于捕获阶段，一个用于冒泡阶段，两个事件的执行顺序真的如此么？<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">div</span> <span class="built_in">class</span>=<span class="string">"outer"</span>&gt;</div><div class="line">  element1</div><div class="line">  &lt;<span class="keyword">div</span> <span class="built_in">class</span>=<span class="string">"inner"</span>&gt;element2&lt;/<span class="keyword">div</span>&gt;</div><div class="line">&lt;/<span class="keyword">div</span>&gt;</div></pre></td></tr></table></figure></p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-----------------------------------</div><div class="line">|<span class="string"> element1                        </span>|</div><div class="line">|<span class="string">   -------------------------     </span>|</div><div class="line">|<span class="string">   </span>|<span class="string">element2               </span>|<span class="string">     </span>|</div><div class="line">|<span class="string">   -------------------------     </span>|</div><div class="line">|<span class="string">                                 </span>|</div><div class="line">-----------------------------------</div></pre></td></tr></table></figure>
+<p>分别为内外两个元素添加两个点击事件，一个用于捕获阶段，一个用于冒泡阶段<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;script&gt;</div><div class="line">  var outerEl = <span class="built_in">document</span>.querySelector(<span class="string">'.outer'</span>);</div><div class="line">  var innerEl = <span class="built_in">document</span>.querySelector(<span class="string">'.inner'</span>);</div><div class="line"></div><div class="line">  innerEl.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'child bubble'</span>)</div><div class="line">  &#125;, <span class="literal">false</span>);</div><div class="line">  innerEl.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'child capture'</span>)</div><div class="line">  &#125;, <span class="literal">true</span>);</div><div class="line"></div><div class="line">  outerEl.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'parent bubble'</span>)</div><div class="line">  &#125;, <span class="literal">false</span>);</div><div class="line">  outerEl.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'parent capture'</span>)</div><div class="line">  &#125;, <span class="literal">true</span>);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>根据前面的知识，当点击 element2 元素和 element1 元素的时候，我们应该会得到：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#点击 element2 元素</span></div><div class="line"><span class="keyword">parent</span> capture</div><div class="line">child capture</div><div class="line">child bubble</div><div class="line"><span class="keyword">parent</span> bubble</div><div class="line"></div><div class="line"><span class="comment">#点击 element1 元素</span></div><div class="line"><span class="keyword">parent</span> capture</div><div class="line"><span class="keyword">parent</span> bubble</div></pre></td></tr></table></figure></p>
+<p><strong>❗️但是，</strong>实际上我们点击 element2 和点击 element1 的时候，得到的结果却是（其中都出现了先 bubble 后 capture）：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 点击 element2</span></div><div class="line"><span class="keyword">parent</span> capture</div><div class="line">child bubble</div><div class="line">child capture</div><div class="line"><span class="keyword">parent</span> bubble</div><div class="line"></div><div class="line"><span class="comment"># 点击 element1</span></div><div class="line"><span class="keyword">parent</span> bubble</div><div class="line"><span class="keyword">parent</span> capture</div></pre></td></tr></table></figure></p>
+<p>这是为什么呢？这跟前面的结论不符啊 🤔 通过观察我们可以发现：<br>① DOM 元素先添加了用于冒泡阶段的事件监听，后添加了用于捕获阶段的事件监听<br>② 被点击元素先执行了冒泡阶段的事件监听，后执行捕获阶段的事件监听；而点击事件的父节点事件监听执行顺序正常<br>③ 我们猜测是否跟事件监听添加顺序有关系，我们调换一下添加顺序：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;script&gt;</div><div class="line">  var outerEl = <span class="built_in">document</span>.querySelector(<span class="string">'.outer'</span>);</div><div class="line">  var innerEl = <span class="built_in">document</span>.querySelector(<span class="string">'.inner'</span>);</div><div class="line"></div><div class="line">  innerEl.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'child bubble'</span>)</div><div class="line">  &#125;, <span class="literal">true</span>);</div><div class="line">  innerEl.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'child capture'</span>)</div><div class="line">  &#125;, <span class="literal">false</span>);</div><div class="line"></div><div class="line">  outerEl.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'parent bubble'</span>)</div><div class="line">  &#125;, <span class="literal">true</span>);</div><div class="line">  outerEl.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="params">(event)</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'parent capture'</span>)</div><div class="line">  &#125;, <span class="literal">false</span>);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>发现执行得到的结果正常</p>
+<p><strong>❗️给出结论：</strong></p>
+<ul>
+<li>绑定在被点击元素的事件是按照代码添加顺序执行，其他元素先捕获后冒泡</li>
+<li><strong>所以事件的执行顺序是：父元素的捕获阶段事件 -&gt; 触发事件元素按代码添加顺序的事件 -&gt; 父元素的冒泡阶段事件</strong></li>
+</ul>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://javascript.info/bubbling-and-capturing" target="_blank" rel="external">Bubbling and capturing</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/事件捕获/" rel="tag">#事件捕获</a>
+          
+            <a href="/tags/事件冒泡/" rel="tag">#事件冒泡</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/20/explore-emoji-length/" rel="next" title="探究 emoji 字符长度">
+                <i class="fa fa-chevron-left"></i> 探究 emoji 字符长度
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bubbling-and-capturing"><span class="nav-number">1.</span> <span class="nav-text">Bubbling and capturing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并非所有的事件都支持冒泡"><span class="nav-number">1.1.</span> <span class="nav-text">并非所有的事件都支持冒泡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三个常用方法"><span class="nav-number">1.2.</span> <span class="nav-text">三个常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#event-target-和-event-currentTarget"><span class="nav-number">1.3.</span> <span class="nav-text">event.target 和 event.currentTarget</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行顺序的问题"><span class="nav-number">2.</span> <span class="nav-text">执行顺序的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/08/14/Introduction-into-Events/';
+      var disqus_title = "Javascript DOM 事件模型";
+      var disqus_url = 'http://objcer.com/2017/08/14/Introduction-into-Events/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
