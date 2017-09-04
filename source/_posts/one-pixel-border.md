@@ -39,6 +39,8 @@ CSS 像素是浏览器使用的抽象单元，用于精确地，一致地在网�
 
 `devicePixelRatio` 值为 1 的屏幕称之为标准屏；目前，大部分移动设备都是高清屏，即 `devicePixelRatio` 值大于 1 的屏幕，对于苹果设备来说，我们经常听到 Retina 视网膜屏，其中 iPhone6/6s/7 的 `devicePixelRatio` 值为 2；而 iPhone6 plus/6s plus/7 plus 的 `devicePixelRatio` 值为 3。
 
+![](http://7vikhl.com1.z0.glb.clouddn.com/iphone-6-plus-screen.jpg)
+
 通过一个例子进一步理解其中的关系：
 ![](http://7vikhl.com1.z0.glb.clouddn.com/AF218F20-056F-4CB4-8A1F-2949C6913DCD.png)
 
