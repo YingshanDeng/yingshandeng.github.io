@@ -1,0 +1,848 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="viewport-fit,iOS 11," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="北京时间 9 月 12 日凌晨，苹果在乔布斯剧院发布了 iPhone X。iPhone X 正面的全面屏上方有一条刘海，对于如何适配 iPhone X，苹果的 Human Interface Guidelines 文档已经给出详细的说明。 苹果对于 iPhone X 的设计布局意见如下：核心内容应该处于 Safe area 确保不会被设备圆角(corners)，传感器外壳(sensor housi">
+<meta name="keywords" content="viewport-fit,iOS 11">
+<meta property="og:type" content="article">
+<meta property="og:title" content="剖析 iOS 11 网页适配问题">
+<meta property="og:url" content="http://objcer.com/2017/09/21/Understanding-the-WebView-Viewport-in-iOS-11-iPhone-X/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="北京时间 9 月 12 日凌晨，苹果在乔布斯剧院发布了 iPhone X。iPhone X 正面的全面屏上方有一条刘海，对于如何适配 iPhone X，苹果的 Human Interface Guidelines 文档已经给出详细的说明。 苹果对于 iPhone X 的设计布局意见如下：核心内容应该处于 Safe area 确保不会被设备圆角(corners)，传感器外壳(sensor housi">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/iphone-x-safe-area.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/424F6040-3325-4AD5-8683-6D55AE4D9BEA.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/47C98605-A351-4903-BDC7-C1E6878D0485.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/viewport-fit.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Screen-Shot-2017-09-14-at-14.19.31.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/0C3B9577-094E-411C-9ED3-AA481FA3A50A.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/Screen-Shot-2017-09-14-at-14.07.11-1.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/iPhone%206s.gif">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/iPhone%20X.gif">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/status-bar-problem.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/2B17E02C-7C0C-4282-9369-F5E6D1C75836.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/FCF9D371-F2B5-44FE-9FFC-DC991E39FD2C.png">
+<meta property="og:updated_time" content="2017-09-21T08:01:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="剖析 iOS 11 网页适配问题">
+<meta name="twitter:description" content="北京时间 9 月 12 日凌晨，苹果在乔布斯剧院发布了 iPhone X。iPhone X 正面的全面屏上方有一条刘海，对于如何适配 iPhone X，苹果的 Human Interface Guidelines 文档已经给出详细的说明。 苹果对于 iPhone X 的设计布局意见如下：核心内容应该处于 Safe area 确保不会被设备圆角(corners)，传感器外壳(sensor housi">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/iphone-x-safe-area.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/09/21/Understanding-the-WebView-Viewport-in-iOS-11-iPhone-X/"/>
+
+
+  <title> 剖析 iOS 11 网页适配问题 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                剖析 iOS 11 网页适配问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-09-21T15:55:40+08:00" content="2017-09-21">
+              2017-09-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index">
+                    <span itemprop="name">CSS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/09/21/Understanding-the-WebView-Viewport-in-iOS-11-iPhone-X/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/09/21/Understanding-the-WebView-Viewport-in-iOS-11-iPhone-X/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/09/21/Understanding-the-WebView-Viewport-in-iOS-11-iPhone-X/" class="leancloud_visitors" data-flag-title="剖析 iOS 11 网页适配问题">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>北京时间 9 月 12 日凌晨，苹果在乔布斯剧院发布了 iPhone X。iPhone X 正面的全面屏上方有一条刘海，对于如何适配 iPhone X，苹果的 <a href="https://developer.apple.com/ios/human-interface-guidelines/overview/iphone-x/" target="_blank" rel="external">Human Interface Guidelines</a> 文档已经给出详细的说明。</p>
+<p>苹果对于 iPhone X 的设计布局意见如下：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/iphone-x-safe-area.png" alt=""><br>核心内容应该处于 <strong>Safe area</strong> 确保不会被设备圆角(corners)，传感器外壳(sensor housing，齐刘海) 以及底部的 Home Indicator 遮挡。</p>
+<p>本文将剖析两则在  iPhone X 异形屏和 iOS 11 网页适配中遇到的问题及解决方案。<br><a id="more"></a></p>
+<h2 id="iPhone-X-Safari-横屏显示左右白边问题"><a href="#iPhone-X-Safari-横屏显示左右白边问题" class="headerlink" title="iPhone X Safari 横屏显示左右白边问题"></a>iPhone X Safari 横屏显示左右白边问题</h2><p>iPhone X Safari 在横屏状态下，网页左右两侧可能会出现白边，如下：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/424F6040-3325-4AD5-8683-6D55AE4D9BEA.png" alt=""></p>
+<p>因为 iPhone X 会将网页内容显示在 Safe area 导致的，解决这一问题，我们需要将背景颜色填充整个屏幕区域，而网页内容处于 Safe area。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/47C98605-A351-4903-BDC7-C1E6878D0485.png" alt=""></p>
+<h3 id="解决方案一：background-color"><a href="#解决方案一：background-color" class="headerlink" title="解决方案一：background-color"></a>解决方案一：<code>background-color</code></h3><p>如果网页设置了一个背景颜色，那么最简单解决方案是，在 <code>body</code> 节点设置 <code>background-color</code>，使背景颜色填充整个屏幕，从而解决横屏显示左右白边的问题</p>
+<h3 id="解决方案二：viewport-fit-safe-area-inset"><a href="#解决方案二：viewport-fit-safe-area-inset" class="headerlink" title="解决方案二：viewport-fit + safe-area-inset-*"></a>解决方案二：<code>viewport-fit</code> + <code>safe-area-inset-*</code></h3><p>在 iOS 11 中苹果为 Web 新增两个内容 <code>viewport-fit</code> + <code>safe-area-inset-*</code></p>
+<blockquote>
+<p>❗️注意：<code>viewport-fit</code> 和 <code>safe-area-inset-*</code> 只对于 WKWebView 有效，在 UIWebView 中无效</p>
+</blockquote>
+<p>1️⃣、<code>viewport-fit</code> 用于设置网页在可视窗口的布局方式</p>
+<blockquote>
+<p>文档：<a href="https://drafts.csswg.org/css-round-display/#viewport-fit-descriptor" target="_blank" rel="external">CSS Round Display Spec</a></p>
+</blockquote>
+<p>这个属性可设置为：</p>
+<ul>
+<li><code>contain</code>: The viewport should fully contain the web content. 可视窗口完全包含网页内容</li>
+<li><code>cover</code>: The web content should fully cover the viewport.  网页内容完全覆盖可视窗口</li>
+<li><code>auto</code>: The default value, <code>contain</code></li>
+</ul>
+<p>对于 iPhone X 之前的 iPhone 设备屏幕为规则的矩形，网页内容都可以完整展示；但是对于 iPhone X 是异形屏幕，通过 <code>viewport-fit</code> 可以设置网页内容在可视窗口中的显示规则，通过下图可以辅助理解<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/viewport-fit.png" alt=""></p>
+<p>我们知道默认情况下 <code>viewport-fit=auto</code> 即为 <code>viewport-fit=contain</code>，在 iPhone X 中，相当于网页内容展示在 Safe area，这样也就是横屏显示时出现白边的原因了，所以我们可以设置 <code>viewport-fit=cover</code> 即可解决问题<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta <span class="attribute">name</span>=<span class="string">"viewport"</span> <span class="attribute">content</span>=<span class="string">"width=device-width, initial-scale=1.0, viewport-fit=cover"</span>&gt;</div></pre></td></tr></table></figure></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/Screen-Shot-2017-09-14-at-14.19.31.png" alt=""></p>
+<p>注意到应用 <code>viewport-fit=cover</code> 之后，网页右上角，menu 按键和 in 按键被圆角，传感器外壳（齐刘海）裁剪掉了 😲</p>
+<p>2️⃣、<code>safe-area-inset-*</code><br><strong>在设置 <code>viewport-fit=cover</code> 之后</strong>，Web 中会新增四个常量：</p>
+<ul>
+<li>safe-area-inset-top</li>
+<li>safe-area-inset-right</li>
+<li>safe-area-inset-left</li>
+<li>safe-area-inset-bottom</li>
+</ul>
+<p>分别表示 Safe area 和可视窗口 viewport 顶部，右边，左边，底部的间距，可以用于设置 <code>margin</code>, <code>padding</code>, 或者绝对定位时 <code>left</code>, <code>top</code></p>
+<blockquote>
+<p>❗️注意：在横屏和竖屏状态下，<code>safe-area-inset-*</code> 的值不同</p>
+</blockquote>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/0C3B9577-094E-411C-9ED3-AA481FA3A50A.png" alt=""></p>
+<p>为了解决应用 <code>viewport-fit=cover</code> 之后，有些显示内容被裁剪的问题，我们可以通过添加边距使得网页主要内容处于 Safe area 中不被裁剪，解决方式如下：<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">padding</span>: constant(safe-<span class="meta">area</span>-inset-top) constant(safe-<span class="meta">area</span>-inset-right) constant(safe-<span class="meta">area</span>-inset-<span class="keyword">bottom) </span>constant(safe-<span class="meta">area</span>-inset-left)<span class="comment">;</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/Screen-Shot-2017-09-14-at-14.07.11-1.png" alt=""></p>
+<h2 id="iOS-11-WebView-中状态栏问题"><a href="#iOS-11-WebView-中状态栏问题" class="headerlink" title="iOS 11 WebView 中状态栏问题"></a>iOS 11 WebView 中状态栏问题</h2><p><strong>问题描述：</strong><br>在 iOS 11 由于 safe area，状态栏的表现有点不同。如果页面顶部有一个 header bar，设置 <code>position: fixed; top: 0px;</code> 那么页面滚动过程中，会出现如下问题：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/iPhone%206s.gif" alt="iPhone 6S"><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/iPhone%20X.gif" alt="iPhone X"></p>
+<p>header bar 没有固定在最顶部，上下滚动过程中，我们可以看到网页内容从 status bar 下方穿过<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/status-bar-problem.png" alt=""></p>
+<p><strong>重现问题：</strong><br>创建一个 iOS 项目，视图中添加一个 <code>WKWebView</code>，加载百度首页<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">  [<span class="keyword">super</span> viewDidLoad];</div><div class="line">  <span class="comment">// Do any additional setup after loading the view, typically from a nib.</span></div><div class="line">  <span class="built_in">WKWebView</span> *webView = [[<span class="built_in">WKWebView</span> alloc] initWithFrame:<span class="keyword">self</span>.view.bounds];</div><div class="line">  [webView loadRequest:[<span class="built_in">NSURLRequest</span> requestWithURL:[<span class="built_in">NSURL</span> URLWithString:<span class="string">@"https://www.baidu.com"</span>]]];</div><div class="line">  [<span class="keyword">self</span>.view addSubview:webView];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>剖析问题：</strong><br>1、这个问题同样也是由于 safe area 导致，虽然 header bar 位置信息为 <code>position: fixed; top: 0px;</code>，但这个位置也是相对于 safe area 而言的，所以看到 header bar 并没有位于屏幕最顶部。👉 在 viewport meta 标签，添加 <code>viewport-fit=cover</code> 即可解决此问题<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/2B17E02C-7C0C-4282-9369-F5E6D1C75836.png" alt=""></p>
+<p>2、虽然 header bar 固定到屏幕最上方，但是很明显在 iPhone X 中却被圆角和齐刘海裁剪了内容，这怎么办呢？👉 为 header bar 添加 <code>padding-top</code> 即可解决此问题<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">header</span> &#123;</div><div class="line">  <span class="comment">/* ... */</span></div><div class="line"></div><div class="line">  <span class="comment">/* Status bar height on iOS 10 */</span></div><div class="line">  <span class="attribute">padding-top</span>: <span class="number">20px</span>;</div><div class="line"></div><div class="line">  <span class="comment">/* Status bar height on iOS 11+ */</span></div><div class="line">  <span class="attribute">padding-top</span>: <span class="built_in">constant</span>(safe-area-inset-top);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/FCF9D371-F2B5-44FE-9FFC-DC991E39FD2C.png" alt=""></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.apple.com/ios/human-interface-guidelines/overview/iphone-x/" target="_blank" rel="external">Human Interface Guidelines-iPhone X</a><br><a href="http://stephenradford.me/removing-the-white-bars-in-safari-on-iphone-x/" target="_blank" rel="external">Removing the White Bars in Safari on iPhone X</a><br><a href="https://ayogo.com/blog/ios11-viewport/" target="_blank" rel="external">Understanding the WebView Viewport in iOS 11</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/viewport-fit/" rel="tag">#viewport-fit</a>
+          
+            <a href="/tags/iOS-11/" rel="tag">#iOS 11</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/06/Implementing-Promise/" rel="next" title="Implementing Promise">
+                <i class="fa fa-chevron-left"></i> Implementing Promise
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">39</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iPhone-X-Safari-横屏显示左右白边问题"><span class="nav-number">1.</span> <span class="nav-text">iPhone X Safari 横屏显示左右白边问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案一：background-color"><span class="nav-number">1.1.</span> <span class="nav-text">解决方案一：background-color</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案二：viewport-fit-safe-area-inset"><span class="nav-number">1.2.</span> <span class="nav-text">解决方案二：viewport-fit + safe-area-inset-*</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS-11-WebView-中状态栏问题"><span class="nav-number">2.</span> <span class="nav-text">iOS 11 WebView 中状态栏问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/09/21/Understanding-the-WebView-Viewport-in-iOS-11-iPhone-X/';
+      var disqus_title = "剖析 iOS 11 网页适配问题";
+      var disqus_url = 'http://objcer.com/2017/09/21/Understanding-the-WebView-Viewport-in-iOS-11-iPhone-X/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
