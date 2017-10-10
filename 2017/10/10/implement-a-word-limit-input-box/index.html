@@ -1,0 +1,816 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="DEMO," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="在 Twitter 发推输入框中，有一个字数限制的逻辑，超出字数限制部分的文字会设置背景颜色提示，以便用户进行调整。这是一个很好的交互设计，在 Ant Design 中也有提到这一点。 本文将介绍如何实现这一字数限制输入框，效果访问：Codepen">
+<meta name="keywords" content="DEMO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现一个字数限制的输入框">
+<meta property="og:url" content="http://objcer.com/2017/10/10/implement-a-word-limit-input-box/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="在 Twitter 发推输入框中，有一个字数限制的逻辑，超出字数限制部分的文字会设置背景颜色提示，以便用户进行调整。这是一个很好的交互设计，在 Ant Design 中也有提到这一点。 本文将介绍如何实现这一字数限制输入框，效果访问：Codepen">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/twitter-input-box.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/ant-design-input.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/rich-input.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/CCCDB51D-C8BD-4014-884B-C69A097F35C5.png">
+<meta property="og:updated_time" content="2017-10-10T07:29:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="实现一个字数限制的输入框">
+<meta name="twitter:description" content="在 Twitter 发推输入框中，有一个字数限制的逻辑，超出字数限制部分的文字会设置背景颜色提示，以便用户进行调整。这是一个很好的交互设计，在 Ant Design 中也有提到这一点。 本文将介绍如何实现这一字数限制输入框，效果访问：Codepen">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/twitter-input-box.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/10/10/implement-a-word-limit-input-box/"/>
+
+
+  <title> 实现一个字数限制的输入框 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                实现一个字数限制的输入框
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-10-10T15:24:25+08:00" content="2017-10-10">
+              2017-10-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/10/10/implement-a-word-limit-input-box/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/10/implement-a-word-limit-input-box/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/10/10/implement-a-word-limit-input-box/" class="leancloud_visitors" data-flag-title="实现一个字数限制的输入框">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/twitter-input-box.png" alt=""><br>在 Twitter 发推输入框中，有一个字数限制的逻辑，超出字数限制部分的文字会设置背景颜色提示，以便用户进行调整。这是一个很好的交互设计，在 <a href="https://ant.design/docs/spec/feature-cn" target="_blank" rel="external">Ant Design</a> 中也有提到这一点。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/ant-design-input.png" alt=""></p>
+<p>本文将介绍如何实现这一字数限制输入框，效果访问：<a href="https://codepen.io/yingshandeng/pen/boRNLx" target="_blank" rel="external">Codepen</a><br><a id="more"></a></p>
+<h2 id="超出限制文字设置背景提示"><a href="#超出限制文字设置背景提示" class="headerlink" title="超出限制文字设置背景提示"></a>超出限制文字设置背景提示</h2><p>实现这个输入框关键在于如何实现对超出字数限制部分的文字设置背景颜色，对于输入框一般有两种选择：</p>
+<ul>
+<li><code>textarea</code> 多行文本输入</li>
+<li><code>div</code> 设置 <code>contenteditable=&quot;true&quot;</code></li>
+</ul>
+<p><code>contenteditable=&quot;true&quot;</code> 的 DIV 节点可以操作其中的 DOM 节点，那么我们可以监听输入区域，用户输入时，获取其中的 <code>innerText</code>，然后进行字数限制判断，设置其 <code>innerHTML</code>，划分两部分，超出部分设置背景颜色，代码大致如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">contenteditable</span>=<span class="string">"true"</span>&gt;</span></div><div class="line">  文字，文字...</div><div class="line">  <span class="tag">&lt;<span class="name">em</span>&gt;</span>超出的文字...<span class="tag">&lt;/<span class="name">em</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">var</span> editorArea = <span class="built_in">document</span>.querySelector(<span class="string">'.editor-area'</span>)</div><div class="line"></div><div class="line">  editorArea.addEventListener(<span class="string">'input'</span>, (evt) =&gt; &#123;</div><div class="line">    <span class="keyword">var</span> normalText;</div><div class="line">    <span class="keyword">var</span> exceedText;</div><div class="line"></div><div class="line">    editorArea.innerHTML = normalText + <span class="string">'&lt;em&gt;'</span> + exceedText + <span class="string">'&lt;/em&gt;'</span></div><div class="line">  &#125;)</div><div class="line">&lt;<span class="regexp">/script</span></div></pre></td></tr></table></figure></p>
+<p>在每次输入后，都重新设置 <code>innerHTML</code>，会导致每次输入后，光标位置都跑到输入框起始位置了，看来这种方式不可行 😤</p>
+<p>👉 解决方案：用两层 DIV 重叠</p>
+<ul>
+<li>上层 DIV 节点用于文字输入，背景颜色透明</li>
+<li>下层 DIV 节点用于高亮超出部分文字，文字颜色设置为透明，超出部分节点设置背景颜色</li>
+</ul>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/rich-input.png" alt=""></p>
+<h2 id="输入框-placeholder"><a href="#输入框-placeholder" class="headerlink" title="输入框 placeholder"></a>输入框 placeholder</h2><p><code>contenteditable=&quot;true&quot;</code> 的 DIV 设置 placeholder 可以通过 CSS 来解决：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.editor-area</span><span class="selector-attr">[contenteditable=true]</span><span class="selector-pseudo">:empty</span><span class="selector-pseudo">:before</span> &#123;</div><div class="line">  <span class="attribute">content</span>: <span class="built_in">attr</span>(placeholder);</div><div class="line">  <span class="attribute">color</span>: <span class="number">#ccd6dd</span>;</div><div class="line">  <span class="attribute">position</span>: absolute;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过选择器 <code>:empty</code> 判断输入框中内容是否为空，其实存在一些问题。点击回车的时候，会插入 <code>&lt;div&gt;&lt;br&gt;&lt;/div&gt;</code> 或者 <code>&lt;br&gt;</code>，这部分会影响 <code>:empty</code> 的判断，譬如 DIV 中没有文字，但是存在一个换行时，这样 <code>:empty</code> 的判断就不会生效，placeholder 也就没有显示，所以我们可以通过另一种方式进行判断，通过 JS 手动添加、移除 class 类处理 placeholder 的显示和隐藏：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// CSS</span></div><div class="line"><span class="selector-class">.editor-area</span><span class="selector-class">.is-showPlaceholder</span><span class="selector-attr">[contenteditable=true]</span><span class="selector-pseudo">:before</span> &#123;</div><div class="line">  <span class="attribute">content</span>: attr(placeholder);</div><div class="line">  <span class="attribute">color</span>: <span class="number">#ccd6dd</span>;</div><div class="line">  <span class="attribute">position</span>: absolute;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// JS</span></div><div class="line"><span class="selector-tag">editorArea</span><span class="selector-class">.addEventListener</span>(<span class="string">'input'</span>, (evt) =&gt; &#123;</div><div class="line">  <span class="selector-tag">if</span> (editorArea.innerHTML === <span class="string">'&lt;div&gt;&lt;br&gt;&lt;/div&gt;'</span> ||</div><div class="line">    editorArea.innerHTML === <span class="string">'&lt;br&gt;'</span> ||</div><div class="line">    editorArea.innerHTML === <span class="string">''</span>) &#123;</div><div class="line">    <span class="selector-tag">editorArea</span><span class="selector-class">.classList</span><span class="selector-class">.add</span>(<span class="string">'is-showPlaceholder'</span>)</div><div class="line">  &#125; <span class="selector-tag">else</span> &#123;</div><div class="line">    <span class="selector-tag">editorArea</span><span class="selector-class">.classList</span><span class="selector-class">.remove</span>(<span class="string">'is-showPlaceholder'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>还有一种解决方式，第一层输入 DIV 节点使用 <code>textarea</code> 替换，<code>textarea</code> 中有 <code>placeholder</code> 属性</p>
+<h2 id="中文输入字数统计"><a href="#中文输入字数统计" class="headerlink" title="中文输入字数统计"></a>中文输入字数统计</h2><p>在中文输入是，中文还未输入到输入框，字数就在统计了；合理的是，中文输入 composing 组合过程中不应进行字数统计，在中文输入到输入框后，才进行字数统计。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/CCCDB51D-C8BD-4014-884B-C69A097F35C5.png" alt=""></p>
+<p>解决这个问题需要用到 <code>compositionstart</code> 和 <code>compositionend</code> 这两个事件；前者表示输入组合开始，后者表示输入组合结束，在 <code>compositionend</code> 事件中就是我们字数统计的合理时机。<br><figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> isComposing = <span class="literal">false</span></div><div class="line"></div><div class="line">editorArea.addEventListener(<span class="string">'compositionstart'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  isComposing = <span class="literal">true</span></div><div class="line">&#125;)</div><div class="line">editorArea.addEventListener(<span class="string">'compositionend'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  isComposing = <span class="literal">false</span></div><div class="line">  <span class="comment">// 字数统计</span></div><div class="line">  <span class="keyword">let</span> text = editorArea.innerText</div><div class="line">  setCounter(limitCnt - text.length)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>🎏 如需考虑 emoji 字符长度计算的话，参考：<a href="https://objcer.com/2017/07/20/explore-emoji-length/">探究 emoji 字符长度</a></p>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p>效果访问：<a href="https://codepen.io/yingshandeng/pen/boRNLx" target="_blank" rel="external">Codepen</a><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">    <span class="selector-tag">html</span>,</div><div class="line">    <span class="selector-tag">body</span> &#123;</div><div class="line">      <span class="attribute">display</span>: flex;</div><div class="line">      <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">      <span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">      <span class="attribute">padding</span>: <span class="number">0</span>;</div><div class="line">      <span class="attribute">margin</span>: <span class="number">0</span>;</div><div class="line">      <span class="attribute">background</span>: <span class="number">#E3F3FD</span>;</div><div class="line">      <span class="attribute">font-family</span>: <span class="string">"Helvetica Neue"</span>,Helvetica,Arial,sans-serif;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="selector-class">.rich-editor</span> &#123;</div><div class="line">      <span class="attribute">width</span>: <span class="number">508px</span>;</div><div class="line">      <span class="attribute">height</span>: auto;</div><div class="line">     <span class="comment">/* max-height: 134px;</span></div><div class="line">      overflow-y: scroll;*/</div><div class="line">      <span class="attribute">margin</span>: auto;</div><div class="line">      <span class="attribute">padding</span>: <span class="number">8px</span>;</div><div class="line">      <span class="attribute">background</span>: <span class="number">#fff</span>;</div><div class="line">      <span class="attribute">border-radius</span>: <span class="number">8px</span>;</div><div class="line">      <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#A4D9F9</span>;</div><div class="line">      <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1px</span> <span class="number">#A4D9F9</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.wrapper</span> &#123;</div><div class="line">      <span class="attribute">position</span>: relative;</div><div class="line">      <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">      <span class="attribute">min-height</span>: <span class="number">116px</span>;</div><div class="line">      <span class="attribute">z-index</span>: <span class="number">1</span>;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.editor-area</span>, <span class="selector-class">.editor-backer</span> &#123;</div><div class="line">      <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">      <span class="attribute">height</span>: auto;</div><div class="line">      <span class="attribute">min-height</span>: <span class="number">116px</span>;</div><div class="line"></div><div class="line">      <span class="attribute">font-size</span>: <span class="number">14px</span>;</div><div class="line">      <span class="attribute">line-height</span>: <span class="number">20px</span>;</div><div class="line">      <span class="attribute">word-wrap</span>: break-word;</div><div class="line">      <span class="attribute">background</span>: transparent;</div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.editor-area</span> &#123;</div><div class="line">      <span class="attribute">outline</span>: none;</div><div class="line">      <span class="attribute">border</span>: none;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.editor-area</span><span class="selector-class">.is-showPlaceholder</span><span class="selector-attr">[contenteditable=true]</span><span class="selector-pseudo">:before</span> &#123;</div><div class="line">      <span class="attribute">content</span>: <span class="built_in">attr</span>(placeholder);</div><div class="line">      <span class="attribute">color</span>: <span class="number">#ccd6dd</span>;</div><div class="line">      <span class="attribute">position</span>: absolute;</div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.editor-backer</span> &#123;</div><div class="line">      <span class="attribute">position</span>: absolute;</div><div class="line">      <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">      <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">      <span class="attribute">color</span>: transparent;</div><div class="line">      <span class="attribute">z-index</span>: -<span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.editor-backer</span> <span class="selector-tag">em</span> &#123;</div><div class="line">      <span class="attribute">background-color</span>: <span class="number">#ffb8c2</span>;</div><div class="line">      <span class="attribute">font-style</span>: normal;</div><div class="line">      <span class="attribute">font-size</span>: <span class="number">14px</span>;</div><div class="line">      <span class="attribute">line-height</span>: <span class="number">20px</span>;</div><div class="line">      <span class="attribute">white-space</span>: pre-wrap;</div><div class="line">      <span class="attribute">word-wrap</span>: break-word;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="selector-class">.counter</span> &#123;</div><div class="line">      <span class="attribute">float</span>: right;</div><div class="line">      <span class="attribute">color</span>: <span class="number">#657786</span>;</div><div class="line">      <span class="attribute">font-size</span>: <span class="number">14px</span>;</div><div class="line">      <span class="attribute">line-height</span>: <span class="number">20px</span>;</div><div class="line">      <span class="attribute">text-align</span>: right;</div><div class="line">      <span class="attribute">user-select</span>: none;</div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.counter</span><span class="selector-class">.max-reached</span> &#123;</div><div class="line">      <span class="attribute">color</span>: <span class="number">#e0245e</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"rich-editor"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wrapper"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"editor-area"</span> <span class="attr">contenteditable</span>=<span class="string">"true"</span> <span class="attr">placeholder</span>=<span class="string">"Enter text here..."</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"editor-backer"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"counter"</span>&gt;</span>140<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">      <span class="keyword">var</span> editorArea = <span class="built_in">document</span>.querySelector(<span class="string">'.editor-area'</span>)</div><div class="line">      <span class="keyword">var</span> editorBacker = <span class="built_in">document</span>.querySelector(<span class="string">'.editor-backer'</span>)</div><div class="line">      <span class="keyword">var</span> counter = <span class="built_in">document</span>.querySelector(<span class="string">'.counter'</span>)</div><div class="line">      <span class="keyword">var</span> limitCnt = <span class="number">140</span></div><div class="line">      <span class="keyword">var</span> isComposing = <span class="literal">false</span></div><div class="line"></div><div class="line">      editorArea.addEventListener(<span class="string">'compositionstart'</span>, () =&gt; &#123;</div><div class="line">        isComposing = <span class="literal">true</span></div><div class="line">      &#125;)</div><div class="line">      editorArea.addEventListener(<span class="string">'compositionend'</span>, () =&gt; &#123;</div><div class="line">        isComposing = <span class="literal">false</span></div><div class="line">        <span class="comment">//</span></div><div class="line">        <span class="keyword">let</span> text = editorArea.innerText</div><div class="line">        setCounter(limitCnt - text.length)</div><div class="line">      &#125;)</div><div class="line"></div><div class="line">      <span class="function"><span class="keyword">function</span> <span class="title">setCounter</span> (<span class="params">cnt</span>) </span>&#123;</div><div class="line">        counter.innerHTML = cnt</div><div class="line">        <span class="keyword">if</span> (cnt &lt; <span class="number">0</span>) &#123;</div><div class="line">          counter.classList.add(<span class="string">'max-reached'</span>)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">          counter.classList.remove(<span class="string">'max-reached'</span>)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="keyword">var</span> inputCompose = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (editorArea.innerHTML === <span class="string">'&lt;div&gt;&lt;br&gt;&lt;/div&gt;'</span> ||</div><div class="line">          editorArea.innerHTML === <span class="string">'&lt;br&gt;'</span> ||</div><div class="line">          editorArea.innerHTML === <span class="string">''</span>) &#123;</div><div class="line">          editorArea.classList.add(<span class="string">'is-showPlaceholder'</span>)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">          editorArea.classList.remove(<span class="string">'is-showPlaceholder'</span>)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">let</span> text = editorArea.innerText</div><div class="line">        <span class="keyword">let</span> remainingCnt = limitCnt - text.trim().length</div><div class="line">        <span class="keyword">if</span> (remainingCnt &lt; <span class="number">0</span>) &#123;</div><div class="line">          <span class="keyword">let</span> allowedText = text.substring(<span class="number">0</span>, limitCnt)</div><div class="line">          <span class="keyword">let</span> refusedText = text.substring(limitCnt)</div><div class="line"></div><div class="line">          editorBacker.innerHTML = allowedText + <span class="string">'&lt;em&gt;'</span> + refusedText + <span class="string">'&lt;/em&gt;'</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">          editorBacker.innerHTML = <span class="string">''</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (!isComposing) &#123;</div><div class="line">          setCounter(remainingCnt)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      inputCompose();</div><div class="line">      editorArea.oninput = inputCompose</div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DEMO/" rel="tag">#DEMO</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/" rel="next" title="动态文本自适应绘制到指定大小的 Canvas">
+                <i class="fa fa-chevron-left"></i> 动态文本自适应绘制到指定大小的 Canvas
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#超出限制文字设置背景提示"><span class="nav-number">1.</span> <span class="nav-text">超出限制文字设置背景提示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输入框-placeholder"><span class="nav-number">2.</span> <span class="nav-text">输入框 placeholder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文输入字数统计"><span class="nav-number">3.</span> <span class="nav-text">中文输入字数统计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整代码"><span class="nav-number">4.</span> <span class="nav-text">完整代码</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/10/10/implement-a-word-limit-input-box/';
+      var disqus_title = "实现一个字数限制的输入框";
+      var disqus_url = 'http://objcer.com/2017/10/10/implement-a-word-limit-input-box/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

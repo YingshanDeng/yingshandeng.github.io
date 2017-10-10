@@ -1,0 +1,815 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Canvas," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="本文将探究动态文本如何自适应绘制到指定大小的 Canvas 🎏">
+<meta name="keywords" content="Canvas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态文本自适应绘制到指定大小的 Canvas">
+<meta property="og:url" content="http://objcer.com/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="本文将探究动态文本如何自适应绘制到指定大小的 Canvas 🎏">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/1-UGtq-cSfbuekV8aHalVIAw.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/fillText.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/2587037021-55bacfa692fb8.png">
+<meta property="og:updated_time" content="2017-10-10T07:29:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="动态文本自适应绘制到指定大小的 Canvas">
+<meta name="twitter:description" content="本文将探究动态文本如何自适应绘制到指定大小的 Canvas 🎏">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/1-UGtq-cSfbuekV8aHalVIAw.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/"/>
+
+
+  <title> 动态文本自适应绘制到指定大小的 Canvas | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                动态文本自适应绘制到指定大小的 Canvas
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-10-10T15:15:11+08:00" content="2017-10-10">
+              2017-10-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/" class="leancloud_visitors" data-flag-title="动态文本自适应绘制到指定大小的 Canvas">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/1-UGtq-cSfbuekV8aHalVIAw.png" alt=""><br>本文将探究动态文本如何自适应绘制到指定大小的 Canvas 🎏</p>
+<a id="more"></a>
+<h2 id="CanvasRenderingContext2D-fillText"><a href="#CanvasRenderingContext2D-fillText" class="headerlink" title="CanvasRenderingContext2D.fillText()"></a><code>CanvasRenderingContext2D.fillText()</code></h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> ctx.fillText(<span class="built_in">text</span>, x, y [, maxWidth]);</div></pre></td></tr></table></figure>
+<p>在 (x, y) 位置填充文本。如果第四个参数提供了最大宽度，文本会进行缩放以适应最大宽度。如果绘制的文本实际宽度超过 <code>maxWidth</code>，那么会在水平方向上进行缩放，文字可能被压缩变形。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/fillText.png" alt=""></p>
+<h2 id="限制宽度"><a href="#限制宽度" class="headerlink" title="限制宽度"></a>限制宽度</h2><figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctx.measureText(text)<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>传入要绘制的文本内容，返回绘制到当前 Canvas 时文本的宽度。我们可以设置一个较大的字体，然后递减字体大小，直到绘制的文本宽度满足 Canvas 宽度限制，由此得到文本绘制到 Canvas 中合适的字体大小<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function dynamicFitTextOnCanvas (text, fontface, desiredWidth) &#123;</div><div class="line">  <span class="selector-tag">var</span> <span class="selector-tag">canvas</span> = document.createElement(<span class="string">'canvas'</span>)</div><div class="line">  <span class="selector-tag">var</span> context = <span class="selector-tag">canvas</span>.getContext(<span class="string">'2d'</span>)</div><div class="line">  <span class="comment">// start with a large font size</span></div><div class="line">  <span class="selector-tag">var</span> fontsize = <span class="number">500</span></div><div class="line">  do &#123;</div><div class="line">    context<span class="selector-class">.font</span> = `$&#123;fontsize&#125;px $&#123;fontface&#125;`</div><div class="line">    fontsize --</div><div class="line">  &#125; while (context.measureText(text)<span class="selector-class">.width</span> &gt; desiredWidth)</div><div class="line">  return fontsize</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>显然字体大小 fontsize 逐次递减一，效率不够好，我们可以通过二分递减来优化这个过程<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">function dynamicFitTextOnCanvas (text, fontface, desiredWidth) &#123;</div><div class="line">  <span class="built_in">var</span> canvas = document.createElement('canvas')</div><div class="line">  <span class="built_in">var</span> <span class="built_in">context</span> = canvas.getContext('2d')</div><div class="line">  // start with a large <span class="built_in">font</span> size</div><div class="line">  <span class="built_in">var</span> fontsize = <span class="number">500</span></div><div class="line">  <span class="built_in">return</span> measureTextBinary(<span class="built_in">context</span>, text, <span class="number">0</span>, fontsize, fontface, desiredWidth)</div><div class="line">&#125;</div><div class="line">function measureTextBinary (<span class="built_in">context</span>, text, <span class="built_in">min</span>, <span class="built_in">max</span>, fontface, desiredWidth) &#123;</div><div class="line">  <span class="keyword">if</span> (<span class="built_in">max</span> - <span class="built_in">min</span> &lt; <span class="number">1</span>) &#123;</div><div class="line">    <span class="built_in">return</span> Math.<span class="built_in">floor</span>(<span class="built_in">min</span>)</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">var</span> cur = <span class="built_in">min</span> + (<span class="built_in">max</span> - <span class="built_in">min</span>) / <span class="number">2</span></div><div class="line">  <span class="built_in">context</span>.<span class="built_in">font</span> = `$&#123;cur&#125;px $&#123;fontface&#125;`</div><div class="line">  <span class="built_in">var</span> measureWidth = <span class="built_in">context</span>.measureText(text).<span class="built_in">width</span></div><div class="line">  <span class="keyword">if</span> (measureWidth &gt; desiredWidth) &#123;</div><div class="line">      <span class="built_in">return</span> measureTextBinary(<span class="built_in">context</span>, text, <span class="built_in">min</span>, cur, fontface, desiredWidth)</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="built_in">return</span> measureTextBinary(<span class="built_in">context</span>, text, cur, <span class="built_in">max</span>, fontface, desiredWidth)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="限制宽度和高度"><a href="#限制宽度和高度" class="headerlink" title="限制宽度和高度"></a>限制宽度和高度</h2><p>注意到 <code>measureText</code> 方法只能测量绘制文本的宽度，无法得到高度信息；我们可以往 document 中添加一个辅助的 <code>div</code> 节点，设置其 <code>innerText</code> 为要绘制的文本，再设置其字体大小，通过 <code>getBoundingClientRect</code> 方法或者 <code>offsetWidth/offsetHeight</code> 属性就可以得到绘制指定字体大小的文本宽高；同理，通过递减字体大小，使得绘制的文本宽高满足 Canvas 的宽高限制；由于有了前面的经验，我们也用二分递减提高执行效率</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dynamicFitTextOnCanvas</span> (<span class="params">text, fontface, desiredWidth, desiredHeight</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> tmpDiv = <span class="built_in">document</span>.querySelector(<span class="string">'.tmp-div'</span>)</div><div class="line">  <span class="keyword">if</span> (!tmpDiv) &#123;</div><div class="line">    tmpDiv = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</div><div class="line">    tmpDiv.classList.add(<span class="string">'tmp-div'</span>)</div><div class="line">    tmpDiv.style[<span class="string">'position'</span>] = <span class="string">'absolute'</span></div><div class="line">    tmpDiv.style[<span class="string">'left'</span>] = <span class="string">'-100000px'</span></div><div class="line">    tmpDiv.style[<span class="string">'top'</span>] = <span class="string">'-100000px'</span></div><div class="line">    tmpDiv.style[<span class="string">'visibility'</span>] = <span class="string">'hidden'</span></div><div class="line">    <span class="built_in">document</span>.body.appendChild(tmpDiv)</div><div class="line">    tmpDiv.innerText = text</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// start with a large font size</span></div><div class="line">  <span class="keyword">var</span> fontsize = <span class="number">500</span></div><div class="line">  <span class="keyword">return</span> measureDivBinary(tmpDiv, <span class="number">0</span>, fontsize, fontface, desiredWidth, desiredHeight)</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">measureDivBinary</span> (<span class="params">tmpDiv, min, max, fontface, desiredWidth, desiredHeight</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (max - min &lt; <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.floor(min)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">var</span> cur = min + (max - min) / <span class="number">2</span></div><div class="line">  tmpDiv.style[<span class="string">'font'</span>] = <span class="string">`<span class="subst">$&#123;cur&#125;</span>px <span class="subst">$&#123;fontface&#125;</span>`</span></div><div class="line">  tmpDiv.style[<span class="string">'line-height'</span>] = <span class="string">`<span class="subst">$&#123;cur&#125;</span>px`</span></div><div class="line">  <span class="keyword">var</span> measureRect = tmpDiv.getBoundingClientRect()</div><div class="line">  <span class="keyword">if</span> (measureRect.width &gt; desiredWidth || measureRect.height &gt; desiredHeight) &#123;</div><div class="line">    <span class="keyword">return</span> measureDivBinary(tmpDiv, min, cur, fontface, desiredWidth, desiredHeight)</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> measureDivBinary(tmpDiv, cur, max, fontface, desiredWidth, desiredHeight)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="关于-line-height"><a href="#关于-line-height" class="headerlink" title="关于 line-height"></a>关于 <code>line-height</code></h3><p><img src="http://7vikhl.com1.z0.glb.clouddn.com/2587037021-55bacfa692fb8.png" alt=""><br>通过上图来理解行高，行距</p>
+<ul>
+<li><strong>行高</strong> (line-height) 是指文本行基线间的垂直距离，上图中两条红线之间的距离就是行高</li>
+<li>上一行的底线和下一行的顶线之间的距离就是<strong>行距</strong>，而同一行顶线和底线之间的距离是 font-size 的大小</li>
+<li>行距的一半是半行距: 半行距 = (line-height - font-size) / 2，当 line-height &lt; font-size，半行距为负值，这时候两行之间就会重叠</li>
+</ul>
+<p>我们发现，font-size 大小即为文字绘制后的实际高度，所以在上面代码中，我们对辅助 <code>div</code> 节点也设置了 <code>line-height = font-size</code>，使得到的文字高度更加精确（去掉了两个半行距）</p>
+<h3 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h3><p>1️⃣ 最小字体大小限制<br>在 Chrome 浏览器中，设定 CSS <code>font-size</code> 小于 12px ，依然会以 12px 进行展示，也就是说 Chrome 浏览器允许设置的最小 <code>font-size</code> 为 12px（Safari 不存在这个问题）。所以如果限制绘制的 Canvas 的宽高小于辅助 <code>div</code> 节点设置 <code>font-size</code> 为 12px 的宽高，那么无法通过计算得到合适绘制的 <code>font-size</code></p>
+<p><strong>为了解决这个问题：</strong>只能通过设置一个较大的 <code>font-size</code>，在 Canvas 上进行绘制，然后对这个 Canvas 缩小到限制的宽高</p>
+<p>2️⃣ 高清屏绘制文字模糊<br>关于这个问题，解决方案参考：<a href="https://objcer.com/2017/10/10/High-DPI-Canvas-Render/">高清屏中 Canvas 的绘制</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Canvas/" rel="tag">#Canvas</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/10/High-DPI-Canvas-Render/" rel="next" title="高清屏中 Canvas 的绘制">
+                <i class="fa fa-chevron-left"></i> 高清屏中 Canvas 的绘制
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/10/implement-a-word-limit-input-box/" rel="prev" title="实现一个字数限制的输入框">
+                实现一个字数限制的输入框 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CanvasRenderingContext2D-fillText"><span class="nav-number">1.</span> <span class="nav-text">CanvasRenderingContext2D.fillText()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#限制宽度"><span class="nav-number">2.</span> <span class="nav-text">限制宽度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#限制宽度和高度"><span class="nav-number">3.</span> <span class="nav-text">限制宽度和高度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于-line-height"><span class="nav-number">3.1.</span> <span class="nav-text">关于 line-height</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存在的问题"><span class="nav-number">3.2.</span> <span class="nav-text">存在的问题</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/';
+      var disqus_title = "动态文本自适应绘制到指定大小的 Canvas";
+      var disqus_url = 'http://objcer.com/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
