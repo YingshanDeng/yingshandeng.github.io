@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://objcer.com/"/>
-  <updated>2017-09-21T08:01:43.000Z</updated>
+  <updated>2017-10-10T07:11:17.000Z</updated>
   <id>http://objcer.com/</id>
   
   <author>
@@ -14,6 +14,70 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>高清屏中 Canvas 的绘制</title>
+    <link href="http://objcer.com/2017/10/10/High-DPI-Canvas-Render/"/>
+    <id>http://objcer.com/2017/10/10/High-DPI-Canvas-Render/</id>
+    <published>2017-10-10T07:07:41.000Z</published>
+    <updated>2017-10-10T07:11:17.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/img_html5-canvas-guide2.jpg" alt=""><br>本文将对 Canvas 在高清屏中绘制出现模糊问题进行分析，并给出解决方案 🎏</p>
+<a id="more"></a>
+<h2 id="问题剖析"><a href="#问题剖析" class="headerlink" title="问题剖析"></a>问题剖析</h2><blockquote>
+<p>文章：<a href="https://objcer.com/2017/06/19/one-pixel-border/">高清屏一像素边框问题</a> 中对物理像素(physical pixel) 、CSS 像素和 devicePixelRatio 等概念进行了介绍</p>
+</blockquote>
+<p>在高清屏中，Canvas 绘制时会出现模糊的问题，在文章 <a href="https://www.html5rocks.com/en/tutorials/canvas/hidpi/" target="_blank" rel="external">High DPI Canvas</a> 中对此进行了分析介绍。其中涉及两个概念：<strong>webkitBackingStorePixelRatio</strong> 和 <strong>devicePixelRatio</strong></p>
+<p>浏览器绘制 Canvas 渲染到屏幕中分两个过程：</p>
+<ul>
+<li>绘制过程：<strong>webkitBackingStorePixelRatio</strong><br><code>webkitBackingStorePixelRatio</code> 表示浏览器在绘制 Canvas 到缓存区时的绘制比例，若图片宽高为 <code>200px</code>，<code>webkitBackingStorePixelRatio</code> 为 2，那么 Canvas 绘制这个图片到缓存区时，宽高就为 <code>400px</code></li>
+<li>渲染过程：<strong>devicePixelRatio</strong><br>Canvas 显示到屏幕中还需要渲染过程，渲染过程根据 <code>devicePixelRatio</code> 参数将缓存区中的 Canvas 进行缩放渲染到屏幕中</li>
+</ul>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/canvas-backingstore-device.png" alt=""></p>
+<p>分析图片在高清屏中 Canvas 绘制会模糊的原因：<br>1、<code>devicePixelRatio = device pixel / CSS pixel</code><br>如果 <code>devicePixelRatio = 2</code> 那么对于 <code>200px * 200px</code> 的图片要绘制到屏幕中，那么对应的屏幕像素(物理像素) 就是 <code>400px * 400px</code></p>
+<p>2、在大部分高清屏中，例如 Macbook Pro 中<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">webkitBackingStorePixelRatio</span> = <span class="number">1</span></div><div class="line"><span class="attr">devicePixelRatio</span> = <span class="number">2</span></div></pre></td></tr></table></figure></p>
+<p>将一个 <code>200px * 200px</code> 的图片 Cavnas 绘制到该屏幕中的流程：</p>
+<ul>
+<li><code>webkitBackingStorePixelRatio = 1</code><br>绘制到缓存区的大小也为：<code>200px * 200px</code></li>
+<li><code>devicePixelRatio = 2</code><br><code>200px * 200px</code> 的图片对应到屏幕像素为 <code>400px * 400px</code>，<code>devicePixelRatio = 2</code> 浏览器就把缓存区的 <code>200px * 200px</code> 宽高分别放大两倍渲染到屏幕中，所以就导致模糊</li>
+</ul>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ul>
+<li><p>将 Canvas 宽高进行放大，放大比例为：<code>devicePixelRatio / webkitBackingStorePixelRatio</code></p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> devicePixelRatio = window.devicePixelRatio || <span class="number">1</span></div><div class="line"><span class="built_in">var</span> backingStoreRatio = <span class="built_in">context</span>.webkitBackingStorePixelRatio ||</div><div class="line">                        <span class="built_in">context</span>.mozBackingStorePixelRatio ||</div><div class="line">                        <span class="built_in">context</span>.msBackingStorePixelRatio ||</div><div class="line">                        <span class="built_in">context</span>.oBackingStorePixelRatio ||</div><div class="line">                        <span class="built_in">context</span>.backingStorePixelRatio || <span class="number">1</span></div><div class="line"></div><div class="line"><span class="built_in">var</span> ratio = devicePixelRatio / backingStoreRatio</div></pre></td></tr></table></figure>
+</li>
+<li><p>通过 CSS 设置将 Canvas 缩小为原大小</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> oldWidth = canvas.<span class="built_in">width</span>;</div><div class="line"><span class="built_in">var</span> oldHeight = canvas.<span class="built_in">height</span>;</div><div class="line"></div><div class="line">canvas.<span class="built_in">width</span> = oldWidth * ratio;</div><div class="line">canvas.<span class="built_in">height</span> = oldHeight * ratio;</div><div class="line"></div><div class="line">canvas.<span class="built_in">style</span>.<span class="built_in">width</span> = oldWidth + 'px';</div><div class="line">canvas.<span class="built_in">style</span>.<span class="built_in">height</span> = oldHeight + 'px';</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>举例分析一下 Canvas 绘制图片，文字的适配方案：<br>1、对于图片绘制 <code>drawImage</code> 方法：<br>由于 Canvas 放大后，相应的绘制图片时也要放大，有两种方式：</p>
+<ul>
+<li><p><code>drawImage</code> 目标宽高分别乘以 <code>ratio</code></p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">context</span>.drawImage(<span class="built_in">image</span>, srcx, srcy, srcw, srch, desx, desy, desw * ratio, desh * ratio);</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>context.scale</code> 缩放</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">context</span>.<span class="built_in">scale</span>(ratio, ratio)</div><div class="line">// 绘制图片</div><div class="line"><span class="built_in">context</span>.drawImage(...)</div><div class="line"><span class="built_in">context</span>.<span class="built_in">scale</span>(<span class="number">1</span>/ratio, <span class="number">1</span>/ratio)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>此种方式在绘制图片之前，调用 <code>scale</code> 设置 Canvas 缩放变换；绘制完成后，需要重置 Canvas 的缩放变换。推荐使用这种方式 👍</p>
+<p>2、对于文字绘制 <code>fillText</code> 方法<br>由于 Canvas 放大了，绘制文字时，字体也要放大，绘制完成后，字体再缩小回原大小<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">context</span>.<span class="built_in">font</span> = <span class="built_in">context</span>.<span class="built_in">font</span>.replace(</div><div class="line">  /(\d+)(px|em|<span class="built_in">rem</span>|pt)/g,</div><div class="line">  function(w, m, u) &#123;</div><div class="line">    <span class="built_in">return</span> (m * ratio) + u;</div><div class="line">  &#125;</div><div class="line">);</div><div class="line">// 绘制文字</div><div class="line"><span class="built_in">context</span>.fillText(...)</div><div class="line"><span class="built_in">context</span>.<span class="built_in">font</span> = <span class="built_in">context</span>.<span class="built_in">font</span>.replace(</div><div class="line">  /(\d+)(px|em|<span class="built_in">rem</span>|pt)/g,</div><div class="line">  function(w, m, u) &#123;</div><div class="line">    <span class="built_in">return</span> (m / ratio) + u;</div><div class="line">  &#125;</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<p>关于 Canvas 在高清屏绘制的兼容，github 有一个 polyfill <a href="https://github.com/jondavidjohn/hidpi-canvas-polyfill" target="_blank" rel="external">jondavidjohn/hidpi-canvas-polyfill</a> 但是这仓库并没有考虑 <code>drawImage</code>，如果直接使用这个 polyfill，在绘制图片时，宽高都会变小；我 fork 了这个仓库，并增加了 <code>drawImage</code> 处理：<a href="https://github.com/YingshanDeng/hidpi-canvas-polyfill" target="_blank" rel="external">YingshanDeng/hidpi-canvas-polyfill</a>。更多 Canvas 绘制方法的兼容参考这个仓库的源码。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>1️⃣ <code>webkitBackingStorePixelRatio</code> 在 Chrome 中已经废弃，详细参考：<a href="https://bugs.chromium.org/p/chromium/issues/detail?id=277205" target="_blank" rel="external">https://bugs.chromium.org/p/chromium/issues/detail?id=277205</a></p>
+<p>2️⃣ 现在高清屏中 Canvas 绘制图片 <code>drawImage</code>，不需要经过如上处理也不会出现模糊的情况了（只在 Mackbook Pro, iPhone 6S 上分别测试过），这点在网上并没有找到更多的信息</p>
+<p>但是 Canvas 的其他绘制方法例如绘制文字 <code>fillText</code> 不经过处理高清屏中绘制仍然会模糊，所以还是需要这个polyfill：<a href="https://github.com/YingshanDeng/hidpi-canvas-polyfill" target="_blank" rel="external">YingshanDeng/hidpi-canvas-polyfill</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/img_html5-canvas-guide2.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;本文将对 Canvas 在高清屏中绘制出现模糊问题进行分析，并给出解决方案 🎏&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="JS" scheme="http://objcer.com/categories/JS/"/>
+    
+    
+      <category term="Canvas" scheme="http://objcer.com/tags/Canvas/"/>
+    
+  </entry>
   
   <entry>
     <title>剖析 iOS 11 网页适配问题</title>
@@ -1480,51 +1544,6 @@
     
     
       <category term="transition-timing-function" scheme="http://objcer.com/tags/transition-timing-function/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>关于 CSS border-radius</title>
-    <link href="http://objcer.com/2017/03/17/css-border-radius/"/>
-    <id>http://objcer.com/2017/03/17/css-border-radius/</id>
-    <published>2017-03-17T13:46:43.000Z</published>
-    <updated>2017-03-17T15:07:38.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><code>border-radius</code> 用来设置边框圆角。当使用一个半径时确定一个圆形；当使用两个半径时确定一个椭圆，这个(椭)圆与边框的交集形成圆角效果。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/FC08A931-6DE4-4CE0-A6F8-4F1B523E2007.png" alt=""></p>
-<p>对于 <code>border-radius</code> 属性，我们最常见就是设置一个参数：<br><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">border-radius</span>: <span class="number">50px</span>;</div><div class="line"><span class="comment">// 或者</span></div><div class="line"><span class="attribute">border-radius</span>: <span class="number">50%</span>;</div></pre></td></tr></table></figure></p>
-<p>而这种用法其实就是为四个角都指定了相同的圆角半径，然而对于 <code>border-radius</code> 其实有更加灵活的用法，可以分别设置四个角不同的圆角效果。</p>
-<a id="more"></a>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><code>border-radius</code> 是一个简写属性，分别设置了：</p>
-<ul>
-<li>border-top-left-radius</li>
-<li>border-top-right-radius</li>
-<li>border-bottom-right-radius</li>
-<li>border-bottom-left-radius</li>
-</ul>
-<p>1、<code>border-radius</code> 可以分别指定1，2，3，4个值，值的类型可以是 length 或者 percentage。</p>
-<ul>
-<li>指定一个值：四个角都设定相同的圆角值</li>
-<li>指定两个值：参数一指定 top-left 和 bottom-right；参数二指定 top-right 和 bottom-left</li>
-<li>指定三个值：参数一指定 top-left；参数二指定 top-right 和 bottom-left；参数三指定 bottom-right</li>
-<li>指定四个值：四个参数分别指定 top-left，top-right，bottom-right，bottom-left（顺时针方向）</li>
-</ul>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/33F068D3-6BC7-4EE1-94BD-1B83632382FA.png" alt=""></p>
-<p>2、<code>border-radius</code> 可以为圆角指定两个半径，上述我们谈到的都是指定了一个圆角半径，那么就是一个正圆形；而指定两个半径，那么就是一个椭圆形。用法是通过一个斜线分割开，斜线左方是 x 轴方向的半径，右方是 y 轴方向的半径。当然，斜线左右两侧可以分别指定 1，2，3，4 个参数，所以有较多的组合。<br>例如：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/D6EBFB3B-41B5-4249-84C6-5F1773F8C480.png" alt=""></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius" target="_blank" rel="external">MDN border-radius</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;code&gt;border-radius&lt;/code&gt; 用来设置边框圆角。当使用一个半径时确定一个圆形；当使用两个半径时确定一个椭圆，这个(椭)圆与边框的交集形成圆角效果。&lt;br&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/FC08A931-6DE4-4CE0-A6F8-4F1B523E2007.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;对于 &lt;code&gt;border-radius&lt;/code&gt; 属性，我们最常见就是设置一个参数：&lt;br&gt;&lt;figure class=&quot;highlight scss&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;attribute&quot;&gt;border-radius&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;50px&lt;/span&gt;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// 或者&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;attribute&quot;&gt;border-radius&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;50%&lt;/span&gt;;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-&lt;p&gt;而这种用法其实就是为四个角都指定了相同的圆角半径，然而对于 &lt;code&gt;border-radius&lt;/code&gt; 其实有更加灵活的用法，可以分别设置四个角不同的圆角效果。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="CSS" scheme="http://objcer.com/categories/CSS/"/>
-    
-    
-      <category term="border-radius" scheme="http://objcer.com/tags/border-radius/"/>
     
   </entry>
   
