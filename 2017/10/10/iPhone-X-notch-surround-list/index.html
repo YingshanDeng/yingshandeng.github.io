@@ -1,0 +1,840 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="DEMO," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="iPhone X 面市后，其异形屏给交互设计提供了更多想象的空间。在 Twitter 上，这位推友就针对刘海设计了列表环绕刘海滚动的效果。 最近在 codepen 上看到已经有人实现了这个 demo：https://codepen.io/davvidbaker/pen/KXgPyG，本文将图文结合分析一下实现这个效果的逻辑。">
+<meta name="keywords" content="DEMO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iPhone X 环绕刘海滚动列表">
+<meta property="og:url" content="http://objcer.com/2017/10/10/iPhone-X-notch-surround-list/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="iPhone X 面市后，其异形屏给交互设计提供了更多想象的空间。在 Twitter 上，这位推友就针对刘海设计了列表环绕刘海滚动的效果。 最近在 codepen 上看到已经有人实现了这个 demo：https://codepen.io/davvidbaker/pen/KXgPyG，本文将图文结合分析一下实现这个效果的逻辑。">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/4E124A83-5DD5-44C1-AA71-9394E34E8C57.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/D75661B5-C160-4906-826D-E7908AA9B237.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/840F60D8-1D25-4B1C-BF50-C9F79DCC2AC9.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/F772D60E-E17B-434F-A970-053BB77E53BB.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/CB366BB3-C658-4514-96F7-103F5B712AD6.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/7B8867D1-1A5E-4DE6-A6CB-5B64209808F2.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/E875669C-BEBE-4B6E-A883-EACF4CF29D63.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/94A6750A-B927-4B11-8446-8F92DCFA7747.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/iPhone%20X%20list.gif">
+<meta property="og:updated_time" content="2017-10-10T09:14:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iPhone X 环绕刘海滚动列表">
+<meta name="twitter:description" content="iPhone X 面市后，其异形屏给交互设计提供了更多想象的空间。在 Twitter 上，这位推友就针对刘海设计了列表环绕刘海滚动的效果。 最近在 codepen 上看到已经有人实现了这个 demo：https://codepen.io/davvidbaker/pen/KXgPyG，本文将图文结合分析一下实现这个效果的逻辑。">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/4E124A83-5DD5-44C1-AA71-9394E34E8C57.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/10/10/iPhone-X-notch-surround-list/"/>
+
+
+  <title> iPhone X 环绕刘海滚动列表 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iPhone X 环绕刘海滚动列表
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-10-10T15:33:27+08:00" content="2017-10-10">
+              2017-10-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/10/10/iPhone-X-notch-surround-list/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/10/iPhone-X-notch-surround-list/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/10/10/iPhone-X-notch-surround-list/" class="leancloud_visitors" data-flag-title="iPhone X 环绕刘海滚动列表">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>iPhone X 面市后，其异形屏给交互设计提供了更多想象的空间。在 Twitter 上，这位推友就针对刘海设计了列表环绕刘海滚动的效果。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/4E124A83-5DD5-44C1-AA71-9394E34E8C57.png" alt=""></p>
+<p>最近在 codepen 上看到已经有人实现了这个 demo：<a href="https://codepen.io/davvidbaker/pen/KXgPyG" target="_blank" rel="external">https://codepen.io/davvidbaker/pen/KXgPyG</a>，本文将图文结合分析一下实现这个效果的逻辑。</p>
+<a id="more"></a>
+<h2 id="DOM-结构"><a href="#DOM-结构" class="headerlink" title="DOM 结构"></a>DOM 结构</h2><p><img src="http://7vikhl.com1.z0.glb.clouddn.com/D75661B5-C160-4906-826D-E7908AA9B237.png" alt=""><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"outer"</span>&gt;</div><div class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"inner"</span>&gt;</span></span></div><div class="line">      <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>北京<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"notch"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">  &lt;<span class="regexp">/div&gt;</span></div></pre></td></tr></table></figure></p>
+<p>DOM 结构比较简单，主要包括列表 <code>ul</code>，其滚动容器为 <code>class=&quot;inner&quot;</code> 的 DIV；刘海是 <code>class=&quot;notch&quot;</code> 的 DIV。</p>
+<h2 id="滚动逻辑"><a href="#滚动逻辑" class="headerlink" title="滚动逻辑"></a>滚动逻辑</h2><p>为了实现列表环绕刘海滚动，需要在滚动事件中，计算处理每一行列表 X 轴方向的位置移动。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/840F60D8-1D25-4B1C-BF50-C9F79DCC2AC9.png" alt=""></p>
+<p>如上图列表向下滚动，上方的列表需要向右位移 <code>notch</code> 宽度；对应的，下方的列表需要向左位移 <code>notch</code> 宽度。我们需要对移动进行相应的计算处理，使位移线性变化，从而在滚动时，环绕效果自然。</p>
+<h3 id="distFromTop-和-distFromBottom"><a href="#distFromTop-和-distFromBottom" class="headerlink" title="distFromTop 和 distFromBottom"></a><code>distFromTop</code> 和 <code>distFromBottom</code></h3><p>列表在上下滚动过程中分为两部分：</p>
+<ul>
+<li>向下滚动：上方列表向右移动进入刘海区域，下方列表向左移动离开刘海区域</li>
+<li>向上滚动：上方列表向左移动离开刘海区域，下方列表向右移动进入刘海区域</li>
+</ul>
+<p>这两部分刚好是相对应的，此处我们只分析<strong>上方列表移动进入/离开刘海区域</strong>，即可以了解滚动过程中的逻辑处理。首先介绍两个变量：<code>distFromTop</code> 和 <code>distFromBottom</code></p>
+<blockquote>
+<p><code>Element.getBoundingClientRect()</code> 方法返回元素的大小及其相对于视口的位置，返回值是一个 <code>DOMRect</code> 对象。<code>DOMRect</code> 对象包含了一组用于描述边框的只读属性 —— left、top、right 和 bottom，单位为像素。除了 width 和 height 外的属性都是相对于视口的左上角位置而言的，如下图：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/F772D60E-E17B-434F-A970-053BB77E53BB.png" alt=""></p>
+</blockquote>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> notchRect = notch.getBoundingClientRect()</div><div class="line"><span class="keyword">let</span> itemRect = item.getBoundingClientRect()</div><div class="line"><span class="keyword">let</span> distFromTop = itemRect.<span class="built_in">bottom</span> - notchRect.<span class="built_in">top</span></div><div class="line"><span class="keyword">let</span> distFromBottom = itemRect.<span class="built_in">top</span> - notchRect.<span class="built_in">bottom</span></div></pre></td></tr></table></figure>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/CB366BB3-C658-4514-96F7-103F5B712AD6.png" alt=""></p>
+<p>这两个变量表征当前这一行列表距离上下刘海边界的位置，在滚动过程中根据 <code>distFromTop</code> 和 <code>distFromBottom</code> 变量触发不同的位移逻辑。</p>
+<h3 id="位移逻辑"><a href="#位移逻辑" class="headerlink" title="位移逻辑"></a>位移逻辑</h3><p>分析<strong>上方列表移动进入/离开刘海区域</strong>时，列表位移的逻辑。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/7B8867D1-1A5E-4DE6-A6CB-5B64209808F2.png" alt=""><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/E875669C-BEBE-4B6E-A883-EACF4CF29D63.png" alt=""></p>
+<p>1️⃣ <strong>阈值：<code>Threshold</code></strong><br>在刘海边界上下 <code>Threshold</code> 区域定义为位移区域，列表进入这一区域即需要进行计算位移量，检测是否进入这一区域的逻辑判断为：<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Math.<span class="keyword">abs</span>(distFromTop) &lt;= Threshold</div></pre></td></tr></table></figure></p>
+<p>2️⃣ <strong>计算位移量</strong><br>考虑两个边界情况：</p>
+<ul>
+<li>当 <code>distFromTop</code> 等于 <code>- Threshold</code>，即列表开始进入刘海区域<br>此时位移量为 0</li>
+<li>当 <code>distFromTop</code> 等于 <code>+ Threshold</code>，即列表完全进入刘海区域<br>此时位移量为刘海宽度 <code>NotchWidth</code></li>
+</ul>
+<p>这个变换过程可以通过线性插值来完成，根据 <code>distFromTop</code> 变量计算在 Y 轴方向的比例关系，从而得到 X 轴方向的位移量。</p>
+<blockquote>
+<p>关于线性插值参考：<a href="https://zh.wikipedia.org/zh-cn/%E7%BA%BF%E6%80%A7%E6%8F%92%E5%80%BC" target="_blank" rel="external">维基百科：线性插值</a></p>
+</blockquote>
+<p>在此处，我们可以简化理解，如下图<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/94A6750A-B927-4B11-8446-8F92DCFA7747.png" alt=""></p>
+<p>计算公式如下：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let lerp = (<span class="name">v0</span>, v1, <span class="literal">t</span>) =&gt; v0 + (<span class="name">v1</span> - v0) * <span class="literal">t</span></div></pre></td></tr></table></figure></p>
+<p>在我们分析的这个情形：上方列表向右移动进入刘海区域，对应的调用为：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">x = lerp(<span class="number">0</span>, NotchWidth, (<span class="name">distFromTop</span> + Threshold) / (<span class="name">Threshold</span> * 2))</div></pre></td></tr></table></figure></p>
+<p>其他情况，位移量计算分别为：</p>
+<ul>
+<li>在刘海区域内滚动<br>判断条件：<code>distFromTop &gt; 0 &amp;&amp; distFromBottom &lt; - Threshold</code><br>位移量始终为：刘海宽度 <code>NotchWidth</code></li>
+<li>下方列表移动进入/离开刘海区域<br>判断条件：<code>Math.abs(distFromBottom) &lt;= Threshold</code><br>位移量始终为：<code>x = lerp(NotchWidth, 0, (distFromBottom + Threshold) / (Threshold * 2))</code></li>
+<li>其他<br>位移量始终为：0</li>
+</ul>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p>最终实现效果：<a href="https://codepen.io/yingshandeng/pen/JrJRBR?editors=1010" target="_blank" rel="external">https://codepen.io/yingshandeng/pen/JrJRBR?editors=1010</a></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/iPhone%20X%20list.gif" alt=""></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">  <span class="selector-tag">html</span>,</div><div class="line">  <span class="selector-tag">body</span> &#123;</div><div class="line">      <span class="attribute">display</span>: flex;</div><div class="line">      <span class="attribute">justify-content</span>: center;</div><div class="line">      <span class="attribute">align-items</span>: center;</div><div class="line">      <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">      <span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">      <span class="attribute">padding</span>: <span class="number">0</span>;</div><div class="line">      <span class="attribute">margin</span>: <span class="number">0</span>;</div><div class="line">      <span class="attribute">background</span>: <span class="number">#E3F3FD</span>;</div><div class="line">      <span class="attribute">font-family</span>: <span class="string">"Helvetica Neue"</span>, Helvetica, Arial, sans-serif;</div><div class="line">  &#125;</div><div class="line">  <span class="selector-class">.outer</span> &#123;</div><div class="line">    <span class="attribute">position</span>: relative;</div><div class="line">    <span class="attribute">width</span>: <span class="number">640px</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">310px</span>;</div><div class="line">    <span class="attribute">min-width</span>: <span class="number">640px</span>;</div><div class="line">    <span class="attribute">min-height</span>: <span class="number">310px</span>;</div><div class="line">    <span class="attribute">background-color</span>: white;</div><div class="line">    <span class="attribute">border-radius</span>: <span class="number">45px</span>;</div><div class="line">    <span class="attribute">-webkit-box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">20px</span> <span class="number">0</span> <span class="built_in">rgba</span>(0, 0, 0, 0.10),</div><div class="line">      inset <span class="number">0</span> -<span class="number">5px</span> <span class="number">20px</span> <span class="number">0</span> <span class="built_in">rgba</span>(0, 0, 0, 0.08);</div><div class="line">    <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">20px</span> <span class="number">0</span> <span class="built_in">rgba</span>(0, 0, 0, 0.10),</div><div class="line">      inset <span class="number">0</span> -<span class="number">5px</span> <span class="number">20px</span> <span class="number">0</span> <span class="built_in">rgba</span>(0, 0, 0, 0.08);</div><div class="line">  &#125;</div><div class="line">  <span class="selector-class">.inner</span> &#123;</div><div class="line">    <span class="attribute">position</span>: absolute;</div><div class="line">    <span class="attribute">width</span>: <span class="number">610px</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">280px</span>;</div><div class="line">    <span class="attribute">margin</span>: <span class="number">15px</span>;</div><div class="line">    <span class="attribute">border-radius</span>: <span class="number">30px</span>;</div><div class="line">    <span class="attribute">background-color</span>: <span class="number">#EBEBEB</span>;</div><div class="line">    <span class="attribute">overflow-x</span>: hidden;</div><div class="line">    <span class="attribute">overflow-y</span>: scroll;</div><div class="line">  &#125;</div><div class="line">  <span class="selector-class">.notch</span> &#123;</div><div class="line">    <span class="attribute">position</span>: absolute;</div><div class="line">    <span class="attribute">left</span>: <span class="number">15px</span>;</div><div class="line">    <span class="attribute">top</span>: <span class="number">79px</span>;</div><div class="line">    <span class="attribute">width</span>: <span class="number">22px</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">152px</span>;</div><div class="line">    <span class="attribute">border-top-right-radius</span>: <span class="number">17px</span>;</div><div class="line">    <span class="attribute">border-bottom-right-radius</span>: <span class="number">17px</span>;</div><div class="line">    <span class="attribute">background-color</span>: <span class="number">#fff</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="selector-tag">ul</span> &#123;</div><div class="line">    <span class="attribute">list-style</span>: none;</div><div class="line">    <span class="attribute">margin</span>: <span class="number">0</span> auto;</div><div class="line">    <span class="attribute">padding-left</span>: <span class="number">10px</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="selector-tag">li</span> &#123;</div><div class="line">    <span class="attribute">padding</span>: <span class="number">6px</span> <span class="number">5px</span>;</div><div class="line">    <span class="attribute">border-bottom</span>: <span class="number">1px</span> solid <span class="number">#dadada</span>;</div><div class="line">    <span class="attribute">transform-origin</span>: center left;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  *<span class="selector-pseudo">::-webkit-scrollbar</span> &#123;</div><div class="line">    <span class="attribute">visibility</span>: hidden;</div><div class="line">  &#125;</div><div class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"outer"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"inner"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>北京<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>天津<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>河北<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>山西<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>内蒙古<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>辽宁<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>吉林<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>黑龙江<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>上海<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>江苏<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>浙江省<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>安徽<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>福建<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>江西<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>山东<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>河南<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>湖北<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>湖南<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>广东<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>广西<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>海南<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>重庆<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>四川<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>贵州<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>云南<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>西藏<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>陕西<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>甘肃省<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>青海<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>宁夏<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>新疆<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>台湾<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>香港特别行政区<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>澳门<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"notch"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">let</span> inner = <span class="built_in">document</span>.querySelector(<span class="string">'.inner'</span>)</div><div class="line">  <span class="keyword">let</span> items = <span class="built_in">document</span>.querySelectorAll(<span class="string">'li'</span>)</div><div class="line">  <span class="keyword">let</span> notch = <span class="built_in">document</span>.querySelector(<span class="string">'.notch'</span>)</div><div class="line">  <span class="keyword">let</span> notchRect = notch.getBoundingClientRect()</div><div class="line"></div><div class="line">  inner.addEventListener(<span class="string">'scroll'</span>, () =&gt; &#123;</div><div class="line">    <span class="built_in">window</span>.requestAnimationFrame(scrollDection)</div><div class="line">  &#125;)</div><div class="line">  <span class="built_in">window</span>.addEventListener(<span class="string">'resize'</span>, () =&gt; &#123;</div><div class="line">    notchRect = notch.getBoundingClientRect()</div><div class="line">  &#125;)</div><div class="line"></div><div class="line">  <span class="keyword">const</span> Threshold = <span class="number">10</span></div><div class="line">  <span class="keyword">const</span> NotchWidth = <span class="number">30</span></div><div class="line">  <span class="keyword">let</span> scrollDection = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> item</div><div class="line">    <span class="keyword">for</span> (item <span class="keyword">of</span> items) &#123;</div><div class="line">      <span class="keyword">let</span> itemRect = item.getBoundingClientRect()</div><div class="line">      <span class="keyword">let</span> distFromTop = itemRect.bottom - notchRect.top</div><div class="line">      <span class="keyword">let</span> distFromBottom = itemRect.top - notchRect.bottom</div><div class="line">      <span class="keyword">let</span> x</div><div class="line"></div><div class="line">      <span class="keyword">if</span> (<span class="built_in">Math</span>.abs(distFromTop) &lt;= Threshold) &#123;</div><div class="line">        x = lerp(<span class="number">0</span>, NotchWidth, (distFromTop + Threshold) / (Threshold * <span class="number">2</span>))</div><div class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (distFromTop &gt; <span class="number">0</span> &amp;&amp; distFromBottom &lt; - Threshold) &#123;</div><div class="line">        x = NotchWidth</div><div class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">Math</span>.abs(distFromBottom) &lt;= Threshold) &#123;</div><div class="line">        x = lerp(NotchWidth, <span class="number">0</span>, (distFromBottom + Threshold) / (Threshold * <span class="number">2</span>))</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        x = <span class="number">0</span></div><div class="line">      &#125;</div><div class="line"></div><div class="line">      item.style.transform = <span class="string">`translateX(<span class="subst">$&#123;x&#125;</span>px)`</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">let</span> lerp = <span class="function">(<span class="params">v0, v1, t</span>) =&gt;</span> v0 + (v1 - v0) * t</div><div class="line"></div><div class="line">  scrollDection()</div><div class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DEMO/" rel="tag">#DEMO</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/10/implement-a-word-limit-input-box/" rel="next" title="实现一个字数限制的输入框">
+                <i class="fa fa-chevron-left"></i> 实现一个字数限制的输入框
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM-结构"><span class="nav-number">1.</span> <span class="nav-text">DOM 结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#滚动逻辑"><span class="nav-number">2.</span> <span class="nav-text">滚动逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#distFromTop-和-distFromBottom"><span class="nav-number">2.1.</span> <span class="nav-text">distFromTop 和 distFromBottom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位移逻辑"><span class="nav-number">2.2.</span> <span class="nav-text">位移逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整代码"><span class="nav-number">3.</span> <span class="nav-text">完整代码</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/10/10/iPhone-X-notch-surround-list/';
+      var disqus_title = "iPhone X 环绕刘海滚动列表";
+      var disqus_url = 'http://objcer.com/2017/10/10/iPhone-X-notch-surround-list/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
