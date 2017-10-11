@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="async,await," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="在 JavaScript 中处理异步操作的回调 (callback) 通常会导致多嵌套的代码块，俗称回调地狱 (callback hell)，这样的代码复杂，可读性，可维护性非常不友好；直达 ES6，Promise 出现，使得我们能够扁平化回调函数，告别回调地狱，写出优雅的代码；但是在实践中发现，Promise 并不完美，如果 Promise 的回调中出现嵌套，依旧会出现回调地狱；而如今，asyn">
+<meta name="keywords" content="async,await">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES7 中的 async await">
+<meta property="og:url" content="http://objcer.com/2017/10/11/Async-Await/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="在 JavaScript 中处理异步操作的回调 (callback) 通常会导致多嵌套的代码块，俗称回调地狱 (callback hell)，这样的代码复杂，可读性，可维护性非常不友好；直达 ES6，Promise 出现，使得我们能够扁平化回调函数，告别回调地狱，写出优雅的代码；但是在实践中发现，Promise 并不完美，如果 Promise 的回调中出现嵌套，依旧会出现回调地狱；而如今，asyn">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/1-ko3KtcVSlzpe3RnTRgJaHw.jpeg">
+<meta property="og:updated_time" content="2017-10-11T09:37:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES7 中的 async await">
+<meta name="twitter:description" content="在 JavaScript 中处理异步操作的回调 (callback) 通常会导致多嵌套的代码块，俗称回调地狱 (callback hell)，这样的代码复杂，可读性，可维护性非常不友好；直达 ES6，Promise 出现，使得我们能够扁平化回调函数，告别回调地狱，写出优雅的代码；但是在实践中发现，Promise 并不完美，如果 Promise 的回调中出现嵌套，依旧会出现回调地狱；而如今，asyn">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/1-ko3KtcVSlzpe3RnTRgJaHw.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/10/11/Async-Await/"/>
+
+
+  <title> ES7 中的 async await | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ES7 中的 async await
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-10-11T14:36:46+08:00" content="2017-10-11">
+              2017-10-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/10/11/Async-Await/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/11/Async-Await/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/10/11/Async-Await/" class="leancloud_visitors" data-flag-title="ES7 中的 async await">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在 JavaScript 中处理异步操作的回调 (callback) 通常会导致多嵌套的代码块，俗称回调地狱 (callback hell)，这样的代码复杂，可读性，可维护性非常不友好；直达 ES6，Promise 出现，使得我们能够扁平化回调函数，告别回调地狱，写出优雅的代码；但是在实践中发现，Promise 并不完美，如果 Promise 的回调中出现嵌套，依旧会出现回调地狱；而如今，async await 出现了，它提供了一种新的编写异步代码方式，使得异步代码看起来像是同步代码，这正式它的魔力所在。</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/1-ko3KtcVSlzpe3RnTRgJaHw.jpeg" alt=""></p>
+<a id="more"></a>
+<h2 id="异步函数"><a href="#异步函数" class="headerlink" title="异步函数"></a>异步函数</h2><figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// async <span class="function"><span class="keyword">function</span></span> statement：async <span class="function"><span class="keyword">function</span></span> 声明语句</div><div class="line">async <span class="function"><span class="keyword">function</span></span> <span class="keyword">name</span>([param[, param[, ... param]]]) &#123;</div><div class="line">   statements</div><div class="line">&#125;</div><div class="line"></div><div class="line">// async <span class="function"><span class="keyword">function</span></span> expression：async <span class="function"><span class="keyword">function</span></span> 表达式</div><div class="line">async <span class="function"><span class="keyword">function</span></span> [<span class="keyword">name</span>]([param1[, param2[, ..., paramN]]]) &#123;</div><div class="line">   statements</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如上，可以通过 async function 声明语句或者表达式来定义一个异步函数，返回一个 <code>AsyncFunction</code> 对象，二者的区别在于在于函数名称，async function 表达式可以省略函数名称来创建一个匿名的函数。</p>
+<p><strong>调用异步函数时会返回一个 promise 对象</strong></p>
+<ul>
+<li>当这个异步函数返回一个值时，promise 的 resolve 方法将会处理这个返回值</li>
+<li>当异步函数抛出异常或者非法值时，promise 的 reject 方法将处理这个异常值</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">'ok'</span></div><div class="line">  <span class="comment">// throw new Error('error')</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">test().then(<span class="built_in">console</span>.log, <span class="built_in">console</span>.error)</div></pre></td></tr></table></figure>
+<h2 id="AsyncFunction"><a href="#AsyncFunction" class="headerlink" title="AsyncFunction"></a><code>AsyncFunction</code></h2><blockquote>
+<p>注意，<code>AsyncFunction</code> 并不是一个全局对象，我们可以这样获得 <code>AsyncFunction</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.getPrototypeOf(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;).constructor</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p><code>AsyncFunction</code> 构造函数用于创建一个新的 async function 对象，在 JavaScript 中，每一个异步函数都是一个 <code>AsyncFunction</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;.constructor)</div><div class="line"><span class="comment">// -&gt; ƒ AsyncFunction() &#123; [native code] &#125;</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;.__proto__)</div><div class="line"><span class="comment">// -&gt; AsyncFunction &#123;Symbol(Symbol.toStringTag): "AsyncFunction", constructor: ƒ&#125;</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> AsyncFunction = <span class="built_in">Object</span>.getPrototypeOf(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;).constructor</div><div class="line"><span class="keyword">var</span> asyncFun = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</div><div class="line"><span class="built_in">console</span>.log(asyncFun <span class="keyword">instanceof</span> AsyncFunction) <span class="comment">// -&gt; true</span></div></pre></td></tr></table></figure></p>
+<p>通过 <code>AsyncFunction</code> 构造函数创建异步函数的语法如下：<br><figure class="highlight inform7"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">new AsyncFunction(<span class="comment">[arg1<span class="comment">[, arg2<span class="comment">[, ...argN]</span>]</span>,]</span> functionBody)</div></pre></td></tr></table></figure></p>
+<p>把 <code>AsyncFunction</code> 当成函数调用（省略 <code>new</code> 操作符）也可创建异步函数，如下：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var AsyncFunction = Object.getPrototypeOf(async function () &#123;&#125;).constructor<span class="comment">;</span></div><div class="line">// var <span class="function"><span class="keyword">func</span> = <span class="title">new</span> <span class="title">AsyncFunction</span><span class="params">(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'return a+b'</span>)</span></span></div><div class="line">var <span class="function"><span class="keyword">func</span> = <span class="title">AsyncFunction</span><span class="params">(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'return a+b'</span>)</span></span></div><div class="line"><span class="function"><span class="keyword">func</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span>.<span class="title">then</span><span class="params">(console.log)</span> // -&gt; 3</span></div></pre></td></tr></table></figure>
+<p>👉 通过 <code>AsyncFunction</code> 构造函数创建的异步函数 在当前上下文不创建闭包；而是在全局作用域创建的。而且只需效率比用 async function 声明语句或者表达式来定义一个异步函数要低，所以一般情况使用 async function 声明语句或者表达式来定义一个异步函数。</p>
+<h2 id="await"><a href="#await" class="headerlink" title="await"></a><code>await</code></h2><p><code>await</code> 操作符用于等待一个 Promise 返回结果或者某个直接的值，且 <code>await</code> 必须在异步函数 (async function) 上下文中使用。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">returnPromise</span> (<span class="params">a</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">    resolve(a)</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">returnValue</span> (<span class="params">a</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> a</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line"><span class="comment">// var a = await returnPromise(2)</span></div><div class="line">  <span class="keyword">var</span> a = <span class="keyword">await</span> returnValue(<span class="number">3</span>)</div><div class="line">  <span class="keyword">return</span> a</div><div class="line">&#125;</div><div class="line"></div><div class="line">test().then(<span class="built_in">console</span>.log, <span class="built_in">console</span>.error)</div></pre></td></tr></table></figure></p>
+<p>异步函数中执行 <code>await</code> 表达式，这将会使异步函数暂停执行并等待 promise 解析传值后，继续执行异步函数并返回解析值。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sleep</span> (<span class="params">second</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">    setTimeout(resolve, second * <span class="number">1000</span>)</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">new</span> <span class="built_in">Date</span>())</div><div class="line">  <span class="keyword">await</span> sleep(<span class="number">3</span>)</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">new</span> <span class="built_in">Date</span>())</div><div class="line">&#125;</div><div class="line"></div><div class="line">test()</div></pre></td></tr></table></figure></p>
+<p>代码执行结果：<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Wed Oct <span class="number">11</span> <span class="number">2017</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">32</span> GMT+<span class="number">0800</span> (CST)</div><div class="line">Promise &#123;<span class="string">[[PromiseStatus]]</span>: <span class="string">"pending"</span>, <span class="string">[[PromiseValue]]</span>: undefined&#125;</div><div class="line">Wed Oct <span class="number">11</span> <span class="number">2017</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">35</span> GMT+<span class="number">0800</span> (CST)</div></pre></td></tr></table></figure></p>
+<p><code>await</code> 串行，并行执行<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">multi</span> (<span class="params">a</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">    setTimeout(resolve.bind(<span class="literal">null</span>, a * a), <span class="number">1000</span>)</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 串行执行</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line">   <span class="keyword">var</span> x = <span class="keyword">await</span> multi(<span class="number">2</span>)</div><div class="line">   <span class="keyword">var</span> y = <span class="keyword">await</span> multi(<span class="number">3</span>)</div><div class="line">   <span class="keyword">return</span> [x, y]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 并行执行</span></div><div class="line"><span class="comment">// async function test () &#123;</span></div><div class="line"><span class="comment">//    var res = await Promise.all([multi(2), multi(3)])</span></div><div class="line"><span class="comment">//    return res</span></div><div class="line"><span class="comment">// &#125;</span></div><div class="line"></div><div class="line">test().then(<span class="built_in">console</span>.log)</div></pre></td></tr></table></figure></p>
+<h2 id="async-await-的优势"><a href="#async-await-的优势" class="headerlink" title="async await 的优势"></a>async await 的优势</h2><p>Promise 有了 async await 的辅助，使其发挥更大的威力，通过 async await 终于可以彻底摆脱回调地狱，以同步方式编写异步代码，代码简洁，十分友好，下面举几个例子 👇</p>
+<h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><p><code>try-catch</code> 处理同步，异步错误。如下代码片段一中，<code>try-catch</code> 并不能捕捉 <code>then</code> 方法中 <code>JSON.parse</code> 异常出错；但是在代码片段二中，使用了 async await，使得 <code>try-catch</code> 能捕捉 <code>JSON.parse</code> 可能的异常出错。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 代码块一</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    getJSON().then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">var</span> data = <span class="built_in">JSON</span>.parse(res) <span class="comment">// 此处可能出错</span></div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 代码块二</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">var</span> data = <span class="built_in">JSON</span>.parse(<span class="keyword">await</span> getJSON())</div><div class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="中间值"><a href="#中间值" class="headerlink" title="中间值"></a>中间值</h3><p>有时会遇到这样的情形：promise1 返回值 value1；promise2 依赖 value1，返回value2；promise3 依赖 value1 和 value2。最简单的做法是通过嵌套解决 promise 间的依赖：<br><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> test () &#123;</div><div class="line">  <span class="keyword">return</span> promise<span class="number">1</span>()</div><div class="line">      .<span class="keyword">then</span>(<span class="keyword">value</span><span class="number">1</span> =&gt; &#123;</div><div class="line">        <span class="keyword">return</span> promise<span class="number">2</span>(valu<span class="number">1</span>)</div><div class="line">          .<span class="keyword">then</span>(<span class="keyword">value</span><span class="number">2</span> =&gt; &#123;</div><div class="line">              <span class="keyword">return</span> promise<span class="number">3</span>(<span class="keyword">value</span><span class="number">1</span>, <span class="keyword">value</span><span class="number">2</span>)</div><div class="line">          &#125;)</div><div class="line">      &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>显然，这种简单粗暴的处理方式使我们又掉进回调地狱了；我们可以通过中间变量来抹平这个回调嵌套：<br><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> test () &#123;</div><div class="line">  var <span class="keyword">value</span><span class="number">1</span></div><div class="line">  var <span class="keyword">value</span><span class="number">2</span></div><div class="line">  <span class="keyword">return</span> promise<span class="number">1</span>()</div><div class="line">    .<span class="keyword">then</span>(vle =&gt; &#123;</div><div class="line">        <span class="keyword">value</span><span class="number">1</span> = vle</div><div class="line">        <span class="keyword">return</span> promise<span class="number">2</span>(<span class="keyword">value</span><span class="number">1</span>)</div><div class="line">    &#125;)</div><div class="line">    .<span class="keyword">then</span>(vle =&gt; &#123;</div><div class="line">        <span class="keyword">value</span><span class="number">2</span> = vle</div><div class="line">        <span class="keyword">return</span> promise<span class="number">3</span>(<span class="keyword">value</span><span class="number">1</span>, <span class="keyword">value</span><span class="number">2</span>)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而通过 async await，可以最优，最简洁的解决这个问题：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> value1 = <span class="keyword">await</span> promise1()</div><div class="line">  <span class="keyword">var</span> value2 = <span class="keyword">await</span> promise2(value1)</div><div class="line">  <span class="keyword">return</span> promise3(value1, value2)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>❗️注意，在上面代码的返回语句 promise3 并没有 <code>await</code>，因为异步函数的会将其返回值隐式封装在 <code>Promise.resolve</code> 中。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction" target="_blank" rel="external">MDN-AsyncFunction</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function" target="_blank" rel="external">MDN-async function</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await" target="_blank" rel="external">MDN-await</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/async/" rel="tag">#async</a>
+          
+            <a href="/tags/await/" rel="tag">#await</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/10/iPhone-X-notch-surround-list/" rel="next" title="iPhone X 环绕刘海滚动列表">
+                <i class="fa fa-chevron-left"></i> iPhone X 环绕刘海滚动列表
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#异步函数"><span class="nav-number">1.</span> <span class="nav-text">异步函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AsyncFunction"><span class="nav-number">2.</span> <span class="nav-text">AsyncFunction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#await"><span class="nav-number">3.</span> <span class="nav-text">await</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#async-await-的优势"><span class="nav-number">4.</span> <span class="nav-text">async await 的优势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#错误处理"><span class="nav-number">4.1.</span> <span class="nav-text">错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中间值"><span class="nav-number">4.2.</span> <span class="nav-text">中间值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/10/11/Async-Await/';
+      var disqus_title = "ES7 中的 async await";
+      var disqus_url = 'http://objcer.com/2017/10/11/Async-Await/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
