@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/58DF62FC-51A3-4F01-A3C6-0E75DF916261.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/000D23FF-1ECD-45D1-9BC3-09908A10787B.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/real-numbers-floating-point-numbers.jpeg">
-<meta property="og:updated_time" content="2017-10-16T08:33:57.000Z">
+<meta property="og:updated_time" content="2017-10-17T01:52:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="0.1+0.2=0.30000000000000004❓">
 <meta name="twitter:description" content="JavaScript中所有的数字，无论是整数还是小数，其类型都是 Number，遵循 IEEE 754 程序内部用一个 64 位固定长度的二进制进行存储表示。JavaScript 中的浮点数进行运算时，经常会遇到计算精度问题，例如经典的 0.1+0.2=0.30000000000000004，本文将探究 JavaScript 的浮点数，并解释为何 0.1+0.2=0.300000000000000">
@@ -337,7 +337,7 @@
 <p>接下来只对 64 位浮点数的二进制表示进行分析：</p>
 <p>该计算公式遵循科学计数法的规范，对于十进制表示而言，尾数的范围是 <code>0&lt;M&lt;10</code>；对于二进制表示而言，尾数的范围是 <code>0&lt;M&lt;2</code>。浮点数二进制表示，所以此处尾数的范围是：<code>0&lt;M&lt;2</code>，也就是说 M 的整数位始终是 1，所以可以舍去，只保留后面的小数部分，这样就能表示 53 位了。</p>
 <p>指数位 E 是一个无符号整数，64 位浮点数中，指数位长度是 11 位，取值范围是 <code>[0~2047]</code>，由于科学计数法中指数可正可负，所以，中间数 1023，<code>[0,1022]</code> 表示为负，<code>[1024,2047]</code> 表示为正</p>
-<p>最终的公式变成：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">V = (<span class="number">-1</span>)^S * M * <span class="number">2</span>^(E - <span class="number">1023</span>)</div></pre></td></tr></table></figure></p>
+<p>最终的公式变成：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">V = (<span class="number">-1</span>)^S * (M + <span class="number">1</span>) * <span class="number">2</span>^(E - <span class="number">1023</span>)</div></pre></td></tr></table></figure></p>
 <h3 id="十进制转换为二进制"><a href="#十进制转换为二进制" class="headerlink" title="十进制转换为二进制"></a>十进制转换为二进制</h3><p><strong>十进制整数转换为二进制整数：</strong>采用”除2取余，逆序排列”法。具体做法是：用 2 去除十进制整数，可以得到一个商和余数；再用 2 去除商，又会得到一个商和余数，如此进行，直到商为零时为止，然后把先得到的余数作为二进制数的低位有效位，后得到的余数作为二进制数的高位有效位，依次排列起来。</p>
 <p><strong>十进制小数转换成二进制小数：</strong>采用”乘2取整，顺序排列”法。具体做法是：用 2 乘十进制小数，可以得到积，将积的整数部分取出，再用 2 乘余下的小数 部分，又得到一个积，再将积的整数部分取出，如此进行，直到积中的小数部分为零，或者达到所要求的精度为止。然后把取出的整数部分按顺序排列起来，先取的整数作为二进制小数的高位有效位，后取的整数作为低位有效位。</p>
 <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/58DF62FC-51A3-4F01-A3C6-0E75DF916261.png" alt=""></p>
