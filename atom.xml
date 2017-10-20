@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://objcer.com/"/>
-  <updated>2017-10-17T01:52:49.000Z</updated>
+  <updated>2017-10-20T08:11:56.000Z</updated>
   <id>http://objcer.com/</id>
   
   <author>
@@ -14,6 +14,238 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Shadow DOM</title>
+    <link href="http://objcer.com/2017/10/20/Shadow-DOM/"/>
+    <id>http://objcer.com/2017/10/20/Shadow-DOM/</id>
+    <published>2017-10-20T08:08:02.000Z</published>
+    <updated>2017-10-20T08:11:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/shadow-dom.png" alt=""><br>Shadow DOM 是四大网络组件标准之一，提供 CSS 作用域、DOM 封装和组合(Composition) 等优势，构建自定义元素。</p>
+<a id="more"></a>
+<h2 id="什么是-Shadow-DOM"><a href="#什么是-Shadow-DOM" class="headerlink" title="什么是 Shadow DOM"></a>什么是 Shadow DOM</h2><p>浏览器在解析网页文档的时候，会将 HTML 标签转换成节点，为了保持页面的层次结构，这些节点构成一个节点树，这个结构就是 DOM（文档对象模型）。DOM 将文档作为一个结构化的节点组以及包含属性和方法的对象，是 HTML 的编程接口，我们通常会使用 JavaScript 来访问操纵 DOM。<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> header = <span class="built_in">document</span>.createElement(<span class="string">'header'</span>);</div><div class="line"><span class="keyword">const</span> h1 = <span class="built_in">document</span>.createElement(<span class="string">'h1'</span>);</div><div class="line">h1.textContent = <span class="string">'Hello world!'</span>;</div><div class="line">header.appendChild(h1);</div><div class="line"><span class="built_in">document</span>.body.appendChild(header);</div></pre></td></tr></table></figure></p>
+<p>这段 JavaScript 代码执行后会生成如下的 DOM 结构：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">header</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello DOM<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">header</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>那什么是 Shadow DOM 呢❓<br>Shadow DOM 为 Web 组件中的 DOM 和 CSS 提供了封装。Shadow DOM 使得这些东西与主文档的 DOM 保持分离。Shadow DOM 与普通的 DOM 的区别是：<br>👉 通常创建新的 DOM 节点附加到其他 DOM 元素上，就会成为其子节点（元素）；但借助 Shadow DOM，可以创建一个  DOM 树附加到其他元素上，这个 DOM 树并非其子节点（元素），其拥有自身的作用域范围，这个 DOM 树称为：<strong><code>shadwo tree</code></strong>。被附加的元素称为 <strong><code>shadow host</code></strong>，这个 DOM 树称为 <strong><code>shadow root</code></strong>。</p>
+<blockquote>
+<p>You can think of shadow DOM as a scoped subtree inside your element.</p>
+</blockquote>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> header = <span class="built_in">document</span>.createElement(<span class="string">'header'</span>);</div><div class="line"><span class="keyword">const</span> shadowRoot = header.attachShadow(&#123;mode: <span class="string">'open'</span>&#125;);</div><div class="line">shadowRoot.innerHTML = <span class="string">'&lt;h1&gt;Hello Shadow DOM&lt;/h1&gt;'</span>; <span class="comment">// Could also use appendChild().</span></div><div class="line"></div><div class="line"><span class="comment">// header.shadowRoot === shadowRoot</span></div><div class="line"><span class="comment">// shadowRoot.host === header</span></div></pre></td></tr></table></figure>
+<ul>
+<li>为元素创建 shadow DOM，调用 <code>element.attachShadow()</code></li>
+<li>通过 <code>shadowRoot</code> 属性获取元素附加的 Shadow DOM</li>
+<li>通过 shadow root 的 <code>host</code> 属性获取其附属的元素</li>
+</ul>
+<p>❗️<strong>注意：</strong>并非所有元素都可以调用 <code>element.attachShadow()</code> 为其创建添加 Shadow DOM，因为有些元素浏览器已经为其添加了 Shadow DOM，例如 <code>&lt;textarea&gt;</code> <code>&lt;input&gt;</code>；而还有些元素为其添加 Shadow DOM 是没有意义的，例如 <code>&lt;img&gt;</code>。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">document</span><span class="selector-class">.createElement</span>(<span class="string">'input'</span>)<span class="selector-class">.attachShadow</span>(&#123;<span class="attribute">mode</span>: <span class="string">'open'</span>&#125;);</div><div class="line"><span class="comment">// Error. `&lt;input&gt;` cannot host shadow dom.</span></div></pre></td></tr></table></figure>
+<p>在创建自定义元素时，Shadow DOM 尤其有用。使用 Shadow DOM 来分隔元素的 HTML、CSS 和 JS，从而生成一个组件。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">window.customElements.define(<span class="symbol">'x</span>-tag', <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;</div><div class="line">  constructor() &#123;</div><div class="line">    <span class="keyword">super</span>()</div><div class="line"></div><div class="line">    let shadowRoot = <span class="keyword">this</span>.attachShadow(&#123;mode: <span class="symbol">'ope</span>n'&#125;)</div><div class="line">    shadowRoot.innerHTML = `</div><div class="line">    &lt;style&gt;</div><div class="line">    b &#123;</div><div class="line">      color: red;</div><div class="line">    &#125;</div><div class="line">    &lt;/style&gt;</div><div class="line">    &lt;b&gt;<span class="type">Hello</span> world&lt;/b&gt;</div><div class="line">    `</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>注意 Shadow DOM 中的 CSS 规则的作用域仅限于 <code>&lt;x-tag&gt;</code>。</p>
+<h2 id="组合和-slot"><a href="#组合和-slot" class="headerlink" title="组合和 slot"></a>组合和 slot</h2><p>组合是 shadow DOM 最难理解的功能之一，但可以说是最重要的功能。</p>
+<h3 id="light-DOM-和-shadow-DOM"><a href="#light-DOM-和-shadow-DOM" class="headerlink" title="light DOM 和 shadow DOM"></a>light DOM 和 shadow DOM</h3><p><strong>light DOM</strong><br>使用组件的用户编写的标记，DOM 元素的实际子元素，该子元素不在组件的 shadow DOM 之内，这就是 light DOM。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">is</span>=<span class="string">"better-button"</span>&gt;</span></div><div class="line">  <span class="comment">&lt;!-- the image and span are better-button's light DOM --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"gear.svg"</span> <span class="attr">slot</span>=<span class="string">"icon"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">span</span>&gt;</span>Settings<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>其中 <code>image</code> 和 <code>span</code> 即是 <code>button</code> 的 light DOM。</p>
+<p><strong>shadow DOM</strong><br>组件作者编写的标记，它定义组件的内部结构，作用域 CSS 等<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#shadow-root</div><div class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined">...</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">slot</span> <span class="attr">name</span>=<span class="string">"icon"</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"wrapper"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">slot</span>&gt;</span>Button<span class="tag">&lt;/<span class="name">slot</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p><strong>Flattened DOM tree</strong><br>浏览器将用户的 light DOM 分布到 shadow DOM 中，渲染成一颗 DOM 树，这个过程称为 <strong><code>flattening the tree</code></strong>，这棵树称为扁平树 <strong><code>Flattened DOM tree</code></strong>。 扁平树也是我们在 DevTools 中最终看到的树以及在页面上渲染的结果。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/FF183E44-E19D-4B24-918B-2DE5067699A4.png" alt=""></p>
+<h3 id="元素"><a href="#元素" class="headerlink" title=" 元素"></a><slot> 元素</slot></h3><p>Shadow DOM 使用 <code>&lt;slot&gt;</code> 元素将 light DOM 树组合到 shadow DOM 中，形成一颗 DOM 树。</p>
+<p>Slot 相当于是组件内部的占位符，通过定义一个或者多个 <code>&lt;slot&gt;</code>，可以将外部的标记引入到组件 shadow DOM 中进行渲染，相当于“跨域”了 shadow DOM 的边界，这些引入到 shadow DOM 中的元素被称为分布式节点 <strong><code>distributed nodes</code></strong>。注意：slot 实际上并不移动这些分布式节点，它们在 shadow DOM 内部的其他位置进行渲染。</p>
+<p>组件可在其 shadow DOM 中定义零个或多个 slot。Slot 可以为空，或者提供回退内容(fallback content)，如果用户不提供 light DOM 内容，slot 会将对其备用内容进行渲染。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- Default slot. If there's more than one default slot, the first is used. --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">slot</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">slot</span>&gt;</span>Fancy button<span class="tag">&lt;/<span class="name">slot</span>&gt;</span> <span class="comment">&lt;!-- default slot with fallback content --&gt;</span></div></pre></td></tr></table></figure>
+<p>还可以创建命名 slot (named slots)，使用组件的用户通过名称找到特定的 slot。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">x-tag</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">slot</span>=<span class="string">"title"</span>&gt;</span>Custom Elements<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">x-tag</span>&gt;</span></div><div class="line"></div><div class="line"></div><div class="line">#shadow-root</div><div class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">  <span class="selector-tag">b</span> &#123;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">  &#125;</div><div class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">b</span>&gt;</span>Hello world<span class="tag">&lt;/<span class="name">b</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">slot</span> <span class="attr">name</span>=<span class="string">"title"</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="设定样式"><a href="#设定样式" class="headerlink" title="设定样式"></a>设定样式</h2><p>shadow DOM 最有用的功能是作用域 CSS：</p>
+<ul>
+<li>外部页面中的 CSS 选择器不会应用于组件内部。</li>
+<li>组件内部定义的样式也不会渗出，它们的作用域仅限于宿主元素(shadow host)</li>
+</ul>
+<h3 id="通过选择器设定样式"><a href="#通过选择器设定样式" class="headerlink" title="通过选择器设定样式"></a>通过选择器设定样式</h3><p><strong>使用 <code>:host</code> 为组件为自身设定样式</strong><br>需要注意：外部页面中为组件设定的样式比 <code>:host</code> 规则具有更高的优先级，也就是说，对于组件自身，外部样式优先，用户可以在外部设置组件自身的样式。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 外部样式比 :host 优先</div><div class="line">x-tag &#123;</div><div class="line">  border: 1px solid red;</div><div class="line">&#125;</div><div class="line"></div><div class="line">#shadow-root</div><div class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">  <span class="selector-pseudo">:host</span> &#123;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid green;</div><div class="line">  &#125;</div><div class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p><strong>使用 <code>:host(&lt;selector&gt;)</code> 匹配组件自身不同状态</strong><br>通过 <code>:host(&lt;selector&gt;)</code> 匹配不同状态，对组件自身或者内部节点设定不同的样式<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#shadow-root</div><div class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">  <span class="selector-pseudo">:host(</span><span class="selector-pseudo">:hover)</span> &#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">  <span class="selector-pseudo">:host(.red_bg)</span> &#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">  <span class="selector-pseudo">:host(.green_bg)</span> &#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">  <span class="selector-pseudo">:host(.disable)</span> <span class="selector-tag">button</span> &#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p><strong>使用 <code>:host-context(&lt;selector&gt;)</code> 匹配任意父级</strong><br>使用 <code>:host-context(&lt;selector&gt;)</code> 主要用于根据组件所在的环境进行主题化（基于情境设定样式），例如设置白天模式，夜晚模式，我们在 <code>&lt;html&gt;</code> 或者 <code>&lt;body&gt;</code> 设定不同的 class，而组件通过 <code>:host-context(&lt;selector&gt;)</code> 就可以匹配到</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="params">&lt;body class="darktheme"&gt;</span></div><div class="line">  <span class="params">&lt;fancy-tabs&gt;</span></div><div class="line">    ...</div><div class="line">  <span class="params">&lt;/fancy-tabs&gt;</span></div><div class="line"><span class="params">&lt;/body&gt;</span></div><div class="line"></div><div class="line"><span class="meta">#shadow-root</span></div><div class="line">  :host-context(.darktheme) &#123;</div><div class="line"><span class="symbol">    color:</span> white;</div><div class="line"><span class="symbol">    background:</span> black;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p><strong>使用 <code>::slotted(&lt;compound-selector&gt;)</code> 匹配分布到 <slot> 中的节点</slot></strong><br>使用 <code>::slotted(&lt;compound-selector&gt;)</code> 为分布式节点设定样式<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">name-badge</span>&gt;</span></div><div class="line">  #shadow-root</div><div class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Eric Bidelman<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"title"</span>&gt;</span></div><div class="line">      Digital Jedi, <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"company"</span>&gt;</span>Google<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">name-badge</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>组件的 shadow DOM 可为用户的 <code>&lt;h2&gt;</code> 和 <code>.title</code> 设定样式：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">  <span class="selector-pseudo">::slotted(h2)</span> &#123;</div><div class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">font-weight</span>: <span class="number">300</span>;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">  &#125;</div><div class="line">  <span class="selector-pseudo">::slotted(.title)</span> &#123;</div><div class="line">     <span class="attribute">color</span>: orange;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">/* DOESN'T WORK (can only select top-level nodes).</span></div><div class="line">  ::slotted(.company),</div><div class="line">  ::slotted(.title .company) &#123;</div><div class="line">    text-transform: uppercase;</div><div class="line">  &#125;</div><div class="line">  */</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>需要注意的是：<br>① 使用 <code>::slotted(&lt;compound-selector&gt;)</code> 只能为分布节点的<strong>顶级节点</strong>设置样式。<br>② slot 并不会移动 light DOM，light DOM 节点分布到 shadow DOM 中后，slot 会对其 DOM 进行渲染，样式设置，但是节点实际还是留在原处。如果外部对 light DOM 设置了样式，那么外部样式将会覆盖 shadow DOM 中通过 <code>::slotted(&lt;compound-selector&gt;)</code> 设置的样式，具有较高优先级。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></div><div class="line">  x-tag p &#123;</div><div class="line">    color: red; // 外部样式，具有较高优先级</div><div class="line">  &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">x-tag</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">slot</span>=<span class="string">"title"</span>&gt;</span>Custom Elements<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">x-tag</span>&gt;</span></div><div class="line"></div><div class="line">#shadow-root</div><div class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">  <span class="selector-pseudo">::slotted(p)</span> &#123;</div><div class="line">    <span class="attribute">color</span>: green;</div><div class="line">  &#125;</div><div class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="从外部为组件设定样式"><a href="#从外部为组件设定样式" class="headerlink" title="从外部为组件设定样式"></a>从外部为组件设定样式</h3><p>有几种方法可从外部为组件设定样式：最简单的方法是使用标记名称作为选择器</p>
+<p><strong>为组件自身设定样式</strong><br>从外部为组件自身设定样式最简单的方法，就是使用组件标签名称作为选择器，设置 CSS 样式。<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">x-<span class="keyword">tag</span> <span class="title">&#123;</span></div><div class="line"></div><div class="line">&#125;</div><div class="line">x-tag:hover &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意：<strong>外部样式总是优先于在 shadow DOM 中定义的样式。</strong>例如，如果用户在组件外部编写：<code>fancy-tabs { width: 500px; }</code>，它将优先于组件的规则：<code>:host { width: 650px;}</code>。</p>
+<p><strong>为组件内部元素设定样式</strong><br>在组件外部，我们不能直接通过选择器对组件内的元素设置样式。组件提供自定义属性 <strong>custom properties</strong>，相当于是样式占位符，外部通过对自定义属性 <strong>custom properties</strong> 来调整组件内部元素的样式。</p>
+<p>例如，<code>&lt;fancy-tabs&gt;</code> 可让用户替换背景颜色：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- main page --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">  <span class="selector-tag">fancy-tabs</span> &#123;</div><div class="line">    <span class="attribute">margin-bottom</span>: <span class="number">32px</span>;</div><div class="line">    <span class="attribute">--fancy-tabs-bg</span>: black;</div><div class="line">  &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">fancy-tabs</span> <span class="attr">background</span>&gt;</span>...<span class="tag">&lt;/<span class="name">fancy-tabs</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>在其 shadow DOM 内部：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-pseudo">:host(</span><span class="selector-attr">[background]</span>) &#123;</div><div class="line">  <span class="attribute">background</span>: <span class="built_in">var</span>(--fancy-tabs-bg, #9E9E9E);</div><div class="line">  <span class="attribute">border-radius</span>: <span class="number">10px</span>;</div><div class="line">  <span class="attribute">padding</span>: <span class="number">10px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在本例中，该组件将使用 <code>black</code> 作为背景值，因为用户指定了该值。 否则背景颜色将采用默认值 <code>#9E9E9E</code>。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="避免在组件中创建-closed-shadow-root"><a href="#避免在组件中创建-closed-shadow-root" class="headerlink" title="避免在组件中创建 closed shadow root"></a>避免在组件中创建 closed shadow root</h3><p>shadow DOM 的另一情况称为<strong>闭合</strong>模式。创建closed shadow DOM tree 后，在外部无法通过 JavaScript 访问组件的内部 DOM。这与 <code>&lt;video&gt;</code> 等原生元素工作方式类似，JavaScript 无法访问 <code>&lt;video&gt;</code> 的 shadow DOM，因为浏览器使用closed shadow root来实现。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</div><div class="line"><span class="keyword">const</span> shadowRoot = div.attachShadow(&#123;mode: <span class="string">'closed'</span>&#125;); <span class="comment">// close shadow tree</span></div><div class="line"><span class="comment">// div.shadowRoot === null</span></div><div class="line"><span class="comment">// shadowRoot.host === div</span></div></pre></td></tr></table></figure>
+<h3 id="关于-slot-的-API"><a href="#关于-slot-的-API" class="headerlink" title="关于 slot 的 API"></a>关于 slot 的 API</h3><p><strong><code>slotchange</code> 事件</strong></p>
+<p>当 slot 的分布式节点发生变化时，<code>slotchange</code> 事件会触发。例如，当用户从 light DOM 中添加/移除子项时。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> slot = <span class="keyword">this</span>.shadowRoot.querySelector(<span class="string">'#slot'</span>);</div><div class="line">slot.addEventListener(<span class="string">'slotchange'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'light dom children changed!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>注：当组件的实例首次初始化时，<code>slotchange</code> 不触发。</p>
+<p><strong>查看 slot 中渲染的元素</strong><br>调用 <code>slot.assignedNodes()</code> 可查看 slot 正在渲染哪些元素；该方法中传入 <code>{flatten: true}</code> 选项将返回 slot 的备用内容fallbcak content（前提是没有分布任何节点）。</p>
+<table>
+<thead>
+<tr>
+<th>用法</th>
+<th>调用</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;button is=&quot;better-button&quot;&gt;My button&lt;/button&gt;</code></td>
+<td>slot.assignedNodes();</td>
+<td>[text]</td>
+</tr>
+<tr>
+<td><code>&lt;button is=&quot;better-button&quot;&gt;&lt;/button&gt;</code></td>
+<td>slot.assignedNodes();</td>
+<td>[]</td>
+</tr>
+<tr>
+<td><code>&lt;button is=&quot;better-button&quot;&gt;&lt;/button&gt;</code></td>
+<td>slot.assignedNodes({flatten: true});</td>
+<td>[<b>fallback content</b>]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>查看元素渲染在哪个 slot 中</strong><br><code>element.assignedSlot</code> 将告诉您元素分配到组件的哪个 slot。</p>
+<h3 id="Shadow-DOM-事件模型"><a href="#Shadow-DOM-事件模型" class="headerlink" title="Shadow DOM 事件模型"></a>Shadow DOM 事件模型</h3><p>当事件从 shadow DOM 中触发时，其目标 target 为维持 shadow DOM 的封装，不暴露 shadow DOM 中的内容元素，会进行重置 retarget，看起来事件是来自组件本身，而不是组件中 shadow DOM 中的内容元素。</p>
+<p>大部分事件都会跨过 shadow DOM 边界，向外传播：</p>
+<ul>
+<li>聚焦事件：blur、focus、focusin、focusout</li>
+<li>鼠标事件：click、dblclick、mousedown、mouseenter、mousemove，等等</li>
+<li>滚轮事件：wheel</li>
+<li>输入事件：beforeinput、input</li>
+<li>键盘事件：keydown、keyup</li>
+<li>组合事件：compositionstart、compositionupdate、compositionend</li>
+<li>拖放事件：dragstart、drag、dragend、drop，等等</li>
+</ul>
+<p>对于 <code>mode</code> 为 <code>open</code> 的 shadow DOM，事件回调中，调用 <code>event.composedPath()</code> 将返回事件向上传播经过的节点路径。</p>
+<p>对于组件内的自定义事件，不会传播出 shadow DOM，除非事件创建时指定 <code>composed: true</code><br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Inside &lt;fancy-tab&gt; custom element class definition:</span></div><div class="line">selectTab() &#123;</div><div class="line">  <span class="keyword">const</span> tabs = <span class="keyword">this</span>.shadowRoot.<span class="built_in">querySelector</span>(<span class="string">'#tabs'</span>);</div><div class="line">  tabs.dispatchEvent(<span class="keyword">new</span> Event(<span class="string">'tab-select'</span>, &#123;bubbles: <span class="keyword">true</span>, composed: <span class="keyword">true</span>&#125;));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果 <code>composed: false</code>（默认值），用户无法在组件外部侦听到这个自定义事件。<br><figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">fancy-tabs</span>&gt;</span><span class="tag">&lt;/<span class="name">fancy-tabs</span>&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  <span class="keyword">const</span> tabs = <span class="built_in">document</span>.querySelector(<span class="string">'fancy-tabs'</span>);</div><div class="line">  tabs.addEventListener(<span class="string">'tab-select'</span>, e =&gt; <span class="template-variable">&#123;</span></div><div class="line">    // won't fire <span class="keyword">if</span> `tab-<span class="keyword">select</span>` wasn't created with `composed: true`.</div><div class="line">  &#125;<span class="xml"><span class="undefined">);</span></span></div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>本文主要是阅读 <strong>Shadow DOM v1: Self-Contained Web Components</strong> 后，理解整理而来。<br>英文原文：<a href="https://developers.google.com/web/fundamentals/web-components/shadowdom" target="_blank" rel="external">Shadow DOM v1: Self-Contained Web Components</a><br>中文翻译：<a href="https://developers.google.com/web/fundamentals/web-components/best-practices?hl=zh-cn" target="_blank" rel="external">Shadow DOM v1：独立的网络组件</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/shadow-dom.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;Shadow DOM 是四大网络组件标准之一，提供 CSS 作用域、DOM 封装和组合(Composition) 等优势，构建自定义元素。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Web Components" scheme="http://objcer.com/categories/Web-Components/"/>
+    
+    
+      <category term="Shadow DOM" scheme="http://objcer.com/tags/Shadow-DOM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Custom Elements</title>
+    <link href="http://objcer.com/2017/10/20/Custom-Elements/"/>
+    <id>http://objcer.com/2017/10/20/Custom-Elements/</id>
+    <published>2017-10-20T08:07:56.000Z</published>
+    <updated>2017-10-20T08:11:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/custom-elements.png" alt=""></p>
+<p>Custom Elements 为开发者提供了创建新 HTML 标记，扩展现有 HTML 标记的能力，创建自定义新的元素，将 JS 逻辑行为和元素 DOM 关联起来，代码模块化，提供重用性。</p>
+<a id="more"></a>
+<h2 id="自定义元素"><a href="#自定义元素" class="headerlink" title="自定义元素"></a>自定义元素</h2><p><strong>创建自定义元素包括两个步骤：</strong></p>
+<ul>
+<li><p>通过 class <strong>定义</strong>自定义元素</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppDrawer</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;</div><div class="line">  constructor() &#123;</div><div class="line">    <span class="comment">// If you define a ctor, always call super() first!</span></div><div class="line">    <span class="keyword">super</span>();</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>向浏览器<strong>注册</strong>该自定义元素</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppDrawer</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;...&#125;</div><div class="line">window.customElements.define(<span class="symbol">'app</span>-drawer', <span class="type">AppDrawer</span>);</div><div class="line"></div><div class="line"><span class="comment">// 匿名类</span></div><div class="line">window.customElements.define(<span class="symbol">'app</span>-drawer', <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;...&#125;);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>创建自定义元素几点注意：</strong></p>
+<ul>
+<li>自定义元素定义类中的构造函数中，总是需要调用 <code>super()</code></li>
+<li>自定义元素名称必须要包含一个短横线(-)，浏览器以次来区分自定义元素和常规元素。例如 <code>&lt;x-tags&gt;</code>、<code>&lt;my-element&gt;</code> 为有效名称；而 <code>&lt;tabs&gt;</code> 和 <code>&lt;foo_bar&gt;</code> 则为无效名称</li>
+<li><p>不能多次注册同一自定义元素，否则会抛出 <code>DOMException</code> 异常</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span></span>&#123;&#125;</div><div class="line">window.customElements.define(<span class="symbol">'app</span>-drawer', <span class="type">A</span>);</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span></span>&#123;&#125;</div><div class="line">window.customElements.define(<span class="symbol">'app</span>-drawer', <span class="type">B</span>); <span class="comment">// ❗️DOMException</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>自定义元素不能自闭合(self-closing)，所以需要写结束标签，例如 <code>&lt;x-tags&gt;&lt;/x-tags&gt;</code></p>
+</li>
+</ul>
+<p><strong>定义新的自定义元素，class 类继承 <code>HTMLElement</code>；也可以扩展已有的元素，包括：</strong></p>
+<ul>
+<li><p>扩展自定义元素</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FancyDrawer</span> <span class="keyword">extends</span> <span class="title">AppDrawer</span> </span>&#123;</div><div class="line">  constructor() &#123;</div><div class="line">    <span class="keyword">super</span>();</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>扩展 HTML 原生元素</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FancyButton</span> <span class="keyword">extends</span> <span class="title">HTMLButtonElement</span> </span>&#123;</div><div class="line">  constructor() &#123;</div><div class="line">    <span class="keyword">super</span>();</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">customElements.define(<span class="symbol">'fancy</span>-button', <span class="type">FancyButton</span>, &#123;<span class="keyword">extends</span>: <span class="symbol">'butto</span>n'&#125;);</div></pre></td></tr></table></figure>
+<p>扩展 HTML 原生元素时，对 <code>define()</code> 的调用会稍有不同，需要传入第三个参数告知浏览器要扩展的标记。</p>
+</li>
+</ul>
+<p>使用自定义元素与 <code>&lt;div&gt;</code> 或任何其他元素的使用没有区别。可以在页面上声明，也可也通过 JavaScript 动态创建实例，也可添加事件侦听器，诸如此类。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;app-drawer&gt;&lt;/app-drawer&gt;</div><div class="line"><span class="keyword">let</span> drawer = <span class="keyword">new</span> AppDrawer()</div><div class="line"></div><div class="line"><span class="comment">// ❗️自定义 HTML 原生元素需要在原生标记上添加 is="" 属性来声明</span></div><div class="line">&lt;button <span class="keyword">is</span>=<span class="string">"fancy-button"</span>&gt;Fancy button!&lt;/button&gt;</div><div class="line"><span class="keyword">let</span> button = <span class="keyword">new</span> FancyButton()</div><div class="line"></div><div class="line"><span class="comment">// customElements.get 方法通过传入自定义元素标记名称，获取元素的构造函数</span></div><div class="line"><span class="keyword">let</span> Drawer = customElements.<span class="keyword">get</span>(<span class="string">'app-drawer'</span>);</div><div class="line"><span class="keyword">let</span> drawer = <span class="keyword">new</span> Drawer();</div></pre></td></tr></table></figure></p>
+<h2 id="自定义元素的响应"><a href="#自定义元素的响应" class="headerlink" title="自定义元素的响应"></a>自定义元素的响应</h2><p>自定义元素提供了一些响应方法，表征其生命周期的不同时刻，我们可以在这些响应方法（回调方法）中执行相关的逻辑。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>调用时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>constructor</td>
+<td>创建或升级元素的一个实例。用于初始化状态、设置事件侦听器或创建 Shadow DOM</td>
+</tr>
+<tr>
+<td>connectedCallback</td>
+<td>元素每次插入到 DOM 时都会调用</td>
+</tr>
+<tr>
+<td>disconnectedCallback</td>
+<td>元素每次从 DOM 中移除时都会调用</td>
+</tr>
+<tr>
+<td>attributeChangedCallback(attrName, oldVal, newVal)</td>
+<td>属性添加、移除、更新或替换时调用；创建元素或者升级时，也会调用它来获取初始值</td>
+</tr>
+<tr>
+<td>adoptedCallback</td>
+<td>自定义元素被移入新的 document （例如，有人调用了 document.adoptNode(el)）</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppDrawer</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;</div><div class="line">  constructor() &#123;</div><div class="line">    <span class="keyword">super</span>(); <span class="comment">// always call super() first in the ctor.</span></div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">  connectedCallback() &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">  disconnectedCallback() &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">  attributeChangedCallback(attrName, oldVal, newVal) &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>attributeChangedCallback</code> 响应仅针对 <code>observedAttributes</code> 属性中列出的，对于 class, style 等属性的修改并不会调用该响应，这也是处于性能考虑</li>
+<li><code>disconnectedCallback()</code> 响应主要用于清理工作，例如移除事件侦听器等。但是如果用户关闭了标签，<code>disconnectedCallback()</code> 响应将无法调用</li>
+<li><strong>响应是同步的</strong>，例如移除自定义元素后，会立即收到 <code>disconnectedCallback()</code> 响应</li>
+</ul>
+<h2 id="自定义元素升级-upgrades"><a href="#自定义元素升级-upgrades" class="headerlink" title="自定义元素升级(upgrades)"></a>自定义元素升级(upgrades)</h2><p><strong>自定义元素可以在其定义注册之前使用。</strong></p>
+<p>HTML 解析标签容错能力强，对于页面上声明的 <code>&lt;asdfasdf&gt;</code> 这类未知的标签，浏览器也能接受，因为 HTML 规范允许这类未知标签，它把这类未知标签生成的元素当成 <code>HTMLUnknownElement</code> 进行解析。而当页面中存在符合自定义元素命名规则（包含短横线’-‘）的标签，但是还未定义注册时，浏览器将其视为潜在的自定义元素，解析成 <code>HTMLElement</code></p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">//</span> <span class="string">"tabs"</span> <span class="keyword">is</span> <span class="keyword">not</span> a valid custom element name</div><div class="line"><span class="built_in">document</span>.createElement(<span class="string">'tabs'</span>) <span class="keyword">instanceof</span> HTMLUnknownElement === <span class="literal">true</span></div><div class="line"></div><div class="line"><span class="regexp">//</span> <span class="string">"x-tabs"</span> <span class="keyword">is</span> a valid custom element name</div><div class="line"><span class="built_in">document</span>.createElement(<span class="string">'x-tabs'</span>) <span class="keyword">instanceof</span> HTMLElement === <span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>所以我们可以在页面中先声明使用自定义元素，其后再调用 <code>customElements.define</code> 注册自定义元素，在自定义元素注册完成后，将页面中已声明使用的升级（upgrades）为自定义元素，这个过程称之为元素升级（element upgrades）</p>
+<p>要了解标记名称何时注册定义，可以使用 <code>window.customElements.whenDefined()</code>。<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">customElements.whenDefined(<span class="string">'app-drawer'</span>).<span class="keyword">then</span>(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'app-drawer defined'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<h2 id="自定义元素的状态-state"><a href="#自定义元素的状态-state" class="headerlink" title="自定义元素的状态 (state)"></a>自定义元素的状态 (state)</h2><p>自定义元素的状态包括：<strong><code>undefined</code>, <code>failed</code>, <code>uncustomized</code>, <code>custom</code></strong>，其中 <strong><code>uncustomized</code>, <code>custom</code></strong> 都表已定义 <strong><code>defined</code></strong>；对于类似 <code>div</code> 的内置元素状态始终为已定义 <strong><code>defined</code></strong></p>
+<p>在元素升级之前，处于未定义状态，我们可以过 <code>:defined</code> 伪类预设置未注册元素的样式，避免在获得定义时产生布局跳动或者 FOUC</p>
+<blockquote>
+<p>FOUC: Flash of Unstyled Content 文档样式短暂失效，指 HTML 页面在打开过程中，内容先于样式展示，导致页面样式在瞬间出现剧变，并且人眼可见</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">app-drawer</span><span class="selector-pseudo">:not(</span><span class="selector-pseudo">:defined)</span> &#123;</div><div class="line">  <span class="comment">/* Pre-style, give layout, replicate app-drawer's eventual styles, etc. */</span></div><div class="line">  <span class="attribute">display</span>: inline-block;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100vh</span>;</div><div class="line">  <span class="attribute">opacity</span>: <span class="number">0</span>;</div><div class="line">  <span class="attribute">transition</span>: opacity <span class="number">0.3s</span> ease-in-out;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在 <code>&lt;app-drawer&gt;</code> 获得定义后，选择器 <code>app-drawer:not(:defined)</code> 不再匹配。</p>
+<h2 id="设置自定义元素的内容"><a href="#设置自定义元素的内容" class="headerlink" title="设置自定义元素的内容"></a>设置自定义元素的内容</h2><h3 id="通过-innerHTML-设置元素内容"><a href="#通过-innerHTML-设置元素内容" class="headerlink" title="通过 innerHTML 设置元素内容"></a>通过 <code>innerHTML</code> 设置元素内容</h3><p>自定义元素在 <code>connectedCallback</code> 响应中，使用 DOM API 来设置元素的内容，但这不是好的做法，不推荐使用，更好的方式是使用 Shadow DOM。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">window.customElements.define(<span class="symbol">'x</span>-tag', <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;</div><div class="line">  connectedCallback() &#123;</div><div class="line">    <span class="keyword">this</span>.innerHTML = '&lt;b&gt;<span class="type">Hello</span> <span class="type">World</span>!&lt;/b&gt; <span class="type">Custom</span> <span class="type">Element</span>'</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<h3 id="通过-Shadow-DOM-设置元素内容"><a href="#通过-Shadow-DOM-设置元素内容" class="headerlink" title="通过 Shadow DOM 设置元素内容"></a>通过 Shadow DOM 设置元素内容</h3><blockquote>
+<p>关于 Shadow DOM 的详细介绍，参考：<a href=""></a></p>
+</blockquote>
+<p>Shadow DOM 提供了一种方法，可让设置的元素以独立于页面其余部分的方式拥有和渲染 DOM 并设置其样式。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;x-tag&gt;<span class="type">Custom</span> <span class="type">Element</span>&lt;/x-tag&gt;</div><div class="line"></div><div class="line">window.customElements.define(<span class="symbol">'x</span>-tag', <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;</div><div class="line">  constructor() &#123;</div><div class="line">    <span class="keyword">super</span>()</div><div class="line"></div><div class="line">    let shadowRoot = <span class="keyword">this</span>.attachShadow(&#123;mode: <span class="symbol">'ope</span>n'&#125;)</div><div class="line">    shadowRoot.innerHTML = `</div><div class="line">    &lt;b&gt;<span class="type">Hello</span> <span class="type">World</span>!&lt;/b&gt;</div><div class="line">    &lt;slot&gt;&lt;/slot&gt;</div><div class="line">    `</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>在这个例子中，Shadow DOM 是通过 <code>innerHTML</code> 来创建 DOM 元素；我们还可以通过 <code>&lt;template&gt;</code> 元素来创建 DOM。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;x-tag&gt;<span class="type">Custom</span> <span class="type">Element</span>&lt;/x-tag&gt;</div><div class="line">&lt;template id=<span class="string">"tmpl"</span>&gt;</div><div class="line">  &lt;style&gt;</div><div class="line">  <span class="comment">/*scoped styles*/</span></div><div class="line">  &lt;/style&gt;</div><div class="line">  &lt;b&gt;<span class="type">Hello</span> <span class="type">World</span>!&lt;/b&gt;</div><div class="line">  &lt;slot&gt;&lt;/slot&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line">window.customElements.define(<span class="symbol">'x</span>-tag', <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">HTMLElement</span> </span>&#123;</div><div class="line">  constructor() &#123;</div><div class="line">    <span class="keyword">super</span>()</div><div class="line"></div><div class="line">    let shadowRoot = <span class="keyword">this</span>.attachShadow(&#123;mode: <span class="symbol">'ope</span>n'&#125;)</div><div class="line">    let tmpl = document.querySelector('#tmpl')</div><div class="line">    shadowRoot.appendChild(tmpl.content.cloneNode(<span class="literal">true</span>))</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<h2 id="属性-property-映射为特性-attribute"><a href="#属性-property-映射为特性-attribute" class="headerlink" title="属性 (property) 映射为特性 (attribute)"></a>属性 (property) 映射为特性 (attribute)</h2><p>对 DOM 元素属性 (property) 修改，其值会以特性 (attribute) 的形式映射到 DOM，例如通过 JS 修改 DOM 元素的 id，hidden 属性：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">div</span>.<span class="built_in">id</span> = '<span class="keyword">my</span>-<span class="built_in">id</span>';</div><div class="line"><span class="keyword">div</span>.hidden = <span class="literal">true</span>;</div></pre></td></tr></table></figure></p>
+<p>DOM 节点会变成：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">div</span> <span class="built_in">id</span>=<span class="string">"my-id"</span> hidden&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>本文主要是阅读 <strong>Custom Elements v1: Reusable Web Components</strong> 后，理解整理而来。<br>英文原文：<a href="https://developers.google.com/web/fundamentals/web-components/customelements" target="_blank" rel="external">Custom Elements v1: Reusable Web Components</a><br>中文翻译：<a href="https://developers.google.com/web/fundamentals/web-components/customelements?hl=zh-cn" target="_blank" rel="external">自定义元素 v1：可重用网络组件</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/custom-elements.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Custom Elements 为开发者提供了创建新 HTML 标记，扩展现有 HTML 标记的能力，创建自定义新的元素，将 JS 逻辑行为和元素 DOM 关联起来，代码模块化，提供重用性。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Web Components" scheme="http://objcer.com/categories/Web-Components/"/>
+    
+    
+      <category term="Custom Elements" scheme="http://objcer.com/tags/Custom-Elements/"/>
+    
+  </entry>
   
   <entry>
     <title>0.1+0.2=0.30000000000000004❓</title>
@@ -1377,172 +1609,6 @@
     
     
       <category term="space" scheme="http://objcer.com/tags/space/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Cordova 打包应用 - iOS篇</title>
-    <link href="http://objcer.com/2017/05/22/cordova-build-iOS-App/"/>
-    <id>http://objcer.com/2017/05/22/cordova-build-iOS-App/</id>
-    <published>2017-05-22T03:53:18.000Z</published>
-    <updated>2017-05-22T03:55:13.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/ios.jpg" alt=""></p>
-<a id="more"></a>
-<h2 id="苹果开发知识储备"><a href="#苹果开发知识储备" class="headerlink" title="苹果开发知识储备"></a>苹果开发知识储备</h2><p><img src="http://7vikhl.com1.z0.glb.clouddn.com/iOS-dev-center.jpg" alt=""></p>
-<h3 id="Certificates"><a href="#Certificates" class="headerlink" title="Certificates"></a>Certificates</h3><p>Certificates 证书，是用来给应用程序签名(code sign)，证明应用程序的合法性和完整性。对于想要安装到真机调试或者发布到应用商店的应用程序，只有经过签名，才能保证其来源可靠，并且代码完整，未经篡改的。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Code%20Signing%20Identity.jpg" alt=""><br>在Xcode Build Setting 的 Code Signing Identity 中，你可以设置用于为代码签名的证书。</p>
-<ul>
-<li>申请一个 Certificate 之前，需要先申请一个 Certificate Signing Request (CSR) 文件，而这个过程中实际上是生成了一对公钥和私钥，保存在你 Mac 的 Keychain 中。<strong>代码签名正是使用这种基于非对称秘钥的加密方式，用私钥进行签名，用公钥进行验证。</strong></li>
-<li>如下图所示，在你 Mac 的 keychain 的 login 中存储着相关的公钥和私钥，而证书中包含了公钥。用私钥来进行签名，<strong>苹果就可以用证书中的公钥来进行验证</strong>，确保是你对代码进行了签名，而不是别人冒充你，同时也确保代码的完整性等。</li>
-<li>当你想与其他人或其他设备共享证书时，导出证书（.p12类型），把私钥传给它就可以了。</li>
-</ul>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/Certificates.png" alt=""><br>证书主要分为两类：Development 和 Production，Development 证书用来开发和调试应用程序，Production 主要用来分发应用程序。</p>
-<h3 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h3><p>App ID 用于标识一个或者一组 App，App ID 应该是和 Xcode 中的 Bundle ID 是一致的或者匹配的。App ID主要有以下两种：</p>
-<ul>
-<li>An Explicit App ID Matches a Single App：唯一的App ID，这种App ID用于唯一标识一个应用程序，例如 <code>com.ABC.demo1</code>，标识 Bundle ID 为 <code>com.ABC.demo1</code> 的程序。</li>
-<li>Wildcard App IDs Match Multiple Apps：通配符App ID，用于标识一组应用程序。例如 <code>*</code> 可以表示所有应用程序，而 <code>com.ABC.*</code> 可以表示以 <code>com.ABC</code> 开头的所有应用程序。</li>
-</ul>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/Bundle%20ID.jpg" alt=""></p>
-<h3 id="Devices"><a href="#Devices" class="headerlink" title="Devices"></a>Devices</h3><p>Device 是指运行 iOS 系统用于开发调试 App 的设备。每台 Apple 设备使用 UDID 来唯一标识。设备的 UDID 可通过 <code>iTunes-&gt;Summary</code> 或者 <code>Xcode-&gt;Window-&gt;Devices</code> 获取。</p>
-<h3 id="Provisioning-Profiles"><a href="#Provisioning-Profiles" class="headerlink" title="Provisioning Profiles"></a>Provisioning Profiles</h3><p>一个 Provisioning Profile 文件包含了上述的所有内容：<strong>证书、App ID、设备</strong>。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Provisioning%20Profiles.png" alt=""></p>
-<p>在打包应用程序或者在真机上运行调试一个应用程序的过程：</p>
-<ul>
-<li>使用 Certificates 证书来进行签名，用于标识该应用程序合法性和完整性</li>
-<li>指明该应用程序的 App ID，并且验证与 Bundle ID 是否一致</li>
-<li>到真机中运行调试该应用程序，确认该设备是否能够用来运行</li>
-</ul>
-<p>Provisioning Profile 把这些信息全部打包在一起，在打包时嵌入 <code>.ipa</code> 的包里。如上所述，在一台设备上运行应用程序的过程如下：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png" alt=""></p>
-<p>与 Certificates 证书一样，Provisioning Profile 也分为 Development 和 Distribution 两种：</p>
-<ul>
-<li>Development</li>
-<li>Distribution: In House、Ad Hoc、App Store</li>
-</ul>
-<p>注：使用 Development Provisioning Profiles 打包的应用程序在设备中运行，要求该设备 UDID 必须绑定添加到该 Provisioning Profiles 中，否则无法在该设备中运行。解决方法是：绑定添加该设备 UDID，更新 Provisioning Profiles，重新打包。</p>
-<h2 id="Xcode-调试"><a href="#Xcode-调试" class="headerlink" title="Xcode 调试"></a>Xcode 调试</h2><h3 id="Xcode-模拟器调试"><a href="#Xcode-模拟器调试" class="headerlink" title="Xcode 模拟器调试"></a>Xcode 模拟器调试</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 添加/移除 iOS 项目</span></div><div class="line">phonegap <span class="built_in">platform</span> <span class="built_in">add</span> ios</div><div class="line">phonegap <span class="built_in">platform</span> remove ios</div><div class="line"><span class="comment"># 更新 iOS 项目</span></div><div class="line">phonegap <span class="built_in">prepare</span> ios</div></pre></td></tr></table></figure>
-<p>在 <code>/platforms/ios</code> 目录下双击打开 <code>.xcworkspace</code> 文件，Xcode 中选择对应的模拟器即可运行。</p>
-<h3 id="Xcode-真机调试"><a href="#Xcode-真机调试" class="headerlink" title="Xcode 真机调试"></a>Xcode 真机调试</h3><p>Xcode 真机调试需要申请 Certificates 证书，然后添加调试设备 UDID，生成 Provisioning Profiles（Development 类型），下载到电脑中，双击安装。<br>苹果设备连接电脑，Xcode -&gt; Build Settings 设置 Code Signing Identity 和 Provisioning Profiles，设置完成后，选择该设备运行即可。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Xcode-debug.jpg" alt=""></p>
-<p>当然 <a href="http://www.jianshu.com/p/351be39f959e" target="_blank" rel="external">Xcode7以后，无证书也能真机编译调试！</a></p>
-<h2 id="应用打包"><a href="#应用打包" class="headerlink" title="应用打包"></a>应用打包</h2><blockquote>
-<p>cordova iOS 应用打包 <a href="https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app" target="_blank" rel="external">参考文档</a></p>
-</blockquote>
-<p>使用 Development 和 Distribution 的 Certificates 和 Provisioning Profiles 对应用程序进行打包的区别是：Development 打出来的包可以进行应用调试，譬如我们可以通过 Safari 对网页进行调试。</p>
-<p>cordova 提供了一套打包解决方案，在项目<strong>根目录</strong>添加 <code>build.json</code> 文件，配置文件中需要指定的参数包括：</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Flag</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Code Sign Identity</td>
-<td>–codeSignIdentity</td>
-<td>Code signing identity to use for signing.</td>
-</tr>
-<tr>
-<td>Provisioning Profile</td>
-<td>–provisioningProfile</td>
-<td>GUID of the provisioning profile to be used for signing. It is copied here on your Mac: <code>~/Library/MobileDevice/Provisioning\ Profiles/</code>.</td>
-</tr>
-<tr>
-<td>Code Sign Resource Rules</td>
-<td>–codesignResourceRules    (Optional)</td>
-<td>Used to control which files in a bundle should be sealed by a code signature. For more details, read The OS X Code Signing In Depth article.</td>
-</tr>
-<tr>
-<td>Development Team</td>
-<td>–developmentTeam</td>
-<td>This is new for Xcode 8. The development team (Team ID) to use for code signing. You would use this setting and a simplified Code Sign Identity (i.e. just ‘iPhone Developer’) to sign your apps, you do not need to provide a Provisioning Profile.</td>
-</tr>
-<tr>
-<td>Packaging Type</td>
-<td>–packageType</td>
-<td>This will determine what type of build is generated by Xcode. Valid options are development (the default), enterprise, ad-hoc, and app-store.</td>
-</tr>
-</tbody>
-</table>
-<p>解释一下需要用到的四个参数：</p>
-<ul>
-<li><strong>Code Sign Identity</strong>：应用程序签名时使用的证书标识。如下图<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/Code%20Sign%20Identity.jpg" alt=""></li>
-<li><strong>Provisioning Profile</strong>：Provisioning Profile 的 GUID。进入 <code>~/Library/MobileDevice/Provisioning\ Profiles/</code> 目录，即可获取到对应 Provisioning Profile 的 GUID<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/GUID.jpg" alt=""></li>
-<li><strong>Development Team</strong>：开发团队 ID<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/TeamID.jpg" alt=""></li>
-<li><strong>Packaging Type</strong>：打包类型，包括：development、enterprise, ad-hoc, 和 app-store</li>
-</ul>
-<p><code>build.json</code> 配置如下：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"ios"</span>: &#123;</div><div class="line">        <span class="attr">"debug"</span>: &#123;</div><div class="line">            <span class="attr">"codeSignIdentity"</span>: <span class="string">"iPhone Developer: Deng Yingshan (Z7********)"</span>,</div><div class="line">            <span class="attr">"provisioningProfile"</span>: <span class="string">"91840e00-****-****-****-************"</span>,</div><div class="line">            <span class="attr">"developmentTeam"</span>: <span class="string">"32********"</span>,</div><div class="line">            <span class="attr">"packageType"</span>: <span class="string">"development"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"release"</span>: &#123;</div><div class="line">            <span class="attr">"codeSignIdentity"</span>: <span class="string">"iPhone Distribution: Zhuhai Kingsoft Office Software Co., Ltd."</span>,</div><div class="line">            <span class="attr">"provisioningProfile"</span>: <span class="string">"ce06cf9c-****-****-****-************"</span>,</div><div class="line">            <span class="attr">"packageType"</span>: <span class="string">"enterprise"</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>❗️注意：</strong></p>
-<ul>
-<li>签名证书 Identity 一定要和 Provisioning Profiles GUID 对应上，否则打包不成功</li>
-<li>打包类型 enterprise 即为使用 in house 类型的 Distribution Provisioning Profiles</li>
-</ul>
-<h3 id="Development"><a href="#Development" class="headerlink" title="Development"></a>Development</h3><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">cordova</span> <span class="comment">build</span> <span class="comment">ios</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">device</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">debug</span></div></pre></td></tr></table></figure>
-<ul>
-<li>打 Development 必须使用 Development 类型的 Certificates 和 Provisioning Profiles。</li>
-<li>配置文件中，在 <code>debug</code> 属性配置参数；打包命令指定 <code>--debug</code>。</li>
-</ul>
-<h3 id="Distribution"><a href="#Distribution" class="headerlink" title="Distribution"></a>Distribution</h3><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">cordova</span> <span class="comment">build</span> <span class="comment">ios</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">device</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">release</span></div></pre></td></tr></table></figure>
-<ul>
-<li>打 Distribution 必须使用 Distribution 类型的 Certificates 和 Provisioning Profiles。</li>
-<li>配置文件中，在 <code>release</code> 属性配置参数；打包命令指定 <code>--release</code>。</li>
-<li>由于 Distribution 类型包括：In House、Ad Hoc、App Store 三种，对应在配置文件中的 <code>packageType</code> 分别为：<code>enterprise</code>, <code>ad-hoc</code>, 和 <code>app-store</code></li>
-</ul>
-<p>最终打包成功后，我们在 <code>platforms/ios/build/device</code> 目录下找到 <code>.ipa</code> 文件</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app" target="_blank" rel="external">Signing an App</a><br><a href="http://www.cnblogs.com/cywin888/p/3263027.html" target="_blank" rel="external">关于Certificate、Provisioning Profile、App ID的介绍及其之间的关系</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/ios.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Cordova" scheme="http://objcer.com/categories/Cordova/"/>
-    
-    
-      <category term="cordova-build" scheme="http://objcer.com/tags/cordova-build/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JS 数组排序 sort 方法</title>
-    <link href="http://objcer.com/2017/05/21/JS-Array-sort/"/>
-    <id>http://objcer.com/2017/05/21/JS-Array-sort/</id>
-    <published>2017-05-21T08:42:51.000Z</published>
-    <updated>2017-05-21T08:45:30.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><em>[问题引入]:</em>在推特上看到有人发了这样一段代码<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = [<span class="number">0</span>, <span class="number">-1</span>, <span class="number">-2</span>, <span class="number">1</span>];</div><div class="line">var b = a.sort();</div><div class="line">console.log(b);</div></pre></td></tr></table></figure></p>
-<p>输出的结果竟然是：<code>[-1, -2, 0, 1]</code><br>显然该推友对 <code>Array.prototype.sort</code> 用法不熟悉导致的误解。🤓<br><a id="more"></a></p>
-<h2 id="Array-prototype-sort"><a href="#Array-prototype-sort" class="headerlink" title="Array.prototype.sort"></a><code>Array.prototype.sort</code></h2><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">arr</span><span class="selector-class">.sort</span>()</div><div class="line"></div><div class="line"><span class="selector-tag">arr</span><span class="selector-class">.sort</span>(<span class="selector-tag">compareFunction</span>)</div></pre></td></tr></table></figure>
-<p><code>sort</code> 方法对数组中的元素进行排序，返回数组；可以指定排序顺序比较函数，如果省略，那么默认排序顺序是根据字符串 Unicode 码点<strong>升序排列</strong>。<br>通过一个例子理解一下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var scores = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">21</span>, <span class="number">8</span>];</div><div class="line">scores.sort(); <span class="comment">// [1, 10, 21, 8]</span></div></pre></td></tr></table></figure></p>
-<p>我们对数组 <code>scores</code> 进行排序，没有指明 <code>compareFunction</code> ，那么元素会按照转换为的字符串的诸个字符的 Unicode 码点进行升序排列。相当于是<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scores = [<span class="string">'1'</span>, <span class="string">'10'</span>, <span class="string">'21'</span>, <span class="string">'8'</span>];</div><div class="line">scores.sort();</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>关于码点，参考文章：<a href="http://objcer.com/2017/05/21/JavaScript-Unicode/">JavaScript Unicode 编码那些事</a></p>
-</blockquote>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">'<span class="number">1</span>'.codePointAt(<span class="number">0</span>) <span class="comment">// 49</span></div><div class="line">'<span class="number">8</span>'.codePointAt(<span class="number">0</span>) <span class="comment">// 56</span></div></pre></td></tr></table></figure>
-<p>字符 <code>1</code> 的码点比字符 <code>8</code> 的码点小，所以 <code>10</code> 排在 <code>8</code> 前面。同理也就可以解释文章开头的例子了。</p>
-<h2 id="compareFunction"><a href="#compareFunction" class="headerlink" title="compareFunction"></a><code>compareFunction</code></h2><p>比较函数格式如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function compare(a, b) &#123;</div><div class="line">    <span class="keyword">if</span> (a <span class="keyword">is</span> less than b <span class="keyword">by</span> some ordering criterion) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (a <span class="keyword">is</span> greater than b <span class="keyword">by</span> the ordering criterion) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// a must be equal to b</span></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>有点需要注意的是，比较函数必须返回 -1 或者 0 或者 1；而不能返回 true 或者 false。</p>
-<p>为了实现元素为数字的数组按照数值升序排列，我们就需要传入一个比较函数 <code>compareFunction</code>，如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scores = [<span class="number">1</span>, <span class="number">10</span>, <span class="number">21</span>, <span class="number">8</span>];</div><div class="line">scores.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a - b) <span class="comment">// 升序排列</span></div><div class="line">scores.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> b - a) <span class="comment">// 降序排列</span></div></pre></td></tr></table></figure></p>
-<p>通过比较函数，我们也可以对对象数组按照某个属性进行排序，很方便。</p>
-<h2 id="sort-排序不一定是稳定的"><a href="#sort-排序不一定是稳定的" class="headerlink" title="sort 排序不一定是稳定的"></a>sort 排序不一定是稳定的</h2><blockquote>
-<p>Quicksort is generally considered to be efficient and fast and so is used by V8 as the implementation for Array.prototype.sort() on arrays with more than 23 items. For less than 23 items, V8 uses insertion sort[2]. Merge sort is a competitor of quicksort as it is also efficient and fast but has the added benefit of being stable. This is why Mozilla and Safari use it for their implementation of Array.prototype.sort().</p>
-</blockquote>
-<p>关于排序是否稳定，参考: <a href="http://imweb.io/topic/565cf7253ad940357eb99881" target="_blank" rel="external">维基百科</a><br>这个图也能很好的理解<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/440px-Sorting_stability_playing_cards.svg.png" alt=""></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank" rel="external">MDN Array.prototype.sort</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;em&gt;[问题引入]:&lt;/em&gt;在推特上看到有人发了这样一段代码&lt;br&gt;&lt;figure class=&quot;highlight lsl&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;var a = [&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;-1&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;-2&lt;/span&gt;, &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;];&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;var b = a.sort();&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;console.log(b);&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-&lt;p&gt;输出的结果竟然是：&lt;code&gt;[-1, -2, 0, 1]&lt;/code&gt;&lt;br&gt;显然该推友对 &lt;code&gt;Array.prototype.sort&lt;/code&gt; 用法不熟悉导致的误解。🤓&lt;br&gt;
-    
-    </summary>
-    
-      <category term="JS" scheme="http://objcer.com/categories/JS/"/>
-    
-    
-      <category term="Array.prototype.sort" scheme="http://objcer.com/tags/Array-prototype-sort/"/>
     
   </entry>
   
