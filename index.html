@@ -243,6 +243,149 @@
             
               
                 
+                <a class="post-title-link" href="/2017/10/27/Data-binding-introduction/" itemprop="url">
+                  探究数据绑定（1）脏检查和存取器方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-10-27T10:30:21+08:00" content="2017-10-27">
+              2017-10-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/10/27/Data-binding-introduction/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/27/Data-binding-introduction/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/10/27/Data-binding-introduction/" class="leancloud_visitors" data-flag-title="探究数据绑定（1）脏检查和存取器方法">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p><strong>Data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them.</strong></p>
+</blockquote>
+<p>在前端组件化框架中，基本都有<strong>数据绑定</strong>这一特性，数据绑定是将生产者的数据源绑定到消费者，并负责数据同步。本文将探究数据绑定的不同实现方式。🤓</p>
+<p>目前主要有以下几种实现方案：</p>
+<ul>
+<li><strong>脏检查（dirty check）</strong></li>
+<li><strong>存取器方法（accessor method）</strong>: <code>Object.defineProperty</code> ES5</li>
+<li><code>Proxy</code>: ES6 支持较差【Proxies are one of the few non polyfillable additions.（babel不支持转换）】</li>
+<li><code>Object.observe</code>: ES7，已经移出草案，不支持</li>
+<li><code>object.watch</code>: 目前只有基于gecko的浏览器如火狐支持,官方建议仅供调试用</li>
+</ul>
+<p>其中前两种方式是主流，angular、Polymer 使用的就是脏检查，Vue 使用的就是存取器方法。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/10/27/Data-binding-introduction/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/10/20/Web-Components/" itemprop="url">
                   Web Components
                 </a>
@@ -1411,137 +1554,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/" itemprop="url">
-                  动态文本自适应绘制到指定大小的 Canvas
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-10-10T15:15:11+08:00" content="2017-10-10">
-              2017-10-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/JS/" itemprop="url" rel="index">
-                    <span itemprop="name">JS</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/" class="leancloud_visitors" data-flag-title="动态文本自适应绘制到指定大小的 Canvas">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/1-UGtq-cSfbuekV8aHalVIAw.png" alt=""><br>本文将探究动态文本如何自适应绘制到指定大小的 Canvas 🎏</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2017/10/10/auto-size-dynamic-text-to-fill-fixed-size-canvas/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1604,7 +1616,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
