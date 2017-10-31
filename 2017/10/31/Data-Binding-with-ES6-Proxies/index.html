@@ -1,0 +1,899 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据绑定,Proxy," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="在上一篇文章：探究数据绑定（1）脏检查和存取器方法 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。">
+<meta name="keywords" content="数据绑定,Proxy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="探究数据绑定（2）ES6 Proxy">
+<meta property="og:url" content="http://objcer.com/2017/10/31/Data-Binding-with-ES6-Proxies/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="在上一篇文章：探究数据绑定（1）脏检查和存取器方法 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/es6-proxy-observables-code.png">
+<meta property="og:updated_time" content="2017-10-31T07:27:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="探究数据绑定（2）ES6 Proxy">
+<meta name="twitter:description" content="在上一篇文章：探究数据绑定（1）脏检查和存取器方法 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2017/10/31/Data-Binding-with-ES6-Proxies/"/>
+
+
+  <title> 探究数据绑定（2）ES6 Proxy | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                探究数据绑定（2）ES6 Proxy
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-10-31T15:25:45+08:00" content="2017-10-31">
+              2017-10-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/10/31/Data-Binding-with-ES6-Proxies/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/31/Data-Binding-with-ES6-Proxies/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/10/31/Data-Binding-with-ES6-Proxies/" class="leancloud_visitors" data-flag-title="探究数据绑定（2）ES6 Proxy">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png" alt=""><br>在上一篇文章：<a href="https://objcer.com/2017/10/27/Data-binding-introduction/">探究数据绑定（1）脏检查和存取器方法</a> 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。</p>
+<a id="more"></a>
+<h2 id="知识储备"><a href="#知识储备" class="headerlink" title="知识储备"></a>知识储备</h2><p>Proxy 方式实现数据绑定中涉及到 Proxy、Reflect、Set、Map 和 WeakMap，这些都是 ES6 的新特性。</p>
+<h3 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h3><p>Proxy 对象代理，在目标对象之前架设一层拦截，外部对目标对象的操作，都会通过这层拦截，我们可以定制拦截行为，每一个被代理的拦截行为都对应一个处理函数。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let p = <span class="keyword">new</span> Proxy(<span class="keyword">target</span>, <span class="keyword">handler</span>);</div></pre></td></tr></table></figure></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> handler = &#123;</div><div class="line">  get: (target, name, recevier) =&gt; &#123;</div><div class="line">    return <span class="string">'proxy'</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">p</span> = new Proxy(&#123;&#125;, handler)</div><div class="line"><span class="selector-tag">p</span><span class="selector-class">.a</span> = <span class="number">1</span></div><div class="line"></div><div class="line">console.log(<span class="selector-tag">p</span><span class="selector-class">.a</span>, <span class="selector-tag">p</span>.c) <span class="comment">// -&gt; proxy proxy</span></div></pre></td></tr></table></figure>
+<p>Proxy 构造函数接收两个参数：</p>
+<ul>
+<li>第一个参数是要代理的目标对象</li>
+<li>第二个参数是配置对象，每一个被代理的操作都对应一个处理函数</li>
+</ul>
+<p>在这个例子中，目标对象是一个空对象，配置对象中有一个 <code>get</code> 函数，用来拦截外部对目标对象属性的访问，可以看到，<code>get</code> 函数始终返回 <code>proxy</code>。</p>
+<p>Proxy 支持拦截的操作一共有13种：</p>
+<ul>
+<li>get(target, propKey, receiver)</li>
+<li>set(target, propKey, value, receiver)</li>
+<li>has(target, propKey)</li>
+<li>deleteProperty(target, propKey)</li>
+<li>ownKeys(target)</li>
+<li>getOwnPropertyDescriptor(target, propKey)</li>
+<li>defineProperty(target, propKey, propDesc)</li>
+<li>preventExtensions(target)</li>
+<li>getPrototypeOf(target)</li>
+<li>isExtensible(target)</li>
+<li>setPrototypeOf(target, proto)</li>
+<li>apply(target, object, args)</li>
+<li>construct(target, args)</li>
+</ul>
+<blockquote>
+<p>👉 更详细介绍参考：<br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank" rel="external">MDN·Proxy</a><br><a href="http://es6.ruanyifeng.com/#docs/proxy" target="_blank" rel="external">Proxy</a></p>
+</blockquote>
+<h3 id="Reflect"><a href="#Reflect" class="headerlink" title="Reflect"></a>Reflect</h3><p>Reflect 对象同 Proxy 对象一样，也是 ES6 为了操作对象而提供的新特性。</p>
+<p>Reflect 对象的方法与 Proxy 对象的方法一一对应，只要是 Proxy 对象的方法，就能在 Reflect 对象上找到对应的静态方法（Reflect 对象没有构造函数，不能使用 new 创建实例）。这就让 Proxy 对象可以方便地调用对应的 Reflect 方法，完成默认行为，作为修改行为的基础。也就是说，不管 Proxy 怎么修改默认行为，你总可以在 Reflect 上获取默认行为。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> handler = &#123;</div><div class="line">  get: (target, name, recevier) =&gt; &#123;</div><div class="line">    console.log(<span class="string">'get: '</span>, name)</div><div class="line">    Reflect.get(target, name)</div><div class="line">  &#125;,</div><div class="line">  set: (target, name, value, recevier) =&gt; &#123;</div><div class="line">    console.log(<span class="string">'set: '</span>, name)</div><div class="line">    Reflect.get(target, name, value)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">p</span> = new Proxy(&#123;&#125;, handler)</div><div class="line"><span class="selector-tag">p</span><span class="selector-class">.a</span> = <span class="number">1</span></div><div class="line"></div><div class="line">console.log(<span class="selector-tag">p</span><span class="selector-class">.a</span>, <span class="selector-tag">p</span>.c)</div></pre></td></tr></table></figure></p>
+<p>代码执行结果，输出：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">set</span>:  <span class="keyword">a</span></div><div class="line"><span class="built_in">get</span>:  <span class="keyword">a</span></div><div class="line"><span class="built_in">get</span>:  c</div></pre></td></tr></table></figure></p>
+<p>上面代码中，Proxy 拦截目标对象的 <code>get</code> 和 <code>set</code>方法，在其中定制拦截行为，最后采用 <code>Reflect.get</code> 和 <code>Reflect.set</code> 分别完成目标对象默认的属性获取和设置行为。</p>
+<blockquote>
+<p>👉 更详细介绍参考：<br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect" target="_blank" rel="external">MDN·Reflect</a><br><a href="http://es6.ruanyifeng.com/#docs/reflect" target="_blank" rel="external">Reflect</a></p>
+</blockquote>
+<h3 id="Set-WeakSet-和-Map-WeakMap"><a href="#Set-WeakSet-和-Map-WeakMap" class="headerlink" title="Set/WeakSet 和 Map/WeakMap"></a>Set/WeakSet 和 Map/WeakMap</h3><p><strong>Set</strong></p>
+<ul>
+<li>类似 Array 数组</li>
+<li>Set 允许你存储任何类型的唯一值，无论是原始值或者是对象引用</li>
+<li>Set 成员的值都是唯一的，没有重复值</li>
+</ul>
+<p><strong>WeakSet</strong></p>
+<ul>
+<li>类似 Set，也是不重复元素的集合</li>
+<li>WeakSet 对象中只能存放对象值, 不能存放原始值, 而 Set 对象都可以</li>
+<li>WeakSet 对象中存储的<strong>对象值都是被弱引用的</strong>, 如果没有其他的变量或属性引用这个对象值, 则这个对象值会被当成垃圾回收掉. 正因为这样, WeakSet 对象是无法被枚举的, 没有办法拿到它包含的所有元素</li>
+</ul>
+<p><strong>Map</strong></p>
+<ul>
+<li>类似 Object 对象，保存键值对</li>
+<li>Map 任何值(对象或者原始值) 都可以作为一个键(key)或一个值(value)，而 Object 对象的 key 键值只能是字符串</li>
+</ul>
+<p><strong>WeakMap</strong></p>
+<ul>
+<li>类似 Map，也是一组键值对的集合</li>
+<li>WeakMap 对象中的<strong>键是弱引用的</strong>。键必须是对象，值可以是任意值</li>
+<li>由于这样的弱引用，只要所引用的对象的其他引用都被清除，垃圾回收机制就会释放该对象所占用的内存。也就是说，一旦不再需要，WeakMap 里面的键名对象和所对应的键值对会自动消失，不用手动删除引用，原理同 WeakSet</li>
+<li>WeakMap 的 key 是非枚举的</li>
+</ul>
+<h2 id="Proxy-实现数据绑定"><a href="#Proxy-实现数据绑定" class="headerlink" title="Proxy 实现数据绑定"></a>Proxy 实现数据绑定</h2><p>先上完整代码 👉<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 监听对象集合</span></div><div class="line"><span class="keyword">var</span> observers = <span class="keyword">new</span> <span class="built_in">WeakMap</span>()</div><div class="line"><span class="comment">// 待执行监听函数集合，Set 可以避免重复</span></div><div class="line"><span class="keyword">var</span> queuedObservers = <span class="keyword">new</span> <span class="built_in">Set</span>()</div><div class="line"><span class="comment">// 当前监听函数</span></div><div class="line"><span class="keyword">var</span> currentObserver</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">observable</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">  observers.set(obj, <span class="keyword">new</span> <span class="built_in">Map</span>())</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Proxy</span>(obj, &#123; get, set &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params">target, key, receiver</span>) </span>&#123;</div><div class="line">  <span class="comment">// get 方法默认行为</span></div><div class="line">  <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.get(target, key, receiver)</div><div class="line">  <span class="comment">// 当前监听函数中，监听使用了该属性，</span></div><div class="line">  <span class="comment">// 那么把该 监听函数 存放到该属性对应的 对象属性监听函数集合 Set</span></div><div class="line">  <span class="keyword">if</span> (currentObserver) &#123;</div><div class="line">    registerObserver(target, key, currentObserver)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">registerObserver</span>(<span class="params">target, key, observer</span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> observersForKey = observers.get(target).get(key)</div><div class="line">  <span class="comment">// 为每一个对象属性都创建一个 Set 集合，存放监听了该属性的监听函数</span></div><div class="line">  <span class="keyword">if</span> (!observersForKey) &#123;</div><div class="line">    observersForKey = <span class="keyword">new</span> <span class="built_in">Set</span>()</div><div class="line">    observers.get(target).set(key, observersForKey)</div><div class="line">  &#125;</div><div class="line">  observersForKey.add(observer)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">set</span>(<span class="params">target, key, value, receiver</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> observersForKey = observers.get(target).get(key)</div><div class="line">  <span class="comment">// 修改对象属性，即对象属性值发生变更时，</span></div><div class="line">  <span class="comment">// 判断 对象属性监听函数集合 Set 是否存在，将其中的所有监听函数都添加到 待执行监听函数集合</span></div><div class="line">  <span class="keyword">if</span> (observersForKey) &#123;</div><div class="line">    observersForKey.forEach(queueObserver)</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// set 方法默认行为</span></div><div class="line">  <span class="keyword">return</span> <span class="built_in">Reflect</span>.set(target, key, value, receiver)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span>(<span class="params">fn</span>) </span>&#123;</div><div class="line">  queueObserver(fn)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 将监听函数添加到 待执行监听函数集合 Set 中</span></div><div class="line"><span class="comment">// 如果 待执行监听函数集合 Set 为空，那么在添加后立即执行</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">queueObserver</span>(<span class="params">observer</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (queuedObservers.size === <span class="number">0</span>) &#123;</div><div class="line">    <span class="comment">// 异步执行</span></div><div class="line">    <span class="built_in">Promise</span>.resolve().then(runObservers)</div><div class="line">  &#125;</div><div class="line">  queuedObservers.add(observer)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 执行 待执行监听函数集合 Set 中的监听函数</span></div><div class="line"><span class="comment">// 执行完毕后，进行清理工作</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">runObservers</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    queuedObservers.forEach(<span class="function">(<span class="params">observer</span>) =&gt;</span> &#123;</div><div class="line">      currentObserver = observer</div><div class="line">      observer()</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="keyword">finally</span> &#123;</div><div class="line">    currentObserver = <span class="literal">undefined</span></div><div class="line">    queuedObservers.clear()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对外暴露的 <code>observable(obj)</code> 和 <code>observe(fn)</code> 方法二者分别用于创建 observable 监听对象和 observer 监听回调函数。当 observable 监听对象发生属性变化时，observer 函数将自动执行。</p>
+<p>测试用例：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">name</span>: <span class="string">'John'</span>, <span class="attr">age</span>: <span class="number">20</span>&#125;</div><div class="line"><span class="comment">// observable object</span></div><div class="line"><span class="keyword">var</span> person = observable(obj)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">print</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`监听属性发生变化：<span class="subst">$&#123;person.name&#125;</span>, <span class="subst">$&#123;person.age&#125;</span>`</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// observer function</span></div><div class="line">observe(print)</div></pre></td></tr></table></figure></p>
+<h3 id="分析接口方法"><a href="#分析接口方法" class="headerlink" title="分析接口方法"></a>分析接口方法</h3><p>关于 <code>observable(obj)</code> 和 <code>observe(fn)</code>：<br><strong><code>observable(obj)</code> 方法中，通过 ES6 Proxy 为目标对象 <code>obj</code> 创建代理，拦截 <code>get</code> 和 <code>set</code> 操作</strong></p>
+<ul>
+<li>当前监听函数：<code>currentObserver</code></li>
+<li>待执行监听函数集合 Set：<code>var queuedObservers = new Set()</code></li>
+<li>监听对象集合 WeakMap：<code>var observers = new WeakMap()</code> 键值为监听对象</li>
+<li>对象属性监听函数集合 Set：监听了对象属性的监听函数，都保存到对象属性监听函数集合 Set 中，方便在对象属性发生变更时，执行监听函数</li>
+<li>拦截方法 <code>get</code>：使用 <code>obj.property</code> 获取对象属性，即会被拦截方法 <code>get</code> 拦截<br>👉 查看 <code>get</code> 中的注释</li>
+<li>拦截方法 <code>set</code>：使用 <code>obj.property = value</code> 设置对象属性，即会被拦截方法 <code>set</code> 拦截<br>👉 查看 <code>set</code> 中的注释</li>
+</ul>
+<p><strong><code>observe(fn)</code> 方法中，添加对象属性监听函数</strong><br>  监听函数中使用 <code>obj.property</code> 获取对象属性，即表明监听函数监听了该属性，那么就会触发拦截方法 <code>get</code> 中对监听属性的逻辑处理，为其创建对象属性监听函数集合 Set，并将当前的监听函数添加进其中</p>
+<h3 id="分析测试用例"><a href="#分析测试用例" class="headerlink" title="分析测试用例"></a>分析测试用例</h3><p>下面通过流程图讲解一下测试用例的执行过程<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/es6-proxy-observables-code.png" alt=""></p>
+<ul>
+<li>通过 <code>observable</code> 方法创建代理对象 <code>person</code></li>
+<li><code>observe</code> 方法设置监听函数，此时待执行监听函数集合 Set 为空，监听函数添加到 Set 中后执行待执行监听函数集合 Set 中的监听函数</li>
+<li>在 <code>runObservers</code> 方法中当前监听函数 <code>currentObserver</code> 被设为 <code>print</code></li>
+<li><code>print</code> 开始执行</li>
+<li>在 <code>print</code> 内部检索到 <code>person.name</code></li>
+<li>在 <code>person</code> 上触发拦截方法 <code>get</code></li>
+<li><code>observers.get(person).get(&#39;name&#39;)</code> 检索到 <code>(person, name)</code> 组合的对象属性监听函数集 Set</li>
+<li>当前监听函数 <code>print</code> 被添加到对象属性监听函数集 Set 中</li>
+<li>对于 <code>person.age</code>，同理，执行前面在 <code>print</code> 内部检索到 <code>person.name</code> 的流程</li>
+<li><code>${person.name}, ${person.age}</code> 打印出来；</li>
+<li><code>print</code> 函数执行结束；</li>
+<li>当前监听函数 <code>currentObserver</code> 变为 <code>undefined</code></li>
+</ul>
+<p>当调用 <code>person.age = 22</code> 修改对象属性时：</p>
+<ul>
+<li><code>person</code> 上触发拦截方法 <code>set</code></li>
+<li><code>observers.get(person).get(&#39;age&#39;)</code> 检索到 <code>(person, age)</code> 组合的对象属性监听函数集 Set</li>
+<li>对象属性监听函数集 Set 中的监听函数（包括 <code>print</code>）入待执行监听函数集合，准备执行</li>
+<li>再次执行 <code>print</code></li>
+</ul>
+<h2 id="高级主题"><a href="#高级主题" class="headerlink" title="高级主题"></a>高级主题</h2><h3 id="动态-observable-tree"><a href="#动态-observable-tree" class="headerlink" title="动态 observable tree"></a>动态 observable tree</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> obj = &#123;</div><div class="line">  name: <span class="string">'John'</span>,</div><div class="line">  age: <span class="number">20</span>,</div><div class="line">  teacher: &#123;</div><div class="line">    name: <span class="string">'Tom'</span>,</div><div class="line">    age: <span class="number">30</span></div><div class="line">&#125;&#125;</div><div class="line"><span class="comment">// observable object</span></div><div class="line"><span class="selector-tag">var</span> person = observable(obj)</div><div class="line"></div><div class="line">function print () &#123;</div><div class="line">  console.log(`监听属性发生变化：$&#123;person<span class="selector-class">.teacher</span><span class="selector-class">.name</span>&#125;, $&#123;person<span class="selector-class">.teacher</span><span class="selector-class">.age</span>&#125;`)</div><div class="line">&#125;</div><div class="line"><span class="comment">// observer function</span></div><div class="line"><span class="function"><span class="title">observe</span><span class="params">(print)</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="title">setTimeout</span><span class="params">(()</span></span> =&gt; &#123;person<span class="selector-class">.teacher</span><span class="selector-class">.name</span> = <span class="string">'Jack'</span>&#125;)</div></pre></td></tr></table></figure>
+<p>到目前为止，单层对象的数据绑定监听是正常工作的。但是在这个例子中，我们监听的对象值又是对象，这个时候监听就失效了，我们需要将：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">observable</span>(&#123;<span class="attribute">data</span>: &#123;name: <span class="string">'John'</span>&#125;&#125;)</div></pre></td></tr></table></figure></p>
+<p>替换成<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">observable</span>(&#123;<span class="attribute">data</span>: <span class="built_in">observable</span>(&#123;name: <span class="string">'John'</span>&#125;)&#125;)</div></pre></td></tr></table></figure></p>
+<p>这样就能正常运行了 😋</p>
+<p>显然，这样使用不方便，可以做拦截方法 <code>get</code> 中修改一下，在返回值是对象时，对返回值对象也调用 <code>observable(obj)</code> 为其创建监听对象。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function <span class="built_in">get</span>(target, <span class="built_in">key</span>, receiver) &#123;</div><div class="line">  <span class="keyword">const</span> result = Reflect.<span class="built_in">get</span>(target, <span class="built_in">key</span>, receiver)</div><div class="line">  <span class="keyword">if</span> (currentObserver) &#123;</div><div class="line">    registerObserver(target, <span class="built_in">key</span>, currentObserver)</div><div class="line">    <span class="keyword">if</span> (typeof result === <span class="string">'object'</span>) &#123;</div><div class="line">      <span class="keyword">const</span> observableResult = observable(result)</div><div class="line">      Reflect.<span class="built_in">set</span>(target, <span class="built_in">key</span>, observableResult, receiver)</div><div class="line">      <span class="keyword">return</span> observableResult</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>对于 Proxy 拦截操作也可以在原型链中被继承，例如：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">let proto = new Proxy(&#123;&#125;, &#123;</div><div class="line">  get(target, propertyKey, receiver) &#123;</div><div class="line">    console.log('GET ' + propertyKey);</div><div class="line">    return Reflect.get(target, propertyKey, receiver);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">let obj = Object.create(proto);</div><div class="line">obj.foo // <span class="string">"<span class="keyword">GET</span> foo"</span></div></pre></td></tr></table></figure></p>
+<p>上面代码中，拦截操作 <code>get</code> 定义在原型对象上面，所以如果读取 <code>obj</code> 对象属性时，拦截会生效。</p>
+<p>同理，通过 Proxy 实现的数据绑定也能与原型继承搭配工作，例如：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">const parent = observable(&#123;greeting: <span class="string">'Hello'</span>&#125;)</div><div class="line">const child = observable(&#123;subject: <span class="string">'World!'</span>&#125;)</div><div class="line">Object.setPrototypeOf(child, parent)</div><div class="line"></div><div class="line">function print () &#123;</div><div class="line">  console.log(`$&#123;child.greeting&#125; $&#123;child.subject&#125;`)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 控制台打印出 'Hello World!'</span></div><div class="line"><span class="function"><span class="title">observe</span><span class="params">(print)</span></span></div><div class="line"></div><div class="line"><span class="comment">// 控制台打印出 'Hello There!'</span></div><div class="line"><span class="function"><span class="title">setTimeout</span><span class="params">(()</span></span> =&gt; child<span class="selector-class">.subject</span> = <span class="string">'There!'</span>)</div><div class="line"></div><div class="line"><span class="comment">// 控制台打印出 'Hey There!'</span></div><div class="line"><span class="function"><span class="title">setTimeout</span><span class="params">(()</span></span> =&gt; parent<span class="selector-class">.greeting</span> = <span class="string">'Hey'</span>, <span class="number">100</span>)</div><div class="line"></div><div class="line"><span class="comment">// 控制台打印出 'Look There!'</span></div><div class="line"><span class="function"><span class="title">setTimeout</span><span class="params">(()</span></span> =&gt; child<span class="selector-class">.greeting</span> = <span class="string">'Look'</span>, <span class="number">200</span>)</div></pre></td></tr></table></figure></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p>本文中通过简单的代码展示了 Proxy 实现数据绑定，更加完整的实现，参考：<a href="https://github.com/nx-js/observer-util" target="_blank" rel="external">nx-js/observer-util</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.risingstack.com/writing-a-javascript-framework-data-binding-es6-proxy/" target="_blank" rel="external">Writing a JavaScript Framework - Data Binding with ES6 Proxies</a><br><a href="http://www.zcfy.cc/article/writing-a-javascript-framework-data-binding-with-es6-proxies-risingstack-1655.html" target="_blank" rel="external">使用 ES6 Proxy 实现数据绑定</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据绑定/" rel="tag">#数据绑定</a>
+          
+            <a href="/tags/Proxy/" rel="tag">#Proxy</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/27/Data-binding-introduction/" rel="next" title="探究数据绑定（1）脏检查和存取器方法">
+                <i class="fa fa-chevron-left"></i> 探究数据绑定（1）脏检查和存取器方法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识储备"><span class="nav-number">1.</span> <span class="nav-text">知识储备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Proxy"><span class="nav-number">1.1.</span> <span class="nav-text">Proxy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reflect"><span class="nav-number">1.2.</span> <span class="nav-text">Reflect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set-WeakSet-和-Map-WeakMap"><span class="nav-number">1.3.</span> <span class="nav-text">Set/WeakSet 和 Map/WeakMap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proxy-实现数据绑定"><span class="nav-number">2.</span> <span class="nav-text">Proxy 实现数据绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析接口方法"><span class="nav-number">2.1.</span> <span class="nav-text">分析接口方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析测试用例"><span class="nav-number">2.2.</span> <span class="nav-text">分析测试用例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级主题"><span class="nav-number">3.</span> <span class="nav-text">高级主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#动态-observable-tree"><span class="nav-number">3.1.</span> <span class="nav-text">动态 observable tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-number">3.2.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码"><span class="nav-number">3.3.</span> <span class="nav-text">源码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2017/10/31/Data-Binding-with-ES6-Proxies/';
+      var disqus_title = "探究数据绑定（2）ES6 Proxy";
+      var disqus_url = 'http://objcer.com/2017/10/31/Data-Binding-with-ES6-Proxies/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

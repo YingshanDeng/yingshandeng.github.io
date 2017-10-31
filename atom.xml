@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://objcer.com/"/>
-  <updated>2017-10-27T02:41:20.000Z</updated>
+  <updated>2017-10-31T07:27:40.000Z</updated>
   <id>http://objcer.com/</id>
   
   <author>
@@ -14,6 +14,136 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>探究数据绑定（2）ES6 Proxy</title>
+    <link href="http://objcer.com/2017/10/31/Data-Binding-with-ES6-Proxies/"/>
+    <id>http://objcer.com/2017/10/31/Data-Binding-with-ES6-Proxies/</id>
+    <published>2017-10-31T07:25:45.000Z</published>
+    <updated>2017-10-31T07:27:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png" alt=""><br>在上一篇文章：<a href="https://objcer.com/2017/10/27/Data-binding-introduction/">探究数据绑定（1）脏检查和存取器方法</a> 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。</p>
+<a id="more"></a>
+<h2 id="知识储备"><a href="#知识储备" class="headerlink" title="知识储备"></a>知识储备</h2><p>Proxy 方式实现数据绑定中涉及到 Proxy、Reflect、Set、Map 和 WeakMap，这些都是 ES6 的新特性。</p>
+<h3 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h3><p>Proxy 对象代理，在目标对象之前架设一层拦截，外部对目标对象的操作，都会通过这层拦截，我们可以定制拦截行为，每一个被代理的拦截行为都对应一个处理函数。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let p = <span class="keyword">new</span> Proxy(<span class="keyword">target</span>, <span class="keyword">handler</span>);</div></pre></td></tr></table></figure></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> handler = &#123;</div><div class="line">  get: (target, name, recevier) =&gt; &#123;</div><div class="line">    return <span class="string">'proxy'</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">p</span> = new Proxy(&#123;&#125;, handler)</div><div class="line"><span class="selector-tag">p</span><span class="selector-class">.a</span> = <span class="number">1</span></div><div class="line"></div><div class="line">console.log(<span class="selector-tag">p</span><span class="selector-class">.a</span>, <span class="selector-tag">p</span>.c) <span class="comment">// -&gt; proxy proxy</span></div></pre></td></tr></table></figure>
+<p>Proxy 构造函数接收两个参数：</p>
+<ul>
+<li>第一个参数是要代理的目标对象</li>
+<li>第二个参数是配置对象，每一个被代理的操作都对应一个处理函数</li>
+</ul>
+<p>在这个例子中，目标对象是一个空对象，配置对象中有一个 <code>get</code> 函数，用来拦截外部对目标对象属性的访问，可以看到，<code>get</code> 函数始终返回 <code>proxy</code>。</p>
+<p>Proxy 支持拦截的操作一共有13种：</p>
+<ul>
+<li>get(target, propKey, receiver)</li>
+<li>set(target, propKey, value, receiver)</li>
+<li>has(target, propKey)</li>
+<li>deleteProperty(target, propKey)</li>
+<li>ownKeys(target)</li>
+<li>getOwnPropertyDescriptor(target, propKey)</li>
+<li>defineProperty(target, propKey, propDesc)</li>
+<li>preventExtensions(target)</li>
+<li>getPrototypeOf(target)</li>
+<li>isExtensible(target)</li>
+<li>setPrototypeOf(target, proto)</li>
+<li>apply(target, object, args)</li>
+<li>construct(target, args)</li>
+</ul>
+<blockquote>
+<p>👉 更详细介绍参考：<br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank" rel="external">MDN·Proxy</a><br><a href="http://es6.ruanyifeng.com/#docs/proxy" target="_blank" rel="external">Proxy</a></p>
+</blockquote>
+<h3 id="Reflect"><a href="#Reflect" class="headerlink" title="Reflect"></a>Reflect</h3><p>Reflect 对象同 Proxy 对象一样，也是 ES6 为了操作对象而提供的新特性。</p>
+<p>Reflect 对象的方法与 Proxy 对象的方法一一对应，只要是 Proxy 对象的方法，就能在 Reflect 对象上找到对应的静态方法（Reflect 对象没有构造函数，不能使用 new 创建实例）。这就让 Proxy 对象可以方便地调用对应的 Reflect 方法，完成默认行为，作为修改行为的基础。也就是说，不管 Proxy 怎么修改默认行为，你总可以在 Reflect 上获取默认行为。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> handler = &#123;</div><div class="line">  get: (target, name, recevier) =&gt; &#123;</div><div class="line">    console.log(<span class="string">'get: '</span>, name)</div><div class="line">    Reflect.get(target, name)</div><div class="line">  &#125;,</div><div class="line">  set: (target, name, value, recevier) =&gt; &#123;</div><div class="line">    console.log(<span class="string">'set: '</span>, name)</div><div class="line">    Reflect.get(target, name, value)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">var</span> <span class="selector-tag">p</span> = new Proxy(&#123;&#125;, handler)</div><div class="line"><span class="selector-tag">p</span><span class="selector-class">.a</span> = <span class="number">1</span></div><div class="line"></div><div class="line">console.log(<span class="selector-tag">p</span><span class="selector-class">.a</span>, <span class="selector-tag">p</span>.c)</div></pre></td></tr></table></figure></p>
+<p>代码执行结果，输出：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">set</span>:  <span class="keyword">a</span></div><div class="line"><span class="built_in">get</span>:  <span class="keyword">a</span></div><div class="line"><span class="built_in">get</span>:  c</div></pre></td></tr></table></figure></p>
+<p>上面代码中，Proxy 拦截目标对象的 <code>get</code> 和 <code>set</code>方法，在其中定制拦截行为，最后采用 <code>Reflect.get</code> 和 <code>Reflect.set</code> 分别完成目标对象默认的属性获取和设置行为。</p>
+<blockquote>
+<p>👉 更详细介绍参考：<br><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect" target="_blank" rel="external">MDN·Reflect</a><br><a href="http://es6.ruanyifeng.com/#docs/reflect" target="_blank" rel="external">Reflect</a></p>
+</blockquote>
+<h3 id="Set-WeakSet-和-Map-WeakMap"><a href="#Set-WeakSet-和-Map-WeakMap" class="headerlink" title="Set/WeakSet 和 Map/WeakMap"></a>Set/WeakSet 和 Map/WeakMap</h3><p><strong>Set</strong></p>
+<ul>
+<li>类似 Array 数组</li>
+<li>Set 允许你存储任何类型的唯一值，无论是原始值或者是对象引用</li>
+<li>Set 成员的值都是唯一的，没有重复值</li>
+</ul>
+<p><strong>WeakSet</strong></p>
+<ul>
+<li>类似 Set，也是不重复元素的集合</li>
+<li>WeakSet 对象中只能存放对象值, 不能存放原始值, 而 Set 对象都可以</li>
+<li>WeakSet 对象中存储的<strong>对象值都是被弱引用的</strong>, 如果没有其他的变量或属性引用这个对象值, 则这个对象值会被当成垃圾回收掉. 正因为这样, WeakSet 对象是无法被枚举的, 没有办法拿到它包含的所有元素</li>
+</ul>
+<p><strong>Map</strong></p>
+<ul>
+<li>类似 Object 对象，保存键值对</li>
+<li>Map 任何值(对象或者原始值) 都可以作为一个键(key)或一个值(value)，而 Object 对象的 key 键值只能是字符串</li>
+</ul>
+<p><strong>WeakMap</strong></p>
+<ul>
+<li>类似 Map，也是一组键值对的集合</li>
+<li>WeakMap 对象中的<strong>键是弱引用的</strong>。键必须是对象，值可以是任意值</li>
+<li>由于这样的弱引用，只要所引用的对象的其他引用都被清除，垃圾回收机制就会释放该对象所占用的内存。也就是说，一旦不再需要，WeakMap 里面的键名对象和所对应的键值对会自动消失，不用手动删除引用，原理同 WeakSet</li>
+<li>WeakMap 的 key 是非枚举的</li>
+</ul>
+<h2 id="Proxy-实现数据绑定"><a href="#Proxy-实现数据绑定" class="headerlink" title="Proxy 实现数据绑定"></a>Proxy 实现数据绑定</h2><p>先上完整代码 👉<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 监听对象集合</span></div><div class="line"><span class="keyword">var</span> observers = <span class="keyword">new</span> <span class="built_in">WeakMap</span>()</div><div class="line"><span class="comment">// 待执行监听函数集合，Set 可以避免重复</span></div><div class="line"><span class="keyword">var</span> queuedObservers = <span class="keyword">new</span> <span class="built_in">Set</span>()</div><div class="line"><span class="comment">// 当前监听函数</span></div><div class="line"><span class="keyword">var</span> currentObserver</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">observable</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">  observers.set(obj, <span class="keyword">new</span> <span class="built_in">Map</span>())</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Proxy</span>(obj, &#123; get, set &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params">target, key, receiver</span>) </span>&#123;</div><div class="line">  <span class="comment">// get 方法默认行为</span></div><div class="line">  <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.get(target, key, receiver)</div><div class="line">  <span class="comment">// 当前监听函数中，监听使用了该属性，</span></div><div class="line">  <span class="comment">// 那么把该 监听函数 存放到该属性对应的 对象属性监听函数集合 Set</span></div><div class="line">  <span class="keyword">if</span> (currentObserver) &#123;</div><div class="line">    registerObserver(target, key, currentObserver)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">registerObserver</span>(<span class="params">target, key, observer</span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> observersForKey = observers.get(target).get(key)</div><div class="line">  <span class="comment">// 为每一个对象属性都创建一个 Set 集合，存放监听了该属性的监听函数</span></div><div class="line">  <span class="keyword">if</span> (!observersForKey) &#123;</div><div class="line">    observersForKey = <span class="keyword">new</span> <span class="built_in">Set</span>()</div><div class="line">    observers.get(target).set(key, observersForKey)</div><div class="line">  &#125;</div><div class="line">  observersForKey.add(observer)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">set</span>(<span class="params">target, key, value, receiver</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> observersForKey = observers.get(target).get(key)</div><div class="line">  <span class="comment">// 修改对象属性，即对象属性值发生变更时，</span></div><div class="line">  <span class="comment">// 判断 对象属性监听函数集合 Set 是否存在，将其中的所有监听函数都添加到 待执行监听函数集合</span></div><div class="line">  <span class="keyword">if</span> (observersForKey) &#123;</div><div class="line">    observersForKey.forEach(queueObserver)</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// set 方法默认行为</span></div><div class="line">  <span class="keyword">return</span> <span class="built_in">Reflect</span>.set(target, key, value, receiver)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span>(<span class="params">fn</span>) </span>&#123;</div><div class="line">  queueObserver(fn)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 将监听函数添加到 待执行监听函数集合 Set 中</span></div><div class="line"><span class="comment">// 如果 待执行监听函数集合 Set 为空，那么在添加后立即执行</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">queueObserver</span>(<span class="params">observer</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (queuedObservers.size === <span class="number">0</span>) &#123;</div><div class="line">    <span class="comment">// 异步执行</span></div><div class="line">    <span class="built_in">Promise</span>.resolve().then(runObservers)</div><div class="line">  &#125;</div><div class="line">  queuedObservers.add(observer)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 执行 待执行监听函数集合 Set 中的监听函数</span></div><div class="line"><span class="comment">// 执行完毕后，进行清理工作</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">runObservers</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    queuedObservers.forEach(<span class="function">(<span class="params">observer</span>) =&gt;</span> &#123;</div><div class="line">      currentObserver = observer</div><div class="line">      observer()</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="keyword">finally</span> &#123;</div><div class="line">    currentObserver = <span class="literal">undefined</span></div><div class="line">    queuedObservers.clear()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对外暴露的 <code>observable(obj)</code> 和 <code>observe(fn)</code> 方法二者分别用于创建 observable 监听对象和 observer 监听回调函数。当 observable 监听对象发生属性变化时，observer 函数将自动执行。</p>
+<p>测试用例：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">name</span>: <span class="string">'John'</span>, <span class="attr">age</span>: <span class="number">20</span>&#125;</div><div class="line"><span class="comment">// observable object</span></div><div class="line"><span class="keyword">var</span> person = observable(obj)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">print</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`监听属性发生变化：<span class="subst">$&#123;person.name&#125;</span>, <span class="subst">$&#123;person.age&#125;</span>`</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// observer function</span></div><div class="line">observe(print)</div></pre></td></tr></table></figure></p>
+<h3 id="分析接口方法"><a href="#分析接口方法" class="headerlink" title="分析接口方法"></a>分析接口方法</h3><p>关于 <code>observable(obj)</code> 和 <code>observe(fn)</code>：<br><strong><code>observable(obj)</code> 方法中，通过 ES6 Proxy 为目标对象 <code>obj</code> 创建代理，拦截 <code>get</code> 和 <code>set</code> 操作</strong></p>
+<ul>
+<li>当前监听函数：<code>currentObserver</code></li>
+<li>待执行监听函数集合 Set：<code>var queuedObservers = new Set()</code></li>
+<li>监听对象集合 WeakMap：<code>var observers = new WeakMap()</code> 键值为监听对象</li>
+<li>对象属性监听函数集合 Set：监听了对象属性的监听函数，都保存到对象属性监听函数集合 Set 中，方便在对象属性发生变更时，执行监听函数</li>
+<li>拦截方法 <code>get</code>：使用 <code>obj.property</code> 获取对象属性，即会被拦截方法 <code>get</code> 拦截<br>👉 查看 <code>get</code> 中的注释</li>
+<li>拦截方法 <code>set</code>：使用 <code>obj.property = value</code> 设置对象属性，即会被拦截方法 <code>set</code> 拦截<br>👉 查看 <code>set</code> 中的注释</li>
+</ul>
+<p><strong><code>observe(fn)</code> 方法中，添加对象属性监听函数</strong><br>  监听函数中使用 <code>obj.property</code> 获取对象属性，即表明监听函数监听了该属性，那么就会触发拦截方法 <code>get</code> 中对监听属性的逻辑处理，为其创建对象属性监听函数集合 Set，并将当前的监听函数添加进其中</p>
+<h3 id="分析测试用例"><a href="#分析测试用例" class="headerlink" title="分析测试用例"></a>分析测试用例</h3><p>下面通过流程图讲解一下测试用例的执行过程<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/es6-proxy-observables-code.png" alt=""></p>
+<ul>
+<li>通过 <code>observable</code> 方法创建代理对象 <code>person</code></li>
+<li><code>observe</code> 方法设置监听函数，此时待执行监听函数集合 Set 为空，监听函数添加到 Set 中后执行待执行监听函数集合 Set 中的监听函数</li>
+<li>在 <code>runObservers</code> 方法中当前监听函数 <code>currentObserver</code> 被设为 <code>print</code></li>
+<li><code>print</code> 开始执行</li>
+<li>在 <code>print</code> 内部检索到 <code>person.name</code></li>
+<li>在 <code>person</code> 上触发拦截方法 <code>get</code></li>
+<li><code>observers.get(person).get(&#39;name&#39;)</code> 检索到 <code>(person, name)</code> 组合的对象属性监听函数集 Set</li>
+<li>当前监听函数 <code>print</code> 被添加到对象属性监听函数集 Set 中</li>
+<li>对于 <code>person.age</code>，同理，执行前面在 <code>print</code> 内部检索到 <code>person.name</code> 的流程</li>
+<li><code>${person.name}, ${person.age}</code> 打印出来；</li>
+<li><code>print</code> 函数执行结束；</li>
+<li>当前监听函数 <code>currentObserver</code> 变为 <code>undefined</code></li>
+</ul>
+<p>当调用 <code>person.age = 22</code> 修改对象属性时：</p>
+<ul>
+<li><code>person</code> 上触发拦截方法 <code>set</code></li>
+<li><code>observers.get(person).get(&#39;age&#39;)</code> 检索到 <code>(person, age)</code> 组合的对象属性监听函数集 Set</li>
+<li>对象属性监听函数集 Set 中的监听函数（包括 <code>print</code>）入待执行监听函数集合，准备执行</li>
+<li>再次执行 <code>print</code></li>
+</ul>
+<h2 id="高级主题"><a href="#高级主题" class="headerlink" title="高级主题"></a>高级主题</h2><h3 id="动态-observable-tree"><a href="#动态-observable-tree" class="headerlink" title="动态 observable tree"></a>动态 observable tree</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> obj = &#123;</div><div class="line">  name: <span class="string">'John'</span>,</div><div class="line">  age: <span class="number">20</span>,</div><div class="line">  teacher: &#123;</div><div class="line">    name: <span class="string">'Tom'</span>,</div><div class="line">    age: <span class="number">30</span></div><div class="line">&#125;&#125;</div><div class="line"><span class="comment">// observable object</span></div><div class="line"><span class="selector-tag">var</span> person = observable(obj)</div><div class="line"></div><div class="line">function print () &#123;</div><div class="line">  console.log(`监听属性发生变化：$&#123;person<span class="selector-class">.teacher</span><span class="selector-class">.name</span>&#125;, $&#123;person<span class="selector-class">.teacher</span><span class="selector-class">.age</span>&#125;`)</div><div class="line">&#125;</div><div class="line"><span class="comment">// observer function</span></div><div class="line"><span class="function"><span class="title">observe</span><span class="params">(print)</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="title">setTimeout</span><span class="params">(()</span></span> =&gt; &#123;person<span class="selector-class">.teacher</span><span class="selector-class">.name</span> = <span class="string">'Jack'</span>&#125;)</div></pre></td></tr></table></figure>
+<p>到目前为止，单层对象的数据绑定监听是正常工作的。但是在这个例子中，我们监听的对象值又是对象，这个时候监听就失效了，我们需要将：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">observable</span>(&#123;<span class="attribute">data</span>: &#123;name: <span class="string">'John'</span>&#125;&#125;)</div></pre></td></tr></table></figure></p>
+<p>替换成<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">observable</span>(&#123;<span class="attribute">data</span>: <span class="built_in">observable</span>(&#123;name: <span class="string">'John'</span>&#125;)&#125;)</div></pre></td></tr></table></figure></p>
+<p>这样就能正常运行了 😋</p>
+<p>显然，这样使用不方便，可以做拦截方法 <code>get</code> 中修改一下，在返回值是对象时，对返回值对象也调用 <code>observable(obj)</code> 为其创建监听对象。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function <span class="built_in">get</span>(target, <span class="built_in">key</span>, receiver) &#123;</div><div class="line">  <span class="keyword">const</span> result = Reflect.<span class="built_in">get</span>(target, <span class="built_in">key</span>, receiver)</div><div class="line">  <span class="keyword">if</span> (currentObserver) &#123;</div><div class="line">    registerObserver(target, <span class="built_in">key</span>, currentObserver)</div><div class="line">    <span class="keyword">if</span> (typeof result === <span class="string">'object'</span>) &#123;</div><div class="line">      <span class="keyword">const</span> observableResult = observable(result)</div><div class="line">      Reflect.<span class="built_in">set</span>(target, <span class="built_in">key</span>, observableResult, receiver)</div><div class="line">      <span class="keyword">return</span> observableResult</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>对于 Proxy 拦截操作也可以在原型链中被继承，例如：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">let proto = new Proxy(&#123;&#125;, &#123;</div><div class="line">  get(target, propertyKey, receiver) &#123;</div><div class="line">    console.log('GET ' + propertyKey);</div><div class="line">    return Reflect.get(target, propertyKey, receiver);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">let obj = Object.create(proto);</div><div class="line">obj.foo // <span class="string">"<span class="keyword">GET</span> foo"</span></div></pre></td></tr></table></figure></p>
+<p>上面代码中，拦截操作 <code>get</code> 定义在原型对象上面，所以如果读取 <code>obj</code> 对象属性时，拦截会生效。</p>
+<p>同理，通过 Proxy 实现的数据绑定也能与原型继承搭配工作，例如：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">const parent = observable(&#123;greeting: <span class="string">'Hello'</span>&#125;)</div><div class="line">const child = observable(&#123;subject: <span class="string">'World!'</span>&#125;)</div><div class="line">Object.setPrototypeOf(child, parent)</div><div class="line"></div><div class="line">function print () &#123;</div><div class="line">  console.log(`$&#123;child.greeting&#125; $&#123;child.subject&#125;`)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 控制台打印出 'Hello World!'</span></div><div class="line"><span class="function"><span class="title">observe</span><span class="params">(print)</span></span></div><div class="line"></div><div class="line"><span class="comment">// 控制台打印出 'Hello There!'</span></div><div class="line"><span class="function"><span class="title">setTimeout</span><span class="params">(()</span></span> =&gt; child<span class="selector-class">.subject</span> = <span class="string">'There!'</span>)</div><div class="line"></div><div class="line"><span class="comment">// 控制台打印出 'Hey There!'</span></div><div class="line"><span class="function"><span class="title">setTimeout</span><span class="params">(()</span></span> =&gt; parent<span class="selector-class">.greeting</span> = <span class="string">'Hey'</span>, <span class="number">100</span>)</div><div class="line"></div><div class="line"><span class="comment">// 控制台打印出 'Look There!'</span></div><div class="line"><span class="function"><span class="title">setTimeout</span><span class="params">(()</span></span> =&gt; child<span class="selector-class">.greeting</span> = <span class="string">'Look'</span>, <span class="number">200</span>)</div></pre></td></tr></table></figure></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><p>本文中通过简单的代码展示了 Proxy 实现数据绑定，更加完整的实现，参考：<a href="https://github.com/nx-js/observer-util" target="_blank" rel="external">nx-js/observer-util</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://blog.risingstack.com/writing-a-javascript-framework-data-binding-es6-proxy/" target="_blank" rel="external">Writing a JavaScript Framework - Data Binding with ES6 Proxies</a><br><a href="http://www.zcfy.cc/article/writing-a-javascript-framework-data-binding-with-es6-proxies-risingstack-1655.html" target="_blank" rel="external">使用 ES6 Proxy 实现数据绑定</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;在上一篇文章：&lt;a href=&quot;https://objcer.com/2017/10/27/Data-binding-introduction/&quot;&gt;探究数据绑定（1）脏检查和存取器方法&lt;/a&gt; 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="JS" scheme="http://objcer.com/categories/JS/"/>
+    
+    
+      <category term="数据绑定" scheme="http://objcer.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A/"/>
+    
+      <category term="Proxy" scheme="http://objcer.com/tags/Proxy/"/>
+    
+  </entry>
   
   <entry>
     <title>探究数据绑定（1）脏检查和存取器方法</title>
@@ -1491,60 +1621,6 @@
     
     
       <category term="Cordova Hot Code Push" scheme="http://objcer.com/tags/Cordova-Hot-Code-Push/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>URI, URL, URN 的区别</title>
-    <link href="http://objcer.com/2017/06/04/The-Difference-Between-URLs-and-URIs/"/>
-    <id>http://objcer.com/2017/06/04/The-Difference-Between-URLs-and-URIs/</id>
-    <published>2017-06-04T08:43:26.000Z</published>
-    <updated>2017-06-04T08:48:24.000Z</updated>
-    
-    <content type="html"><![CDATA[<ul>
-<li>URI: Uniform Resource Identifier (统一资源标识符)</li>
-<li>URL: Uniform Resource Locator (统一资源定位符)</li>
-<li>URN: Uniform Resource Name (统一资源名称)</li>
-</ul>
-<a id="more"></a>
-<h2 id="URI-URL-URN"><a href="#URI-URL-URN" class="headerlink" title="URI, URL, URN"></a>URI, URL, URN</h2><p><strong>URI, URL, URN</strong> 三者关系图:<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/URI-vs-URL.png" alt=""></p>
-<p>📌 关系：</p>
-<ul>
-<li>URI 是一个紧凑的字符串用来标示抽象或物理资源</li>
-<li>URL 相对于 URI，除了确定一个资源，还提供一种定位该资源的主要访问机制或者网络地址 (“access mechanism” or “network location”) 例如：http:// or ftp://</li>
-<li>URI 包括 URL 和 URN，每一个 URL 都是 URI</li>
-<li>URN 是唯一标识的一部分，就是一个特殊的名字</li>
-</ul>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/800px-URI_Euler_Diagram_no_lone_URIs.svg.png" alt=""></p>
-<blockquote>
-<p><em>[维基百科]:</em> URI 可被视为定位符（URL），名称（URN）或两者兼备。统一资源名（URN）如同一个人的名称，而统一资源定位符（URL）代表一个人的住址。换言之，URN 定义某事物的身份，而 URL 提供查找该事物的方法。</p>
-</blockquote>
-<p>举例说明：</p>
-<ul>
-<li><a href="http://www.wikipedia.org/" target="_blank" rel="external">http://www.wikipedia.org/</a><br>  这个就是 URL，标识一个特定的互联网资源，并且可以通过 http 协议访问该网络资源</li>
-<li>urn:isbn:0-395-36341-1<br>  这个就是 URN，指定标识系统（即国际标准书号ISBN）和某资源在该系统中的唯一表示的URI。它可以允许人们在不指出其位置和获得方式的情况下谈论这本书</li>
-</ul>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://danielmiessler.com/study/url-uri/#gs.taQ4gpU" target="_blank" rel="external">The Difference Between URLs and URIs</a><br><a href="https://zh.wikipedia.org/zh-cn/%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E6%A0%87%E5%BF%97%E7%AC%A6" target="_blank" rel="external">统一资源标志符</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;ul&gt;
-&lt;li&gt;URI: Uniform Resource Identifier (统一资源标识符)&lt;/li&gt;
-&lt;li&gt;URL: Uniform Resource Locator (统一资源定位符)&lt;/li&gt;
-&lt;li&gt;URN: Uniform Resource Name (统一资源名称)&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://objcer.com/categories/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-      <category term="URI" scheme="http://objcer.com/tags/URI/"/>
-    
-      <category term="URL" scheme="http://objcer.com/tags/URL/"/>
-    
-      <category term="URN" scheme="http://objcer.com/tags/URN/"/>
     
   </entry>
   
