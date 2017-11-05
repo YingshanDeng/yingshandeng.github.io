@@ -105,6 +105,48 @@ header {
 ```
 ![](http://7vikhl.com1.z0.glb.clouddn.com/FCF9D371-F2B5-44FE-9FFC-DC991E39FD2C.png)
 
+## 更新内容
+> **Webkit 文档** [Designing Websites for iPhone X](https://webkit.org/blog/7929/designing-websites-for-iphone-x/)
+
+### CSS function `env()`
+> The env() function shipped in iOS 11 with the name constant(). Beginning with Safari Technology Preview 41 and the iOS 11.2 beta, constant() has been removed and replaced with env(). You can use the CSS fallback mechanism to support both versions, if necessary, but should prefer env() going forward.
+
+**Webkit 在 iOS 11 中新增 CSS function：`env()` 替代 `constant()`**，文档中推荐使用 `env()`，而 `constant()` 从 Safari Technology Preview 41 和 iOS 11.2 beta 开始会被废弃。`env()` 用法如同 `var()`，在不支持的 `env()` 的浏览器中，会自动忽略这一样式规则，不影响网页正常展示：
+```
+.post {
+  padding: 12px;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+```
+
+### CSS function `min()` 和 `max()`
+在 iPhone X 设备设置网页边距的时候，可能会遇到这样的情形：我们通过 `env(safe-area-inset-left)` 和 `env(safe-area-inset-right)` 设置了页面展示左右边距：
+```
+.post {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+```
+
+在横屏状态下显示正常，但是在竖屏状态下，常量 `safe-area-inset-left` 和 `safe-area-inset-right` 都为 0，所以会导致页面展示左右边距为 `0px`，如下图左，正常情况应该是如下图右，竖屏状态下页面左右也有边距。
+
+![](http://7vikhl.com1.z0.glb.clouddn.com/css-funciton-min-max.png)
+
+Webkit 从 Safari Technology Preview 41 和 iOS 11.2 beta 开始，新增 CSS function：`min()` 和 `max()`，这两个就可以解决这个问题了。
+> Both functions take an arbitrary number of arguments and return the minimum or maximum. They can be used inside of calc(), or nested inside each other, and both functions allow calc()-like math inside of them.
+
+```
+@supports(padding: max(0px)) {
+  .post {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+}
+```
+
+❗️此处需要使用 `@supports` 去检测浏览器是否支持 `min()` 和 `max()`
+
 ## 参考链接
 [Human Interface Guidelines-iPhone X](https://developer.apple.com/ios/human-interface-guidelines/overview/iphone-x/)
 [Removing the White Bars in Safari on iPhone X](http://stephenradford.me/removing-the-white-bars-in-safari-on-iphone-x/)
