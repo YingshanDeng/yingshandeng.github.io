@@ -243,6 +243,138 @@
             
               
                 
+                <a class="post-title-link" href="/2017/12/27/unhandled-promise-rejections-in-node-js/" itemprop="url">
+                  Node.js 中的 UnhandledPromiseRejectionWarning 问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-12-27T17:25:07+08:00" content="2017-12-27">
+              2017-12-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/12/27/unhandled-promise-rejections-in-node-js/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/27/unhandled-promise-rejections-in-node-js/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/12/27/unhandled-promise-rejections-in-node-js/" class="leancloud_visitors" data-flag-title="Node.js 中的 UnhandledPromiseRejectionWarning 问题">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><em>问题引入：</em>今天在 Gulp 构建任务中出现一个 html 解析错误，但是并没有报错，也没有中断 gulp 构建任务的执行，而是出现 <code>UnhandledPromiseRejectionWarning</code> 的警告，所以会误以为构建成功，这篇文章将对此进行探究并解决该问题。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="string">node:</span><span class="number">24866</span>) <span class="string">UnhandledPromiseRejectionWarning:</span> Unhandled promise rejection (rejection <span class="string">id:</span> <span class="number">2</span>): Error <span class="keyword">in</span> plugin <span class="string">'gulp-posthtml'</span></div><div class="line"><span class="string">Message:</span></div><div class="line">  Parse <span class="string">Error:</span> &lt;img id=<span class="string">"titleIcon"</span> <span class="class"><span class="keyword">class</span>$="&#123;</span>&#123;getStypeType_(info.stype)&#125;&#125;<span class="string">" src$="</span>&#123;&#123;getTitleIcon_(<span class="keyword">in</span></div><div class="line">  ...</div><div class="line">(<span class="string">node:</span><span class="number">24866</span>) [DEP0018] <span class="string">DeprecationWarning:</span> Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.</div></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/12/27/unhandled-promise-rejections-in-node-js/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/10/31/Data-Binding-with-ES6-Proxies/" itemprop="url">
                   探究数据绑定（2）ES6 Proxy
                 </a>
@@ -1421,138 +1553,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/10/10/iPhone-X-notch-surround-list/" itemprop="url">
-                  iPhone X 环绕刘海滚动列表
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-10-10T15:33:27+08:00" content="2017-10-10">
-              2017-10-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/JS/" itemprop="url" rel="index">
-                    <span itemprop="name">JS</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/10/10/iPhone-X-notch-surround-list/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/10/iPhone-X-notch-surround-list/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2017/10/10/iPhone-X-notch-surround-list/" class="leancloud_visitors" data-flag-title="iPhone X 环绕刘海滚动列表">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>iPhone X 面市后，其异形屏给交互设计提供了更多想象的空间。在 Twitter 上，这位推友就针对刘海设计了列表环绕刘海滚动的效果。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/4E124A83-5DD5-44C1-AA71-9394E34E8C57.png" alt=""></p>
-<p>最近在 codepen 上看到已经有人实现了这个 demo：<a href="https://codepen.io/davvidbaker/pen/KXgPyG" target="_blank" rel="external">https://codepen.io/davvidbaker/pen/KXgPyG</a>，本文将图文结合分析一下实现这个效果的逻辑。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2017/10/10/iPhone-X-notch-surround-list/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1598,7 +1598,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
