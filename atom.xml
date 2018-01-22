@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://objcer.com/"/>
-  <updated>2017-12-27T09:27:02.000Z</updated>
+  <updated>2018-01-22T13:28:45.000Z</updated>
   <id>http://objcer.com/</id>
   
   <author>
@@ -14,6 +14,329 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>学习正则表达式</title>
+    <link href="http://objcer.com/2018/01/22/learn-regexp/"/>
+    <id>http://objcer.com/2018/01/22/learn-regexp/</id>
+    <published>2018-01-22T13:26:08.000Z</published>
+    <updated>2018-01-22T13:28:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/regex.jpg" alt=""><br>对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓</p>
+<a id="more"></a>
+<h2 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h2><p><code>index.html</code> 页面中，有如下一段代码：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1, shrink-to-fit=no"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"theme-color"</span> <span class="attr">content</span>=<span class="string">"#000000"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>React SharedPen App<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./pace/pace.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"./pace/pace-theme-minimal.css"</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">&lt;!-- SharedPen scripts --&gt;</span></div><div class="line">  <span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://localhost:5000/Utils.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  ...</div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://localhost:5000/SharedPen.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="comment">&lt;!-- end --&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">&lt;!-- SharedPen stylesheet --&gt;</span></div><div class="line">  <span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"http://localhost:5000/SharedPen.css"</span>&gt;</span></div><div class="line">  <span class="comment">&lt;!-- end --&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>注意这两段注释标签<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div></pre></td></tr></table></figure></p>
+<p>在页面在开发环境中，加载的是本地源文件，在生产环境中，我希望将其替换成压缩文件：<code>./dist/sharedpen.min.js</code> 和 <code>./dist/SharedPen.css</code>。</p>
+<p><strong>解决思路是：</strong>使用 webpack 插件 <a href="https://www.npmjs.com/package/html-replace-webpack-plugin" target="_blank" rel="external">html-replace-webpack-plugin</a> 配置正则表达式，然后进行替换。最终的代码如下:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin')</div><div class="line">const tpl = &#123;</div><div class="line">  css: '<span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"%s"</span>&gt;</span>',</div><div class="line">  js: '<span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"%s"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>'</div><div class="line">&#125;</div><div class="line"></div><div class="line">module.exports = &#123;</div><div class="line">  // Definition for Webpack plugins</div><div class="line">  plugin: [</div><div class="line">    // Replace html contents with string or regex patterns</div><div class="line">    new HtmlReplaceWebpackPlugin([&#123;</div><div class="line">      pattern: /(<span class="comment">&lt;!--\s*)(css|js):([\w-\/\.]+)(\s*--&gt;</span>)([\s\S]*?)(<span class="comment">&lt;!--\s*end\s*--&gt;</span>)/,</div><div class="line">      replacement: function (match, $1, type, file) &#123;</div><div class="line">        switch (type) &#123;</div><div class="line">          case 'css':</div><div class="line">          case 'js':</div><div class="line">            return tpl[type].replace('%s', file)</div><div class="line">          default:</div><div class="line">            return ''</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;])</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>其中关键就是写出正则表达式，匹配出那两段注释代码。正则语法可以参考文末附录二，为了方便测试，我们可以在 <a href="https://regex101.com/" target="_blank" rel="external">https://regex101.com/</a> 这个网站上编写正则表达式。</p>
+<h2 id="撰写正则表达式"><a href="#撰写正则表达式" class="headerlink" title="撰写正则表达式"></a>撰写正则表达式</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="分成三部分处理"><a href="#分成三部分处理" class="headerlink" title="分成三部分处理"></a>分成三部分处理</h3><p>观察这两段注释，每一段可以分成三部分，根据正则语法，可以写出如下三部分的正则表达式：</p>
+<ul>
+<li><p>起始部分 匹配 <code>&lt;!-- js:./dist/sharedpen.min.js --&gt;</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--\s*(css|js):[\w\-\/\.]+\s*--&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>中间内容部分</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="symbol">\s</span><span class="symbol">\S</span>]*</div></pre></td></tr></table></figure>
+</li>
+<li><p>结束部分 匹配 <code>&lt;!-- end --&gt;</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--\s*end\s*--&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="子表达式"><a href="#子表达式" class="headerlink" title="子表达式"></a>子表达式</h3><p>在第一部分 <code>&lt;!-- js:./dist/sharedpen.min.js --&gt;</code>，我们还需要正则表达式能匹配出：文件类型和文件路径</p>
+<blockquote>
+<p>注意到<br>1、<code>(pattern)</code> <strong>匹配 pattern 并捕获该匹配的子表达式。可以使用 $1…$9 属性从结果“匹配”集合中检索捕获的匹配。</strong><br>2、在 JavaScript 中 <code>$1…$9</code> 属性是包含括号子串匹配的正则表达式的静态只读属性，我们可以通过 <code>RegExp.$1, ..., RegExp.$9</code> 来使用它们</p>
+</blockquote>
+<p>通过括号写出子表达式，匹配出我们需要的内容<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var regexp = new RegExp(/<span class="comment">&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;</span>/)</div><div class="line">var str = '<span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span>'</div><div class="line">regexp.exec(str)</div><div class="line">console.log(RegExp.$1) // "js"</div><div class="line">console.log(RegExp.$2) // "./dist/sharedpen.min.js"</div></pre></td></tr></table></figure>
+<h3 id="最长匹配（贪婪匹配）和最短匹配（懒惰匹配）"><a href="#最长匹配（贪婪匹配）和最短匹配（懒惰匹配）" class="headerlink" title="最长匹配（贪婪匹配）和最短匹配（懒惰匹配）"></a>最长匹配（贪婪匹配）和最短匹配（懒惰匹配）</h3><p>到目前为止，我们的正则表达式为：<code>&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;[\s\S]*&lt;!--\s*end\s*--&gt;</code>，但是会发现，此时匹配有点问题：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/51E1FD12-5B3D-4600-8EEE-C00AE4485F46.png" alt=""></p>
+<p>我们是希望遇到第一个 <code>&lt;!-- end --&gt;</code> 就结束匹配，而现在却是匹配到最后一个。这个时候就需要了解正则表达式的最长匹配（贪婪匹配）和最短匹配（懒惰匹配）<br>例子一：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'abc123def'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> regexp1 = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="regexp">/abc[\d]*/</span>) <span class="comment">// 最长匹配</span></div><div class="line"><span class="keyword">var</span> regexp2 = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="regexp">/abc[\d]*?/</span>) <span class="comment">// 最短匹配</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp1.exec(str)[<span class="number">0</span>]) <span class="comment">// "abc123"</span></div><div class="line"><span class="built_in">console</span>.log(regexp2.exec(str)[<span class="number">0</span>]) <span class="comment">// "abc"</span></div></pre></td></tr></table></figure></p>
+<p>例子二：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = '<span class="comment">/*** 注释1 ****/</span> <span class="keyword">var</span> name = <span class="string">"aty"</span>; <span class="comment">/***注释2****/</span>'</div><div class="line"><span class="keyword">var</span> regexp = <span class="keyword">new</span> <span class="type">RegExp</span>(/\/\*([\s\<span class="type">S</span>]*?)\*\<span class="comment">//)</span></div><div class="line"></div><div class="line">console.log(regexp.exec(str)[<span class="number">0</span>]) <span class="comment">// 使用 `*?` 就可以正确的匹配到注释内容</span></div></pre></td></tr></table></figure></p>
+<p>我们会发现，最长和最短匹配的差别是，前者匹配尽可能多的字符，后者匹配尽可能少的字符。一般正则表达式引擎默认都是最长匹配，<strong>如果想要最短匹配，那么需要在数量修饰符(例如：<code>*</code>，<code>+</code>)后面添加一个 <code>?</code> 变成最短匹配</strong></p>
+<p>所以此时执行对我们的正则表达式增加一个 <code>?</code> 即可<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;</span>[\s\S]*?<span class="comment">&lt;!--\s*end\s*--&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="全局匹配"><a href="#全局匹配" class="headerlink" title="全局匹配"></a>全局匹配</h3><p>JavaScript 中使用正则表达式有两种方式：<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># 直接量语法</span></div><div class="line">/pattern/attributes</div><div class="line"></div><div class="line"><span class="meta"># 创建 RegExp 对象的语法</span></div><div class="line"><span class="keyword">new</span> RegExp(pattern, attributes);</div></pre></td></tr></table></figure></p>
+<p><strong>参数:</strong></p>
+<ul>
+<li>pattern 是一个字符串，指定了正则表达式</li>
+<li>attributes 是一个可选的字符串，包含属性: <strong>“g”、”i” 和 “m”，分别用于指定全局匹配、区分大小写的匹配和多行匹配</strong>。</li>
+</ul>
+<p>其中 <code>g</code> 指定正则表达式全局匹配，那么有什么特殊之处呢？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'abc123def'</span></div><div class="line"><span class="keyword">var</span> regexp = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="regexp">/abc[\d]*/</span>, <span class="string">'g'</span>)</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
+<p>其中第二次 console 输出为啥是 <code>false</code> 呢？</p>
+<ul>
+<li>在全局匹配模式下可以对指定要查找的字符串<strong>执行多次匹配</strong>。</li>
+<li>每次匹配使用当前正则对象的 <code>lastIndex</code> 属性的值作为在目标字符串中开始查找的起始位置。</li>
+<li><code>lastIndex</code> 属性的初始值为 0，找到匹配的项后，<code>lastIndex</code> 的值被重置为匹配内容的下一个字符在字符串中的位置索引，用来标识下次执行匹配时开始查找的位置。</li>
+<li>如果找不到匹配的项，<code>lastIndex</code> 的值会被设置为 0。</li>
+<li>没有设置正则对象的全局匹配标志时 <code>lastIndex</code> 属性的值始终为0，每次执行匹配仅查找字符串中第一个匹配的项。</li>
+</ul>
+<p>如果我们每次执行 <code>regexp.test(str)</code> 方法后，查看一下正则对象的 lastIndex 属性的值，就清楚了。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'abc123def'</span></div><div class="line"><span class="keyword">var</span> regexp = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="regexp">/abc[\d]*/</span>, <span class="string">'g'</span>)</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(regexp.lastIndex) <span class="comment">// 6</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log(regexp.lastIndex) <span class="comment">// 0</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(regexp.lastIndex) <span class="comment">// 6</span></div></pre></td></tr></table></figure></p>
+<p>第一次执行 <code>regexp.test(str)</code> 前，正则对象的 <code>lastIndex</code> 属性值为 0，匹配到字符 <code>abc123</code> 后，正则对象的 <code>lastIndex</code> 属性值变成 6；<br>在第二次执行 <code>regexp.test(str)</code> 时，从第 7 个字符(从0开始)开始进行匹配，当然就匹配失败啦。</p>
+<p>下面再来看看正则对象的另一个方法 <code>exec</code> 在全局模式下的例子：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var str = `</div><div class="line"><span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div><div class="line"><span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span>`</div><div class="line"></div><div class="line">var regexp = new RegExp(/<span class="comment">&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;</span>[\s\S]*?<span class="comment">&lt;!--\s*end\s*--&gt;</span>/g)</div><div class="line">var matches</div><div class="line">while((matches = regexp.exec(str)) != null) &#123;</div><div class="line">  str = str.replace(matches[0], '<span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span>')</div><div class="line">&#125;</div><div class="line">console.log(str)</div></pre></td></tr></table></figure></p>
+<p>我们希望代码执行匹配替换后，输出结果是：<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">div</span>&gt;<span class="keyword">test</span>&lt;/<span class="keyword">div</span>&gt;</div><div class="line">&lt;<span class="keyword">div</span>&gt;<span class="keyword">test</span>&lt;/<span class="keyword">div</span>&gt;</div></pre></td></tr></table></figure></p>
+<p>但是实际上输出结果是：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div></pre></td></tr></table></figure></p>
+<p>显然是第二次匹配替换出问题了。有了前面的经验，我们很快就知道，是全局模式匹配的问题，第一次全局匹配后，正则对象的 <code>lastIndex</code> 属性值发生变化，影响了第二次正则匹配，我们只需去掉全局匹配 <code>g</code> 即可解决问题。</p>
+<p>🏗 至此，我们终于可以得到如下的正则表达式：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/(<span class="comment">&lt;!--\s*)(css|js):([\w-\/\.]+)(\s*--&gt;</span>)([\s\S]*?)(<span class="comment">&lt;!--\s*end\s*--&gt;</span>)/</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="附录一-常用方法"><a href="#附录一-常用方法" class="headerlink" title="[附录一] 常用方法"></a>[附录一] 常用方法</h2><p>RegExp 对象方法：<code>test</code>, <code>exec</code></p>
+<table>
+<thead>
+<tr>
+<th>用法</th>
+<th>说明</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RegExpObj.test(string)</code></td>
+<td>用于检测一个字符串是否匹配某个模式</td>
+<td>匹配返回 true，否则返回 false</td>
+</tr>
+<tr>
+<td><code>RegExpObj.exec(string)</code></td>
+<td>用于检索字符串中的正则表达式的匹配</td>
+<td>返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null</td>
+</tr>
+</tbody>
+</table>
+<p>String 对象方法：<code>match</code>, <code>replace</code></p>
+<table>
+<thead>
+<tr>
+<th>用法</th>
+<th>说明</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stringObj.match( regexp/substr )</code></td>
+<td>在字符串内检索指定的值，或找到一个或多个正则表达式的匹配</td>
+<td>返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null</td>
+</tr>
+<tr>
+<td><code>stringObj.replace( regexp/substr, replacement )</code></td>
+<td>根据 regexp/substr 进行正则匹配,把匹配结果替换为 replacement</td>
+<td>一个新的字符串</td>
+</tr>
+</tbody>
+</table>
+<h2 id="附录二-正则表达式语法"><a href="#附录二-正则表达式语法" class="headerlink" title="[附录二] 正则表达式语法"></a>[附录二] 正则表达式语法</h2><p>学习正则表达式，首先要了解其语法规则，以下规则来自：<strong>MSDN 正则表达式语法:</strong> <a href="https://msdn.microsoft.com/zh-cn/library/ae5bf541(v=vs.90).aspx" target="_blank" rel="external">https://msdn.microsoft.com/zh-cn/library/ae5bf541(v=vs.90).aspx</a></p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\</code></td>
+<td><strong>将下一字符标记为特殊字符、文本、反向引用或八进制转义符。</strong>例如，“n” 匹配字符 “n”。“\n” 匹配换行符。序列 “\” 匹配 “\”，“(” 匹配 “(”。</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td><strong>匹配输入字符串开始的位置。</strong>如果设置了 RegExp 对象的 Multiline 属性，^ 还会与 “\n” 或 “\r” 之后的位置匹配。</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td><strong>匹配输入字符串结尾的位置。</strong>如果设置了 RegExp 对象的 Multiline 属性，$ 还会与 “\n” 或 “\r” 之前的位置匹配。</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td><strong>零次或多次匹配前面的字符或子表达式。</strong>例如，zo<em> 匹配 “z” 和 “zoo”。</em> 等效于 {0,}。</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td><strong>一次或多次匹配前面的字符或子表达式。</strong>例如，“zo+” 与 “zo” 和 “zoo” 匹配，但与 “z” 不匹配。+ 等效于 {1,}。</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td><strong>零次或一次匹配前面的字符或子表达式。</strong>例如，“do(es)?” 匹配 “do” 或 “does” 中的 “do”。? 等效于 {0,1}。</td>
+</tr>
+<tr>
+<td><code>{n}</code></td>
+<td><strong>n 是非负整数。正好匹配 n 次。</strong>例如，“o{2}” 与 “Bob” 中的 “o” 不匹配，但与 “food” 中的两个“o”匹配。</td>
+</tr>
+<tr>
+<td><code>{n,}</code></td>
+<td><strong>n 是非负整数。至少匹配 n 次。</strong>例如，“o{2,}” 不匹配 “Bob” 中的 “o”，而匹配 “foooood” 中的所有 o。“o{1,}” 等效于 “o+”。“o{0,}” 等效于 “o*”。</td>
+</tr>
+<tr>
+<td><code>{n,m}</code></td>
+<td>m 和 n 是非负整数，其中 n &lt;= m。<strong>匹配至少 n 次，至多 m 次。</strong>例如，“o{1,3}” 匹配 “fooooood” 中的头三个 o。’o{0,1}’ 等效于 ‘o?’。注意：您不能将空格插入逗号和数字之间。</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td><strong>当此字符紧随任何其他限定符（*、+、?、{n}、{n,}、{n,m}）之后时，匹配模式是“非贪心的”。“非贪心的”模式匹配搜索到的、尽可能短的字符串，而默认的“贪心的”模式匹配搜索到的、尽可能长的字符串。</strong>例如，在字符串 “oooo” 中，“o+?” 只匹配单个 “o”，而 “o+” 匹配所有 “o”。</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td><strong>匹配除“\n”之外的任何单个字符。</strong>若要匹配包括 “\n” 在内的任意字符，请使用诸如 “[\s\S]” 之类的模式。</td>
+</tr>
+<tr>
+<td><code>(pattern)</code></td>
+<td><strong>匹配 pattern 并捕获该匹配的子表达式。可以使用 $1…$9 属性从结果“匹配”集合中检索捕获的匹配。</strong>若要匹配括号字符 ( )，请使用“(”或者“)”。</td>
+</tr>
+<tr>
+<td><code>(?:pattern)</code></td>
+<td>匹配 pattern 但不捕获该匹配的子表达式，即它是一个非捕获匹配，不存储供以后使用的匹配。这对于用 “or” 字符 <code>(│)</code> 组合模式部件的情况很有用。例如，<code>industr(?:y│ies)</code> 是比 <code>industry│industries</code> 更经济的表达式。</td>
+</tr>
+<tr>
+<td><code>(?=pattern)</code></td>
+<td>执行正向预测先行搜索的子表达式，该表达式匹配处于匹配 pattern 的字符串的起始点的字符串。它是一个非捕获匹配，即不能捕获供以后使用的匹配。例如，’Windows (?=95│98│NT│2000)’ 匹配“Windows 2000”中的“Windows”，但不匹配“Windows 3.1”中的“Windows”。预测先行不占用字符，即发生匹配后，下一匹配的搜索紧随上一匹配之后，而不是在组成预测先行的字符后。</td>
+</tr>
+<tr>
+<td><code>(?!pattern)</code></td>
+<td>执行反向预测先行搜索的子表达式，该表达式匹配不处于匹配 pattern 的字符串的起始点的搜索字符串。它是一个非捕获匹配，即不能捕获供以后使用的匹配。例如，’Windows (?!95│98│NT│2000)’ 匹配“Windows 3.1”中的 “Windows”，但不匹配“Windows 2000”中的“Windows”。预测先行不占用字符，即发生匹配后，下一匹配的搜索紧随上一匹配之后，而不是在组成预测先行的字符后。</td>
+</tr>
+<tr>
+<td><code>x│y</code></td>
+<td><strong>匹配 x 或 y。</strong>例如，’z│food’ 匹配“z”或“food”。’(z│f)ood’ 匹配“zood”或“food”。</td>
+</tr>
+<tr>
+<td><code>[xyz]</code></td>
+<td>字符集。匹配包含的任一字符。例如，“[abc]”匹配“plain”中的“a”。</td>
+</tr>
+<tr>
+<td><code>[^xyz]</code></td>
+<td>反向字符集。匹配未包含的任何字符。例如，“[^abc]”匹配“plain”中的“p”。</td>
+</tr>
+<tr>
+<td><code>[a-z]</code></td>
+<td><strong>字符范围。</strong>匹配指定范围内的任何字符。例如，“[a-z]”匹配“a”到“z”范围内的任何小写字母。</td>
+</tr>
+<tr>
+<td><code>[^a-z]</code></td>
+<td><strong>反向范围字符。</strong>匹配不在指定的范围内的任何字符。例如，“[^a-z]”匹配任何不在“a”到“z”范围内的任何字符。</td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>匹配一个字边界，即字与空格间的位置。例如，“er\b”匹配“never”中的“er”，但不匹配“verb”中的“er”。</td>
+</tr>
+<tr>
+<td><code>\B</code></td>
+<td>非字边界匹配。“er\B”匹配“verb”中的“er”，但不匹配“never”中的“er”。</td>
+</tr>
+<tr>
+<td><code>\cx</code></td>
+<td>匹配 x 指示的控制字符。例如，\cM 匹配 Control-M 或回车符。x 的值必须在 A-Z 或 a-z 之间。如果不是这样，则假定 c 就是“c”字符本身。</td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td><strong>数字字符匹配。</strong>等效于 [0-9]。</td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td><strong>非数字字符匹配。</strong>等效于 [^0-9]。</td>
+</tr>
+<tr>
+<td><code>\f</code></td>
+<td>换页符匹配。等效于 \x0c 和 \cL。</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>换行符匹配。等效于 \x0a 和 \cJ。</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>匹配一个回车符。等效于 \x0d 和 \cM。</td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td><strong>匹配任何空白字符，包括空格、制表符、换页符等。</strong>与 [ \f\n\r\t\v] 等效。</td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td><strong>匹配任何非空白字符。</strong>与 [^ \f\n\r\t\v] 等效。</td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>制表符匹配。与 \x09 和 \cI 等效。</td>
+</tr>
+<tr>
+<td><code>\v</code></td>
+<td>垂直制表符匹配。与 \x0b 和 \cK 等效。</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>匹配任何字类字符，包括下划线。与“[A-Za-z0-9_]”等效。</td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>与任何非单词字符匹配。与“[^A-Za-z0-9_]”等效。</td>
+</tr>
+<tr>
+<td><code>\xn</code></td>
+<td>匹配 n，此处的 n 是一个十六进制转义码。十六进制转义码必须正好是两位数长。例如，“\x41”匹配“A”。“\x041”与“\x04”&amp;“1”等效。允许在正则表达式中使用 ASCII 代码。</td>
+</tr>
+<tr>
+<td><code>\num</code></td>
+<td>匹配 num，此处的 num 是一个正整数。到捕获匹配的反向引用。例如，“(.)\1”匹配两个连续的相同字符。</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>标识一个八进制转义码或反向引用。如果 \n 前面至少有 n 个捕获子表达式，那么 n 是反向引用。否则，如果 n 是八进制数 (0-7)，那么 n 是八进制转义码。</td>
+</tr>
+<tr>
+<td><code>\nm</code></td>
+<td>标识一个八进制转义码或反向引用。如果 \nm 前面至少有 nm 个捕获子表达式，那么 nm 是反向引用。如果 \nm 前面至少有 n 个捕获，则 n 是反向引用，后面跟有字符 m。如果两种前面的情况都不存在，则 \nm 匹配八进制值 nm，其中 n 和 m 是八进制数字 (0-7)。</td>
+</tr>
+<tr>
+<td><code>\nml</code></td>
+<td>当 n 是八进制数 (0-3)，m 和 l 是八进制数 (0-7) 时，匹配八进制转义码 nml。</td>
+</tr>
+<tr>
+<td><code>\un</code></td>
+<td>匹配 n，其中 n 是以四位十六进制数表示的 Unicode 字符。例如，\u00A9 匹配版权符号 (©)。</td>
+</tr>
+</tbody>
+</table>
+<p>正则表达式从左往右进行计算，运算符的优先级顺序如下：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\</code></td>
+<td>转义符</td>
+</tr>
+<tr>
+<td><code>(), (?:), (?=), []</code></td>
+<td>括号和中括号</td>
+</tr>
+<tr>
+<td><code>*, +, ?, {n}, {n,}, {n,m}</code></td>
+<td>限定符</td>
+</tr>
+<tr>
+<td><code>^, $, \ 任何元字符、任何字符</code></td>
+<td>定位点和序列</td>
+</tr>
+<tr>
+<td>│</td>
+<td>替换</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.w3school.com.cn/jsref/jsref_obj_regexp.asp" target="_blank" rel="external">JavaScript RegExp 对象</a><br><a href="https://segmentfault.com/a/1190000003497780" target="_blank" rel="external">JS 进阶 test, exec, match, replace</a><br><a href="https://regex101.com/" target="_blank" rel="external">正则匹配在线网站</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/regex.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="JS" scheme="http://objcer.com/categories/JS/"/>
+    
+    
+      <category term="正则表达式" scheme="http://objcer.com/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>Node.js 中的 UnhandledPromiseRejectionWarning 问题</title>
@@ -1454,66 +1777,6 @@
     
       <category term="Cordova" scheme="http://objcer.com/categories/Cordova/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>高清屏一像素边框问题</title>
-    <link href="http://objcer.com/2017/06/19/one-pixel-border/"/>
-    <id>http://objcer.com/2017/06/19/one-pixel-border/</id>
-    <published>2017-06-19T13:24:02.000Z</published>
-    <updated>2017-09-06T14:24:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/retinaDisplayMagnified_1159x285@2x.png" alt=""><br><a id="more"></a></p>
-<h2 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h2><p>在 iPhone 设备（Retina屏）上一像素边框设置有问题</p>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/F115E87F-990C-4957-B007-26F8B844287D.png" alt=""></p>
-<p>如上图右所示，UI 要求效果的边框是 1px；如上图左所示，开发出来的效果边框为 2px（膜拜一下UI的像素眼 👍🏿）。设置边框的代码很简单，如下：<br><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#e1e0e0</span>;</div></pre></td></tr></table></figure></p>
-<p>那问题该如何解决呢 🤔</p>
-<h2 id="基本概念-术语"><a href="#基本概念-术语" class="headerlink" title="基本概念(术语)"></a>基本概念(术语)</h2><h3 id="device-pixel-physical-pixel"><a href="#device-pixel-physical-pixel" class="headerlink" title="device pixel / physical pixel"></a>device pixel / physical pixel</h3><p>设备像素（或物理像素）是<strong>显示屏中最小的物理单元</strong>。 每个像素点根据操作系统的指示设置自己的颜色和亮度。</p>
-<h3 id="density-independent-pixel-DIP"><a href="#density-independent-pixel-DIP" class="headerlink" title="density-independent pixel(DIP)"></a>density-independent pixel(DIP)</h3><p>设备无关像素(也叫密度无关像素)，可以认为是<strong>计算机坐标系统中得一个点</strong>，这个点代表一个可以由程序使用的虚拟像素，然后由相关系统转换为物理像素。</p>
-<h3 id="CSS-pixel"><a href="#CSS-pixel" class="headerlink" title="CSS pixel"></a>CSS pixel</h3><p>CSS 像素是浏览器使用的抽象单元，用于精确地，一致地在网页上绘制内容。 通常，<strong>CSS 像素被称为与设备无关的像素（DIP）</strong>。</p>
-<h3 id="devicePixelRatio"><a href="#devicePixelRatio" class="headerlink" title="devicePixelRatio"></a>devicePixelRatio</h3><p>设备像素和设备无关像素之间存在着一定的对应关系，这就是 devicePixelRatio（设备像素比）</p>
-<blockquote>
-<p>devicePixelRatio is the ratio between physical pixels and device-independent pixels (dips) on the device.</p>
-</blockquote>
-<p><strong>devicePixelRatio = device pixels / dips</strong></p>
-<p><code>devicePixelRatio</code> 值为 1 的屏幕称之为标准屏；目前，大部分移动设备都是高清屏，即 <code>devicePixelRatio</code> 值大于 1 的屏幕，对于苹果设备来说，我们经常听到 Retina 视网膜屏，其中 iPhone6/6s/7 的 <code>devicePixelRatio</code> 值为 2；而 iPhone6 plus/6s plus/7 plus 的 <code>devicePixelRatio</code> 值为 3。</p>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/iphone-6-plus-screen.jpg" alt=""></p>
-<p>通过一个例子进一步理解其中的关系：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/AF218F20-056F-4CB4-8A1F-2949C6913DCD.png" alt=""></p>
-<p>假设我们需要绘制如下这个 <code>div</code> 节点，<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div <span class="attribute">height</span>=<span class="string">"2"</span> <span class="attribute">width</span>=<span class="string">"2"</span>&gt;&lt;/div&gt;</div></pre></td></tr></table></figure></p>
-<ul>
-<li><code>div</code> 节点宽度和高度都是 <code>2px</code>，这里的 <code>2px</code> 指的就是 CSS pixel，而 CSS pixel 是抽象的单位，所以不管在标准屏，还是高清屏，其 CSS pixel 都是 <code>2px</code></li>
-<li>1 CSS pixel 等同于 1 DIP</li>
-<li>device pixels = devicePixelRatio * dips<ul>
-<li>在标准屏（<code>devicePixelRatio</code> 值为 1）中绘制这个节点时，节点的设备像素为 <code>2px * 2px</code></li>
-<li>在高清屏（<code>devicePixelRatio</code> 值为 2）中绘制这个节点时，节点的设备像素为 <code>4px * 4px</code></li>
-</ul>
-</li>
-<li>高清屏中节点的面积是标准屏中的 4 倍</li>
-</ul>
-<p>在网页中，我们可以通过 JS 获取 <code>devicePixelRatio</code><br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.devicePixelRatio)</div></pre></td></tr></table></figure></p>
-<p>在 CSS 媒体查询（media query）中也可以用到 <code>devicePixelRatio</code><br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@media</span> only screen and (<span class="attribute">-webkit-min-device-pixel-ratio</span>: <span class="number">2</span>),</div><div class="line"><span class="variable">@media</span> only screen and (<span class="attribute">min-device-pixel-ratio</span>: <span class="number">2</span>) &#123;</div><div class="line">	<span class="comment">/* TODO ... */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="解决一像素边框问题"><a href="#解决一像素边框问题" class="headerlink" title="解决一像素边框问题"></a>解决一像素边框问题</h2><h3 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h3><p>了解了以上这些基本概念，我就知道设置边框一像素 <code>border: 1px solid #e1e0e0;</code> ，在高清屏中展示大于一像素的原因了，因为 <code>devicePixelRatio</code> 这个家伙导致的，由此我们会快就写出如下解决方案：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#e1e0e0</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@media</span> only screen and (<span class="attribute">-webkit-min-device-pixel-ratio</span>: <span class="number">2</span>),</div><div class="line"><span class="variable">@media</span> only screen and (<span class="attribute">min-device-pixel-ratio</span>: <span class="number">2</span>) &#123;</div><div class="line">    <span class="selector-tag">div</span> &#123;</div><div class="line">        <span class="attribute">border</span>: <span class="number">0.5px</span> solid <span class="number">#e1e0e0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@media</span> only screen and (<span class="attribute">-webkit-min-device-pixel-ratio</span>: <span class="number">3</span>),</div><div class="line"><span class="variable">@media</span> only screen and (<span class="attribute">min-device-pixel-ratio</span>: <span class="number">3</span>) &#123;</div><div class="line">    <span class="selector-tag">div</span> &#123;</div><div class="line">        <span class="attribute">border</span>: <span class="number">0.3333px</span> solid <span class="number">#e1e0e0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在 <code>devicePixelRatio</code> 为 2 的时候，设置边框为 <code>0.5px</code>；在 <code>devicePixelRatio</code> 为 2 的时候，设置边框为 <code>0.3333px</code>。但是要注意有些 Retina 屏的浏览器可能不认识 <code>0.5px</code> 的边框，将会把它解析成 <code>0px</code>，这样就没有边框了。</p>
-<h3 id="终极解决方案"><a href="#终极解决方案" class="headerlink" title="终极解决方案"></a>终极解决方案</h3><p>利用伪元素 <code>before/after</code>  <code>transform</code> 来实现，其浏览器兼容性非常好 👍<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">div</span> <span class="built_in">class</span>=<span class="string">"onePixelBorder"</span>&gt;</div><div class="line">    One Pixel Border</div><div class="line">&lt;/<span class="keyword">div</span>&gt;</div></pre></td></tr></table></figure></p>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/9C362BA4-4C66-4590-BED9-6DCE84EA2232.png" alt=""></p>
-<p>单一边框：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.onePixelBorder</span> &#123;</div><div class="line">    <span class="attribute">position</span>: relative;</div><div class="line">    <span class="attribute">display</span>: inline-block;</div><div class="line">    <span class="attribute">font-size</span>: <span class="number">40px</span>;</div><div class="line">    <span class="attribute">color</span>: <span class="number">#2C2C2C</span>;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">    <span class="attribute">content</span>: <span class="string">''</span>;</div><div class="line">    <span class="attribute">position</span>: absolute;</div><div class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">bottom</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">1px</span>;</div><div class="line">    <span class="attribute">background-color</span>: <span class="number">#2C2C2C</span>;</div><div class="line">    <span class="attribute">-webkit-transform-origin</span>: center bottom;</div><div class="line">    <span class="attribute">transform-origin</span>: center bottom;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">media</span> only screen and (-webkit-min-device-pixel-ratio: <span class="number">2</span>),</div><div class="line">@media only screen and (min-device-pixel-ratio: <span class="number">2</span>) &#123;</div><div class="line">    <span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">scaleY</span>(.5);</div><div class="line">        <span class="attribute">transform</span>: <span class="built_in">scaleY</span>(.5);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">@<span class="keyword">media</span> only screen and (-webkit-min-device-pixel-ratio: <span class="number">3</span>),</div><div class="line">@media only screen and (min-device-pixel-ratio: <span class="number">3</span>) &#123;</div><div class="line">    <span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">scaleY</span>(.333);</div><div class="line">        <span class="attribute">transform</span>: <span class="built_in">scaleY</span>(.333);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>四边边框：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.onePixelBorder</span> &#123;</div><div class="line">    <span class="attribute">position</span>: relative;</div><div class="line">    <span class="attribute">display</span>: inline-block;</div><div class="line">    <span class="attribute">font-size</span>: <span class="number">40px</span>;</div><div class="line">    <span class="attribute">color</span>: <span class="number">#2C2C2C</span>;</div><div class="line"></div><div class="line">&#125;</div><div class="line"><span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">    <span class="attribute">content</span>: <span class="string">''</span>;</div><div class="line">    <span class="attribute">position</span>: absolute;</div><div class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#2C2C2C</span>;</div><div class="line">    <span class="attribute">-webkit-transform-origin</span>: left top;</div><div class="line">    <span class="attribute">transform-origin</span>: left top;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">media</span> only screen and (-webkit-min-device-pixel-ratio: <span class="number">2</span>),</div><div class="line">@media only screen and (min-device-pixel-ratio: <span class="number">2</span>) &#123;</div><div class="line">    <span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">        <span class="attribute">width</span>: <span class="number">200%</span>;</div><div class="line">        <span class="attribute">height</span>: <span class="number">200%</span>;</div><div class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">scale</span>(.5);</div><div class="line">        <span class="attribute">transform</span>: <span class="built_in">scale</span>(.5);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">@<span class="keyword">media</span> only screen and (-webkit-min-device-pixel-ratio: <span class="number">3</span>),</div><div class="line">@media only screen and (min-device-pixel-ratio: <span class="number">3</span>) &#123;</div><div class="line">    <span class="selector-class">.onePixelBorder</span><span class="selector-pseudo">:after</span> &#123;</div><div class="line">        <span class="attribute">width</span>: <span class="number">300%</span>;</div><div class="line">        <span class="attribute">height</span>: <span class="number">300%</span>;</div><div class="line">        <span class="attribute">-webkit-transform</span>: <span class="built_in">scale</span>(.333);</div><div class="line">        <span class="attribute">transform</span>: <span class="built_in">scale</span>(.333);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>注意到以上通过 CSS 媒体查询获知当前屏幕的 <code>devicePixelRatio</code>，然后针对不同的 <code>devicePixelRatio</code> 进行处理。还有一种另一种方式，通过 JS 在 HTML 节点添加 class 表征不同的 <code>devicePixelRatio</code>，例如在 framework7 框架中， HTML 节点就添加了 <code>devicePixelRatio</code> 有关的 class:</p>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/BED6EAE5-B9D5-45B2-A22E-A1B698ECFED1.png" alt=""></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.smashingmagazine.com/2012/08/towards-retina-web/" target="_blank" rel="external">Towards A Retina Web</a><br><a href="https://www.quirksmode.org/blog/archives/2012/07/more_about_devi.html" target="_blank" rel="external">More about devicePixelRatio</a><br><a href="https://jinlong.github.io/2015/05/24/css-retina-hairlines/" target="_blank" rel="external">Retina屏的移动设备如何实现真正1px的线？</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/retinaDisplayMagnified_1159x285@2x.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
-    
-    </summary>
-    
-      <category term="CSS" scheme="http://objcer.com/categories/CSS/"/>
-    
-    
-      <category term="devicePixelRatio" scheme="http://objcer.com/tags/devicePixelRatio/"/>
     
   </entry>
   

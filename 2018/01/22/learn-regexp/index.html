@@ -1,0 +1,1092 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="正则表达式," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓">
+<meta name="keywords" content="正则表达式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习正则表达式">
+<meta property="og:url" content="http://objcer.com/2018/01/22/learn-regexp/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/regex.jpg">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/51E1FD12-5B3D-4600-8EEE-C00AE4485F46.png">
+<meta property="og:updated_time" content="2018-01-22T13:28:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学习正则表达式">
+<meta name="twitter:description" content="对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/regex.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2018/01/22/learn-regexp/"/>
+
+
+  <title> 学习正则表达式 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                学习正则表达式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-01-22T21:26:08+08:00" content="2018-01-22">
+              2018-01-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/01/22/learn-regexp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/01/22/learn-regexp/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/01/22/learn-regexp/" class="leancloud_visitors" data-flag-title="学习正则表达式">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/regex.jpg" alt=""><br>对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓</p>
+<a id="more"></a>
+<h2 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h2><p><code>index.html</code> 页面中，有如下一段代码：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1, shrink-to-fit=no"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"theme-color"</span> <span class="attr">content</span>=<span class="string">"#000000"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>React SharedPen App<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./pace/pace.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"./pace/pace-theme-minimal.css"</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">&lt;!-- SharedPen scripts --&gt;</span></div><div class="line">  <span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://localhost:5000/Utils.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  ...</div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://localhost:5000/SharedPen.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">  <span class="comment">&lt;!-- end --&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">&lt;!-- SharedPen stylesheet --&gt;</span></div><div class="line">  <span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"http://localhost:5000/SharedPen.css"</span>&gt;</span></div><div class="line">  <span class="comment">&lt;!-- end --&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>注意这两段注释标签<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div></pre></td></tr></table></figure></p>
+<p>在页面在开发环境中，加载的是本地源文件，在生产环境中，我希望将其替换成压缩文件：<code>./dist/sharedpen.min.js</code> 和 <code>./dist/SharedPen.css</code>。</p>
+<p><strong>解决思路是：</strong>使用 webpack 插件 <a href="https://www.npmjs.com/package/html-replace-webpack-plugin" target="_blank" rel="external">html-replace-webpack-plugin</a> 配置正则表达式，然后进行替换。最终的代码如下:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin')</div><div class="line">const tpl = &#123;</div><div class="line">  css: '<span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"%s"</span>&gt;</span>',</div><div class="line">  js: '<span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"%s"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>'</div><div class="line">&#125;</div><div class="line"></div><div class="line">module.exports = &#123;</div><div class="line">  // Definition for Webpack plugins</div><div class="line">  plugin: [</div><div class="line">    // Replace html contents with string or regex patterns</div><div class="line">    new HtmlReplaceWebpackPlugin([&#123;</div><div class="line">      pattern: /(<span class="comment">&lt;!--\s*)(css|js):([\w-\/\.]+)(\s*--&gt;</span>)([\s\S]*?)(<span class="comment">&lt;!--\s*end\s*--&gt;</span>)/,</div><div class="line">      replacement: function (match, $1, type, file) &#123;</div><div class="line">        switch (type) &#123;</div><div class="line">          case 'css':</div><div class="line">          case 'js':</div><div class="line">            return tpl[type].replace('%s', file)</div><div class="line">          default:</div><div class="line">            return ''</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;])</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>其中关键就是写出正则表达式，匹配出那两段注释代码。正则语法可以参考文末附录二，为了方便测试，我们可以在 <a href="https://regex101.com/" target="_blank" rel="external">https://regex101.com/</a> 这个网站上编写正则表达式。</p>
+<h2 id="撰写正则表达式"><a href="#撰写正则表达式" class="headerlink" title="撰写正则表达式"></a>撰写正则表达式</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="分成三部分处理"><a href="#分成三部分处理" class="headerlink" title="分成三部分处理"></a>分成三部分处理</h3><p>观察这两段注释，每一段可以分成三部分，根据正则语法，可以写出如下三部分的正则表达式：</p>
+<ul>
+<li><p>起始部分 匹配 <code>&lt;!-- js:./dist/sharedpen.min.js --&gt;</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--\s*(css|js):[\w\-\/\.]+\s*--&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>中间内容部分</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="symbol">\s</span><span class="symbol">\S</span>]*</div></pre></td></tr></table></figure>
+</li>
+<li><p>结束部分 匹配 <code>&lt;!-- end --&gt;</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--\s*end\s*--&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="子表达式"><a href="#子表达式" class="headerlink" title="子表达式"></a>子表达式</h3><p>在第一部分 <code>&lt;!-- js:./dist/sharedpen.min.js --&gt;</code>，我们还需要正则表达式能匹配出：文件类型和文件路径</p>
+<blockquote>
+<p>注意到<br>1、<code>(pattern)</code> <strong>匹配 pattern 并捕获该匹配的子表达式。可以使用 $1…$9 属性从结果“匹配”集合中检索捕获的匹配。</strong><br>2、在 JavaScript 中 <code>$1…$9</code> 属性是包含括号子串匹配的正则表达式的静态只读属性，我们可以通过 <code>RegExp.$1, ..., RegExp.$9</code> 来使用它们</p>
+</blockquote>
+<p>通过括号写出子表达式，匹配出我们需要的内容<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var regexp = new RegExp(/<span class="comment">&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;</span>/)</div><div class="line">var str = '<span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span>'</div><div class="line">regexp.exec(str)</div><div class="line">console.log(RegExp.$1) // "js"</div><div class="line">console.log(RegExp.$2) // "./dist/sharedpen.min.js"</div></pre></td></tr></table></figure>
+<h3 id="最长匹配（贪婪匹配）和最短匹配（懒惰匹配）"><a href="#最长匹配（贪婪匹配）和最短匹配（懒惰匹配）" class="headerlink" title="最长匹配（贪婪匹配）和最短匹配（懒惰匹配）"></a>最长匹配（贪婪匹配）和最短匹配（懒惰匹配）</h3><p>到目前为止，我们的正则表达式为：<code>&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;[\s\S]*&lt;!--\s*end\s*--&gt;</code>，但是会发现，此时匹配有点问题：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/51E1FD12-5B3D-4600-8EEE-C00AE4485F46.png" alt=""></p>
+<p>我们是希望遇到第一个 <code>&lt;!-- end --&gt;</code> 就结束匹配，而现在却是匹配到最后一个。这个时候就需要了解正则表达式的最长匹配（贪婪匹配）和最短匹配（懒惰匹配）<br>例子一：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'abc123def'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> regexp1 = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="regexp">/abc[\d]*/</span>) <span class="comment">// 最长匹配</span></div><div class="line"><span class="keyword">var</span> regexp2 = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="regexp">/abc[\d]*?/</span>) <span class="comment">// 最短匹配</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp1.exec(str)[<span class="number">0</span>]) <span class="comment">// "abc123"</span></div><div class="line"><span class="built_in">console</span>.log(regexp2.exec(str)[<span class="number">0</span>]) <span class="comment">// "abc"</span></div></pre></td></tr></table></figure></p>
+<p>例子二：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = '<span class="comment">/*** 注释1 ****/</span> <span class="keyword">var</span> name = <span class="string">"aty"</span>; <span class="comment">/***注释2****/</span>'</div><div class="line"><span class="keyword">var</span> regexp = <span class="keyword">new</span> <span class="type">RegExp</span>(/\/\*([\s\<span class="type">S</span>]*?)\*\<span class="comment">//)</span></div><div class="line"></div><div class="line">console.log(regexp.exec(str)[<span class="number">0</span>]) <span class="comment">// 使用 `*?` 就可以正确的匹配到注释内容</span></div></pre></td></tr></table></figure></p>
+<p>我们会发现，最长和最短匹配的差别是，前者匹配尽可能多的字符，后者匹配尽可能少的字符。一般正则表达式引擎默认都是最长匹配，<strong>如果想要最短匹配，那么需要在数量修饰符(例如：<code>*</code>，<code>+</code>)后面添加一个 <code>?</code> 变成最短匹配</strong></p>
+<p>所以此时执行对我们的正则表达式增加一个 <code>?</code> 即可<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;</span>[\s\S]*?<span class="comment">&lt;!--\s*end\s*--&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="全局匹配"><a href="#全局匹配" class="headerlink" title="全局匹配"></a>全局匹配</h3><p>JavaScript 中使用正则表达式有两种方式：<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># 直接量语法</span></div><div class="line">/pattern/attributes</div><div class="line"></div><div class="line"><span class="meta"># 创建 RegExp 对象的语法</span></div><div class="line"><span class="keyword">new</span> RegExp(pattern, attributes);</div></pre></td></tr></table></figure></p>
+<p><strong>参数:</strong></p>
+<ul>
+<li>pattern 是一个字符串，指定了正则表达式</li>
+<li>attributes 是一个可选的字符串，包含属性: <strong>“g”、”i” 和 “m”，分别用于指定全局匹配、区分大小写的匹配和多行匹配</strong>。</li>
+</ul>
+<p>其中 <code>g</code> 指定正则表达式全局匹配，那么有什么特殊之处呢？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'abc123def'</span></div><div class="line"><span class="keyword">var</span> regexp = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="regexp">/abc[\d]*/</span>, <span class="string">'g'</span>)</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
+<p>其中第二次 console 输出为啥是 <code>false</code> 呢？</p>
+<ul>
+<li>在全局匹配模式下可以对指定要查找的字符串<strong>执行多次匹配</strong>。</li>
+<li>每次匹配使用当前正则对象的 <code>lastIndex</code> 属性的值作为在目标字符串中开始查找的起始位置。</li>
+<li><code>lastIndex</code> 属性的初始值为 0，找到匹配的项后，<code>lastIndex</code> 的值被重置为匹配内容的下一个字符在字符串中的位置索引，用来标识下次执行匹配时开始查找的位置。</li>
+<li>如果找不到匹配的项，<code>lastIndex</code> 的值会被设置为 0。</li>
+<li>没有设置正则对象的全局匹配标志时 <code>lastIndex</code> 属性的值始终为0，每次执行匹配仅查找字符串中第一个匹配的项。</li>
+</ul>
+<p>如果我们每次执行 <code>regexp.test(str)</code> 方法后，查看一下正则对象的 lastIndex 属性的值，就清楚了。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'abc123def'</span></div><div class="line"><span class="keyword">var</span> regexp = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="regexp">/abc[\d]*/</span>, <span class="string">'g'</span>)</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(regexp.lastIndex) <span class="comment">// 6</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log(regexp.lastIndex) <span class="comment">// 0</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(regexp.test(str)) <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(regexp.lastIndex) <span class="comment">// 6</span></div></pre></td></tr></table></figure></p>
+<p>第一次执行 <code>regexp.test(str)</code> 前，正则对象的 <code>lastIndex</code> 属性值为 0，匹配到字符 <code>abc123</code> 后，正则对象的 <code>lastIndex</code> 属性值变成 6；<br>在第二次执行 <code>regexp.test(str)</code> 时，从第 7 个字符(从0开始)开始进行匹配，当然就匹配失败啦。</p>
+<p>下面再来看看正则对象的另一个方法 <code>exec</code> 在全局模式下的例子：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var str = `</div><div class="line"><span class="comment">&lt;!-- js:./dist/sharedpen.min.js --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div><div class="line"><span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span>`</div><div class="line"></div><div class="line">var regexp = new RegExp(/<span class="comment">&lt;!--\s*(css|js):([\w\-\/\.]+)\s*--&gt;</span>[\s\S]*?<span class="comment">&lt;!--\s*end\s*--&gt;</span>/g)</div><div class="line">var matches</div><div class="line">while((matches = regexp.exec(str)) != null) &#123;</div><div class="line">  str = str.replace(matches[0], '<span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span>')</div><div class="line">&#125;</div><div class="line">console.log(str)</div></pre></td></tr></table></figure></p>
+<p>我们希望代码执行匹配替换后，输出结果是：<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">div</span>&gt;<span class="keyword">test</span>&lt;/<span class="keyword">div</span>&gt;</div><div class="line">&lt;<span class="keyword">div</span>&gt;<span class="keyword">test</span>&lt;/<span class="keyword">div</span>&gt;</div></pre></td></tr></table></figure></p>
+<p>但是实际上输出结果是：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="comment">&lt;!-- css:./dist/SharedPen.css --&gt;</span></div><div class="line">...</div><div class="line"><span class="comment">&lt;!-- end --&gt;</span></div></pre></td></tr></table></figure></p>
+<p>显然是第二次匹配替换出问题了。有了前面的经验，我们很快就知道，是全局模式匹配的问题，第一次全局匹配后，正则对象的 <code>lastIndex</code> 属性值发生变化，影响了第二次正则匹配，我们只需去掉全局匹配 <code>g</code> 即可解决问题。</p>
+<p>🏗 至此，我们终于可以得到如下的正则表达式：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/(<span class="comment">&lt;!--\s*)(css|js):([\w-\/\.]+)(\s*--&gt;</span>)([\s\S]*?)(<span class="comment">&lt;!--\s*end\s*--&gt;</span>)/</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="附录一-常用方法"><a href="#附录一-常用方法" class="headerlink" title="[附录一] 常用方法"></a>[附录一] 常用方法</h2><p>RegExp 对象方法：<code>test</code>, <code>exec</code></p>
+<table>
+<thead>
+<tr>
+<th>用法</th>
+<th>说明</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RegExpObj.test(string)</code></td>
+<td>用于检测一个字符串是否匹配某个模式</td>
+<td>匹配返回 true，否则返回 false</td>
+</tr>
+<tr>
+<td><code>RegExpObj.exec(string)</code></td>
+<td>用于检索字符串中的正则表达式的匹配</td>
+<td>返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null</td>
+</tr>
+</tbody>
+</table>
+<p>String 对象方法：<code>match</code>, <code>replace</code></p>
+<table>
+<thead>
+<tr>
+<th>用法</th>
+<th>说明</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stringObj.match( regexp/substr )</code></td>
+<td>在字符串内检索指定的值，或找到一个或多个正则表达式的匹配</td>
+<td>返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null</td>
+</tr>
+<tr>
+<td><code>stringObj.replace( regexp/substr, replacement )</code></td>
+<td>根据 regexp/substr 进行正则匹配,把匹配结果替换为 replacement</td>
+<td>一个新的字符串</td>
+</tr>
+</tbody>
+</table>
+<h2 id="附录二-正则表达式语法"><a href="#附录二-正则表达式语法" class="headerlink" title="[附录二] 正则表达式语法"></a>[附录二] 正则表达式语法</h2><p>学习正则表达式，首先要了解其语法规则，以下规则来自：<strong>MSDN 正则表达式语法:</strong> <a href="https://msdn.microsoft.com/zh-cn/library/ae5bf541(v=vs.90).aspx" target="_blank" rel="external">https://msdn.microsoft.com/zh-cn/library/ae5bf541(v=vs.90).aspx</a></p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\</code></td>
+<td><strong>将下一字符标记为特殊字符、文本、反向引用或八进制转义符。</strong>例如，“n” 匹配字符 “n”。“\n” 匹配换行符。序列 “\” 匹配 “\”，“(” 匹配 “(”。</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td><strong>匹配输入字符串开始的位置。</strong>如果设置了 RegExp 对象的 Multiline 属性，^ 还会与 “\n” 或 “\r” 之后的位置匹配。</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td><strong>匹配输入字符串结尾的位置。</strong>如果设置了 RegExp 对象的 Multiline 属性，$ 还会与 “\n” 或 “\r” 之前的位置匹配。</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td><strong>零次或多次匹配前面的字符或子表达式。</strong>例如，zo<em> 匹配 “z” 和 “zoo”。</em> 等效于 {0,}。</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td><strong>一次或多次匹配前面的字符或子表达式。</strong>例如，“zo+” 与 “zo” 和 “zoo” 匹配，但与 “z” 不匹配。+ 等效于 {1,}。</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td><strong>零次或一次匹配前面的字符或子表达式。</strong>例如，“do(es)?” 匹配 “do” 或 “does” 中的 “do”。? 等效于 {0,1}。</td>
+</tr>
+<tr>
+<td><code>{n}</code></td>
+<td><strong>n 是非负整数。正好匹配 n 次。</strong>例如，“o{2}” 与 “Bob” 中的 “o” 不匹配，但与 “food” 中的两个“o”匹配。</td>
+</tr>
+<tr>
+<td><code>{n,}</code></td>
+<td><strong>n 是非负整数。至少匹配 n 次。</strong>例如，“o{2,}” 不匹配 “Bob” 中的 “o”，而匹配 “foooood” 中的所有 o。“o{1,}” 等效于 “o+”。“o{0,}” 等效于 “o*”。</td>
+</tr>
+<tr>
+<td><code>{n,m}</code></td>
+<td>m 和 n 是非负整数，其中 n &lt;= m。<strong>匹配至少 n 次，至多 m 次。</strong>例如，“o{1,3}” 匹配 “fooooood” 中的头三个 o。’o{0,1}’ 等效于 ‘o?’。注意：您不能将空格插入逗号和数字之间。</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td><strong>当此字符紧随任何其他限定符（*、+、?、{n}、{n,}、{n,m}）之后时，匹配模式是“非贪心的”。“非贪心的”模式匹配搜索到的、尽可能短的字符串，而默认的“贪心的”模式匹配搜索到的、尽可能长的字符串。</strong>例如，在字符串 “oooo” 中，“o+?” 只匹配单个 “o”，而 “o+” 匹配所有 “o”。</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td><strong>匹配除“\n”之外的任何单个字符。</strong>若要匹配包括 “\n” 在内的任意字符，请使用诸如 “[\s\S]” 之类的模式。</td>
+</tr>
+<tr>
+<td><code>(pattern)</code></td>
+<td><strong>匹配 pattern 并捕获该匹配的子表达式。可以使用 $1…$9 属性从结果“匹配”集合中检索捕获的匹配。</strong>若要匹配括号字符 ( )，请使用“(”或者“)”。</td>
+</tr>
+<tr>
+<td><code>(?:pattern)</code></td>
+<td>匹配 pattern 但不捕获该匹配的子表达式，即它是一个非捕获匹配，不存储供以后使用的匹配。这对于用 “or” 字符 <code>(│)</code> 组合模式部件的情况很有用。例如，<code>industr(?:y│ies)</code> 是比 <code>industry│industries</code> 更经济的表达式。</td>
+</tr>
+<tr>
+<td><code>(?=pattern)</code></td>
+<td>执行正向预测先行搜索的子表达式，该表达式匹配处于匹配 pattern 的字符串的起始点的字符串。它是一个非捕获匹配，即不能捕获供以后使用的匹配。例如，’Windows (?=95│98│NT│2000)’ 匹配“Windows 2000”中的“Windows”，但不匹配“Windows 3.1”中的“Windows”。预测先行不占用字符，即发生匹配后，下一匹配的搜索紧随上一匹配之后，而不是在组成预测先行的字符后。</td>
+</tr>
+<tr>
+<td><code>(?!pattern)</code></td>
+<td>执行反向预测先行搜索的子表达式，该表达式匹配不处于匹配 pattern 的字符串的起始点的搜索字符串。它是一个非捕获匹配，即不能捕获供以后使用的匹配。例如，’Windows (?!95│98│NT│2000)’ 匹配“Windows 3.1”中的 “Windows”，但不匹配“Windows 2000”中的“Windows”。预测先行不占用字符，即发生匹配后，下一匹配的搜索紧随上一匹配之后，而不是在组成预测先行的字符后。</td>
+</tr>
+<tr>
+<td><code>x│y</code></td>
+<td><strong>匹配 x 或 y。</strong>例如，’z│food’ 匹配“z”或“food”。’(z│f)ood’ 匹配“zood”或“food”。</td>
+</tr>
+<tr>
+<td><code>[xyz]</code></td>
+<td>字符集。匹配包含的任一字符。例如，“[abc]”匹配“plain”中的“a”。</td>
+</tr>
+<tr>
+<td><code>[^xyz]</code></td>
+<td>反向字符集。匹配未包含的任何字符。例如，“[^abc]”匹配“plain”中的“p”。</td>
+</tr>
+<tr>
+<td><code>[a-z]</code></td>
+<td><strong>字符范围。</strong>匹配指定范围内的任何字符。例如，“[a-z]”匹配“a”到“z”范围内的任何小写字母。</td>
+</tr>
+<tr>
+<td><code>[^a-z]</code></td>
+<td><strong>反向范围字符。</strong>匹配不在指定的范围内的任何字符。例如，“[^a-z]”匹配任何不在“a”到“z”范围内的任何字符。</td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>匹配一个字边界，即字与空格间的位置。例如，“er\b”匹配“never”中的“er”，但不匹配“verb”中的“er”。</td>
+</tr>
+<tr>
+<td><code>\B</code></td>
+<td>非字边界匹配。“er\B”匹配“verb”中的“er”，但不匹配“never”中的“er”。</td>
+</tr>
+<tr>
+<td><code>\cx</code></td>
+<td>匹配 x 指示的控制字符。例如，\cM 匹配 Control-M 或回车符。x 的值必须在 A-Z 或 a-z 之间。如果不是这样，则假定 c 就是“c”字符本身。</td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td><strong>数字字符匹配。</strong>等效于 [0-9]。</td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td><strong>非数字字符匹配。</strong>等效于 [^0-9]。</td>
+</tr>
+<tr>
+<td><code>\f</code></td>
+<td>换页符匹配。等效于 \x0c 和 \cL。</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>换行符匹配。等效于 \x0a 和 \cJ。</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>匹配一个回车符。等效于 \x0d 和 \cM。</td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td><strong>匹配任何空白字符，包括空格、制表符、换页符等。</strong>与 [ \f\n\r\t\v] 等效。</td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td><strong>匹配任何非空白字符。</strong>与 [^ \f\n\r\t\v] 等效。</td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>制表符匹配。与 \x09 和 \cI 等效。</td>
+</tr>
+<tr>
+<td><code>\v</code></td>
+<td>垂直制表符匹配。与 \x0b 和 \cK 等效。</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>匹配任何字类字符，包括下划线。与“[A-Za-z0-9_]”等效。</td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>与任何非单词字符匹配。与“[^A-Za-z0-9_]”等效。</td>
+</tr>
+<tr>
+<td><code>\xn</code></td>
+<td>匹配 n，此处的 n 是一个十六进制转义码。十六进制转义码必须正好是两位数长。例如，“\x41”匹配“A”。“\x041”与“\x04”&amp;“1”等效。允许在正则表达式中使用 ASCII 代码。</td>
+</tr>
+<tr>
+<td><code>\num</code></td>
+<td>匹配 num，此处的 num 是一个正整数。到捕获匹配的反向引用。例如，“(.)\1”匹配两个连续的相同字符。</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>标识一个八进制转义码或反向引用。如果 \n 前面至少有 n 个捕获子表达式，那么 n 是反向引用。否则，如果 n 是八进制数 (0-7)，那么 n 是八进制转义码。</td>
+</tr>
+<tr>
+<td><code>\nm</code></td>
+<td>标识一个八进制转义码或反向引用。如果 \nm 前面至少有 nm 个捕获子表达式，那么 nm 是反向引用。如果 \nm 前面至少有 n 个捕获，则 n 是反向引用，后面跟有字符 m。如果两种前面的情况都不存在，则 \nm 匹配八进制值 nm，其中 n 和 m 是八进制数字 (0-7)。</td>
+</tr>
+<tr>
+<td><code>\nml</code></td>
+<td>当 n 是八进制数 (0-3)，m 和 l 是八进制数 (0-7) 时，匹配八进制转义码 nml。</td>
+</tr>
+<tr>
+<td><code>\un</code></td>
+<td>匹配 n，其中 n 是以四位十六进制数表示的 Unicode 字符。例如，\u00A9 匹配版权符号 (©)。</td>
+</tr>
+</tbody>
+</table>
+<p>正则表达式从左往右进行计算，运算符的优先级顺序如下：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\</code></td>
+<td>转义符</td>
+</tr>
+<tr>
+<td><code>(), (?:), (?=), []</code></td>
+<td>括号和中括号</td>
+</tr>
+<tr>
+<td><code>*, +, ?, {n}, {n,}, {n,m}</code></td>
+<td>限定符</td>
+</tr>
+<tr>
+<td><code>^, $, \ 任何元字符、任何字符</code></td>
+<td>定位点和序列</td>
+</tr>
+<tr>
+<td>│</td>
+<td>替换</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.w3school.com.cn/jsref/jsref_obj_regexp.asp" target="_blank" rel="external">JavaScript RegExp 对象</a><br><a href="https://segmentfault.com/a/1190000003497780" target="_blank" rel="external">JS 进阶 test, exec, match, replace</a><br><a href="https://regex101.com/" target="_blank" rel="external">正则匹配在线网站</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/正则表达式/" rel="tag">#正则表达式</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/27/unhandled-promise-rejections-in-node-js/" rel="next" title="Node.js 中的 UnhandledPromiseRejectionWarning 问题">
+                <i class="fa fa-chevron-left"></i> Node.js 中的 UnhandledPromiseRejectionWarning 问题
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">73</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题引入"><span class="nav-number">1.</span> <span class="nav-text">问题引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#撰写正则表达式"><span class="nav-number">2.</span> <span class="nav-text">撰写正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分成三部分处理"><span class="nav-number">2.1.</span> <span class="nav-text">分成三部分处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子表达式"><span class="nav-number">2.2.</span> <span class="nav-text">子表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最长匹配（贪婪匹配）和最短匹配（懒惰匹配）"><span class="nav-number">2.3.</span> <span class="nav-text">最长匹配（贪婪匹配）和最短匹配（懒惰匹配）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全局匹配"><span class="nav-number">2.4.</span> <span class="nav-text">全局匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录一-常用方法"><span class="nav-number">3.</span> <span class="nav-text">[附录一] 常用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录二-正则表达式语法"><span class="nav-number">4.</span> <span class="nav-text">[附录二] 正则表达式语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2018/01/22/learn-regexp/';
+      var disqus_title = "学习正则表达式";
+      var disqus_url = 'http://objcer.com/2018/01/22/learn-regexp/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
