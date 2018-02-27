@@ -56,7 +56,7 @@ CodeMirror 编辑器具有丰富友好的 API 接口：
 ![](http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-insert.png)
 ![](http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-delete.png)
 - **`markText` 富文本支持 API**
-  注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API `markText` 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 [SharePen 之 AnnotationList](https://objcer.com/2018/02/27/SharePen-AnnotationList/) 中将进行详细介绍
+  注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API `markText` 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 [SharedPen 之 AnnotationList](https://objcer.com/2018/02/27/SharedPen-AnnotationList/) 中将进行详细介绍
 
 ## 架构
  | 架构 | Server 作用
