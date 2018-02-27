@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-delete.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen-peer-to-peer.png?t=1">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen-client-server.png">
-<meta property="og:updated_time" content="2018-02-27T14:42:09.000Z">
+<meta property="og:updated_time" content="2018-02-27T14:48:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SharedPen 富文本实时协同编辑器">
 <meta name="twitter:description" content="2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等">
@@ -356,7 +356,7 @@
 <ul>
 <li><strong>坐标系统</strong><br>CodeMirror 中以行为单位，通过 <code>{line, ch}</code> 第几行的第几个字符可以准确为每一个字符定位 <code>pos</code>，同时每一个字符都有一个全局索引 <code>index</code>，通过 <code>doc.posFromIndex</code> 和 <code>doc.indexFromPos</code> 两个辅助方法可以对二者进行转换</li>
 <li><strong>丰富的事件回调: <code>change</code>, <code>beforeChange</code>, <code>cursorActivity</code>…</strong><br>其中编辑事件 <code>change</code> 的回调参数信息非常丰富，便于我们将其转换成 OT 算法中的 operation<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-insert.png" alt=""><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-delete.png" alt=""></li>
-<li><strong><code>markText</code> 富文本支持 API</strong><br>注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API <code>markText</code> 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 <a href="https://objcer.com/2018/02/27/SharePen-AnnotationList/">SharePen 之 AnnotationList</a> 中将进行详细介绍</li>
+<li><strong><code>markText</code> 富文本支持 API</strong><br>注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API <code>markText</code> 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 <a href="https://objcer.com/2018/02/27/SharedPen-AnnotationList/">SharedPen 之 AnnotationList</a> 中将进行详细介绍</li>
 </ul>
 <h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><table>
 <thead>
@@ -415,8 +415,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/27/SharePen-AnnotationList/" rel="next" title="SharePen 之 AnnotationList">
-                <i class="fa fa-chevron-left"></i> SharePen 之 AnnotationList
+              <a href="/2018/02/27/SharePen-AnnotationList/" rel="next" title="SharedPen 之 AnnotationList">
+                <i class="fa fa-chevron-left"></i> SharedPen 之 AnnotationList
               </a>
             
           </div>
