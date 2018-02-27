@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://objcer.com/"/>
-  <updated>2018-01-22T13:28:45.000Z</updated>
+  <updated>2018-02-27T14:42:09.000Z</updated>
   <id>http://objcer.com/</id>
   
   <author>
@@ -14,6 +14,183 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SharedPen 富文本实时协同编辑器</title>
+    <link href="http://objcer.com/2018/02/27/SharedPen/"/>
+    <id>http://objcer.com/2018/02/27/SharedPen/</id>
+    <published>2018-02-27T14:39:33.000Z</published>
+    <updated>2018-02-27T14:42:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png" alt=""></p>
+<p>2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏<br>SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：<a href="https://github.com/YingshanDeng/SharedPen" target="_blank" rel="external">GitHub: YingshanDeng/SharedPen</a>。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。</p>
+<a id="more"></a>
+<h2 id="关于协同编辑器"><a href="#关于协同编辑器" class="headerlink" title="关于协同编辑器"></a>关于协同编辑器</h2><p>协同编辑也就是多个人对一份文档进行编辑，每个协作这都有自己的输入光标，并可以可以自由地和其他协作者一起输入。对于 web-based 的协同编辑器，目前有很多成熟的产品。像我很喜欢用的: <a href="https://www.google.com/docs/about/" target="_blank" rel="external">Google Docs</a>，国内的: <a href="https://shimo.im/" target="_blank" rel="external">石墨文档</a>。</p>
+<p>另一个值得介绍的是 <a href="https://teletype.atom.io/" target="_blank" rel="external">Teletype</a>，这是在旧金山举办的 2017 QCon 大会上，GitHub 发布的 Atom 实时协作插件，Teletype 可以让两名开发者轻松的协作编写代码，由于 Atom 是基于 <a href="https://electronjs.org/" target="_blank" rel="external">Electron</a> 构建的应用程序，所以我们也可以将其看作是 web-based 协同编辑器。</p>
+<p><strong>协同编辑的关键是要解决数据一致性的问题</strong>，不同的协作者修改他们自己的文档副本，本地的编辑会立刻应用到本地副本，之后会传输给其他协作者，这会导致不同的副本可能会以不同的顺序应用各种修改，应该有算法来确保在协同编辑之后，所有副本最终的内容是一致的。</p>
+<h2 id="数据一致性解决方案"><a href="#数据一致性解决方案" class="headerlink" title="数据一致性解决方案"></a>数据一致性解决方案</h2><p>首先介绍一下分布式系统，分布式系统即运行在多物理计算机上的系统。这个是人类目前实际可行的构建超大规模系统的唯二办法之一（另一种就是构建超级计算机）。构建一个分布式系统的难点在于：让分布式系统运作起来正确性与单机程序完全无二。而协同编辑器，我们也可以看做是一个分布式系统，多端的协作者修改文档，而最终文档内容要收敛到相同的状态<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png" alt=""></p>
+<p>目前来说，解决分布式系统数据一致性问题，主流的有两大方案：</p>
+<ul>
+<li><strong>Conflict-free replicated data type</strong> (CRDT)</li>
+<li><strong>Operational transformation</strong> (OT)</li>
+</ul>
+<h3 id="Conflict-free-replicated-data-type"><a href="#Conflict-free-replicated-data-type" class="headerlink" title="Conflict-free replicated data type"></a>Conflict-free replicated data type</h3><p>Conflict-free replicated data type，简称为 CRDT，直译的话即是：无冲突可复制数据类型。</p>
+<blockquote>
+<p>Wikipedia 介绍: <a href="https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type" target="_blank" rel="external">Conflict-free replicated data type</a><br>In distributed computing, a conflict-free replicated data type (CRDT) is a <strong>data structure</strong> which can be replicated across multiple computers in a network, where the replicas can be updated independently and concurrently without coordination between the replicas, and where it is always mathematically possible to resolve inconsistencies which might result.</p>
+</blockquote>
+<p>简单的理解：CRDT 就是这样一些适应于分布式系统的可以保持最终一致性的<strong>数据结构</strong>的统称。GitHub 开源的 Teletype 协同编辑插件，使用的就是 CRDT 算法。GitHub 为此开发的 CRDT 是一个独立的库，有兴趣可前往 GitHub 具体了解。</p>
+<blockquote>
+<p>项目地址：<a href="https://github.com/atom/teletype-crdt" target="_blank" rel="external">atom/teletype-crdt</a> String-wise sequence CRDT powering peer-to-peer collaborative editing in Teletype for Atom.</p>
+</blockquote>
+<h3 id="Operational-transformation"><a href="#Operational-transformation" class="headerlink" title="Operational transformation"></a>Operational transformation</h3><p>Operational transformation，简称 OT，直译的话即是：操作转换<br>OT 它起源于 1989 年发表的一篇<a href="https://dl.acm.org/citation.cfm?doid=67544.66963" target="_blank" rel="external">研究论文</a>，进过多年的发展，现在已经是非常成熟的一致性解决算法，很多协同编辑器都采用此算法作为协同解决方案，例如我们熟知的 Google Docs。</p>
+<blockquote>
+<p>Wikipedia 介绍: <a href="https://en.wikipedia.org/wiki/Operational_transformation" target="_blank" rel="external">Operational transformation</a><br>Operational transformation (OT) is a technology for supporting a range of collaboration functionalities in advanced collaborative software systems. OT was originally invented for consistency maintenance and concurrency control in collaborative editing of plain text documents. Two decades of research has extended its capabilities and expanded its applications to include group undo, locking, conflict resolution, operation notification and compression, group-awareness, HTML/XML and tree-structured document editing, collaborative office productivity tools, application-sharing, and collaborative computer-aided media design tools (see OTFAQ). In 2009 OT was adopted as a core technique behind the collaboration features in Apache Wave and Google Docs.</p>
+</blockquote>
+<p><strong>SharedPen 也是采用 OT 作为协同编辑解决方案</strong>，使用了 <a href="https://github.com/Operational-Transformation/ot.js" target="_blank" rel="external">ot.js</a> 库，OT 算法将有另一篇文章单独介绍，敬请期待 😋</p>
+<h2 id="富文本编辑器"><a href="#富文本编辑器" class="headerlink" title="富文本编辑器"></a>富文本编辑器</h2><p>SharedPen 是基于 web 端的所见即所得 (WYSIWYG) 编辑器。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen.png" alt=""></p>
+<p>在 ot.js 库中，使用 <a href="https://codemirror.net/" target="_blank" rel="external">CodeMirror</a> 作为文本编辑器，CodeMirror 是一款优秀的编辑器，多用于代码编辑器，譬如在 Chrome 浏览器的调试器中，就使用 CodeMirror 作为代码编辑器。ot.js 库基于 CodeMirror 实现了一个简单的纯文本编辑器，demo 可以参考：<a href="https://github.com/YingshanDeng/ot.js-demo" target="_blank" rel="external">GitHub: ot.js-demo</a></p>
+<p>CodeMirror 编辑器具有丰富友好的 API 接口：</p>
+<ul>
+<li><strong>坐标系统</strong><br>CodeMirror 中以行为单位，通过 <code>{line, ch}</code> 第几行的第几个字符可以准确为每一个字符定位 <code>pos</code>，同时每一个字符都有一个全局索引 <code>index</code>，通过 <code>doc.posFromIndex</code> 和 <code>doc.indexFromPos</code> 两个辅助方法可以对二者进行转换</li>
+<li><strong>丰富的事件回调: <code>change</code>, <code>beforeChange</code>, <code>cursorActivity</code>…</strong><br>其中编辑事件 <code>change</code> 的回调参数信息非常丰富，便于我们将其转换成 OT 算法中的 operation<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-insert.png" alt=""><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-delete.png" alt=""></li>
+<li><strong><code>markText</code> 富文本支持 API</strong><br>注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API <code>markText</code> 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 <a href="https://objcer.com/2018/02/27/SharePen-AnnotationList/">SharePen 之 AnnotationList</a> 中将进行详细介绍</li>
+</ul>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>架构</th>
+<th>Server 作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google Docs，石墨文档</td>
+<td>C/S 模式</td>
+<td>负责转发多端操作和数据持久化存储</td>
+</tr>
+<tr>
+<td>Teletype(Atom协同编辑插件)</td>
+<td>Peer-to-Peer 模式</td>
+<td>辅助建立连接(握手)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Peer-to-Peer-模式"><a href="#Peer-to-Peer-模式" class="headerlink" title="Peer-to-Peer 模式"></a>Peer-to-Peer 模式</h3><p>Atom 协同编辑插件 Teletype，采用 Peer-to-Peer 模式，通过 WebRTC 加密多端之间的通信。除了最初的握手依赖于 GitHub 的服务器之外，所有的传输都是点对点的（不需要访问 GitHub 服务器）。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen-peer-to-peer.png?t=1" alt=""></p>
+<h3 id="C-S-模式"><a href="#C-S-模式" class="headerlink" title="C/S 模式"></a>C/S 模式</h3><p>像 Google Docs，石墨文档都是采用 C/S 模式作为前后端架构，SharedPen 也是采用这种架构模式，前后端建立 socket 连接，相互实时发送 operation 操作，服务端中还对数据进行持久化存储。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen-client-server.png" alt=""></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://liyu1981.github.io/what-is-CRDT/" target="_blank" rel="external">谈谈CRDT</a><br><a href="http://www.jdon.com/artichect/crdt.html" target="_blank" rel="external">分布式CRDT模型</a><br><a href="https://drive.googleblog.com/2010/05/whats-different-about-new-google-docs.html" target="_blank" rel="external">What’s different about the new Google Docs?</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏&lt;br&gt;SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：&lt;a href=&quot;https://github.com/YingshanDeng/SharedPen&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub: YingshanDeng/SharedPen&lt;/a&gt;。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="SharedPen" scheme="http://objcer.com/categories/SharedPen/"/>
+    
+    
+      <category term="富文本" scheme="http://objcer.com/tags/%E5%AF%8C%E6%96%87%E6%9C%AC/"/>
+    
+      <category term="实时协同编辑器" scheme="http://objcer.com/tags/%E5%AE%9E%E6%97%B6%E5%8D%8F%E5%90%8C%E7%BC%96%E8%BE%91%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SharePen 之 AnnotationList</title>
+    <link href="http://objcer.com/2018/02/27/SharePen-AnnotationList/"/>
+    <id>http://objcer.com/2018/02/27/SharePen-AnnotationList/</id>
+    <published>2018-02-27T14:35:29.000Z</published>
+    <updated>2018-02-27T14:42:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Annotation.png" alt=""></p>
+<p>CodeMirror 是一款优秀的开源文本编辑器，常用于代码编辑器。但并不支持富文本编辑功能。但是得益于 CodeMirror 的 API</p>
+<blockquote>
+<p><a href="https://codemirror.net/doc/manual.html#api_marker" target="_blank" rel="external">markText</a>: <strong>Can be used to mark a range of text with a specific CSS class name.</strong></p>
+</blockquote>
+<p>能够为指定 range 的文本设置一个 CSS class，这样我们就可以通过这个 class 来设置富文本样式。例如对于文本：<code>ABCDEFGHF</code>，我们可以通过如下方式为其设置 class<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">doc</span><span class="selector-class">.markText</span>(&#123;<span class="attribute">line</span>:<span class="number">0</span>, ch: <span class="number">0</span>&#125;, &#123;<span class="attribute">line</span>: <span class="number">0</span>, ch: <span class="number">3</span>&#125;, &#123;<span class="attribute">className</span>: <span class="string">'classA'</span>&#125;)</div><div class="line"><span class="selector-tag">doc</span><span class="selector-class">.markText</span>(&#123;<span class="attribute">line</span>:<span class="number">0</span>, ch: <span class="number">3</span>&#125;, &#123;<span class="attribute">line</span>: <span class="number">0</span>, ch: <span class="number">6</span>&#125;, &#123;<span class="attribute">className</span>: <span class="string">'classB'</span>&#125;)</div><div class="line"><span class="selector-tag">doc</span><span class="selector-class">.markText</span>(&#123;<span class="attribute">line</span>:<span class="number">0</span>, ch: <span class="number">6</span>&#125;, &#123;<span class="attribute">line</span>: <span class="number">0</span>, ch: <span class="number">9</span>&#125;, &#123;<span class="attribute">className</span>: <span class="string">'classC'</span>&#125;)</div></pre></td></tr></table></figure></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/marktext.png" alt=""></p>
+<p><code>markText</code> 方法会返回一个 <code>CodeMirror.TextMarker</code> 对象，该对象中的 <code>clear()</code> 方法用于清除 class，这样就非常便于我们动态为文本设置富文本样式了。</p>
+<p>为了管理，操作整个富文本文档流，我们引入 <strong>AnnotationList</strong> 单链表结构，把每一段富文本当成 <code>Node</code> 节点，由此形成链表结构。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/annotation-list.png" alt=""></p>
+<p>本文将详解 AnnotationList 单链表结构 🤓</p>
+<a id="more"></a>
+<h2 id="文本区间-Span-类"><a href="#文本区间-Span-类" class="headerlink" title="文本区间 Span 类"></a>文本区间 <code>Span</code> 类</h2><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Span</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span> (pos, length) &#123;</div><div class="line">    <span class="keyword">this</span>.pos = pos</div><div class="line">    <span class="keyword">this</span>.length = length</div><div class="line">  &#125;</div><div class="line">  end () &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.pos + <span class="keyword">this</span>.length</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Span</code> 表示一段文本区间：</p>
+<ul>
+<li><code>pos</code>：区间起点</li>
+<li><code>length</code>：区间长度（若长度为0，即未选中文字，只表示光标位置）</li>
+</ul>
+<h2 id="链表节点-Node-类"><a href="#链表节点-Node-类" class="headerlink" title="链表节点 Node 类"></a>链表节点 <code>Node</code> 类</h2><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span> (length, <span class="keyword">annotation</span>) &#123;</div><div class="line">    <span class="keyword">this</span>.length = length</div><div class="line">    <span class="keyword">this</span>.<span class="keyword">annotation</span> = <span class="keyword">annotation</span></div><div class="line">    <span class="keyword">this</span>.attachedObject = <span class="literal">null</span></div><div class="line">    <span class="keyword">this</span>.next = <span class="literal">null</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>链表节点包含四个属性：</p>
+<ul>
+<li><code>length</code>：表示该节点的文本的长度，需要注意的是，<strong>节点并不需要直接存储文本内容</strong></li>
+<li><code>annotation</code>：表示节点包含的富文本属性</li>
+<li><code>attachedObject</code>：<code>CodeMirror.TextMarker</code> 对象</li>
+<li><code>next</code>：指向下一个节点</li>
+</ul>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/list-node.png" alt=""></p>
+<h2 id="辅助方法-getAffectedNodes-span"><a href="#辅助方法-getAffectedNodes-span" class="headerlink" title="辅助方法 getAffectedNodes_(span)"></a>辅助方法 <code>getAffectedNodes_(span)</code></h2><p>此方法用于获取指定文本区间(span)在单链表中的节点信息，包括：</p>
+<ul>
+<li><code>start</code>: the node contains the first character in span.</li>
+<li><code>end</code>: the node contains the last character in span.</li>
+<li><code>beforeStart</code>: the node before <code>start</code> node.</li>
+<li><code>succ</code>: the node after <code>end</code> node if <code>span.end()</code> was on a node boundary, else <code>null</code>.</li>
+<li><code>pred</code>: the node before <code>start</code> if <code>span.pos</code> was on a node boundary, else <code>null</code>.</li>
+<li><code>beforePred</code>: the node before <code>pred</code> node.</li>
+<li><code>startPos</code>: the position of <code>start</code> node</li>
+<li><code>predPos</code>: the position of <code>pred</code> node</li>
+</ul>
+<h3 id="start-和-end"><a href="#start-和-end" class="headerlink" title="start 和 end"></a><code>start</code> 和 <code>end</code></h3><p><code>start</code> 和 <code>end</code> 分别表示文本区间(span)的第一个和最后一个字符所在的节点。<br>大致有如下三种情况：</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/start-end-node.png" alt=""></p>
+<h3 id="pred-和-succ"><a href="#pred-和-succ" class="headerlink" title="pred 和 succ"></a><code>pred</code> 和 <code>succ</code></h3><p><code>pred</code> 和 <code>succ</code> 是指文本区间(span)左右边界恰好也是处于单链表节点边界处时，左边界的前一个节点和右边界的后一个节点。<br>大致有如下五种情况：</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/pred-succ-node.png?t=1" alt=""></p>
+<h3 id="startPos-和-predPos"><a href="#startPos-和-predPos" class="headerlink" title="startPos 和 predPos"></a><code>startPos</code> 和 <code>predPos</code></h3><p><code>startPos</code> 和 <code>predPos</code> 是指 <code>start</code> 和 <code>pred</code> 节点首字符在整个文档中的位置</p>
+<h2 id="链表操作"><a href="#链表操作" class="headerlink" title="链表操作"></a>链表操作</h2><p>文档编辑过程中的富文本操作对应到单链表中的操作包括增删改查，其中插入，删除和更新，这些方法都依赖这个方法：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">wrapOperation_ (span, operationFn)</div><div class="line"></div><div class="line"><span class="keyword">this</span>.wrapOperation_(span, <span class="function"><span class="keyword">function</span> (<span class="params">startPos, start</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> newNodes</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>其中 <code>span</code> 指定文本区间；而 <code>operationFn(res.startPos, res.start)</code> 回调方法根据从辅助方法 <code>getAffectedNodes_(span)</code> 获取的 <strong><code>startPos</code>, <code>start</code></strong> 信息生成一段新的链表段。<code>wrapOperation_</code> 将新生成的这段链表融入到原有的 AnnotationList 单链表。</p>
+<h3 id="插入操作-insertAnnotatedSpan"><a href="#插入操作-insertAnnotatedSpan" class="headerlink" title="插入操作 insertAnnotatedSpan"></a>插入操作 <code>insertAnnotatedSpan</code></h3><p>插入操作包括两种情况：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/insert-span.png" alt=""></p>
+<p>其中前者在节点间隔处插入，<code>start</code> 节点为 <code>null</code>，此时由新插入的文本生成 Node 节点作为新生成链表段直接返回；而后者在节点中插入，<code>start</code> 节点为当前节点，生成新链表段需要将 <code>start</code> 节点从插入点分裂生成两个节点，新插入的文本作为新 Node 节点插入其中，如下图所示：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/insert-span-action.png?t=1" alt=""></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">insertAnnotatedSpan</span> (<span class="params">span, annotation</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.wrapOperation_(<span class="keyword">new</span> Span(span.pos, <span class="number">0</span>), <span class="function"><span class="keyword">function</span> (<span class="params">oldPos, old</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> toInsert = <span class="keyword">new</span> Node(span.length, annotation)</div><div class="line">    <span class="keyword">if</span> (!old) &#123;</div><div class="line">      <span class="keyword">return</span> toInsert</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">var</span> newNodes = <span class="keyword">new</span> Node(<span class="number">0</span>, NullAnnotation)</div><div class="line">      <span class="comment">// Insert part of old before insertion point.</span></div><div class="line">      newNodes.next = <span class="keyword">new</span> Node(span.pos - oldPos, old.annotation)</div><div class="line">      <span class="comment">// Insert new node.</span></div><div class="line">      newNodes.next.next = toInsert</div><div class="line">      <span class="comment">// Insert part of old after insertion point.</span></div><div class="line">      toInsert.next = <span class="keyword">new</span> Node(oldPos + old.length - span.pos, old.annotation)</div><div class="line">      <span class="keyword">return</span> newNodes.next</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="删除操作-removeSpan"><a href="#删除操作-removeSpan" class="headerlink" title="删除操作 removeSpan"></a>删除操作 <code>removeSpan</code></h3><p>删除操作中，要求文本区间长度大于 0；其执行过程如下图所示：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/delete-span-action.png" alt=""></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeSpan</span> (<span class="params">removeSpan</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (removeSpan.length === <span class="number">0</span>) &#123; <span class="keyword">return</span> &#125;</div><div class="line">  <span class="keyword">this</span>.wrapOperation_(removeSpan, <span class="function"><span class="keyword">function</span> (<span class="params">oldPos, old</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> newNodes = <span class="keyword">new</span> Node(<span class="number">0</span>, NullAnnotation)</div><div class="line">    <span class="keyword">var</span> current = newNodes</div><div class="line">    <span class="comment">// ① Add new node for part before the removed span (if any).</span></div><div class="line">    <span class="keyword">if</span> (removeSpan.pos &gt; oldPos) &#123;</div><div class="line">      current.next = <span class="keyword">new</span> Node(removeSpan.pos - oldPos, old.annotation)</div><div class="line">      current = current.next</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// ② Skip over removed nodes.</span></div><div class="line">    <span class="keyword">while</span> (removeSpan.end() &gt; oldPos + old.length) &#123;</div><div class="line">      oldPos += old.length</div><div class="line">      old = old.next</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// ③ Add new node for part after the removed span (if any).</span></div><div class="line">    <span class="keyword">var</span> afterChars = oldPos + old.length - removeSpan.end()</div><div class="line">    <span class="keyword">if</span> (afterChars &gt; <span class="number">0</span>) &#123;</div><div class="line">      current.next = <span class="keyword">new</span> Node(afterChars, old.annotation)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> newNodes.next</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="更新操作-updateSpan"><a href="#更新操作-updateSpan" class="headerlink" title="更新操作 updateSpan"></a>更新操作 <code>updateSpan</code></h3><p>更新操作中，文本区间长度也要大于 0；其执行过程如下图所示：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/update-span-action.png" alt=""></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateSpan</span> (<span class="params">span, updateFn</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (span.length === <span class="number">0</span>) &#123; <span class="keyword">return</span> &#125;</div><div class="line">  <span class="keyword">this</span>.wrapOperation_(span, <span class="function"><span class="keyword">function</span> (<span class="params">oldPos, old</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> newNodes = <span class="keyword">new</span> Node(<span class="number">0</span>, NullAnnotation)</div><div class="line">    <span class="keyword">var</span> current = newNodes</div><div class="line">    <span class="keyword">var</span> currentPos = oldPos</div><div class="line"></div><div class="line">    <span class="comment">// ① Add node for any characters before the span we're updating.</span></div><div class="line">    <span class="keyword">var</span> beforeChars = span.pos - currentPos</div><div class="line">    <span class="keyword">if</span> (beforeChars &gt; <span class="number">0</span>) &#123;</div><div class="line">      current.next = <span class="keyword">new</span> Node(beforeChars, old.annotation)</div><div class="line">      current = current.next</div><div class="line">      currentPos += current.length</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// ② Add updated nodes for entirely updated nodes.</span></div><div class="line">    <span class="keyword">while</span> (old !== <span class="literal">null</span> &amp;&amp; span.end() &gt;= oldPos + old.length) &#123;</div><div class="line">      <span class="keyword">var</span> length = oldPos + old.length - currentPos</div><div class="line">      current.next = <span class="keyword">new</span> Node(length, updateFn(old.annotation, length))</div><div class="line">      current = current.next</div><div class="line">      oldPos += old.length</div><div class="line">      old = old.next</div><div class="line">      currentPos = oldPos</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// ③ Add updated nodes for last node.</span></div><div class="line">    <span class="keyword">var</span> updateChars = span.end() - currentPos</div><div class="line">    <span class="keyword">if</span> (updateChars &gt; <span class="number">0</span>) &#123;</div><div class="line">      current.next = <span class="keyword">new</span> Node(updateChars, updateFn(old.annotation, updateChars))</div><div class="line">      current = current.next</div><div class="line">      currentPos += current.length</div><div class="line"></div><div class="line">      <span class="comment">// ④ Add non-updated remaining part of node.</span></div><div class="line">      current.next = <span class="keyword">new</span> Node(oldPos + old.length - currentPos, old.annotation)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> newNodes.next</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="wrapOperation"><a href="#wrapOperation" class="headerlink" title="wrapOperation_"></a>wrapOperation_</h3><p><code>wrapOperation_</code> 方法是 AnnotationList 链表操作的核心方法，通过这个方法会从单链表中提取需旧节点数组和新节点数组，如下图所示：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/oldNodes-newNodes.png" alt=""></p>
+<p>其中浅灰色层覆盖的节点为 <code>oldNodes</code> 数组；浅蓝色层覆盖的节点为 <code>newNodes</code> 数组。得到这两个数组后，首先对 <code>oldNodes</code> 数组中的节点进行操作，通过 <code>attachedObject</code> 属性得到 <code>CodeMirror.TextMarker</code> 对象，调用 <code>clear()</code> 方法，取消先前设置的 class。然后对 <code>newNodes</code> 数组中的节点，通过 <code>markText</code> 方法设置相应的 class。</p>
+<p>👇下面列几个在这个方法中比较关键(链表优化)的处理：</p>
+<p><strong>1. <code>mergeNodesWithSameAnnotations_</code></strong><br>通过 <code>wrapOperation_ (span, operationFn)</code> 回调函数 <code>operationFn</code> 会生成一小段新的链表 <code>var newSegment = operationFn(res.startPos, res.start)</code>，得到这段新链表段后，需要对其进行一个预处理，合并其中节点富文本属性 <strong><code>annotation</code></strong> 相同的节点，这个过程调用 <code>mergeNodesWithSameAnnotations_</code> 方法<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">this</span>.mergeNodesWithSameAnnotations_(<span class="keyword">new</span><span class="type">Segment</span>)</div></pre></td></tr></table></figure></p>
+<p><strong>2. 存在 <code>pred</code> 或者 <code>succ</code> 节点时的判断</strong><br>考虑如下这种情况：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/AD4C499B-D669-4251-B59D-0162041C4D97.png" alt=""></p>
+<p>对中间三个节点进行更新操作，那么由于选择的文本区间边界正好处于链表的节点边界，所以 <code>pred</code> 和 <code>succ</code> 节点都不为空，那么此时需要进行两个判断：</p>
+<ul>
+<li><code>pred</code> 节点和 <code>newSegment</code> 的首节点判断富文本属性 <code>annotation</code> 是否相同；若相同，说明 <code>pred</code> 节点和<code>newSegment</code> 的首节点可以<strong>合并</strong>，那么需要将 <code>pred</code> 节点纳入 <code>oldNodes</code> 数组</li>
+<li>同理，<code>succ</code> 节点和 <code>newSegment</code> 的最后一个节点也需要执行如上逻辑的判断</li>
+</ul>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">if (res.pred &amp;&amp; res.pred.annotation.equals(newSegment.annotation)) &#123;</div><div class="line">  // We can merge the pred <span class="keyword">node</span> <span class="title">with</span> newSegment's first <span class="keyword">node</span>.</div><div class="line">  <span class="title">includePredInOldNodes</span> = <span class="literal">true</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">if (res.succ &amp;&amp; res.succ.annotation.equals(newSegment.annotation)) &#123;</div><div class="line">  // We can merge newSegment's last <span class="keyword">node</span> <span class="title">with</span> the succ <span class="keyword">node</span>.</div><div class="line">  <span class="title">includeSuccInOldNodes</span> = <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h3><p><strong>AnnotationList</strong> 类中也提供了两个链表查询方法，根据 <code>pos</code> 位置信息或者 <code>span</code> 指定文本区间查询链表节点信息，基本上都是遍历链表的操作，此处不详述，直接参考源码即可。<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getAnnotatedSpansForPos</span> <span class="params">(pos)</span></span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getAnnotatedSpansForSpan</span> <span class="params">(span)</span></span></div></pre></td></tr></table></figure></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><strong>AnnotationList</strong> 单链表结构执行操作的效率比较低，所有操作的算法复杂度都是 <code>O(n)</code>，这个链表长度会随着文章长度，富文本属性设置操作的增加而变长。优化的方向是，<strong>将链表结果改造成树状结构</strong>。🎄</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Annotation.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;CodeMirror 是一款优秀的开源文本编辑器，常用于代码编辑器。但并不支持富文本编辑功能。但是得益于 CodeMirror 的 API&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://codemirror.net/doc/manual.html#api_marker&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;markText&lt;/a&gt;: &lt;strong&gt;Can be used to mark a range of text with a specific CSS class name.&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;能够为指定 range 的文本设置一个 CSS class，这样我们就可以通过这个 class 来设置富文本样式。例如对于文本：&lt;code&gt;ABCDEFGHF&lt;/code&gt;，我们可以通过如下方式为其设置 class&lt;br&gt;&lt;figure class=&quot;highlight css&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;selector-tag&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;selector-class&quot;&gt;.markText&lt;/span&gt;(&amp;#123;&lt;span class=&quot;attribute&quot;&gt;line&lt;/span&gt;:&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, ch: &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;&amp;#125;, &amp;#123;&lt;span class=&quot;attribute&quot;&gt;line&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, ch: &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;&amp;#125;, &amp;#123;&lt;span class=&quot;attribute&quot;&gt;className&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&#39;classA&#39;&lt;/span&gt;&amp;#125;)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;selector-tag&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;selector-class&quot;&gt;.markText&lt;/span&gt;(&amp;#123;&lt;span class=&quot;attribute&quot;&gt;line&lt;/span&gt;:&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, ch: &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;&amp;#125;, &amp;#123;&lt;span class=&quot;attribute&quot;&gt;line&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, ch: &lt;span class=&quot;number&quot;&gt;6&lt;/span&gt;&amp;#125;, &amp;#123;&lt;span class=&quot;attribute&quot;&gt;className&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&#39;classB&#39;&lt;/span&gt;&amp;#125;)&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;selector-tag&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;selector-class&quot;&gt;.markText&lt;/span&gt;(&amp;#123;&lt;span class=&quot;attribute&quot;&gt;line&lt;/span&gt;:&lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, ch: &lt;span class=&quot;number&quot;&gt;6&lt;/span&gt;&amp;#125;, &amp;#123;&lt;span class=&quot;attribute&quot;&gt;line&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;, ch: &lt;span class=&quot;number&quot;&gt;9&lt;/span&gt;&amp;#125;, &amp;#123;&lt;span class=&quot;attribute&quot;&gt;className&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&#39;classC&#39;&lt;/span&gt;&amp;#125;)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/marktext.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;markText&lt;/code&gt; 方法会返回一个 &lt;code&gt;CodeMirror.TextMarker&lt;/code&gt; 对象，该对象中的 &lt;code&gt;clear()&lt;/code&gt; 方法用于清除 class，这样就非常便于我们动态为文本设置富文本样式了。&lt;/p&gt;
+&lt;p&gt;为了管理，操作整个富文本文档流，我们引入 &lt;strong&gt;AnnotationList&lt;/strong&gt; 单链表结构，把每一段富文本当成 &lt;code&gt;Node&lt;/code&gt; 节点，由此形成链表结构。&lt;br&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/annotation-list.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;本文将详解 AnnotationList 单链表结构 🤓&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="SharedPen" scheme="http://objcer.com/categories/SharedPen/"/>
+    
+    
+      <category term="AnnotationList" scheme="http://objcer.com/tags/AnnotationList/"/>
+    
+  </entry>
   
   <entry>
     <title>学习正则表达式</title>
@@ -1606,177 +1783,6 @@
       <category term="事件捕获" scheme="http://objcer.com/tags/%E4%BA%8B%E4%BB%B6%E6%8D%95%E8%8E%B7/"/>
     
       <category term="事件冒泡" scheme="http://objcer.com/tags/%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>探究 emoji 字符长度</title>
-    <link href="http://objcer.com/2017/07/20/explore-emoji-length/"/>
-    <id>http://objcer.com/2017/07/20/explore-emoji-length/</id>
-    <published>2017-07-20T11:41:38.000Z</published>
-    <updated>2017-07-20T11:46:24.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png" alt=""><br>我们注意到在 Twitter，微博，谷歌翻译的输入框中输入 emoji 字符，都不能正确的判断字符个数。🤷‍<br>在阅读本文之前，需要先对 Unicode 编码有所了解，参考: <a href="http://objcer.com/2017/05/21/JavaScript-Unicode/">JavaScript Unicode 编码那些事</a></p>
-<a id="more"></a>
-<h2 id="String-length-Char-count"><a href="#String-length-Char-count" class="headerlink" title="String length != Char count"></a>String length != Char count</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="string">'😂'</span><span class="selector-class">.length</span> <span class="comment">// 2</span></div><div class="line"><span class="string">'1️⃣'</span><span class="selector-class">.length</span> <span class="comment">// 3</span></div><div class="line"><span class="string">'👨‍👨‍👦'</span><span class="selector-class">.length</span> <span class="comment">// 8</span></div><div class="line"><span class="string">'👨‍👩‍👧‍👦'</span><span class="selector-class">.length</span> <span class="comment">// 11</span></div></pre></td></tr></table></figure>
-<h2 id="关于-Unicode"><a href="#关于-Unicode" class="headerlink" title="关于 Unicode"></a>关于 Unicode</h2><p>Unicode 编码范围是从 U+0000 到 U+10FFFF，每一个编码（也称之为码位 code point）表示一个 Unicode 字符；而这么多码位有划分成 17 个平面：</p>
-<ul>
-<li>第一个平面(U+0000 ~ U+FFFF): 基本平面(Basic Multilingual Plane - <em>BMP</em>)</li>
-<li>其他 16 个平面(U+100000 ~ U+10FFFF): 补充平面(Supplementary Planes)</li>
-</ul>
-<p>其中 emoji 作为一种特殊编码在补充平面，例如：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">'😀'<span class="string">.codePointAt</span><span class="params">(0)</span><span class="string">.toString</span><span class="params">(16)</span> <span class="string">//</span> 0x1f600</div><div class="line">'😂'<span class="string">.codePointAt</span><span class="params">(0)</span><span class="string">.toString</span><span class="params">(16)</span> <span class="string">//</span> 0x1f602</div></pre></td></tr></table></figure></p>
-<h2 id="关于-emoji"><a href="#关于-emoji" class="headerlink" title="关于 emoji"></a>关于 emoji</h2><blockquote>
-<p>An Emoji as we know it today <strong>is defined by at least one code point</strong> in the Unicode range. This means that there are also several Emoji out there being a combination of several different Emoji and code points. These combinations are called <strong>sequences</strong>.</p>
-</blockquote>
-<p>一个 emoji 字符至少由一个码位表示，一个 emoji 有多个码位表示的我们称之为序列(sequences)。可以在 <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank" rel="external">Full Emoji List</a> 页面查看到所有 emoji 的编码信息<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/5E88BF15-66B7-4A32-9125-B3E019C52E9C.png" alt=""></p>
-<p>在 JavaScript 中 <code>String.length</code> 计算字符长度时，认为两个字节为一个字符，所以一个基本平面上的字符长度都为 1；而一个补充平面上的字符使用代理对，由四个字符表示，所以长度为 2；<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// a: 0x61</span></div><div class="line"><span class="string">'a'</span><span class="selector-class">.lenght</span> <span class="comment">// 1</span></div><div class="line"></div><div class="line"><span class="comment">//💩: U+d83d U+dca9</span></div><div class="line"><span class="string">'💩'</span><span class="selector-class">.length</span> <span class="comment">// 2</span></div><div class="line"></div><div class="line"><span class="comment">// '1️⃣': U+0031 U+FE0F U+20E3</span></div><div class="line"><span class="string">'1️⃣'</span><span class="selector-class">.length</span> <span class="comment">// 3</span></div></pre></td></tr></table></figure></p>
-<h3 id="Modifier-sequences"><a href="#Modifier-sequences" class="headerlink" title="Modifier sequences"></a>Modifier sequences</h3><p><img src="http://7vikhl.com1.z0.glb.clouddn.com/480D3F20-0262-40E4-B7C6-E068A9958692.png" alt=""><br>我们注意部分人类相关的 <strong>Human emoji</strong> 可以选择其他 5 种不同的肤色(<strong>Skin color</strong>)，默认颜色的 emoji 称之为 <strong>neutral emoji</strong>，不同肤色称之为 <strong>modifier</strong>，这些不同肤色的 emoji 我们称之为 <strong>Modifier sequences</strong>。</p>
-<blockquote>
-<p>These modifiers are called EMOJI MODIFIER FITZPATRICK TYPE-1-2, -3, -4, -5, and -6 (U+1F3FB–U+1F3FF): 🏻 🏼 🏽 🏾 🏿</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>Code point</th>
-<th>default</th>
-<th>FITZ-1-2(U+1F3FB)</th>
-<th>FITZ-3(U+1F3FC)</th>
-<th>FITZ-4(U+1F3FD)</th>
-<th>FITZ-5(U+1F3FE)</th>
-<th>FITZ-6(U+1F3FF)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>U+1F466: BOY</td>
-<td>👦</td>
-<td>👦🏻</td>
-<td>👦🏼</td>
-<td>👦🏽</td>
-<td>👦🏾</td>
-<td>👦🏿</td>
-</tr>
-<tr>
-<td>U+1F467: GIRL</td>
-<td>👧</td>
-<td>👧🏻</td>
-<td>👧🏼</td>
-<td>👧🏽</td>
-<td>👧🏾</td>
-<td>👧🏿</td>
-</tr>
-<tr>
-<td>U+1F468: MAN</td>
-<td>👨</td>
-<td>👨🏻</td>
-<td>👨🏼</td>
-<td>👨🏽</td>
-<td>👨🏾</td>
-<td>👨🏿</td>
-</tr>
-<tr>
-<td>U+1F469: WOMAN</td>
-<td>👩</td>
-<td>👩🏻</td>
-<td>👩🏼</td>
-<td>👩🏽</td>
-<td>👩🏾</td>
-<td>👩🏿</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// U+1F467 + U+1F3FD</div><div class="line">👧 + 🏽</div><div class="line"><span class="meta">&gt;</span><span class="bash"> 👧🏽</span></div></pre></td></tr></table></figure>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/E3F5C223-E3E9-4ECC-AD67-DF09D6D62DD6.png" alt=""></p>
-<p>明显的，这类 emoji 的通过 <code>String.length</code> 获取长度为 <strong>4</strong></p>
-<h3 id="ZWJ-sequences"><a href="#ZWJ-sequences" class="headerlink" title="ZWJ sequences"></a>ZWJ sequences</h3><p>接下来里了解一下 <strong>family emoji</strong>，譬如我们常见的：三口之家：👪，四口之家：👨‍👩‍👧‍👦，等等；其中值得注意的是：</p>
-<ul>
-<li>有一个 neutral family emoji (U+1F46A - ‍👪) 由一个码位表示</li>
-<li>而其他 family emoji 都是 <strong>Zero-Width-Joiner sequence</strong>；它们由多个 emoji 和 zero-width-joiner (U+200D) 组合而成</li>
-</ul>
-<p>注：zero-width-joiner (U+200D) 这个码位就如同胶水一般将不同的 emoji 组合成一个 emoji；zero-width-joiner (U+200D) 只占一个长度<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">// neutral family</div><div class="line">// U<span class="string">+1</span>F46A</div><div class="line">// length: 2</div><div class="line">&gt; 👪</div><div class="line"></div><div class="line">// ZWJ sequence: family (man, woman, boy)</div><div class="line">// U<span class="string">+1</span>F468 + U<span class="string">+200</span>D + U<span class="string">+1</span>F469 + U<span class="string">+200</span>D + U<span class="string">+1</span>F466</div><div class="line">// 👨‍ + U<span class="string">+200</span>D + 👩‍ + U<span class="string">+200</span>D + 👦</div><div class="line">// length: 8</div><div class="line">&gt; ‍👨‍👩‍👦</div><div class="line"></div><div class="line">// ZWJ sequence: family (woman, woman, girl)</div><div class="line">// U<span class="string">+1</span>F469 + U<span class="string">+200</span>D + U<span class="string">+1</span>F469 + U<span class="string">+200</span>D + U<span class="string">+1</span>F467</div><div class="line">// 👩‍ + U<span class="string">+200</span>D + 👩‍ U<span class="string">+200</span>D + 👧</div><div class="line">// length: 8</div><div class="line">&gt; ‍👩‍👩‍👧</div><div class="line"></div><div class="line">// ZWJ sequence: family (woman, woman, girl, girl)</div><div class="line">// U<span class="string">+1</span>F469 + U<span class="string">+200</span>D + U<span class="string">+1</span>F469 + U<span class="string">+200</span>D + U<span class="string">+1</span>F467 + U<span class="string">+200</span>D + U<span class="string">+1</span>F467</div><div class="line">// 👩‍ + U<span class="string">+200</span>D + 👩‍ + U<span class="string">+200</span>D + 👧‍ + U<span class="string">+200</span>D + 👧</div><div class="line">// length: 11</div><div class="line">&gt; ‍👩‍👩‍👧‍👧</div></pre></td></tr></table></figure></p>
-<p>拆分，组合 family emoji：<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[...<span class="string">'👨‍👩‍👦'</span>]</div><div class="line">&gt;  [<span class="string">"👨"</span>, <span class="string">"‍"</span>, <span class="string">"👩"</span>, <span class="string">"‍"</span>, <span class="string">"👦"</span>]</div><div class="line"></div><div class="line">var family =  [<span class="string">"👨"</span>, <span class="string">"‍"</span>, <span class="string">"👩"</span>, <span class="string">"‍"</span>, <span class="string">"👦"</span>]</div><div class="line">console.log(family.join(<span class="string">''</span>))</div><div class="line">&gt; <span class="string">"👨‍👩‍👦"</span></div></pre></td></tr></table></figure></p>
-<h2 id="解决字符长度终极解决方案"><a href="#解决字符长度终极解决方案" class="headerlink" title="解决字符长度终极解决方案"></a>解决字符长度终极解决方案</h2><p>我们找到一段正则表达式，可以用于匹配 Unicode 字符；然后封装成 <a href="https://github.com/YingshanDeng/EmojiCharString" target="_blank" rel="external">EmojiCharString</a> 类库，详细介绍参考该仓库 README 👉</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://mathiasbynens.be/notes/javascript-unicode" target="_blank" rel="external">JavaScript has a Unicode problem</a><br><a href="https://www.contentful.com/blog/2016/12/06/unicode-javascript-and-the-emoji-family/" target="_blank" rel="external">Emoji.prototype.length — a tale of characters in Unicode</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;我们注意到在 Twitter，微博，谷歌翻译的输入框中输入 emoji 字符，都不能正确的判断字符个数。🤷‍&lt;br&gt;在阅读本文之前，需要先对 Unicode 编码有所了解，参考: &lt;a href=&quot;http://objcer.com/2017/05/21/JavaScript-Unicode/&quot;&gt;JavaScript Unicode 编码那些事&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Unicode" scheme="http://objcer.com/categories/Unicode/"/>
-    
-    
-      <category term="unicode-emoji" scheme="http://objcer.com/tags/unicode-emoji/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Cordova 开发环境 - Android 篇</title>
-    <link href="http://objcer.com/2017/07/03/cordova-android-development-environment/"/>
-    <id>http://objcer.com/2017/07/03/cordova-android-development-environment/</id>
-    <published>2017-07-03T14:14:19.000Z</published>
-    <updated>2017-07-20T11:46:24.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/android-banner.jpg" alt=""><br><a id="more"></a></p>
-<h2 id="安装-IDE-Android-Studio"><a href="#安装-IDE-Android-Studio" class="headerlink" title="安装 IDE (Android Studio)"></a>安装 IDE (Android Studio)</h2><p>安装 Android Studio, SDK, Android Virtual Device (AVD，安卓模拟器)</p>
-<ul>
-<li>下载链接：<a href="https://developer.android.com/studio/index.html?hl=zh-cn" target="_blank" rel="external">Android Studio</a></li>
-<li>下载安装全程需要<strong>翻墙</strong></li>
-<li>安装 Android Studio 完成后，创建一个 HelloWorld 程序到模拟器中运行，这个过程中，按照提示进行下载安装即可</li>
-</ul>
-<h2 id="真机运行"><a href="#真机运行" class="headerlink" title="真机运行"></a>真机运行</h2><p>手机通过 USB 连接电脑后，运行时，选择对应的设备即可运行，以下罗列几点真机运行中遇到的问题和技巧</p>
-<h3 id="解决：DELETE-FAILED-INTERNAL-ERROR-Error-while-Installing-APK"><a href="#解决：DELETE-FAILED-INTERNAL-ERROR-Error-while-Installing-APK" class="headerlink" title="解决：DELETE_FAILED_INTERNAL_ERROR Error while Installing APK"></a>解决：<em>DELETE_FAILED_INTERNAL_ERROR Error while Installing APK</em></h3><p>安卓真机（小米4C）通过 USB 连接电脑后，运行，可能会出现如下问题：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/3B19ED97-CE3F-45A9-8518-C08D779F7FA3.png" alt=""><br>点击 OK 继续，会出现如下错误：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DELETE_FAILED_INTERNAL_ERROR</div><div class="line"><span class="keyword">Error </span>while Installing APKs</div></pre></td></tr></table></figure></p>
-<p>参考链接：<a href="https://stackoverflow.com/questions/38892270/delete-failed-internal-error-error-while-installing-apk" target="_blank" rel="external">DELETE_FAILED_INTERNAL_ERROR Error while Installing APK</a> 大致有两种解决方案：</p>
-<ul>
-<li>操作步骤：Android Studio &gt; Preferences &gt;  Build, Execution, Deployment &gt; Instant Run &gt; <strong>Uncheck : Enable Instant Run</strong>（此处理方式会禁用 Instant Run 功能）<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/03E0830C-F5BB-4EC5-AC41-50A604A3E532.png" alt=""></li>
-<li>由于调试设备是小米，所以还可以：设置 &gt; 更多设置 &gt; 开发者选项 &gt; <strong>去掉：启动 MIUI 优化</strong> &gt; 关闭并重启</li>
-</ul>
-<h3 id="ADB-无线调试"><a href="#ADB-无线调试" class="headerlink" title="ADB 无线调试"></a>ADB 无线调试</h3><p>Android ADB 提供了无线调试的功能</p>
-<blockquote>
-<p><a href="https://developer.android.com/studio/command-line/adb.html?hl=zh-cn#Enabling" target="_blank" rel="external">Android 调试桥</a></p>
-</blockquote>
-<h4 id="解决：zsh-command-not-found-adb"><a href="#解决：zsh-command-not-found-adb" class="headerlink" title="解决：zsh: command not found: adb"></a>解决：<code>zsh: command not found: adb</code></h4><p>解决步骤：<br>1️⃣ 执行如下命令往 .bash_profile 添加两个路径<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">"export PATH=\$PATH:/Users/<span class="variable">$&#123;USER&#125;</span>/Library/Android/sdk/platform-tools/"</span> &gt;&gt; ~/.bash_profile</div><div class="line"><span class="built_in">echo</span> <span class="string">"export PATH=\$PATH:/Users/<span class="variable">$&#123;USER&#125;</span>/Library/Android/sdk/tools/"</span> &gt;&gt; ~/.bash_profile</div></pre></td></tr></table></figure></p>
-<p>执行后 <code>.bash_profile</code> 文件：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export PATH=<span class="variable">$PATH</span><span class="symbol">:/Users/YingshanDeng/Library/Android/sdk/platform-tools/</span></div><div class="line">export PATH=<span class="variable">$PATH</span><span class="symbol">:/Users/YingshanDeng/Library/Android/sdk/tools/</span></div></pre></td></tr></table></figure></p>
-<p>2️⃣ 执行 <code>source .bash_profile</code> 使其生效，此时我们在终端中输入 <code>adb</code> 会发现该命令生效了<br>3️⃣ 由于我的终端使用的是 zsh，所以需要再处理一下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> 打开 .zshrc</span></div><div class="line">open .zshrc</div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"> 在文件末尾添加</span></div><div class="line">source ~/.bash_profile</div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"> 保存，重启终端即可</span></div></pre></td></tr></table></figure></p>
-<h4 id="AndroidWiFiADB-插件"><a href="#AndroidWiFiADB-插件" class="headerlink" title="AndroidWiFiADB 插件"></a>AndroidWiFiADB 插件</h4><p>直接使用还是不够方便，推荐使用 <strong>AndroidWiFiADB 插件</strong>，项目地址：<a href="https://github.com/pedrovgs/AndroidWiFiADB" target="_blank" rel="external">AndroidWiFiADB</a></p>
-<p>安装方式：</p>
-<ul>
-<li>Preferences -&gt; Settings -&gt; Plugins-&gt; Browse Repositories</li>
-<li>输入: Android WiFi ADB 进行搜索，安装后重启</li>
-</ul>
-<p>如何使用：</p>
-<ul>
-<li>先将手机通过 USB 连接电脑，而且保证手机和电脑连接同一 WiFi，点击 AndroidWiFiADB 插件按键，会在右下角弹气泡提示是否连接成功，连接成功后即可断开 USB 连接线，享受无线提示</li>
-<li>在使用过程中，要确保手机和电脑连接的同一 WiFi</li>
-<li>可以通过 AndroidWiFiADB 设备面板查看设备及设置连接状态</li>
-</ul>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/36CDAE13-BEBC-42D2-9226-A53DF0CEE4B1.png" alt=""></p>
-<h2 id="Chrome-远程调试模拟器-真机"><a href="#Chrome-远程调试模拟器-真机" class="headerlink" title="Chrome 远程调试模拟器/真机"></a>Chrome 远程调试模拟器/真机</h2><blockquote>
-<p><a href="https://developers.google.com/web/tools/chrome-devtools/remote-debugging/?hl=zh-cn" target="_blank" rel="external">远程调试 Android 设备使用入门</a></p>
-</blockquote>
-<p>操作步骤：</p>
-<ul>
-<li>随便在某个页面打开调试页面，如下图找到 <strong>Remote devices</strong><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/8FA1EB72-12AE-4984-AA64-2C7022B1F00E.png" alt=""></li>
-<li>确保已勾选 <strong>Discover USB devices</strong><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/B378E60C-01E5-43AE-8EA1-02999501F241.png" alt=""></li>
-<li>如下图找到对应的模拟器或者真机，点击 <strong>Inspect</strong> 按键就可以打开调试界面<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/917006D3-5881-4A6F-814F-0B3BB54383D7.png" alt=""></li>
-</ul>
-<h2 id="其他问题记录"><a href="#其他问题记录" class="headerlink" title="其他问题记录"></a>其他问题记录</h2><p>1、Android Studio 导入项目卡在 <em>Building gradle project info</em> 的解决方法：</p>
-<ul>
-<li><a href="http://www.jianshu.com/p/1311562bbfd4" target="_blank" rel="external">修改项目中gradle-wrapper.properties文件中的distributionUrl</a></li>
-<li>从一个能打开项目根目录拷贝 <code>gradle</code> 文件夹覆盖当前项目根目录中的 <code>gradle</code> 文件夹</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/android-banner.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;
-    
-    </summary>
-    
-      <category term="Cordova" scheme="http://objcer.com/categories/Cordova/"/>
-    
     
   </entry>
   
