@@ -1,11 +1,15 @@
-title: SharePen-AnnotationList
-tags:
+title: SharePen 之 AnnotationList
+date: 2018-02-27 22:35:29
+tags: AnnotationList
+categories: SharedPen
 ---
+
+![](http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Annotation.png)
 
 CodeMirror 是一款优秀的开源文本编辑器，常用于代码编辑器。但并不支持富文本编辑功能。但是得益于 CodeMirror 的 API
 > [markText](https://codemirror.net/doc/manual.html#api_marker): **Can be used to mark a range of text with a specific CSS class name.**
 
-能够为指定 range 的文本设置一个 class，这样我们就可以通过这个 class 来设置富文本样式。例如对于文本：`ABCDEFGHF`，我们可以通过如下方式为其设置 class
+能够为指定 range 的文本设置一个 CSS class，这样我们就可以通过这个 class 来设置富文本样式。例如对于文本：`ABCDEFGHF`，我们可以通过如下方式为其设置 class
 ```
 doc.markText({line:0, ch: 0}, {line: 0, ch: 3}, {className: 'classA'})
 doc.markText({line:0, ch: 3}, {line: 0, ch: 6}, {className: 'classB'})
