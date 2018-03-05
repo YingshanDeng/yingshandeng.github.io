@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://objcer.com/"/>
-  <updated>2018-03-05T15:29:18.000Z</updated>
+  <updated>2018-03-05T15:39:38.000Z</updated>
   <id>http://objcer.com/</id>
   
   <author>
@@ -16,11 +16,93 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>SharedPen 富文本实时协同编辑器</title>
+    <link href="http://objcer.com/2018/03/05/SharedPen/"/>
+    <id>http://objcer.com/2018/03/05/SharedPen/</id>
+    <published>2018-03-05T15:37:33.000Z</published>
+    <updated>2018-03-05T15:39:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png" alt=""></p>
+<p>2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏<br>SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：<a href="https://github.com/YingshanDeng/SharedPen" target="_blank" rel="external">GitHub: YingshanDeng/SharedPen</a>。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。</p>
+<a id="more"></a>
+<h2 id="关于协同编辑器"><a href="#关于协同编辑器" class="headerlink" title="关于协同编辑器"></a>关于协同编辑器</h2><p>协同编辑也就是多个人对一份文档进行编辑，每个协作这都有自己的输入光标，并可以可以自由地和其他协作者一起输入。对于 web-based 的协同编辑器，目前有很多成熟的产品。像我很喜欢用的: <a href="https://www.google.com/docs/about/" target="_blank" rel="external">Google Docs</a>，国内的: <a href="https://shimo.im/" target="_blank" rel="external">石墨文档</a>。</p>
+<p>另一个值得介绍的是 <a href="https://teletype.atom.io/" target="_blank" rel="external">Teletype</a>，这是在旧金山举办的 2017 QCon 大会上，GitHub 发布的 Atom 实时协作插件，Teletype 可以让两名开发者轻松的协作编写代码，由于 Atom 是基于 <a href="https://electronjs.org/" target="_blank" rel="external">Electron</a> 构建的应用程序，所以我们也可以将其看作是 web-based 协同编辑器。</p>
+<p><strong>协同编辑的关键是要解决数据一致性的问题</strong>，不同的协作者修改他们自己的文档副本，本地的编辑会立刻应用到本地副本，之后会传输给其他协作者，这会导致不同的副本可能会以不同的顺序应用各种修改，应该有算法来确保在协同编辑之后，所有副本最终的内容是一致的。</p>
+<h2 id="数据一致性解决方案"><a href="#数据一致性解决方案" class="headerlink" title="数据一致性解决方案"></a>数据一致性解决方案</h2><p>首先介绍一下分布式系统，分布式系统即运行在多物理计算机上的系统。这个是人类目前实际可行的构建超大规模系统的唯二办法之一（另一种就是构建超级计算机）。构建一个分布式系统的难点在于：让分布式系统运作起来正确性与单机程序完全无二。而协同编辑器，我们也可以看做是一个分布式系统，多端的协作者修改文档，而最终文档内容要收敛到相同的状态<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png" alt=""></p>
+<p>目前来说，解决分布式系统数据一致性问题，主流的有两大方案：</p>
+<ul>
+<li><strong>Conflict-free replicated data type</strong> (CRDT)</li>
+<li><strong>Operational transformation</strong> (OT)</li>
+</ul>
+<h3 id="Conflict-free-replicated-data-type"><a href="#Conflict-free-replicated-data-type" class="headerlink" title="Conflict-free replicated data type"></a>Conflict-free replicated data type</h3><p>Conflict-free replicated data type，简称为 CRDT，直译的话即是：无冲突可复制数据类型。</p>
+<blockquote>
+<p>Wikipedia 介绍: <a href="https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type" target="_blank" rel="external">Conflict-free replicated data type</a><br>In distributed computing, a conflict-free replicated data type (CRDT) is a <strong>data structure</strong> which can be replicated across multiple computers in a network, where the replicas can be updated independently and concurrently without coordination between the replicas, and where it is always mathematically possible to resolve inconsistencies which might result.</p>
+</blockquote>
+<p>简单的理解：CRDT 就是这样一些适应于分布式系统的可以保持最终一致性的<strong>数据结构</strong>的统称。GitHub 开源的 Teletype 协同编辑插件，使用的就是 CRDT 算法。GitHub 为此开发的 CRDT 是一个独立的库，有兴趣可前往 GitHub 具体了解。</p>
+<blockquote>
+<p>项目地址：<a href="https://github.com/atom/teletype-crdt" target="_blank" rel="external">atom/teletype-crdt</a> String-wise sequence CRDT powering peer-to-peer collaborative editing in Teletype for Atom.</p>
+</blockquote>
+<h3 id="Operational-transformation"><a href="#Operational-transformation" class="headerlink" title="Operational transformation"></a>Operational transformation</h3><p>Operational transformation，简称 OT，直译的话即是：操作转换<br>OT 它起源于 1989 年发表的一篇<a href="https://dl.acm.org/citation.cfm?doid=67544.66963" target="_blank" rel="external">研究论文</a>，进过多年的发展，现在已经是非常成熟的一致性解决算法，很多协同编辑器都采用此算法作为协同解决方案，例如我们熟知的 Google Docs。</p>
+<blockquote>
+<p>Wikipedia 介绍: <a href="https://en.wikipedia.org/wiki/Operational_transformation" target="_blank" rel="external">Operational transformation</a><br>Operational transformation (OT) is a technology for supporting a range of collaboration functionalities in advanced collaborative software systems. OT was originally invented for consistency maintenance and concurrency control in collaborative editing of plain text documents. Two decades of research has extended its capabilities and expanded its applications to include group undo, locking, conflict resolution, operation notification and compression, group-awareness, HTML/XML and tree-structured document editing, collaborative office productivity tools, application-sharing, and collaborative computer-aided media design tools (see OTFAQ). In 2009 OT was adopted as a core technique behind the collaboration features in Apache Wave and Google Docs.</p>
+</blockquote>
+<p><strong>SharedPen 也是采用 OT 作为协同编辑解决方案</strong>，使用了 <a href="https://github.com/Operational-Transformation/ot.js" target="_blank" rel="external">ot.js</a> 库，OT 算法在文章 <a href="https://objcer.com/2018/03/05/SharePen-Operational-Transformation/">SharedPen 之 Operational Transformation</a> 进行了详细介绍 😋</p>
+<h2 id="富文本编辑器"><a href="#富文本编辑器" class="headerlink" title="富文本编辑器"></a>富文本编辑器</h2><p>SharedPen 是基于 web 端的所见即所得 (WYSIWYG) 编辑器。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen.png" alt=""></p>
+<p>在 ot.js 库中，使用 <a href="https://codemirror.net/" target="_blank" rel="external">CodeMirror</a> 作为文本编辑器，CodeMirror 是一款优秀的编辑器，多用于代码编辑器，譬如在 Chrome 浏览器的调试器中，就使用 CodeMirror 作为代码编辑器。ot.js 库基于 CodeMirror 实现了一个简单的纯文本编辑器，demo 可以参考：<a href="https://github.com/YingshanDeng/ot.js-demo" target="_blank" rel="external">GitHub: ot.js-demo</a></p>
+<p>CodeMirror 编辑器具有丰富友好的 API 接口：</p>
+<ul>
+<li><strong>坐标系统</strong><br>CodeMirror 中以行为单位，通过 <code>{line, ch}</code> 第几行的第几个字符可以准确为每一个字符定位 <code>pos</code>，同时每一个字符都有一个全局索引 <code>index</code>，通过 <code>doc.posFromIndex</code> 和 <code>doc.indexFromPos</code> 两个辅助方法可以对二者进行转换</li>
+<li><strong>丰富的事件回调: <code>change</code>, <code>beforeChange</code>, <code>cursorActivity</code>…</strong><br>其中编辑事件 <code>change</code> 的回调参数信息非常丰富，便于我们将其转换成 OT 算法中的 operation<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-insert.png" alt=""><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-delete.png" alt=""></li>
+<li><strong><code>markText</code> 富文本支持 API</strong><br>注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API <code>markText</code> 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 <a href="https://objcer.com/2018/02/27/SharedPen-AnnotationList/">SharedPen 之 AnnotationList</a> 中进行了详细介绍 😋</li>
+</ul>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>架构</th>
+<th>Server 作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google Docs，石墨文档</td>
+<td>C/S 模式</td>
+<td>负责转发多端操作和数据持久化存储</td>
+</tr>
+<tr>
+<td>Teletype(Atom协同编辑插件)</td>
+<td>Peer-to-Peer 模式</td>
+<td>辅助建立连接(握手)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Peer-to-Peer-模式"><a href="#Peer-to-Peer-模式" class="headerlink" title="Peer-to-Peer 模式"></a>Peer-to-Peer 模式</h3><p>Atom 协同编辑插件 Teletype，采用 Peer-to-Peer 模式，通过 WebRTC 加密多端之间的通信。除了最初的握手依赖于 GitHub 的服务器之外，所有的传输都是点对点的（不需要访问 GitHub 服务器）。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen-peer-to-peer.png?t=1" alt=""></p>
+<h3 id="C-S-模式"><a href="#C-S-模式" class="headerlink" title="C/S 模式"></a>C/S 模式</h3><p>像 Google Docs，石墨文档都是采用 C/S 模式作为前后端架构，SharedPen 也是采用这种架构模式，前后端建立 socket 连接，相互实时发送 operation 操作，服务端中还对数据进行持久化存储。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen-client-server.png" alt=""></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://liyu1981.github.io/what-is-CRDT/" target="_blank" rel="external">谈谈CRDT</a><br><a href="http://www.jdon.com/artichect/crdt.html" target="_blank" rel="external">分布式CRDT模型</a><br><a href="https://drive.googleblog.com/2010/05/whats-different-about-new-google-docs.html" target="_blank" rel="external">What’s different about the new Google Docs?</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏&lt;br&gt;SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：&lt;a href=&quot;https://github.com/YingshanDeng/SharedPen&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub: YingshanDeng/SharedPen&lt;/a&gt;。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="SharedPen" scheme="http://objcer.com/categories/SharedPen/"/>
+    
+    
+      <category term="富文本" scheme="http://objcer.com/tags/%E5%AF%8C%E6%96%87%E6%9C%AC/"/>
+    
+      <category term="实时协同编辑器" scheme="http://objcer.com/tags/%E5%AE%9E%E6%97%B6%E5%8D%8F%E5%90%8C%E7%BC%96%E8%BE%91%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
     <title>SharedPen 之区间树优化</title>
     <link href="http://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/"/>
     <id>http://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/</id>
     <published>2018-03-05T15:27:03.000Z</published>
-    <updated>2018-03-05T15:29:18.000Z</updated>
+    <updated>2018-03-05T15:39:38.000Z</updated>
     
     <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png" alt=""></p>
 <p>前文 <a href="">SharedPen 之 AnnotationList</a> 讲到：</p>
@@ -105,7 +187,7 @@
 <h4 id="插入-insert-pos-length-prop"><a href="#插入-insert-pos-length-prop" class="headerlink" title="插入 insert(pos, length, prop)"></a>插入 <code>insert(pos, length, prop)</code></h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">insert(pos, length, prop) &#123;</div><div class="line">  <span class="comment">// 查找位置对应的迭代器</span></div><div class="line">  <span class="keyword">var</span> found = <span class="keyword">this</span>.find(<span class="keyword">this</span>.tree, pos)</div><div class="line">  <span class="keyword">if</span> (!found) &#123; <span class="keyword">throw</span> new Error(<span class="string">'Not found'</span>) &#125;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (found._lowerPosition === pos) &#123; <span class="comment">// 情况1: 在两句之间插入（注意区间左闭右开）</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.equaler(found, prop)) &#123; <span class="comment">// 情况1.1: 和后一句属性相同</span></div><div class="line">      <span class="keyword">this</span>.expand(<span class="keyword">this</span>.tree, pos, length)</div><div class="line">      <span class="keyword">return</span> found</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="comment">// found 移动到前一句</span></div><div class="line">      found.movePrev()</div><div class="line"></div><div class="line">      <span class="keyword">if</span> (!found.atTree() &amp;&amp; <span class="keyword">this</span>.equaler(found, prop)) &#123; <span class="comment">// 情况1.2: 和前一句属性相同</span></div><div class="line">        <span class="keyword">this</span>.expand(pos<span class="number">-1</span>, length)</div><div class="line">        <span class="keyword">return</span> found</div><div class="line">      &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况1.3: 和前后句都不相同，那么创建新的句</span></div><div class="line">        found.moveNext()</div><div class="line"></div><div class="line">        <span class="keyword">this</span>.expand(<span class="keyword">this</span>.tree, pos, length)</div><div class="line">        found = <span class="keyword">this</span>.split(<span class="keyword">this</span>.tree, found, length, prop)</div><div class="line">        <span class="keyword">return</span> found</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况2: 在一句的中间插入</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.equaler(found, prop)) &#123; <span class="comment">// 情况2.2: 句属性相同</span></div><div class="line">      <span class="keyword">this</span>.expand(<span class="keyword">this</span>.tree, pos, length)</div><div class="line">      <span class="keyword">return</span> found</div><div class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况2.3: 句属性不同 -&gt; 断句，插入新节点</span></div><div class="line">      let _splitDistance = pos - found._lowerPosition</div><div class="line"></div><div class="line">      found = <span class="keyword">this</span>.split(<span class="keyword">this</span>.tree, found, _splitDistance, found._node.prop)</div><div class="line">      <span class="keyword">this</span>.expand(<span class="keyword">this</span>.tree, pos, length)</div><div class="line">      found.moveNext()</div><div class="line">      found = <span class="keyword">this</span>.split(<span class="keyword">this</span>.tree, found, length, prop)</div><div class="line">      <span class="keyword">return</span> found</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="删除-shrink-pos-length"><a href="#删除-shrink-pos-length" class="headerlink" title="删除 shrink(pos, length)"></a>删除 <code>shrink(pos, length)</code></h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">shrink(pos, length) &#123;</div><div class="line">  <span class="comment">// 查找位置对应的迭代器</span></div><div class="line">  <span class="keyword">var</span> found = <span class="keyword">this</span>.find(<span class="keyword">this</span>.tree, pos)</div><div class="line">  <span class="keyword">if</span> (!found) &#123; <span class="keyword">throw</span> new Error(<span class="string">'Not found'</span>) &#125;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (found._lowerPosition !== pos) &#123; <span class="comment">// 删除位置不在句头，先断句</span></div><div class="line">    let _splitDistance = pos - found._lowerPosition</div><div class="line">    found = <span class="keyword">this</span>.split(<span class="keyword">this</span>.tree, found, _splitDistance, found._node.prop)</div><div class="line">  &#125; <span class="keyword">else</span> &#123; <span class="comment">// 删除位置恰好在句头</span></div><div class="line">    found.movePrev()</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 删除</span></div><div class="line">  <span class="keyword">this</span>.remove(<span class="keyword">this</span>.tree, found.clone(), pos, length)</div><div class="line">  <span class="keyword">if</span> (!found.atTree()) &#123;</div><div class="line">    <span class="keyword">var</span> found2 = found.clone()</div><div class="line">    found2.moveNext()</div><div class="line">    <span class="comment">// 判断是否需要和后一句合并</span></div><div class="line">    <span class="keyword">if</span> (!found2.atTree() &amp;&amp; <span class="keyword">this</span>.equaler(found, found2._node.prop)) &#123;</div><div class="line">      <span class="keyword">this</span>.merge(<span class="keyword">this</span>.tree, found)</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <h4 id="修改-modifyProp-pos-length-propFn"><a href="#修改-modifyProp-pos-length-propFn" class="headerlink" title="修改 modifyProp(pos, length, propFn)"></a>修改 <code>modifyProp(pos, length, propFn)</code></h4><figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">modifyProp(pos, length, propFn) &#123; <span class="comment">// propFn：区间属性修改回调方法</span></div><div class="line">  <span class="comment">// 查找位置对应的迭代器</span></div><div class="line">  var found = this.<span class="built_in">find</span>(this.tree, pos)</div><div class="line">  <span class="keyword">if</span> (!found) &#123; <span class="keyword">throw</span> new Error(<span class="string">'Not found'</span>) &#125;</div><div class="line"></div><div class="line">  <span class="keyword">while</span>(!found.atTree()) &#123;</div><div class="line">    let <span class="variable">_lower</span> = found.<span class="variable">_lowerPosition</span></div><div class="line">    let <span class="variable">_upper</span> = found.<span class="variable">_upperPosition</span></div><div class="line">    let <span class="variable">_newProp</span> = propFn(found.<span class="variable">_node</span>.prop) <span class="comment">// 返回新的区间属性</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (!this.equaler(found, <span class="variable">_newProp</span>)) &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="variable">_lower</span> &lt; pos) &#123;</div><div class="line">        found = this.split(tree, found, pos-<span class="variable">_lower</span>, found.<span class="variable">_node</span>.prop)</div><div class="line">        found.moveNext()</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> (pos+length &lt; <span class="variable">_upper</span>) &#123;</div><div class="line">        found = this.split(tree, found, pos+length-found.<span class="variable">_lowerPosition</span>, found.<span class="variable">_node</span>.prop)</div><div class="line">      &#125;</div><div class="line">      <span class="comment">// 修改句属性</span></div><div class="line">      found.<span class="variable">_node</span>.modifyProp(<span class="variable">_newProp</span>)</div><div class="line"></div><div class="line">      <span class="comment">// 当改变区域和上一个区域交接时，尝试向前合并</span></div><div class="line">      <span class="keyword">if</span> (pos &lt;= <span class="variable">_lower</span> &amp;&amp; pos !== <span class="number">0</span>) &#123;</div><div class="line">        let <span class="variable">_prevHint</span> = found.clone()</div><div class="line">        <span class="variable">_prevHint</span>.movePrev()</div><div class="line">        <span class="keyword">if</span> (!<span class="variable">_prevHint</span>.atTree() &amp;&amp; this.equaler(<span class="variable">_prevHint</span>, <span class="variable">_newProp</span>)) &#123;</div><div class="line">          found = this.merge(this.tree, <span class="variable">_prevHint</span>)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (<span class="variable">_upper</span> &gt;= (pos + length)) &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="variable">_upper</span> == (pos + length)) &#123;</div><div class="line">        <span class="comment">// 改变的区域结束正好在句结束位置，这时尝试向后合并句</span></div><div class="line">        let <span class="variable">_nextHint</span> = found.clone()</div><div class="line">        <span class="variable">_nextHint</span>.moveNext()</div><div class="line">        <span class="keyword">if</span> (!<span class="variable">_nextHint</span>.atTree() &amp;&amp; this.equaler(<span class="variable">_nextHint</span>, <span class="variable">_newProp</span>)) &#123;</div><div class="line">          found = this.merge(this.tree, found)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      break</div><div class="line">    &#125;</div><div class="line">    found.moveNext()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://zh.wikipedia.org/zh-cn/%E7%BA%A2%E9%BB%91%E6%A0%91" target="_blank" rel="external">维基百科·红黑树</a><br><a href="https://segmentfault.com/a/1190000012728513" target="_blank" rel="external">红黑树详细分析，看了都说好</a><br><a href=""></a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://zh.wikipedia.org/zh-cn/%E7%BA%A2%E9%BB%91%E6%A0%91" target="_blank" rel="external">维基百科·红黑树</a><br><a href="https://segmentfault.com/a/1190000012728513" target="_blank" rel="external">红黑树详细分析，看了都说好</a></p>
 ]]></content>
     
     <summary type="html">
@@ -251,93 +333,11 @@
   </entry>
   
   <entry>
-    <title>SharedPen 富文本实时协同编辑器</title>
-    <link href="http://objcer.com/2018/02/27/SharedPen/"/>
-    <id>http://objcer.com/2018/02/27/SharedPen/</id>
-    <published>2018-02-27T14:39:33.000Z</published>
-    <updated>2018-02-27T14:48:04.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png" alt=""></p>
-<p>2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏<br>SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：<a href="https://github.com/YingshanDeng/SharedPen" target="_blank" rel="external">GitHub: YingshanDeng/SharedPen</a>。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。</p>
-<a id="more"></a>
-<h2 id="关于协同编辑器"><a href="#关于协同编辑器" class="headerlink" title="关于协同编辑器"></a>关于协同编辑器</h2><p>协同编辑也就是多个人对一份文档进行编辑，每个协作这都有自己的输入光标，并可以可以自由地和其他协作者一起输入。对于 web-based 的协同编辑器，目前有很多成熟的产品。像我很喜欢用的: <a href="https://www.google.com/docs/about/" target="_blank" rel="external">Google Docs</a>，国内的: <a href="https://shimo.im/" target="_blank" rel="external">石墨文档</a>。</p>
-<p>另一个值得介绍的是 <a href="https://teletype.atom.io/" target="_blank" rel="external">Teletype</a>，这是在旧金山举办的 2017 QCon 大会上，GitHub 发布的 Atom 实时协作插件，Teletype 可以让两名开发者轻松的协作编写代码，由于 Atom 是基于 <a href="https://electronjs.org/" target="_blank" rel="external">Electron</a> 构建的应用程序，所以我们也可以将其看作是 web-based 协同编辑器。</p>
-<p><strong>协同编辑的关键是要解决数据一致性的问题</strong>，不同的协作者修改他们自己的文档副本，本地的编辑会立刻应用到本地副本，之后会传输给其他协作者，这会导致不同的副本可能会以不同的顺序应用各种修改，应该有算法来确保在协同编辑之后，所有副本最终的内容是一致的。</p>
-<h2 id="数据一致性解决方案"><a href="#数据一致性解决方案" class="headerlink" title="数据一致性解决方案"></a>数据一致性解决方案</h2><p>首先介绍一下分布式系统，分布式系统即运行在多物理计算机上的系统。这个是人类目前实际可行的构建超大规模系统的唯二办法之一（另一种就是构建超级计算机）。构建一个分布式系统的难点在于：让分布式系统运作起来正确性与单机程序完全无二。而协同编辑器，我们也可以看做是一个分布式系统，多端的协作者修改文档，而最终文档内容要收敛到相同的状态<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png" alt=""></p>
-<p>目前来说，解决分布式系统数据一致性问题，主流的有两大方案：</p>
-<ul>
-<li><strong>Conflict-free replicated data type</strong> (CRDT)</li>
-<li><strong>Operational transformation</strong> (OT)</li>
-</ul>
-<h3 id="Conflict-free-replicated-data-type"><a href="#Conflict-free-replicated-data-type" class="headerlink" title="Conflict-free replicated data type"></a>Conflict-free replicated data type</h3><p>Conflict-free replicated data type，简称为 CRDT，直译的话即是：无冲突可复制数据类型。</p>
-<blockquote>
-<p>Wikipedia 介绍: <a href="https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type" target="_blank" rel="external">Conflict-free replicated data type</a><br>In distributed computing, a conflict-free replicated data type (CRDT) is a <strong>data structure</strong> which can be replicated across multiple computers in a network, where the replicas can be updated independently and concurrently without coordination between the replicas, and where it is always mathematically possible to resolve inconsistencies which might result.</p>
-</blockquote>
-<p>简单的理解：CRDT 就是这样一些适应于分布式系统的可以保持最终一致性的<strong>数据结构</strong>的统称。GitHub 开源的 Teletype 协同编辑插件，使用的就是 CRDT 算法。GitHub 为此开发的 CRDT 是一个独立的库，有兴趣可前往 GitHub 具体了解。</p>
-<blockquote>
-<p>项目地址：<a href="https://github.com/atom/teletype-crdt" target="_blank" rel="external">atom/teletype-crdt</a> String-wise sequence CRDT powering peer-to-peer collaborative editing in Teletype for Atom.</p>
-</blockquote>
-<h3 id="Operational-transformation"><a href="#Operational-transformation" class="headerlink" title="Operational transformation"></a>Operational transformation</h3><p>Operational transformation，简称 OT，直译的话即是：操作转换<br>OT 它起源于 1989 年发表的一篇<a href="https://dl.acm.org/citation.cfm?doid=67544.66963" target="_blank" rel="external">研究论文</a>，进过多年的发展，现在已经是非常成熟的一致性解决算法，很多协同编辑器都采用此算法作为协同解决方案，例如我们熟知的 Google Docs。</p>
-<blockquote>
-<p>Wikipedia 介绍: <a href="https://en.wikipedia.org/wiki/Operational_transformation" target="_blank" rel="external">Operational transformation</a><br>Operational transformation (OT) is a technology for supporting a range of collaboration functionalities in advanced collaborative software systems. OT was originally invented for consistency maintenance and concurrency control in collaborative editing of plain text documents. Two decades of research has extended its capabilities and expanded its applications to include group undo, locking, conflict resolution, operation notification and compression, group-awareness, HTML/XML and tree-structured document editing, collaborative office productivity tools, application-sharing, and collaborative computer-aided media design tools (see OTFAQ). In 2009 OT was adopted as a core technique behind the collaboration features in Apache Wave and Google Docs.</p>
-</blockquote>
-<p><strong>SharedPen 也是采用 OT 作为协同编辑解决方案</strong>，使用了 <a href="https://github.com/Operational-Transformation/ot.js" target="_blank" rel="external">ot.js</a> 库，OT 算法将有另一篇文章单独介绍，敬请期待 😋</p>
-<h2 id="富文本编辑器"><a href="#富文本编辑器" class="headerlink" title="富文本编辑器"></a>富文本编辑器</h2><p>SharedPen 是基于 web 端的所见即所得 (WYSIWYG) 编辑器。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen.png" alt=""></p>
-<p>在 ot.js 库中，使用 <a href="https://codemirror.net/" target="_blank" rel="external">CodeMirror</a> 作为文本编辑器，CodeMirror 是一款优秀的编辑器，多用于代码编辑器，譬如在 Chrome 浏览器的调试器中，就使用 CodeMirror 作为代码编辑器。ot.js 库基于 CodeMirror 实现了一个简单的纯文本编辑器，demo 可以参考：<a href="https://github.com/YingshanDeng/ot.js-demo" target="_blank" rel="external">GitHub: ot.js-demo</a></p>
-<p>CodeMirror 编辑器具有丰富友好的 API 接口：</p>
-<ul>
-<li><strong>坐标系统</strong><br>CodeMirror 中以行为单位，通过 <code>{line, ch}</code> 第几行的第几个字符可以准确为每一个字符定位 <code>pos</code>，同时每一个字符都有一个全局索引 <code>index</code>，通过 <code>doc.posFromIndex</code> 和 <code>doc.indexFromPos</code> 两个辅助方法可以对二者进行转换</li>
-<li><strong>丰富的事件回调: <code>change</code>, <code>beforeChange</code>, <code>cursorActivity</code>…</strong><br>其中编辑事件 <code>change</code> 的回调参数信息非常丰富，便于我们将其转换成 OT 算法中的 operation<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-insert.png" alt=""><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-delete.png" alt=""></li>
-<li><strong><code>markText</code> 富文本支持 API</strong><br>注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API <code>markText</code> 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 <a href="https://objcer.com/2018/02/27/SharedPen-AnnotationList/">SharedPen 之 AnnotationList</a> 中将进行详细介绍</li>
-</ul>
-<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><table>
-<thead>
-<tr>
-<th></th>
-<th>架构</th>
-<th>Server 作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Google Docs，石墨文档</td>
-<td>C/S 模式</td>
-<td>负责转发多端操作和数据持久化存储</td>
-</tr>
-<tr>
-<td>Teletype(Atom协同编辑插件)</td>
-<td>Peer-to-Peer 模式</td>
-<td>辅助建立连接(握手)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="Peer-to-Peer-模式"><a href="#Peer-to-Peer-模式" class="headerlink" title="Peer-to-Peer 模式"></a>Peer-to-Peer 模式</h3><p>Atom 协同编辑插件 Teletype，采用 Peer-to-Peer 模式，通过 WebRTC 加密多端之间的通信。除了最初的握手依赖于 GitHub 的服务器之外，所有的传输都是点对点的（不需要访问 GitHub 服务器）。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen-peer-to-peer.png?t=1" alt=""></p>
-<h3 id="C-S-模式"><a href="#C-S-模式" class="headerlink" title="C/S 模式"></a>C/S 模式</h3><p>像 Google Docs，石墨文档都是采用 C/S 模式作为前后端架构，SharedPen 也是采用这种架构模式，前后端建立 socket 连接，相互实时发送 operation 操作，服务端中还对数据进行持久化存储。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/sharedpen-client-server.png" alt=""></p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://liyu1981.github.io/what-is-CRDT/" target="_blank" rel="external">谈谈CRDT</a><br><a href="http://www.jdon.com/artichect/crdt.html" target="_blank" rel="external">分布式CRDT模型</a><br><a href="https://drive.googleblog.com/2010/05/whats-different-about-new-google-docs.html" target="_blank" rel="external">What’s different about the new Google Docs?</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏&lt;br&gt;SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：&lt;a href=&quot;https://github.com/YingshanDeng/SharedPen&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub: YingshanDeng/SharedPen&lt;/a&gt;。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="SharedPen" scheme="http://objcer.com/categories/SharedPen/"/>
-    
-    
-      <category term="富文本" scheme="http://objcer.com/tags/%E5%AF%8C%E6%96%87%E6%9C%AC/"/>
-    
-      <category term="实时协同编辑器" scheme="http://objcer.com/tags/%E5%AE%9E%E6%97%B6%E5%8D%8F%E5%90%8C%E7%BC%96%E8%BE%91%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
     <title>SharedPen 之 AnnotationList</title>
     <link href="http://objcer.com/2018/02/27/SharedPen-AnnotationList/"/>
     <id>http://objcer.com/2018/02/27/SharedPen-AnnotationList/</id>
     <published>2018-02-27T14:35:29.000Z</published>
-    <updated>2018-02-27T14:52:28.000Z</updated>
+    <updated>2018-03-05T15:39:38.000Z</updated>
     
     <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Annotation.png" alt=""></p>
 <p>CodeMirror 是一款优秀的开源文本编辑器，常用于代码编辑器。但并不支持富文本编辑功能。但是得益于 CodeMirror 的 API</p>
@@ -402,7 +402,7 @@
 </ul>
 <figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">if (res.pred &amp;&amp; res.pred.annotation.equals(newSegment.annotation)) &#123;</div><div class="line">  // We can merge the pred <span class="keyword">node</span> <span class="title">with</span> newSegment's first <span class="keyword">node</span>.</div><div class="line">  <span class="title">includePredInOldNodes</span> = <span class="literal">true</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">if (res.succ &amp;&amp; res.succ.annotation.equals(newSegment.annotation)) &#123;</div><div class="line">  // We can merge newSegment's last <span class="keyword">node</span> <span class="title">with</span> the succ <span class="keyword">node</span>.</div><div class="line">  <span class="title">includeSuccInOldNodes</span> = <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h3><p><strong>AnnotationList</strong> 类中也提供了两个链表查询方法，根据 <code>pos</code> 位置信息或者 <code>span</code> 指定文本区间查询链表节点信息，基本上都是遍历链表的操作，此处不详述，直接参考源码即可。<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getAnnotatedSpansForPos</span> <span class="params">(pos)</span></span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getAnnotatedSpansForSpan</span> <span class="params">(span)</span></span></div></pre></td></tr></table></figure></p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><strong>AnnotationList</strong> 单链表结构执行操作的效率比较低，所有操作的算法复杂度都是 <code>O(n)</code>，这个链表长度会随着文章长度，富文本属性设置操作的增加而变长。优化的方向是，<strong>将链表结果改造成树状结构</strong>。🎄</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p><strong>AnnotationList</strong> 单链表结构执行操作的效率比较低，所有操作的算法复杂度都是 <code>O(n)</code>，这个链表长度会随着文章长度，富文本属性设置操作的增加而变长。优化的方向是，<strong>将链表结果改造成树状结构</strong>。这部分优化内容在文章 <a href="https://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/">SharedPen 之区间树优化</a> 进行了详细介绍，欢迎前往阅读。🎏</p>
 ]]></content>
     
     <summary type="html">
