@@ -1,5 +1,5 @@
 title: SharedPen 富文本实时协同编辑器
-date: 2018-02-27 22:39:33
+date: 2018-03-05 23:37:33
 tags: ['富文本', '实时协同编辑器']
 categories: SharedPen
 ---
@@ -40,7 +40,7 @@ OT 它起源于 1989 年发表的一篇[研究论文](https://dl.acm.org/citatio
 > Wikipedia 介绍: [Operational transformation](https://en.wikipedia.org/wiki/Operational_transformation)
 Operational transformation (OT) is a technology for supporting a range of collaboration functionalities in advanced collaborative software systems. OT was originally invented for consistency maintenance and concurrency control in collaborative editing of plain text documents. Two decades of research has extended its capabilities and expanded its applications to include group undo, locking, conflict resolution, operation notification and compression, group-awareness, HTML/XML and tree-structured document editing, collaborative office productivity tools, application-sharing, and collaborative computer-aided media design tools (see OTFAQ). In 2009 OT was adopted as a core technique behind the collaboration features in Apache Wave and Google Docs.
 
-**SharedPen 也是采用 OT 作为协同编辑解决方案**，使用了 [ot.js](https://github.com/Operational-Transformation/ot.js) 库，OT 算法将有另一篇文章单独介绍，敬请期待 😋
+**SharedPen 也是采用 OT 作为协同编辑解决方案**，使用了 [ot.js](https://github.com/Operational-Transformation/ot.js) 库，OT 算法在文章 [SharedPen 之 Operational Transformation](https://objcer.com/2018/03/05/SharePen-Operational-Transformation/) 进行了详细介绍 😋
 
 ## 富文本编辑器
 SharedPen 是基于 web 端的所见即所得 (WYSIWYG) 编辑器。
@@ -56,7 +56,7 @@ CodeMirror 编辑器具有丰富友好的 API 接口：
 ![](http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-insert.png)
 ![](http://7vikhl.com1.z0.glb.clouddn.com/codemirror-change-delete.png)
 - **`markText` 富文本支持 API**
-  注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API `markText` 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 [SharedPen 之 AnnotationList](https://objcer.com/2018/02/27/SharedPen-AnnotationList/) 中将进行详细介绍
+  注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API `markText` 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 [SharedPen 之 AnnotationList](https://objcer.com/2018/02/27/SharedPen-AnnotationList/) 中进行了详细介绍 😋
 
 ## 架构
  | 架构 | Server 作用

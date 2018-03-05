@@ -359,9 +359,6 @@ modifyProp(pos, length, propFn) { // propFn：区间属性修改回调方法
 }
 ```
 
-## 思考
-
 ## 参考链接
 [维基百科·红黑树](https://zh.wikipedia.org/zh-cn/%E7%BA%A2%E9%BB%91%E6%A0%91)
 [红黑树详细分析，看了都说好](https://segmentfault.com/a/1190000012728513)
-[]()

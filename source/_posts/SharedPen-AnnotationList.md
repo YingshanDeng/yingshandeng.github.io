@@ -248,5 +248,6 @@ function getAnnotatedSpansForPos (pos)
 function getAnnotatedSpansForSpan (span)
 ```
 
-## 其他
-**AnnotationList** 单链表结构执行操作的效率比较低，所有操作的算法复杂度都是 `O(n)`，这个链表长度会随着文章长度，富文本属性设置操作的增加而变长。优化的方向是，**将链表结果改造成树状结构**。🎄
+## 思考
+**AnnotationList** 单链表结构执行操作的效率比较低，所有操作的算法复杂度都是 `O(n)`，这个链表长度会随着文章长度，富文本属性设置操作的增加而变长。优化的方向是，**将链表结果改造成树状结构**。这部分优化内容在文章 [SharedPen 之区间树优化](https://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/) 进行了详细介绍，欢迎前往阅读。🎏
+
