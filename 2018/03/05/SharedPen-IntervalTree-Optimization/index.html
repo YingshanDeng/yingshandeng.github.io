@@ -1,0 +1,883 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="区间树," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="前文 SharedPen 之 AnnotationList 讲到：  为了管理，操作整个富文本文档流，我们引入 AnnotationList 单链表结构，把每一段富文本当成 Node 节点，由此形成链表结构。  单链表数据结构形象容易理解，但是执行操作（增删改查）的效率比较低，所有操作的算法复杂度都是 O(N)（其中N为节点数）；优化的方向是将链表数据结构改造成树形结构。本文将对优化思路进行分析">
+<meta name="keywords" content="区间树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SharedPen 之区间树优化">
+<meta property="og:url" content="http://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="前文 SharedPen 之 AnnotationList 讲到：  为了管理，操作整个富文本文档流，我们引入 AnnotationList 单链表结构，把每一段富文本当成 Node 节点，由此形成链表结构。  单链表数据结构形象容易理解，但是执行操作（增删改查）的效率比较低，所有操作的算法复杂度都是 O(N)（其中N为节点数）；优化的方向是将链表数据结构改造成树形结构。本文将对优化思路进行分析">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/tree-all.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/900px-Red-black_tree_example.svg.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-demo.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-expand.png?t=1">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-remove.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-originNode.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-origin2.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/A02DFDB4-8A1E-4D18-997D-E1A1BC5ACC2A.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/C2898E5B-198A-4D3D-AA97-3207F4187376.png">
+<meta property="og:updated_time" content="2018-03-05T15:29:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SharedPen 之区间树优化">
+<meta name="twitter:description" content="前文 SharedPen 之 AnnotationList 讲到：  为了管理，操作整个富文本文档流，我们引入 AnnotationList 单链表结构，把每一段富文本当成 Node 节点，由此形成链表结构。  单链表数据结构形象容易理解，但是执行操作（增删改查）的效率比较低，所有操作的算法复杂度都是 O(N)（其中N为节点数）；优化的方向是将链表数据结构改造成树形结构。本文将对优化思路进行分析">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/"/>
+
+
+  <title> SharedPen 之区间树优化 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SharedPen 之区间树优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-03-05T23:27:03+08:00" content="2018-03-05">
+              2018-03-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/SharedPen/" itemprop="url" rel="index">
+                    <span itemprop="name">SharedPen</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/03/05/SharedPen-IntervalTree-Optimization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/05/SharedPen-IntervalTree-Optimization/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/03/05/SharedPen-IntervalTree-Optimization/" class="leancloud_visitors" data-flag-title="SharedPen 之区间树优化">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png" alt=""></p>
+<p>前文 <a href="">SharedPen 之 AnnotationList</a> 讲到：</p>
+<blockquote>
+<p>为了管理，操作整个富文本文档流，我们引入 <strong>AnnotationList</strong> 单链表结构，把每一段富文本当成 <code>Node</code> 节点，由此形成链表结构。</p>
+</blockquote>
+<p>单链表数据结构形象容易理解，但是执行操作（增删改查）的效率比较低，所有操作的算法复杂度都是 <code>O(N)</code>（其中N为节点数）；优化的方向是将链表数据结构改造成树形结构。本文将对优化思路进行分析。</p>
+<a id="more"></a>
+<h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p><strong>二叉查找树</strong>（Binary Search Tree，简称BST）是一棵二叉树，特点是：它的左子节点的值比父节点的值要小，右节点的值要比父节点的值大。它的高度决定了它的查找效率。在理想的情况下，二叉查找树增删查改的时间复杂度为 <code>O(logN)</code>，最坏的情况下为 <code>O(N)</code>。当它的高度为 <code>logN+1</code> 时，我们就说二叉查找树是平衡的。</p>
+<p>由于 BST 存在的问题，产生了一种新的树 – <strong>自平衡二叉查找树</strong>，自平衡树在插入和删除节点的时候，会通过旋转操作将高度保持在 <code>logN</code>，所以它可以在 <code>O(log N)</code> 时间内做查找，插入和删除。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/tree-all.png" alt=""></p>
+<p><strong><a href="https://zh.wikipedia.org/zh-cn/%E7%BA%A2%E9%BB%91%E6%A0%91" target="_blank" rel="external">红黑树</a></strong>（Red–black tree）就是一种<strong>自平衡二叉查找树</strong>，它是复杂的，<br>但它的操作有着良好的最坏情况运行时间，并且在实践中是高效的，其实际应用也非常广泛。</p>
+<p>红黑树是每个节点都带有颜色属性的二叉查找树，颜色为红色或黑色。除二叉查找树强制一般要求以外，对于任何有效的红黑树我们增加了如下的额外要求：</p>
+<ul>
+<li>节点是红色或黑色。</li>
+<li>根是黑色。</li>
+<li>所有叶子都是黑色（叶子是NIL节点）。</li>
+<li>每个红色节点必须有两个黑色的子节点。（从每个叶子到根的所有路径上不能有两个连续的红色节点。）</li>
+<li>从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点。</li>
+</ul>
+<p>下面是一个具体的红黑树的图例：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/900px-Red-black_tree_example.svg.png" alt=""></p>
+<blockquote>
+<p>推荐一个数据结构可视化在线工具，可以辅助理解：<a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html" target="_blank" rel="external">Data Structure Visualizations</a><br>其中红黑树增删节点可视化：<a href="https://www.cs.usfca.edu/~galles/visualization/RedBlack.html" target="_blank" rel="external">Red/Black Tree</a></p>
+</blockquote>
+<h2 id="区间树"><a href="#区间树" class="headerlink" title="区间树"></a>区间树</h2><p>区间树（interval tree）是一种扩展的红黑树，区间树中的节点都代表一个区间。例如区间：(2, 8) (6, 15) (30, 36) (20, 25) (33, 40) 构成如下区间树：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-demo.png" alt=""></p>
+<p>对于一个区间：</p>
+<ul>
+<li>区间用 <code>Range(lowerPosition, upperPosition)</code> 来表示，其中：<code>lowerPosition</code> 和 <code>upperPosition</code> 分别表示起始位置和结束位置</li>
+<li>在起始和结束位置上，都有两种情况：包含或者不包含，也就是区间的开闭，一共有四种情况：<code>[a, b)</code>，<code>[a, b]</code>，<code>(a, b)</code>，<code>(a, b]</code></li>
+</ul>
+<p>在处理 SharedPen 文本区间时：</p>
+<ul>
+<li>注意到我们的区间是连续的（这是区间树的一种特殊情况），所以可以定义我们的区间为：<strong>左闭右开</strong>，即 <code>[a, b)</code></li>
+<li>区间树也符合二叉查找树的特点，区间进行大小比较时，定义如下：<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RangeKeyword</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(lowerPosition, upperPosition) &#123;</div><div class="line">    <span class="keyword">this</span>._lowerPosition = lowerPosition;</div><div class="line">    <span class="keyword">this</span>._upperPosition = upperPosition;</div><div class="line">  &#125;</div><div class="line">  gt(hint) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._lowerPosition == hint._lowerPosition) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._upperPosition &gt; hint._upperPosition</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._lowerPosition &gt; hint._lowerPosition</div><div class="line">  &#125;</div><div class="line">  lt(hint) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._lowerPosition == hint._lowerPosition) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._upperPosition &lt; hint._upperPosition</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._lowerPosition &lt; hint._lowerPosition</div><div class="line">  &#125;</div><div class="line">  eq(hint) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._lowerPosition == hint._lowerPosition</div><div class="line">      &amp;&amp; <span class="keyword">this</span>._upperPosition == hint._upperPosition</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>接下来将以这种连续（左闭右开）区间进行分析</strong></p>
+<p>区间树有两个重要操作：<code>expand</code> 和 <code>remove</code></p>
+<ul>
+<li><strong>扩张：<code>expand(pos, length)</code></strong><br>在 <code>pos</code> 位置，插入 <code>length</code> 长度的字符，插入文本后，后续的区间位置需要<strong>自动更新</strong><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-expand.png?t=1" alt=""><br>例子中区间：<code>[2, 8),[8, 15),[15, 20),[20, 28)</code> 变成 <code>[2, 8),[8, 17),[17, 22),[22, 30)</code></li>
+<li><strong>收缩：<code>remove(pos, length)</code></strong>：<br>在 <code>pos</code> 位置，删除 <code>length</code> 长度的字符，删除文本后，后续的区间位置需要<strong>自动更新</strong><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-remove.png" alt=""><br>例子中区间：<code>[2, 8),[8, 15),[15, 20),[20, 28)</code> 变成 <code>[2, 8),[8, 13),[13, 18),[18, 26)</code></li>
+</ul>
+<p>注意到插入和删除文本后，其后续区间的位置都能<strong>自动更新</strong>，为了实现这个功能，我们需要对区间进行一些处理。区间<code>Range(lowerPosition, upperPosition)</code> 的 <code>lowerPosition</code> 和 <code>upperPosition</code> 都表示<strong>绝对位置</strong>，下面给区间引入<strong>相对位置</strong>的概念。</p>
+<ul>
+<li>每一个区间都是相对于某一个区间而言的，这个相对的区间称之为 <code>originNode</code>，注意：<ul>
+<li>左节点的 <code>originNode</code> = 其父节点的 <code>originNode</code></li>
+<li>右节点的 <code>originNode</code> = 其父节点</li>
+</ul>
+</li>
+<li>区间新增的几个属性：<ul>
+<li><code>origin</code>: 表示区间相对位置的相对起点</li>
+<li><code>relativeLower</code>: 表示区间相对位置的起始位置</li>
+<li><code>upperDistance</code>: 表示区间的长度</li>
+</ul>
+</li>
+</ul>
+<p>下面通过：<code>[2, 8),[8, 15),[15, 20),[20, 28),[28, 40)</code> 这个区间树来解释一下相对位置的概念</p>
+<p>下图中的红色箭头指向为 <code>originNode</code>，注意到其中的 <code>[2, 8)</code> 和 <code>[8, 15)</code> 区间其实是指向这个区间树，表示其相对区间为区间树的起点。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-originNode.png" alt=""></p>
+<p>下图中分别列出了每个区间的 <code>origin</code>，<code>relativeLower</code>，<code>upperDistance</code> 的属性<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-origin2.png" alt=""></p>
+<p>其中区间 <code>origin</code> 属性通过如下计算得到：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">get</span> <span class="title">origin</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> n = <span class="literal">null</span>,</div><div class="line">      o = <span class="number">0</span>;</div><div class="line">  <span class="keyword">for</span> (n = <span class="keyword">this</span>.originNode; <span class="literal">null</span> != n; n = n.originNode) &#123;</div><div class="line">    o += n.relativeLower;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> o;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>区间的绝对位置可以通过如下计算得到：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">get</span> lowerPosition() &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.origin + <span class="keyword">this</span>.relativeLower;</div><div class="line">&#125;</div><div class="line"><span class="keyword">get</span> upperPosition() &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.lowerPosition + <span class="keyword">this</span>.upperDistance;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>有了相对位置概念之后，<strong>处理扩张/收缩，只需遍历区间树中的部分节点，更新其中相关的属性即可。</strong>如下区间树，<code>expand(10, 2)</code>，在 10 的位置扩展 2 个长度，即区间 <code>[8, 15)</code> 变成 <code>[8, 17)</code>，除了更新当前区间 <code>[8, 15)</code> 外，只需要更新那些以该区间节点为 <code>originNode</code> 的区间，我们可以知道区间 <code>[15, 20)</code> 和 <code>[20, 28)</code> 的 <code>originNode</code> 就是 <code>[8, 15)</code><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/A02DFDB4-8A1E-4D18-997D-E1A1BC5ACC2A.png" alt=""></p>
+<p>下面简单的介绍一下实现原理：<br>① <code>passWhole</code> 和 <code>passRight</code><br>执行遍历过程中，需要对比执行操作点（插入点/删除点）和区间节点的关系，其中包含两个重要的比较过程：<code>passWhole</code> 和 <code>passRight</code></p>
+<ul>
+<li><p><code>passWhole</code><br>区间节点有一个 <code>limitPosition</code> 属性，表示当前区间节点所在子树的右边界位置<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/C2898E5B-198A-4D3D-AA97-3207F4187376.png" alt=""><br><code>passWhole</code> 判断执行操作点的位置如果比当前区间节点所在子树的右边界大，那么可以跳过这个子树</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">passWhole(<span class="keyword">hint</span>) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._position &gt; <span class="keyword">hint</span>.limitPosition;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>passRight</code><br><code>passRight</code> 判断执行操作点的位置如果比当前区间的（绝对位置的）起始位置小，那么可以跳过这个区间节点对应的右子树（即只需考虑当前区间的左子树）</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">passRight(<span class="keyword">hint</span>) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._position &lt; <span class="keyword">hint</span>._lowerPosition</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>② 伪代码<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">function travel() &#123;</div><div class="line">  var deep = []</div><div class="line">  var <span class="keyword">hint</span> = makeHintAtTree() <span class="comment">// 生成区间树迭代器</span></div><div class="line">  var isHintStop = <span class="keyword">false</span></div><div class="line">  <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (isHintStop) &#123; <span class="comment">//</span></div><div class="line">      isHintStop = <span class="keyword">false</span></div><div class="line">      <span class="keyword">if</span> (<span class="number">0</span> == deep.length) &#123;</div><div class="line">        <span class="keyword">break</span></div><div class="line">      &#125;</div><div class="line">      <span class="comment">// 出栈</span></div><div class="line">      <span class="keyword">hint</span> = deep.pop()</div><div class="line">      <span class="comment">// 修改迭代器对应的区间节点数据</span></div><div class="line">      <span class="keyword">hint</span>._node.visit()</div><div class="line">      <span class="comment">// 迭代器向左移动</span></div><div class="line">      <span class="keyword">hint</span>.moveLeft();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">      <span class="comment">// 跳过当前区间所在的整颗子树</span></div><div class="line">      <span class="keyword">if</span> (visitor.passWhole(<span class="keyword">hint</span>)) &#123;</div><div class="line">        isHintStop = <span class="keyword">true</span></div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="comment">// 入栈</span></div><div class="line">      deep.push(<span class="keyword">hint</span>.clone());</div><div class="line">      <span class="comment">// 跳过当前区间所在的右子树</span></div><div class="line">      <span class="keyword">if</span> (visitor.passRight(<span class="keyword">hint</span>)) &#123;</div><div class="line">        isHintStop = <span class="keyword">true</span></div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="comment">// 迭代器向右移动</span></div><div class="line">      <span class="keyword">hint</span>.moveRight();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="AnnotationTree"><a href="#AnnotationTree" class="headerlink" title="AnnotationTree"></a>AnnotationTree</h2><p>区间树主要提供四个接口：插入/删除区间；扩张/收缩区间；下面我们通过这四个接口来构建 AnnotationTree，也即是将单链表数据结构的 AnnotationList 改造成区间树数据结构的 AnnotationTree，同样 AnnotationTree 需要提供增删改查的四个功能。</p>
+<p>给区间树引入<strong>迭代器 <code>Hint(tree, node, origin)</code></strong>，这个迭代器指向区间树的某个节点，迭代器通过 <code>moveLeft</code>，<code>moveRight</code>，<code>movePrev</code>，<code>moveNext</code>，<code>moveUp</code> 方法在区间树中移动游走，迭代器移动过程中会更新保存 <code>origin</code> 信息，方便使用</p>
+<h3 id="基础方法"><a href="#基础方法" class="headerlink" title="基础方法"></a>基础方法</h3><h4 id="查找-find-tree-pos"><a href="#查找-find-tree-pos" class="headerlink" title="查找 find(tree, pos)"></a>查找 <code>find(tree, pos)</code></h4><p><code>find(tree, pos)</code>：根据位置在区间树中查找区间，返回对应迭代器<br>区间和位置点的大小比较，定义如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PositionKeyword</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(position) &#123;</div><div class="line">    <span class="keyword">this</span>._position = position</div><div class="line">  &#125;</div><div class="line">  gt(hint) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._position &gt;= hint._upperPosition</div><div class="line">  &#125;</div><div class="line">  lt(hint) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._position &lt; hint._lowerPosition</div><div class="line">  &#125;</div><div class="line">  eq(hint) &#123;</div><div class="line">    <span class="keyword">return</span> (hint._lowerPosition &lt;= <span class="keyword">this</span>._position &amp;&amp;</div><div class="line">      <span class="keyword">this</span>._position &lt; hint._upperPosition)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意：区间是左闭右开，所以当 <code>lowerPosition &lt;= position &lt; upperPosition</code> 时，判断为相等</p>
+<h4 id="区间收缩-remove-tree-hint-pos-length"><a href="#区间收缩-remove-tree-hint-pos-length" class="headerlink" title="区间收缩 remove(tree, hint, pos, length)"></a>区间收缩 <code>remove(tree, hint, pos, length)</code></h4><p>扩张直接调用区间树的 <code>expand</code> 方法即可；但是对于收缩，调用区间树 <code>remove</code> 方法后，有可能出现长度为 0 的区间，这个时候，我们还需要将长度为 0 的区间进行移除。例如：<br>区间树：<code>[2, 8),[8, 15),[15, 20),[20, 28),[28, 40)</code><br>➡️ 调用区间树方法 <code>remove(10, 13)</code><br>区间树变成：<code>[2, 8),[8, 10),[10, 10),[10, 15),[15, 27)</code><br>➡️ 移除长度为 0 的区间<br>区间树变成：<code>[2, 8),[8, 10),[10, 15),[15, 27)</code></p>
+<h4 id="分裂-split-tree-hint-distance-prop"><a href="#分裂-split-tree-hint-distance-prop" class="headerlink" title="分裂 split(tree, hint, distance, prop)"></a>分裂 <code>split(tree, hint, distance, prop)</code></h4><p>将 <code>hint</code> 指向的区间节点，在 <code>distance</code> 位置进行分裂，并将 <code>prop</code> 数据附加到左侧节点，返回左侧区间节点迭代器；例如将区间 <code>[15, 20)</code> 分裂成 <code>[15, 17)</code> 和 <code>[17, 20)</code></p>
+<p>❗️注意此时不能将 <code>[15, 20)</code> 收缩变成 <code>[15, 17)</code>，然后再插入新的区间节点 <code>[17, 20)</code>；<br>因为 <code>[15, 20)</code> 收缩变成 <code>[15, 17)</code><br>过程中会调整区间节点的相对位置；而插入新的区间节点并不会调整区间节点的位置关系。例如：<br>区间树：<code>[2, 8),[8, 15),[15, 20),[20, 28),[28, 40)</code><br>➡️ 调用区间树方法 <code>remove(15, 3)</code><br>区间树变成：<code>[2, 8),[8, 15),[15, 17),[17, 25),[25, 37)</code><br>➡️ 插入新的区间节点 <code>[17, 20)</code><br>区间树变成：<code>[2, 8),[8, 15),[15, 17),[17, 20),[17, 25),[25, 37)</code></p>
+<p><strong>正确的做法是：删除当前节点，插入两个新的节点</strong></p>
+<h4 id="合并-merge-tree-hint"><a href="#合并-merge-tree-hint" class="headerlink" title="合并 merge(tree, hint)"></a>合并 <code>merge(tree, hint)</code></h4><p>将迭代器指向的区间合入下一个区间<br><strong>做法是：移除当前区间节点和下一区间节点，插入一个新的区间节点</strong></p>
+<h3 id="增删改查方法"><a href="#增删改查方法" class="headerlink" title="增删改查方法"></a>增删改查方法</h3><p>增删改方法逻辑参考如下代码即可理解；查询方法比较简单，此处略。</p>
+<h4 id="插入-insert-pos-length-prop"><a href="#插入-insert-pos-length-prop" class="headerlink" title="插入 insert(pos, length, prop)"></a>插入 <code>insert(pos, length, prop)</code></h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">insert(pos, length, prop) &#123;</div><div class="line">  <span class="comment">// 查找位置对应的迭代器</span></div><div class="line">  <span class="keyword">var</span> found = <span class="keyword">this</span>.find(<span class="keyword">this</span>.tree, pos)</div><div class="line">  <span class="keyword">if</span> (!found) &#123; <span class="keyword">throw</span> new Error(<span class="string">'Not found'</span>) &#125;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (found._lowerPosition === pos) &#123; <span class="comment">// 情况1: 在两句之间插入（注意区间左闭右开）</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.equaler(found, prop)) &#123; <span class="comment">// 情况1.1: 和后一句属性相同</span></div><div class="line">      <span class="keyword">this</span>.expand(<span class="keyword">this</span>.tree, pos, length)</div><div class="line">      <span class="keyword">return</span> found</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="comment">// found 移动到前一句</span></div><div class="line">      found.movePrev()</div><div class="line"></div><div class="line">      <span class="keyword">if</span> (!found.atTree() &amp;&amp; <span class="keyword">this</span>.equaler(found, prop)) &#123; <span class="comment">// 情况1.2: 和前一句属性相同</span></div><div class="line">        <span class="keyword">this</span>.expand(pos<span class="number">-1</span>, length)</div><div class="line">        <span class="keyword">return</span> found</div><div class="line">      &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况1.3: 和前后句都不相同，那么创建新的句</span></div><div class="line">        found.moveNext()</div><div class="line"></div><div class="line">        <span class="keyword">this</span>.expand(<span class="keyword">this</span>.tree, pos, length)</div><div class="line">        found = <span class="keyword">this</span>.split(<span class="keyword">this</span>.tree, found, length, prop)</div><div class="line">        <span class="keyword">return</span> found</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况2: 在一句的中间插入</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.equaler(found, prop)) &#123; <span class="comment">// 情况2.2: 句属性相同</span></div><div class="line">      <span class="keyword">this</span>.expand(<span class="keyword">this</span>.tree, pos, length)</div><div class="line">      <span class="keyword">return</span> found</div><div class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况2.3: 句属性不同 -&gt; 断句，插入新节点</span></div><div class="line">      let _splitDistance = pos - found._lowerPosition</div><div class="line"></div><div class="line">      found = <span class="keyword">this</span>.split(<span class="keyword">this</span>.tree, found, _splitDistance, found._node.prop)</div><div class="line">      <span class="keyword">this</span>.expand(<span class="keyword">this</span>.tree, pos, length)</div><div class="line">      found.moveNext()</div><div class="line">      found = <span class="keyword">this</span>.split(<span class="keyword">this</span>.tree, found, length, prop)</div><div class="line">      <span class="keyword">return</span> found</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="删除-shrink-pos-length"><a href="#删除-shrink-pos-length" class="headerlink" title="删除 shrink(pos, length)"></a>删除 <code>shrink(pos, length)</code></h4><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">shrink(pos, length) &#123;</div><div class="line">  <span class="comment">// 查找位置对应的迭代器</span></div><div class="line">  <span class="keyword">var</span> found = <span class="keyword">this</span>.find(<span class="keyword">this</span>.tree, pos)</div><div class="line">  <span class="keyword">if</span> (!found) &#123; <span class="keyword">throw</span> new Error(<span class="string">'Not found'</span>) &#125;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (found._lowerPosition !== pos) &#123; <span class="comment">// 删除位置不在句头，先断句</span></div><div class="line">    let _splitDistance = pos - found._lowerPosition</div><div class="line">    found = <span class="keyword">this</span>.split(<span class="keyword">this</span>.tree, found, _splitDistance, found._node.prop)</div><div class="line">  &#125; <span class="keyword">else</span> &#123; <span class="comment">// 删除位置恰好在句头</span></div><div class="line">    found.movePrev()</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 删除</span></div><div class="line">  <span class="keyword">this</span>.remove(<span class="keyword">this</span>.tree, found.clone(), pos, length)</div><div class="line">  <span class="keyword">if</span> (!found.atTree()) &#123;</div><div class="line">    <span class="keyword">var</span> found2 = found.clone()</div><div class="line">    found2.moveNext()</div><div class="line">    <span class="comment">// 判断是否需要和后一句合并</span></div><div class="line">    <span class="keyword">if</span> (!found2.atTree() &amp;&amp; <span class="keyword">this</span>.equaler(found, found2._node.prop)) &#123;</div><div class="line">      <span class="keyword">this</span>.merge(<span class="keyword">this</span>.tree, found)</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<h4 id="修改-modifyProp-pos-length-propFn"><a href="#修改-modifyProp-pos-length-propFn" class="headerlink" title="修改 modifyProp(pos, length, propFn)"></a>修改 <code>modifyProp(pos, length, propFn)</code></h4><figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">modifyProp(pos, length, propFn) &#123; <span class="comment">// propFn：区间属性修改回调方法</span></div><div class="line">  <span class="comment">// 查找位置对应的迭代器</span></div><div class="line">  var found = this.<span class="built_in">find</span>(this.tree, pos)</div><div class="line">  <span class="keyword">if</span> (!found) &#123; <span class="keyword">throw</span> new Error(<span class="string">'Not found'</span>) &#125;</div><div class="line"></div><div class="line">  <span class="keyword">while</span>(!found.atTree()) &#123;</div><div class="line">    let <span class="variable">_lower</span> = found.<span class="variable">_lowerPosition</span></div><div class="line">    let <span class="variable">_upper</span> = found.<span class="variable">_upperPosition</span></div><div class="line">    let <span class="variable">_newProp</span> = propFn(found.<span class="variable">_node</span>.prop) <span class="comment">// 返回新的区间属性</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (!this.equaler(found, <span class="variable">_newProp</span>)) &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="variable">_lower</span> &lt; pos) &#123;</div><div class="line">        found = this.split(tree, found, pos-<span class="variable">_lower</span>, found.<span class="variable">_node</span>.prop)</div><div class="line">        found.moveNext()</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> (pos+length &lt; <span class="variable">_upper</span>) &#123;</div><div class="line">        found = this.split(tree, found, pos+length-found.<span class="variable">_lowerPosition</span>, found.<span class="variable">_node</span>.prop)</div><div class="line">      &#125;</div><div class="line">      <span class="comment">// 修改句属性</span></div><div class="line">      found.<span class="variable">_node</span>.modifyProp(<span class="variable">_newProp</span>)</div><div class="line"></div><div class="line">      <span class="comment">// 当改变区域和上一个区域交接时，尝试向前合并</span></div><div class="line">      <span class="keyword">if</span> (pos &lt;= <span class="variable">_lower</span> &amp;&amp; pos !== <span class="number">0</span>) &#123;</div><div class="line">        let <span class="variable">_prevHint</span> = found.clone()</div><div class="line">        <span class="variable">_prevHint</span>.movePrev()</div><div class="line">        <span class="keyword">if</span> (!<span class="variable">_prevHint</span>.atTree() &amp;&amp; this.equaler(<span class="variable">_prevHint</span>, <span class="variable">_newProp</span>)) &#123;</div><div class="line">          found = this.merge(this.tree, <span class="variable">_prevHint</span>)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (<span class="variable">_upper</span> &gt;= (pos + length)) &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="variable">_upper</span> == (pos + length)) &#123;</div><div class="line">        <span class="comment">// 改变的区域结束正好在句结束位置，这时尝试向后合并句</span></div><div class="line">        let <span class="variable">_nextHint</span> = found.clone()</div><div class="line">        <span class="variable">_nextHint</span>.moveNext()</div><div class="line">        <span class="keyword">if</span> (!<span class="variable">_nextHint</span>.atTree() &amp;&amp; this.equaler(<span class="variable">_nextHint</span>, <span class="variable">_newProp</span>)) &#123;</div><div class="line">          found = this.merge(this.tree, found)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      break</div><div class="line">    &#125;</div><div class="line">    found.moveNext()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://zh.wikipedia.org/zh-cn/%E7%BA%A2%E9%BB%91%E6%A0%91" target="_blank" rel="external">维基百科·红黑树</a><br><a href="https://segmentfault.com/a/1190000012728513" target="_blank" rel="external">红黑树详细分析，看了都说好</a><br><a href=""></a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/区间树/" rel="tag">#区间树</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/05/SharePen-Operational-Transformation/" rel="next" title="SharedPen 之 Operational Transformation">
+                <i class="fa fa-chevron-left"></i> SharedPen 之 Operational Transformation
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">58</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#红黑树"><span class="nav-number">1.</span> <span class="nav-text">红黑树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区间树"><span class="nav-number">2.</span> <span class="nav-text">区间树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AnnotationTree"><span class="nav-number">3.</span> <span class="nav-text">AnnotationTree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基础方法"><span class="nav-number">3.1.</span> <span class="nav-text">基础方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查找-find-tree-pos"><span class="nav-number">3.1.1.</span> <span class="nav-text">查找 find(tree, pos)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#区间收缩-remove-tree-hint-pos-length"><span class="nav-number">3.1.2.</span> <span class="nav-text">区间收缩 remove(tree, hint, pos, length)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分裂-split-tree-hint-distance-prop"><span class="nav-number">3.1.3.</span> <span class="nav-text">分裂 split(tree, hint, distance, prop)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合并-merge-tree-hint"><span class="nav-number">3.1.4.</span> <span class="nav-text">合并 merge(tree, hint)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#增删改查方法"><span class="nav-number">3.2.</span> <span class="nav-text">增删改查方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入-insert-pos-length-prop"><span class="nav-number">3.2.1.</span> <span class="nav-text">插入 insert(pos, length, prop)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除-shrink-pos-length"><span class="nav-number">3.2.2.</span> <span class="nav-text">删除 shrink(pos, length)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改-modifyProp-pos-length-propFn"><span class="nav-number">3.2.3.</span> <span class="nav-text">修改 modifyProp(pos, length, propFn)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">4.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2018/03/05/SharedPen-IntervalTree-Optimization/';
+      var disqus_title = "SharedPen 之区间树优化";
+      var disqus_url = 'http://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,896 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Operational Transformation," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="当多用户协同编辑同一篇文档，由于没有锁的机制，便会出现内容冲突，这时就需要一定的算法来自动解决冲突，使所有对文档的修改同步后，每个协同编辑的用户看到的文档内容是完全一致的。而 Operational Transformation (简称 OT) 算法就是解决协同问题的通用算法，支持各类协同编辑引用，例如文档，表格，演示，代码编辑等。其最早发表于 1989 年，后因 Google 的在线协作产品">
+<meta name="keywords" content="Operational Transformation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SharedPen 之 Operational Transformation">
+<meta property="og:url" content="http://objcer.com/2018/03/05/SharePen-Operational-Transformation/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="当多用户协同编辑同一篇文档，由于没有锁的机制，便会出现内容冲突，这时就需要一定的算法来自动解决冲突，使所有对文档的修改同步后，每个协同编辑的用户看到的文档内容是完全一致的。而 Operational Transformation (简称 OT) 算法就是解决协同问题的通用算法，支持各类协同编辑引用，例如文档，表格，演示，代码编辑等。其最早发表于 1989 年，后因 Google 的在线协作产品">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Operational%20Transformation.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/EB6D28DA-FACE-4B68-BB71-1A7E8ABFFDEE.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/36EAED8F-D0E3-48F4-AAC9-9FC7AE2EFC88.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/4CA49A74-0941-4E5E-A7E5-78410D96D148.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/49EEDFD9-F635-4F55-8DCA-C165E4813AC6.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/EE6A20BC-A5EA-4BA4-B7F8-566310464A8D.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/AC60F950-D30A-44BC-AB0C-19719EA41C5B.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/7F6B6005-8F23-4294-A94C-196EFE124E8A.png">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/781C4BCD-1D5C-4AD2-9173-B8CF6CD5C016.png">
+<meta property="og:updated_time" content="2018-03-05T15:29:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SharedPen 之 Operational Transformation">
+<meta name="twitter:description" content="当多用户协同编辑同一篇文档，由于没有锁的机制，便会出现内容冲突，这时就需要一定的算法来自动解决冲突，使所有对文档的修改同步后，每个协同编辑的用户看到的文档内容是完全一致的。而 Operational Transformation (简称 OT) 算法就是解决协同问题的通用算法，支持各类协同编辑引用，例如文档，表格，演示，代码编辑等。其最早发表于 1989 年，后因 Google 的在线协作产品">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Operational%20Transformation.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2018/03/05/SharePen-Operational-Transformation/"/>
+
+
+  <title> SharedPen 之 Operational Transformation | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SharedPen 之 Operational Transformation
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-03-05T23:25:30+08:00" content="2018-03-05">
+              2018-03-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/SharedPen/" itemprop="url" rel="index">
+                    <span itemprop="name">SharedPen</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/03/05/SharePen-Operational-Transformation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/05/SharePen-Operational-Transformation/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/03/05/SharePen-Operational-Transformation/" class="leancloud_visitors" data-flag-title="SharedPen 之 Operational Transformation">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Operational%20Transformation.png" alt=""></p>
+<p>当多用户协同编辑同一篇文档，由于没有锁的机制，便会出现内容冲突，这时就需要一定的算法来自动解决冲突，使所有对文档的修改同步后，每个协同编辑的用户看到的文档内容是完全一致的。而 Operational Transformation (简称 OT) 算法就是解决协同问题的通用算法，支持各类协同编辑引用，例如文档，表格，演示，代码编辑等。其最早发表于 1989 年，后因 Google 的在线协作产品 Google Wave，Google Docs 的应用而成熟流行。</p>
+<blockquote>
+<p>关于 Google Wave: <a href="http://www.ifanr.com/675122" target="_blank" rel="external">Google Wave，值得纪念的伟大失败</a></p>
+</blockquote>
+<p>GitHub 上开源项目 <a href="https://github.com/Operational-Transformation/ot.js" target="_blank" rel="external">ot.js</a> 已经对 OT 算法进行 JavaScript 语言实现。本文将对 OT 算法进行介绍 👉</p>
+<blockquote>
+<p><strong>❗️注意:</strong> ot.js 库只是针对纯文本协同编辑的 OT 算法实现；SharedPen 使用了这个库，但是 SharedPen 支持富文本编辑，所以需要对 ot.js 库进行增强，使之支持富文本文档编辑的协同。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="OT-Explained"><a href="#OT-Explained" class="headerlink" title="OT Explained"></a>OT Explained</h2><p>为了方便解释，以下内容基于 ot.js 这个库应用于<strong>纯文本</strong>协同编辑对 OT 算法进行介绍。</p>
+<h3 id="Operations"><a href="#Operations" class="headerlink" title="Operations"></a>Operations</h3><ul>
+<li><strong>Operation(操作) 表示对文档的修改</strong><br>例如插入文本，删除文本这些都可以看作是一个 <code>operation</code>。如同我们 Git 操作中，两个 commit 之间的 diff</li>
+<li><strong>一个 Operation(操作) 包含多个 action(行为)</strong><br>共有三种 action: insert, delete, retain</li>
+</ul>
+<h3 id="Actions-insert-delete-retain"><a href="#Actions-insert-delete-retain" class="headerlink" title="Actions(insert, delete, retain)"></a>Actions(insert, delete, retain)</h3><blockquote>
+<p>When you apply an operation to a string, an invisible cursor begins traversing the string from left to right. The insert and delete components mutate the string at the current position of the cursor while the retain component simply advances the position of the cursor by the specified number of characters.</p>
+</blockquote>
+<p>将 operation 应用到字符串时，有一个隐形的光标位于字符串起点，<code>retain</code> 用于移动光标，<code>insert</code> 和 <code>delete</code> 在光标所在位置对字符串进行字符插入和删除，operation 应用完后，光标必须处于字符串的末端（这保证了应用 operation 的正确性）。</p>
+<h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> operation = <span class="function"><span class="keyword">new</span> <span class="title">ot</span>.<span class="title">Operation</span>()</span></div><div class="line">  .<span class="title">retain</span>(<span class="number">11</span>)</div><div class="line">  .<span class="title">insert</span>(" dolor");</div><div class="line"></div><div class="line"><span class="title">operation</span>.<span class="title">apply</span>("lorem ipsum"); <span class="comment">// =&gt; "lorem ipsum dolor"</span></div></pre></td></tr></table></figure>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/EB6D28DA-FACE-4B68-BB71-1A7E8ABFFDEE.png" alt=""></p>
+<p>这个例子中，operation 包含两个 action: <code>retain(11)</code> 和 <code>insert(&quot; dolor&quot;)</code>，顺序执行这两个 action，光标从左往右移动 11 个字符，然后在光标当前位置插入字符 <code>&quot; dolor&quot;</code>，光标最终到达字符串末端，operation 应用完成。</p>
+<p>我们再将 operation 应用到字符串 <code>&quot;lorem ipsum amet&quot;</code> 中，发现会报错！<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">operation</span><span class="selector-class">.apply</span>(<span class="string">"lorem ipsum amet"</span>); <span class="comment">// throws an error</span></div></pre></td></tr></table></figure></p>
+<p>这是因为 operation 应用完后，隐形的光标并不处于字符串末端，所以报错；要解决这个问题也简单，增加一个 <code>retain</code> 行为将光标移动到字符串末端。<br><figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">operation.retain(<span class="number">5</span>).<span class="built_in">apply</span>(<span class="string">"lorem ipsum amet"</span>); // =&gt; <span class="string">"lorem ipsum dolor amet"</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/36EAED8F-D0E3-48F4-AAC9-9FC7AE2EFC88.png" alt=""></p>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">var</span> operation = <span class="built_in">new</span> ot.Operation() // create <span class="built_in">new</span> operation</div><div class="line">  .<span class="built_in">delete</span>(<span class="string">"lorem "</span>)</div><div class="line">  .retain(<span class="number">5</span>);</div><div class="line">operation.<span class="built_in">apply</span>(<span class="string">"lorem ipsum"</span>); // =&gt; <span class="string">"ipsum"</span></div></pre></td></tr></table></figure>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/4CA49A74-0941-4E5E-A7E5-78410D96D148.png" alt=""></p>
+<p>在这个例子中，operation 包含两个 action: <code>delete(&quot;lorem &quot;)</code> 和 <code>retain(5)</code>，顺序执行这两个 action，先删除字符 <code>&quot;lorem &quot;</code>，然后光标再从左往右移动 5 个字符恰好到达字符串末端，operation 应用完成。</p>
+<p>在严谨的 OT 算法实现中，<code>delete</code> 删除字符是要严格匹配的。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">operation</span><span class="selector-class">.apply</span>(<span class="string">"trolo ipsum"</span>); <span class="comment">// 删除字符不匹配，throws an error</span></div></pre></td></tr></table></figure></p>
+<p>但是在实际的算法实现中，很多是根据删除字符的长度来进行删除，例如 ot.js 库就是这样处理，在实际协同文本编辑器应用中也基本满足要求了，无需再对删除字符进行比较，一定程度上也提高了处理效率。</p>
+<h3 id="操作合并-compose"><a href="#操作合并-compose" class="headerlink" title="操作合并(compose)"></a>操作合并(compose)</h3><p>前面提到：<strong>一个 Operation(操作) 包含多个 action(行为)</strong>，这样有一个好处是：<strong>多个 operation 能合并 (compose) 成一个</strong>。</p>
+<blockquote>
+<p><strong><em>apply(apply(S, A), B) = apply(S, compose(A, B))</em></strong><br>多个 operation 依次应用等价于，先将多个 operation 合并成一个，然后再进行应用</p>
+</blockquote>
+<p>例如有两个 operation 要应用到一个字符串上，正常的做法是这两个 operation 依次进行应用；现在我们可以先对两个 operation 进行合并成一个 operation，然后再进行应用。<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Define two consecutive operations</span></div><div class="line"><span class="keyword">var</span> operation0 = <span class="keyword">new</span> <span class="type">ot</span>.Operation()</div><div class="line">  .retain(<span class="number">11</span>)</div><div class="line">  .insert(<span class="string">" dolor"</span>);</div><div class="line"><span class="keyword">var</span> operation1 = <span class="keyword">new</span> <span class="type">ot</span>.Operation()</div><div class="line">  .delete(<span class="string">"lorem "</span>)</div><div class="line">  .retain(<span class="number">11</span>);</div><div class="line"></div><div class="line"><span class="comment">// Our input string</span></div><div class="line"><span class="keyword">var</span> str0 = <span class="string">"lorem ipsum"</span>;</div></pre></td></tr></table></figure></p>
+<p>依次应用这两个 operation：<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Apply operations one after another</span></div><div class="line">var str<span class="number">1</span> = operatio<span class="symbol">n0</span>.apply<span class="comment">(str0)</span>; <span class="comment">// "lorem ipsum dolor"</span></div><div class="line">var str<span class="number">2</span>a = operatio<span class="symbol">n1</span>.apply<span class="comment">(str1)</span>; <span class="comment">// "ipsum dolor"</span></div></pre></td></tr></table></figure></p>
+<p>先将两个 operation 合并成一个，然后再应用这个 operation：<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// Combine operations <span class="keyword">and</span> <span class="built_in">apply</span> the combined operation</div><div class="line"><span class="built_in">var</span> combinedOperation = operation0.compose(operation1);</div><div class="line"><span class="built_in">var</span> str2b = combinedOperation.<span class="built_in">apply</span>(str0); // <span class="string">"ipsum dolor"</span></div></pre></td></tr></table></figure></p>
+<h3 id="操作转换-transform"><a href="#操作转换-transform" class="headerlink" title="操作转换(transform)"></a>操作转换(transform)</h3><p>OT 算法的核心就是这个 <code>transform</code> 转换算法，OT 的思路是将编辑转换成操作 (operation)，当多人协同操作时，就需要对这些操作进行转换，使得最终文档的内容一致。</p>
+<p>例如：文档内容是：’go’，两个用户同时在字符串末尾执行字符插入：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> str = <span class="string">'go'</span></div></pre></td></tr></table></figure></p>
+<p>Client-A:<br><figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> opA = <span class="function"><span class="keyword">new</span> <span class="title">ot</span>.<span class="title">Operation</span>()</span></div><div class="line">  .<span class="title">retain</span>(<span class="number">2</span>)</div><div class="line">  .<span class="title">insert</span>("a");</div><div class="line"></div><div class="line"><span class="title">opA</span>.<span class="title">apply</span>(str) <span class="comment">// =&gt; goa</span></div></pre></td></tr></table></figure></p>
+<p>Client-B:<br><figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> opB = <span class="function"><span class="keyword">new</span> <span class="title">ot</span>.<span class="title">Operation</span>()</span></div><div class="line">  .<span class="title">retain</span>(<span class="number">2</span>)</div><div class="line">  .<span class="title">insert</span>("t");</div><div class="line"><span class="title">opB</span>.<span class="title">apply</span>(str) <span class="comment">// =&gt; got</span></div></pre></td></tr></table></figure></p>
+<p>用户对文档的插入操作会立即应用到本地文档副本，然后将操作 <code>opA</code> 和 <code>opB</code> 上传到服务器；服务器先后接收到这两个操作，然后对服务端的这份文档进行应用，假设以先 <code>opA</code> 后 <code>opB</code> 的顺序，应用 <code>opA</code> 后，字符串变成 <code>goa</code>，长度变成 3；然后应用 <code>opB</code>，隐形的光标未到字符串末端，执行会抛出错误。<br>此外，服务端也会将 <code>opA</code> 发送给 Client-B，<code>opB</code> 发送给 Client-A，由于此时字符串都长度都变成 3，应用过程中隐形的光标未到字符串末端，会抛出错误。但即使能应用成果，结果也是：</p>
+<ul>
+<li>Client-A: ‘goa’ + (retain(2); insert(‘t’)) = ‘gota’</li>
+<li>Client-B: ‘got’ + (retain(2); insert(‘a’)) = ‘goat’</li>
+</ul>
+<p>两个用户得到的文档内容也不一致了，这种情况下就需要 <code>transform</code> 操作转换了。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/49EEDFD9-F635-4F55-8DCA-C165E4813AC6.png" alt=""></p>
+<p>① 如上图左，<code>a</code> 表示客户端的 operation，<code>b</code> 表示服务端的 operation，二者相交的顶点表示文档状态相同，此时客户端和服务端对文档分别应用操作 <code>a</code> 和 <code>b</code>，这时两边的文档内容都发生变化，且不一致；为了客户端和服务端的文档达到一致的状态，我们需要对 <code>a</code> 和 <code>b</code> 进行操作转换 <code>transfrom(a, b) =&gt; (a&#39;, b&#39;)</code> 得到两个衍生的操作 <code>a&#39;</code> 和 <code>b&#39;</code>。<br>② 如上图右，<code>a&#39;</code> 在服务端应用，<code>b&#39;</code> 在客户端应用，最终文档内容达到一致。</p>
+<p>上面这种问题称之为：<strong>one-step diamond problem</strong>，客户端和服务端同时对文档执行一个 operation，从上方顶点分裂开两条边，相当于 diamond 图形的上方两边（<code>a</code>, <code>b</code>），通过 OT 算法的 <code>transform</code> 方法得到两个衍生的 operation，客户端和服务端分别执行这两个衍生的 operation，相当于 diamond 图形的下方两边（<code>a&#39;</code>, <code>b&#39;</code>），这样从上方顶点分裂开的两边又汇合到下顶点，构成一个完整的 diamond 图形。diamond 图形的上下两个顶点表示客户端和服务器的文档内容处于相同状态。</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/EE6A20BC-A5EA-4BA4-B7F8-566310464A8D.png" alt=""></p>
+<p>所以这个例子的正确解法是：<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">var transformedPair</span> = ot.Operation.transform(opA, opB);</div><div class="line"><span class="attribute">var opAPrime</span> = transformedPair[0];</div><div class="line"><span class="attribute">var opBPrime</span> = transformedPair[1];</div><div class="line"></div><div class="line"><span class="attribute">var strABPrime</span> = opAPrime.apply(strB);</div><div class="line"><span class="attribute">var strBAPrime</span> = opBPrime.apply(strA);</div></pre></td></tr></table></figure></p>
+<h3 id="operation-的逆向操作"><a href="#operation-的逆向操作" class="headerlink" title="operation 的逆向操作"></a>operation 的逆向操作</h3><blockquote>
+<p>The inverse of an operation is the operation that reverts the effects of the operation</p>
+</blockquote>
+<p>例如一个 opration 包含 <code>insert(&quot;hello &quot;); retain(6);</code> 这两个 action；那么这个 operation 的逆向操作就是 <code>delete(&quot;hello &quot;); retain(6);</code><br>一个 operation 的逆向主要用于 Undo/Redo，在文档编辑中执行了一个 operation，那么需要将其逆向操作推入 undo/redo 栈中，在撤销/回撤时，弹出栈顶 operation 执行。</p>
+<blockquote>
+<p>undo/redo 入栈的数据除了当前操作的 inverse operation，还包括了选区信息<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// inverseOperation inverse operation</span></div><div class="line"><span class="comment">// Metadata: selection</span></div><div class="line"><span class="function"><span class="title">WrappedOperation</span><span class="params">(inverseOperation, Metadata)</span></span></div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="C-S-模式"><a href="#C-S-模式" class="headerlink" title="C/S 模式"></a>C/S 模式</h2><p>绝大多数的协同应用都是 Client/Server(C/S) 模式，下面我们将分析 OT 算法在 C/S 模式下的处理过程。</p>
+<h3 id="compound-OT"><a href="#compound-OT" class="headerlink" title="compound OT"></a>compound OT</h3><p>上一节中介绍了客户端和服务端各有一个操作的情况，通过 <code>transform</code> 操作变换，将客户端和服务端的文档内容收敛到相同状态；但是在实际应用场景中，不可能仅仅只有一个操作，而是有多个操作，假设客户端有两个操作，服务端只有一个操作，如下图所示：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/AC60F950-D30A-44BC-AB0C-19719EA41C5B.png" alt=""></p>
+<p>此时需要构建两个 diamond 图形才能使客户端和服务端的文档收敛到相同的状态。</p>
+<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/7F6B6005-8F23-4294-A94C-196EFE124E8A.png" alt=""><br>如上图客户端有三个操作，服务端有一个操作的时候，需要构建三个 diamond 图形能将两端文档内容收敛到相同状态；由此我们可以类推出，当两端操作数出现多对一 <code>N:1</code> 或者一对多 <code>1:N</code> 的关系时，可以递归构建 diamond 图形来使得两端内容最终收敛到相同状态。<br>假设已知客户端有一个操作 <code>clientOp</code>，服务端有多个操作 <code>serverOps</code> ，那么可以通过如下代码，计算出客户端的操作经过变换，在服务端应用的操作 <code>clientOpPrime</code>。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clientOp</div><div class="line"><span class="keyword">var</span> serverOps = []</div><div class="line"><span class="keyword">var</span> clientOpPrime = clientOp</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; serverOps.length; i++) &#123;</div><div class="line">  clientOpPrime = transform(clientOpPrime, serverOps[i])[<span class="number">0</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>当然，客户端和服务端的操作数也有可能出现多对多 <code>N:M</code> 的关系，那么做法是将 <code>N:M</code> 的关系拆分成多个 <code>N:1</code> 或者 <code>1:N</code> 的关系来解决。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/781C4BCD-1D5C-4AD2-9173-B8CF6CD5C016.png" alt=""></p>
+<h3 id="revision-版本号"><a href="#revision-版本号" class="headerlink" title="revision(版本号)"></a>revision(版本号)</h3><ul>
+<li>文档一次编辑前后的差异 (diff) 即为一个 operation 操作</li>
+<li>每一个操作对应一次版本号顺序递增</li>
+<li>客户端和服务端各自维持一个版本号<ul>
+<li>客户端进行一次编辑产生一个 operation 或者从服务端接收到一个 operation，客户端版本号都会递增一</li>
+<li>服务端作为客户端并发编辑操作串行化的地点，除了保存文档内容，还会将客户端发过来的 operation 保存到一个数组中，这个数组也就是文档编辑的历史记录。服务端每接收到一个操作，服务端版本号会递增一</li>
+<li><strong>客户端版本号始终小于等于服务端版本号</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="C-S-直接的交互"><a href="#C-S-直接的交互" class="headerlink" title="C/S 直接的交互"></a>C/S 直接的交互</h3><ul>
+<li>客户端将一次编辑操作（例如输入/删除字符，设置文本样式等）封装成一个 operation，通过 socket 将当前客户端版本号 revision 和编辑操作 operation 发送到服务端</li>
+<li>服务端接收到客户端的信息 <code>(revision, operation)</code> 后，执行如下处理函数<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">receiveOperation (revision, operation) &#123;</div><div class="line">  <span class="comment">// ① revision check</span></div><div class="line">  <span class="keyword">if</span> (revision &lt; <span class="number">0</span> || <span class="keyword">this</span>.operations.length &lt; revision) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'operation revision not in history'</span>)</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// ② Find all operations that the client didn't know of when it sent the</span></div><div class="line">  <span class="comment">// operation ...</span></div><div class="line">  <span class="keyword">var</span> concurrentOperations = <span class="keyword">this</span>.operations.slice(revision)</div><div class="line"></div><div class="line">  <span class="comment">// ... and transform the operation against all these operations ...</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; concurrentOperations.length; i++) &#123;</div><div class="line">    operation = WrappedOperation.transform(operation, concurrentOperations[i])[<span class="number">0</span>]</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// ③ ... and apply that on the document.</span></div><div class="line">  <span class="keyword">this</span>.document = operation.apply(<span class="keyword">this</span>.document)</div><div class="line">  <span class="comment">// Store operation in history.</span></div><div class="line">  <span class="keyword">this</span>.operations.push(operation)</div><div class="line"></div><div class="line">  <span class="comment">// It's the caller's responsibility to send the operation to all connected</span></div><div class="line">  <span class="comment">// clients and an acknowledgement to the creator.</span></div><div class="line">  <span class="keyword">return</span> operation</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>👉 剖析一下这个函数：</p>
+<ul>
+<li><strong>注释①</strong>：客户端和服务端版本号大小比较，确保<em>客户端版本号始终小于等于服务端版本号</em>，否则报错</li>
+<li><strong>注释②</strong>：客户端操作和服务端操作递归执行 <code>transform</code> 操作变换</li>
+<li><strong>注释③</strong>：将<em>注释②</em>结果应用到当前文档，并保存到历史操作数组中</li>
+<li>最后，将 <code>receiveOperation (revision, operation)</code> 这个函数返回的 <code>operation</code> 发送给其他协同编辑的客户端</li>
+</ul>
+<h3 id="UNDO-REDO"><a href="#UNDO-REDO" class="headerlink" title="UNDO/REDO"></a>UNDO/REDO</h3><p>客户端从服务端接收到一个 <code>operation</code> 后，需要使用这个 <code>operation</code> 对 UNDO/REDO 栈中的所有操作进行 <code>transform</code> 变换<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">transform (operation) &#123;</div><div class="line">  <span class="keyword">this</span>.undoStack = <span class="keyword">this</span>._transformStack(<span class="keyword">this</span>.undoStack, operation)</div><div class="line">  <span class="keyword">this</span>.redoStack = <span class="keyword">this</span>._transformStack(<span class="keyword">this</span>.redoStack, operation)</div><div class="line">&#125;</div><div class="line">_transformStack (stack, operation) &#123;</div><div class="line">  <span class="keyword">var</span> newStack = []</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = stack.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">    <span class="keyword">var</span> pair = WrappedOperation.transform(stack[i], operation)</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> pair[<span class="number">0</span>].isNoop !== <span class="string">'function'</span> || !pair[<span class="number">0</span>].isNoop()) &#123;</div><div class="line">      newStack.push(pair[<span class="number">0</span>])</div><div class="line">    &#125;</div><div class="line">    operation = pair[<span class="number">1</span>]</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> newStack.reverse()</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="OT-富文本支持"><a href="#OT-富文本支持" class="headerlink" title="OT 富文本支持"></a>OT 富文本支持</h2><p>关于扩展 ot.js 支持富文本属性，可以参考文件 <a href="">TextAction.js</a> 和 <a href="">TextOperation.js</a>，此处不展开介绍（后面再写文章对此介绍）</p>
+<p>前面提到服务端保存了两套数据：</p>
+<ul>
+<li>文档内容，这是一段纯文本字符串</li>
+<li>文档编辑历史记录，这是一个保存 operation 的数组</li>
+</ul>
+<p>注意到文档内容是纯文本，并不包含富文本信息。客户端打开文档时，需要将文档历史记录中所有的 operation 合并成一个 operation（合并逻辑可放在服务端处理，将合并后的 operation 发给客户端），然后对文档内容执行这个 operation，这样才会让文档显示出富文本样式。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">initClientContent () &#123;</div><div class="line">  <span class="comment">// init the editor content with historyOps</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.historyOps &amp;&amp; <span class="keyword">this</span>.historyOps.length) &#123;</div><div class="line">    <span class="keyword">var</span> _ops = <span class="keyword">this</span>.historyOps.map(<span class="function"><span class="params">wrappedOp</span> =&gt;</span> wrappedOp.wrapped)</div><div class="line">    <span class="keyword">var</span> initialTextOp = <span class="keyword">new</span> TextOperation()</div><div class="line"></div><div class="line">    _ops.forEach(<span class="function">(<span class="params">op</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">var</span> _textOp = TextOperation.fromJSON(op)</div><div class="line">      initialTextOp = initialTextOp.compose(_textOp)</div><div class="line">    &#125;)</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.applyOperation(initialTextOp)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://github.com/Operational-Transformation/ot.js" target="_blank" rel="external">Operational-Transformation/ot.js</a><br><a href="http://operational-transformation.github.io/index.html" target="_blank" rel="external">Operational Transformation</a><br><a href="http://www.codecommit.com/blog/java/understanding-and-applying-operational-transformation" target="_blank" rel="external">Understanding and Applying Operational Transformation</a><br><a href="http://blog.csdn.net/pheecian10/article/details/78496854" target="_blank" rel="external">Operational Transformation算法图解</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Operational-Transformation/" rel="tag">#Operational Transformation</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/27/SharedPen/" rel="next" title="SharedPen 富文本实时协同编辑器">
+                <i class="fa fa-chevron-left"></i> SharedPen 富文本实时协同编辑器
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/05/SharedPen-IntervalTree-Optimization/" rel="prev" title="SharedPen 之区间树优化">
+                SharedPen 之区间树优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">58</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OT-Explained"><span class="nav-number">1.</span> <span class="nav-text">OT Explained</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Operations"><span class="nav-number">1.1.</span> <span class="nav-text">Operations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actions-insert-delete-retain"><span class="nav-number">1.2.</span> <span class="nav-text">Actions(insert, delete, retain)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入"><span class="nav-number">1.3.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">1.4.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作合并-compose"><span class="nav-number">1.5.</span> <span class="nav-text">操作合并(compose)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作转换-transform"><span class="nav-number">1.6.</span> <span class="nav-text">操作转换(transform)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operation-的逆向操作"><span class="nav-number">1.7.</span> <span class="nav-text">operation 的逆向操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-S-模式"><span class="nav-number">2.</span> <span class="nav-text">C/S 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#compound-OT"><span class="nav-number">2.1.</span> <span class="nav-text">compound OT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#revision-版本号"><span class="nav-number">2.2.</span> <span class="nav-text">revision(版本号)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-S-直接的交互"><span class="nav-number">2.3.</span> <span class="nav-text">C/S 直接的交互</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UNDO-REDO"><span class="nav-number">2.4.</span> <span class="nav-text">UNDO/REDO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OT-富文本支持"><span class="nav-number">3.</span> <span class="nav-text">OT 富文本支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2018/03/05/SharePen-Operational-Transformation/';
+      var disqus_title = "SharedPen 之 Operational Transformation";
+      var disqus_url = 'http://objcer.com/2018/03/05/SharePen-Operational-Transformation/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>
