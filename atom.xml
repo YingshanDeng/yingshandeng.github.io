@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://objcer.com/"/>
-  <updated>2018-03-05T15:39:38.000Z</updated>
+  <updated>2018-03-05T15:44:59.000Z</updated>
   <id>http://objcer.com/</id>
   
   <author>
@@ -20,10 +20,15 @@
     <link href="http://objcer.com/2018/03/05/SharedPen/"/>
     <id>http://objcer.com/2018/03/05/SharedPen/</id>
     <published>2018-03-05T15:37:33.000Z</published>
-    <updated>2018-03-05T15:39:38.000Z</updated>
+    <updated>2018-03-05T15:44:59.000Z</updated>
     
     <content type="html"><![CDATA[<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png" alt=""></p>
-<p>2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏<br>SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：<a href="https://github.com/YingshanDeng/SharedPen" target="_blank" rel="external">GitHub: YingshanDeng/SharedPen</a>。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。</p>
+<p>2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏<br>SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：<a href="https://github.com/YingshanDeng/SharedPen" target="_blank" rel="external">GitHub: YingshanDeng/SharedPen</a>。本文将对 SharedPen 整体架构进行介绍，下列文章对其中具体的技术方案进行了详细介绍：</p>
+<ul>
+<li><a href="https://objcer.com/2018/03/05/SharePen-Operational-Transformation/">SharedPen 之 Operational Transformation</a></li>
+<li><a href="https://objcer.com/2018/02/27/SharedPen-AnnotationList/">SharedPen 之 AnnotationList</a></li>
+<li><a href="https://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/">SharedPen 之区间树优化</a></li>
+</ul>
 <a id="more"></a>
 <h2 id="关于协同编辑器"><a href="#关于协同编辑器" class="headerlink" title="关于协同编辑器"></a>关于协同编辑器</h2><p>协同编辑也就是多个人对一份文档进行编辑，每个协作这都有自己的输入光标，并可以可以自由地和其他协作者一起输入。对于 web-based 的协同编辑器，目前有很多成熟的产品。像我很喜欢用的: <a href="https://www.google.com/docs/about/" target="_blank" rel="external">Google Docs</a>，国内的: <a href="https://shimo.im/" target="_blank" rel="external">石墨文档</a>。</p>
 <p>另一个值得介绍的是 <a href="https://teletype.atom.io/" target="_blank" rel="external">Teletype</a>，这是在旧金山举办的 2017 QCon 大会上，GitHub 发布的 Atom 实时协作插件，Teletype 可以让两名开发者轻松的协作编写代码，由于 Atom 是基于 <a href="https://electronjs.org/" target="_blank" rel="external">Electron</a> 构建的应用程序，所以我们也可以将其看作是 web-based 协同编辑器。</p>
@@ -84,7 +89,12 @@
     <summary type="html">
     
       &lt;p&gt;&lt;img src=&quot;http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏&lt;br&gt;SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：&lt;a href=&quot;https://github.com/YingshanDeng/SharedPen&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub: YingshanDeng/SharedPen&lt;/a&gt;。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。&lt;/p&gt;
+&lt;p&gt;2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏&lt;br&gt;SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：&lt;a href=&quot;https://github.com/YingshanDeng/SharedPen&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub: YingshanDeng/SharedPen&lt;/a&gt;。本文将对 SharedPen 整体架构进行介绍，下列文章对其中具体的技术方案进行了详细介绍：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://objcer.com/2018/03/05/SharePen-Operational-Transformation/&quot;&gt;SharedPen 之 Operational Transformation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://objcer.com/2018/02/27/SharedPen-AnnotationList/&quot;&gt;SharedPen 之 AnnotationList&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/&quot;&gt;SharedPen 之区间树优化&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
     
     </summary>
     
