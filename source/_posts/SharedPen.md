@@ -7,7 +7,10 @@ categories: SharedPen
 ![](http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png)
 
 2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏
-SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：[GitHub: YingshanDeng/SharedPen](https://github.com/YingshanDeng/SharedPen)。本文将对 SharedPen 整体架构进行介绍，后续会有系列文章介绍其中具体的技术实现细节(敬请期待 🎏)。
+SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：[GitHub: YingshanDeng/SharedPen](https://github.com/YingshanDeng/SharedPen)。本文将对 SharedPen 整体架构进行介绍，下列文章对其中具体的技术方案进行了详细介绍：
+- [SharedPen 之 Operational Transformation](https://objcer.com/2018/03/05/SharePen-Operational-Transformation/)
+- [SharedPen 之 AnnotationList](https://objcer.com/2018/02/27/SharedPen-AnnotationList/)
+- [SharedPen 之区间树优化](https://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/)
 
 <!-- more -->
 
