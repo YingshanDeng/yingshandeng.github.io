@@ -4,7 +4,6 @@ tags: [BMP, charCodeAt, codePointAt]
 categories: Unicode
 ---
 
-
 ![](http://7vikhl.com1.z0.glb.clouddn.com/IMG_1915.PNG)
 <!-- more -->
 
@@ -18,7 +17,7 @@ Unicode 字符分为 17 组平面，每个平面拥有 2^16 (65,536) 个码位�
 
 而当 xy 是 00 (码点范围是从U+0000到U+FFFF) 的时候，也就是 Unicode 最前 2^16 (65,536) 个字符，被称为**基本平面 BMP(Basic Multilingual Plane)**，最常见的字符都在这个平面上，这也是 Unicode 最先定义和最先公布的一个平面。
 
-其余 16 个平面（U+100000 到 U+10FFFF）称为**补充平面(supplementary planes, or astral planes)**，也称之为补充字符，相对于 BMP 字符而言，这些字符称之为非 BMP 字符。要区分是非 BMP 字符很简单：其码位需要超过 4 位 16 进制表示
+其余 16 个平面（U+010000 到 U+10FFFF）称为**补充平面(supplementary planes, or astral planes)**，也称之为补充字符，相对于 BMP 字符而言，这些字符称之为非 BMP 字符。要区分是非 BMP 字符很简单：其码位需要超过 4 位 16 进制表示
 
 ## UTF-16 和 UCS-2
 
@@ -63,7 +62,7 @@ UCS(Universal Character Set) 通用字符集，是一个 ISO 标准，UCS-2 用 
 - 1995.5 JavaScript 诞生
 - 1996.7 UTF-16 诞生
 
-所以 JS 诞生之时 UTF-16 还没有问世，所以只能用 来处理字符，而这也为字符处理留下了隐患，而后来通过不断完善，譬如引入 UTF-16 将问题一步步解决。
+所以 JS 诞生之时 UTF-16 还没有问世，所以只能用 UCS-2 来处理字符，而这也为字符处理留下了隐患，而后来通过不断完善，譬如引入 UTF-16 将问题一步步解决。
 
 ## JavaScript 字符处理
 
