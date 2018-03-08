@@ -1,0 +1,851 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Gulp," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Deng's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="Gulp 是三个自动化构建工具（Grunt, Gulp, Webpack）之一，其通过代码优于配置的策略，Gulp 让简单的任务简单，复杂的任务可管理，仅提供几个 API 就能将构建任务很好完成，而且有着丰富的插件生态，本文将探究 Gulp 的原理及如何创建插件。">
+<meta name="keywords" content="Gulp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="探究 Gulp：基于流的自动化构建工具">
+<meta property="og:url" content="http://objcer.com/2018/02/27/Explore-Gulp/index.html">
+<meta property="og:site_name" content="Deng&#39;s Blog">
+<meta property="og:description" content="Gulp 是三个自动化构建工具（Grunt, Gulp, Webpack）之一，其通过代码优于配置的策略，Gulp 让简单的任务简单，复杂的任务可管理，仅提供几个 API 就能将构建任务很好完成，而且有着丰富的插件生态，本文将探究 Gulp 的原理及如何创建插件。">
+<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/gulpjs-cover.png">
+<meta property="og:updated_time" content="2018-03-08T14:51:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="探究 Gulp：基于流的自动化构建工具">
+<meta name="twitter:description" content="Gulp 是三个自动化构建工具（Grunt, Gulp, Webpack）之一，其通过代码优于配置的策略，Gulp 让简单的任务简单，复杂的任务可管理，仅提供几个 API 就能将构建任务很好完成，而且有着丰富的插件生态，本文将探究 Gulp 的原理及如何创建插件。">
+<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/gulpjs-cover.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://objcer.com/2018/02/27/Explore-Gulp/"/>
+
+
+  <title> 探究 Gulp：基于流的自动化构建工具 | Deng's Blog </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Deng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Work Smart, Enjoy Life!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                探究 Gulp：基于流的自动化构建工具
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-02-27T22:21:40+08:00" content="2018-02-27">
+              2018-02-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JS/" itemprop="url" rel="index">
+                    <span itemprop="name">JS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/02/27/Explore-Gulp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/02/27/Explore-Gulp/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/02/27/Explore-Gulp/" class="leancloud_visitors" data-flag-title="探究 Gulp：基于流的自动化构建工具">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/gulpjs-cover.png" alt=""></p>
+<p>Gulp 是三个自动化构建工具（Grunt, Gulp, Webpack）之一，其通过代码优于配置的策略，Gulp 让简单的任务简单，复杂的任务可管理，仅提供几个 API 就能将构建任务很好完成，而且有着丰富的插件生态，本文将探究 Gulp 的原理及如何创建插件。</p>
+<a id="more"></a>
+<h2 id="流"><a href="#流" class="headerlink" title="流"></a>流</h2><h3 id="Node-中的流"><a href="#Node-中的流" class="headerlink" title="Node 中的流"></a>Node 中的流</h3><p>Node 中的 Stream 一般分四种, 其中 Transform 也是 Duplex，只不过输出是由输入计算得到的，因此算作 Duplex 的特例。</p>
+<ul>
+<li>输入流(stream.Readable)</li>
+<li>输出流(stream.Writable)</li>
+<li>读写流(stream.Duplex)</li>
+<li>转换流(stream.Transform)</li>
+</ul>
+<p>Stream 流有一个很基本的操作 <code>pipe</code> 管道。用于将一个流的输出口接到另一个流的输入口，起连接两个流的作用。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">a</span><span class="selector-class">.pipe</span>(<span class="selector-tag">b</span>)<span class="selector-class">.pipe</span>(<span class="selector-tag">c</span>)<span class="selector-class">.pipe</span>(<span class="selector-tag">d</span>)</div></pre></td></tr></table></figure></p>
+<p>Stream 都是 Node 事件对象 EventEmitter 的实例( All streams are instances of EventEmitter )，它们可以通过 <code>on</code> 添加事件监听。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</div><div class="line">fs.createReadStream(<span class="string">'src.txt'</span>)</div><div class="line">  .pipe(fs.createWriteStream(<span class="string">'dest.txt'</span>))</div><div class="line">  .on(<span class="string">'finish'</span>, () =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"Write complete."</span>)</div><div class="line">  &#125;)</div></pre></td></tr></table></figure></p>
+<p><code>fs.createReadStream(&#39;src.txt&#39;)</code> 创建了 Readable Stream，<code>fs.createWriteStream()</code> 创建了 Writable Stream，然后通过管道方法 <code>pipe</code> 就可以完成数据从 Readable Stream 到 Writable Stream 的流动。Stream 是 EventEmitter 的实例，通过 <code>on</code> 方法为 Readable Stream 添加了一个 <code>finish</code> 事件，写入完成时触发该事件回调。</p>
+<h3 id="Stream-和-Buffer"><a href="#Stream-和-Buffer" class="headerlink" title="Stream 和 Buffer"></a>Stream 和 Buffer</h3><p><strong>两种数据类型：</strong></p>
+<ul>
+<li>buffer：数据缓冲对象，是一个类似数组结构的对象，可以通过指定开始写入的位置及写入的数据长度，往其中写入<strong>二进制数据</strong></li>
+<li>stream：也就是我们上面提到的 Node 中的流，stream 对 buffer 对象的高级封装，其操作的底层还是 buffer 对象</li>
+</ul>
+<p><strong>处理数据的两种模式：</strong></p>
+<ul>
+<li>Buffer 模式：就是取完整数据一次性操作</li>
+<li>Stream 模式：就是边读取数据边操作</li>
+</ul>
+<p>例如打开一个 2G 的文件, 用 Buffer 模式就是先分配 2G 的内存, 把文件全部读出来, 然后开始操作内存；而用 Stream 模式的方法就是边读数据边处理。可见，Steam 模式无论在空间上还是时间上都优于 Buffer 模式。</p>
+<h2 id="vinyl"><a href="#vinyl" class="headerlink" title="vinyl"></a>vinyl</h2><p><a href="https://github.com/gulpjs/vinyl" target="_blank" rel="external">vinyl</a> 是一种虚拟文件格式（Virtual file format），也是一种 JavaScript 对象，称之为：<strong>Vinyl File Object</strong>，如下：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Vinyl = require(<span class="string">'vinyl'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> jsFile = <span class="keyword">new</span> Vinyl(&#123;</div><div class="line">  cwd: <span class="string">'/'</span>,</div><div class="line">  <span class="keyword">base</span>: <span class="string">'/test/'</span>,</div><div class="line">  path: <span class="string">'/test/file.js'</span>,</div><div class="line">  contents: <span class="keyword">new</span> Buffer(<span class="string">'var x = 123'</span>)</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>我们知道 Gulp 是基于流的自动化构建工具，但是这个流并非 Node 中的 Stream，而是 <strong>Vinyl File Object Stream</strong>，但其中用到了 Node 中的 Stream。那 Gulp 为什么不直接使用 Node 中的 Stream 呢？看如下例子：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">gulp.task(<span class="string">"copy"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> gulp.src(<span class="string">"./stylesheets/src/**/*.css"</span>)</div><div class="line">    .pipe(gulp.dest(<span class="string">"./stylesheets/dest"</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>这段代码将 <code>src</code> 目录下的 css 文件全部拷贝到 <code>dest</code> 目录，拷贝过程中保留了目录结构，文件名等等。 Node 中的 Stream 只传输 String 类型（Buffer经过 <code>utf8</code> 编码），Buffer 类型（二进制）和 Null（空），也即只关注了文件的内容；但是 Gulp 中不只关注文件内容，还用到这个文件相关的路径信息，而这是 Node 中的 Stream 无法支持的。留意上面 vinyl 对象代码，我们会发现包含了 <code>contents</code> 和 <code>path</code> 属性，所以 Gulp 中用到 Vinyl File Object，其使用的流就是 Vinyl File Object Stream。</p>
+<h3 id="vinyl-fs"><a href="#vinyl-fs" class="headerlink" title="vinyl-fs"></a>vinyl-fs</h3><p><a href="https://github.com/gulpjs/vinyl-fs" target="_blank" rel="external">vinyl-fs</a> 是 vinyl 文件对象的适配器(Vinyl adapter for the file system)。Gulp 中并没有直接使用 vinyl 文件对象，而是通过 vinyl-fs 提供的方法进行操作，在 <a href="https://github.com/gulpjs/gulp/blob/master/index.js" target="_blank" rel="external">Gulp 源码</a> 中发现：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> vfs = <span class="built_in">require</span>(<span class="string">'vinyl-fs'</span>);</div><div class="line"></div><div class="line">Gulp.prototype.src = vfs.src;</div><div class="line">Gulp.prototype.dest = vfs.dest;</div></pre></td></tr></table></figure></p>
+<h3 id="vinyl-内容类型"><a href="#vinyl-内容类型" class="headerlink" title="vinyl 内容类型"></a>vinyl 内容类型</h3><p>Vinyl File Object 的 <code>contents</code> 属性有三种类型：</p>
+<ul>
+<li>stream</li>
+<li>buffer(二进制)</li>
+<li>null</li>
+</ul>
+<p>Gulp 插件中操作的虽然都是 Vinyl File Object，但是对 <code>contents</code> 类型可能会有不同的要求。在使用 Gulp 过程中可能会遇到这样的插件报错：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">internal/streams/legacy.<span class="symbol">js:</span><span class="number">59</span></div><div class="line">      throw er; <span class="regexp">//</span> Unhandled stream error in pipe.</div><div class="line">      ^</div><div class="line"><span class="symbol">GulpUglifyError:</span> Streaming not supported</div><div class="line">    at createError (<span class="regexp">/Users/</span>YingshanDeng/Documents/GitHub/SharedPen/node_modules/gulp-uglify/<span class="class"><span class="keyword">lib</span>/<span class="title">create</span>-<span class="title">error</span>.<span class="title">js</span>:6:14)</span></div><div class="line">    at apply (<span class="regexp">/Users/</span>YingshanDeng/Documents/GitHub/SharedPen/node_modules/lodash/_apply.<span class="symbol">js:</span><span class="number">16</span>:<span class="number">25</span>)</div><div class="line">    at wrapper (<span class="regexp">/Users/</span>YingshanDeng/Documents/GitHub/SharedPen/node_modules/lodash/_createCurry.<span class="symbol">js:</span><span class="number">41</span>:<span class="number">12</span>)</div><div class="line">    at /Users/YingshanDeng/Documents/GitHub/SharedPen/node_modules/gulp-uglify/<span class="class"><span class="keyword">lib</span>/<span class="title">minify</span>.<span class="title">js</span>:32:15</span></div><div class="line">    ...</div></pre></td></tr></table></figure></p>
+<p>前面介绍了 Stream 和 Buffer 的区别，我们知道：Buffer 就是一次性获取完整的文件数据，而 Stream 是将文件切分成小块，一块一块获取；那么对于不同的插件可能有不同的要求。例如上面报错的就是 gulp-uglify 插件，提示不支持 Stream，需要 Buffer 类型的 Vinyl File Object。</p>
+<p><code>gulp.src(globs[, options])</code> 方法默认会返回 buffer 类型的 Vinyl File Object。<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">options.<span class="keyword">buffer</span></div><div class="line">  <span class="keyword">Type</span>: <span class="built_in">Boolean</span> <span class="keyword">Default</span>: <span class="literal">true</span></div><div class="line"></div><div class="line">  Setting this <span class="keyword">to</span> <span class="literal">false</span> will <span class="keyword">return</span> <span class="keyword">file</span>.contents as a stream <span class="keyword">and</span> <span class="keyword">not</span> <span class="keyword">buffer</span> files.</div><div class="line">  This <span class="keyword">is</span> useful <span class="keyword">when</span> working <span class="keyword">with</span> large files.</div><div class="line">  <span class="literal">Note</span>: Plugins might <span class="keyword">not</span> implement support <span class="keyword">for</span> streams.</div></pre></td></tr></table></figure></p>
+<p>想要 Steam 类型可通过设置 <code>options.buffer</code> 为 <code>false</code><br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">gulp</span><span class="selector-class">.src</span>("*<span class="selector-class">.js</span>", &#123;<span class="attribute">buffer</span>: false&#125;)</div></pre></td></tr></table></figure></p>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><p>在编写插件过程通过会遇到 Node Stream 和 Vinyl File Object Stream 之间的转换，下面介绍几种情况：</p>
+<ul>
+<li>将 Node Stream 转换成 Vinyl File Object Stream<ul>
+<li>转换成 <code>contents</code> 类型是 stream 的 Vinyl File Object Stream<br>使用 <a href="https://www.npmjs.com/package/vinyl-source-stream" target="_blank" rel="external">vinyl-source-stream</a> 插件</li>
+<li>转换成 <code>contents</code> 类型是 buffer 的 Vinyl File Object Stream<br>使用 <a href="https://www.npmjs.com/package/vinyl-source-buffer" target="_blank" rel="external">vinyl-source-buffer</a> 插件</li>
+</ul>
+</li>
+<li>将 stream 类型的 Vinyl File Object Stream 转换成 buffer 类型的 Vinyl File Object Stream<br>使用 <a href="https://www.npmjs.com/package/vinyl-buffer" target="_blank" rel="external">vinyl-buffer</a> 插件</li>
+</ul>
+<p>下面通过一个经典的例子来介绍一下这些插件的使用：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> browserify = <span class="built_in">require</span>(<span class="string">'browserify'</span>)</div><div class="line"><span class="keyword">var</span> source = <span class="built_in">require</span>(<span class="string">'vinyl-source-stream'</span>)</div><div class="line"><span class="keyword">var</span> buffer = <span class="built_in">require</span>(<span class="string">'vinyl-buffer'</span>)</div><div class="line"></div><div class="line">gulp.task(<span class="string">'bundle'</span>, () =&gt; &#123;</div><div class="line">  <span class="keyword">return</span> browserify(bundle.entry, &#123; <span class="attr">standalone</span>: bundle.standalone &#125;)</div><div class="line">    .transform(babelify, &#123;</div><div class="line">      <span class="attr">presets</span>: [<span class="string">'es2015'</span>]</div><div class="line">    &#125;)</div><div class="line">    .bundle() <span class="comment">// ①</span></div><div class="line">    .pipe(source(<span class="string">'filename.js'</span>)) <span class="comment">// ②</span></div><div class="line">    .pipe(gulp.dest(<span class="string">'dist/'</span>))</div><div class="line">    .pipe(buffer()) <span class="comment">// ③</span></div><div class="line">    .pipe(uglify())</div><div class="line">    .pipe(rename(&#123;</div><div class="line">      <span class="attr">extname</span>: <span class="string">'.min.js'</span></div><div class="line">    &#125;))</div><div class="line">    .pipe(gulp.dest(<span class="string">'dist/'</span>))</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>① <a href="http://browserify.org/" target="_blank" rel="external">browserify</a> 模块打包工具的 bundle 方法将打包好的文件生成 Node Stream 中的 Readable Stream<br>② vinyl-source-stream 插件将 Node Stream 转换成 Vinyl File Object Stream，这样才能在 Gulp 中使用（注意：需要传入一个文件名）<br>③ 将 stream 类型的 Vinyl File Object Stream 转换成 buffer 类型的 Vinyl File Object Stream，满足 gulp-uglify 插件的使用要求</p>
+<h2 id="编写-Gulp-插件"><a href="#编写-Gulp-插件" class="headerlink" title="编写 Gulp 插件"></a>编写 Gulp 插件</h2><blockquote>
+<p><a href="https://www.gulpjs.com.cn/docs/writing-a-plugin/" target="_blank" rel="external">官方编写插件文档</a></p>
+</blockquote>
+<p>简单的理解，Gulp 插件就是通过接收 Vinyl File Object，然后进行插件逻辑处理，最后返回 Vinyl File Object。这个过程也就是对流进行转换(transform stream)，通常我们会使用到 <a href="https://github.com/rvagg/through2" target="_blank" rel="external">through2</a>。下面通过一个例子了解一下如何编写一个 Gulp 插件：</p>
+<p><code>index.js</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> through2 = <span class="built_in">require</span>(<span class="string">'through2'</span>);</div><div class="line"><span class="keyword">const</span> PLUGIN_NAME = <span class="string">'gulp-demo'</span></div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> through2.obj(<span class="function"><span class="keyword">function</span>(<span class="params">chunk, encoding, callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (chunk.isNull()) &#123;</div><div class="line">      callback(<span class="literal">null</span>, chunk)</div><div class="line">      <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (chunk.isStream()) &#123;</div><div class="line">      <span class="keyword">this</span>.emit(<span class="string">'error'</span>, <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">`<span class="subst">$&#123;PLUGIN_NAME&#125;</span>: Streaming not supported`</span>))</div><div class="line">      callback()</div><div class="line">      <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (chunk.isBuffer()) &#123;</div><div class="line">      <span class="comment">// 向文件内容追加 'demo'</span></div><div class="line">      chunk.contents = <span class="keyword">new</span> Buffer(chunk.contents.toString() + <span class="string">'demo'</span>)</div><div class="line">      <span class="keyword">this</span>.push(chunk)</div><div class="line">      cb()</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>gulpfile.js</code><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>)</div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"><span class="keyword">var</span> demoPlugin = <span class="built_in">require</span>(<span class="string">'./index.js'</span>)</div><div class="line"><span class="keyword">var</span> source = <span class="built_in">require</span>(<span class="string">'vinyl-source-stream'</span>)</div><div class="line"><span class="keyword">var</span> buffer = <span class="built_in">require</span>(<span class="string">'vinyl-buffer'</span>)</div><div class="line"></div><div class="line">gulp.task(<span class="string">'demo'</span>, () =&gt; &#123;</div><div class="line">  <span class="keyword">return</span> fs.createReadStream(<span class="string">'./test/src/text.txt'</span>)</div><div class="line">    .pipe(source(<span class="string">'text.txt'</span>))</div><div class="line">    .pipe(buffer())</div><div class="line">    .pipe(demoPlugin())</div><div class="line">    .pipe(gulp.dest(<span class="string">'./test/dest'</span>))</div><div class="line">&#125;)</div><div class="line"><span class="comment">// 或者</span></div><div class="line"><span class="comment">// gulp.task('demo', () =&gt; &#123;</span></div><div class="line"><span class="comment">//   return gulp.src('./test/src/text.txt')</span></div><div class="line"><span class="comment">//     .pipe(demoPlugin())</span></div><div class="line"><span class="comment">//     .pipe(gulp.dest('./test/dest'))</span></div><div class="line"><span class="comment">// &#125;)</span></div></pre></td></tr></table></figure></p>
+<h2 id="Gulp-和-Grunt-的比较"><a href="#Gulp-和-Grunt-的比较" class="headerlink" title="Gulp 和 Grunt 的比较"></a>Gulp 和 Grunt 的比较</h2><p>Gulp 基于流； 而 Grunt 基于文件的机制，导致了任务之间没有信息传递。<br>Grunt 任务流程基本上打开文件、处理文件、保存文件、关闭文件，然后执行继续向后执行任务。每一个任务都需要做重复的打开、保存、关闭操作无疑影响效率。Gulp 的特点在于单入口模式，文件打开、保存、关闭均一次，都是在内存中获取数据，操作数据，这样肯定比 Gulp 快。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.gulpjs.com.cn/" target="_blank" rel="external">Gulp 中文网</a><br><a href="https://segmentfault.com/a/1190000003770541" target="_blank" rel="external">探究 Gulp</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Gulp/" rel="tag">#Gulp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/26/Detect-the-mouse-leave-the-window/" rel="next" title="检测鼠标指针移动离开页面">
+                <i class="fa fa-chevron-left"></i> 检测鼠标指针移动离开页面
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/27/SharedPen-AnnotationList/" rel="prev" title="SharedPen 之 AnnotationList">
+                SharedPen 之 AnnotationList <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               alt="小邓" />
+          <p class="site-author-name" itemprop="name">小邓</p>
+          <p class="site-description motion-element" itemprop="description">Hello World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yingshandeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/objcer" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2249439934" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#流"><span class="nav-number">1.</span> <span class="nav-text">流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-中的流"><span class="nav-number">1.1.</span> <span class="nav-text">Node 中的流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream-和-Buffer"><span class="nav-number">1.2.</span> <span class="nav-text">Stream 和 Buffer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vinyl"><span class="nav-number">2.</span> <span class="nav-text">vinyl</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vinyl-fs"><span class="nav-number">2.1.</span> <span class="nav-text">vinyl-fs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vinyl-内容类型"><span class="nav-number">2.2.</span> <span class="nav-text">vinyl 内容类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型转换"><span class="nav-number">2.3.</span> <span class="nav-text">类型转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写-Gulp-插件"><span class="nav-number">3.</span> <span class="nav-text">编写 Gulp 插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gulp-和-Grunt-的比较"><span class="nav-number">4.</span> <span class="nav-text">Gulp 和 Grunt 的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小邓</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'objcer';
+      var disqus_identifier = '2018/02/27/Explore-Gulp/';
+      var disqus_title = "探究 Gulp：基于流的自动化构建工具";
+      var disqus_url = 'http://objcer.com/2018/02/27/Explore-Gulp/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("UaIz9QT8AVdqAXxUgypgPsTN-gzGzoHsz", "ONQFdHGRNex5wb5Aa64623Dw");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://objcer.com/2017/05/21/JavaScript-Unicode/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/IMG_1915.PNG">
-<meta property="og:updated_time" content="2017-07-21T01:47:26.000Z">
+<meta property="og:updated_time" content="2018-03-08T14:51:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript Unicode 编码那些事">
 <meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/IMG_1915.PNG">
@@ -321,7 +321,7 @@
 <p><strong>码点/码位</strong>是为每一个字符提供一个全局唯一的标识符，一个码位映射一个字符，码位值的范围是从U+0000到U+10FFFF，可以表示超过110万个符号。</p>
 <p>Unicode 字符分为 17 组平面，每个平面拥有 2^16 (65,536) 个码位。每一个码位都可以用 16 进制 xy0000 到 xyFFFF 来表示，这里的 xy 是表示一个 16 进制的值，从 00 到 10。</p>
 <p>而当 xy 是 00 (码点范围是从U+0000到U+FFFF) 的时候，也就是 Unicode 最前 2^16 (65,536) 个字符，被称为<strong>基本平面 BMP(Basic Multilingual Plane)</strong>，最常见的字符都在这个平面上，这也是 Unicode 最先定义和最先公布的一个平面。</p>
-<p>其余 16 个平面（U+100000 到 U+10FFFF）称为<strong>补充平面(supplementary planes, or astral planes)</strong>，也称之为补充字符，相对于 BMP 字符而言，这些字符称之为非 BMP 字符。要区分是非 BMP 字符很简单：其码位需要超过 4 位 16 进制表示</p>
+<p>其余 16 个平面（U+010000 到 U+10FFFF）称为<strong>补充平面(supplementary planes, or astral planes)</strong>，也称之为补充字符，相对于 BMP 字符而言，这些字符称之为非 BMP 字符。要区分是非 BMP 字符很简单：其码位需要超过 4 位 16 进制表示</p>
 <h2 id="UTF-16-和-UCS-2"><a href="#UTF-16-和-UCS-2" class="headerlink" title="UTF-16 和 UCS-2"></a>UTF-16 和 UCS-2</h2><h3 id="UTF-16"><a href="#UTF-16" class="headerlink" title="UTF-16"></a>UTF-16</h3><p>UTF-16 对于 BMP 字符的码位，用 2 个字节进行编码；而非 BMP 字符的码位，用 4 个字节组成代理对（surrogate pair）来表示。</p>
 <p>关于<strong>代理对</strong>：前两个字节称为高位代理或者顶部代理，<strong>范围在 0xD800 到 0xDBFF 之间</strong>；后两个字节称为低位代理或者尾部代理，<strong>范围在 0xDC00 到 0xDFFF 之间</strong>。</p>
 <p><strong>码位（code points）和代理对（surrogate pairs）之间的转换：</strong><br>假设：一个码位 C 大于 0xFFFF 的编码使用代理对 <h, l=""> 来表示的公式为：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">H = Math.floor((C - <span class="number">0x10000</span>) / <span class="number">0x400</span>) + <span class="number">0xD800</span></div><div class="line">L = (C - <span class="number">0x10000</span>) % <span class="number">0x400</span> + <span class="number">0xDC00</span></div></pre></td></tr></table></figure></h,></p>
@@ -334,7 +334,7 @@
 <li>1995.5 JavaScript 诞生</li>
 <li>1996.7 UTF-16 诞生</li>
 </ul>
-<p>所以 JS 诞生之时 UTF-16 还没有问世，所以只能用 来处理字符，而这也为字符处理留下了隐患，而后来通过不断完善，譬如引入 UTF-16 将问题一步步解决。</p>
+<p>所以 JS 诞生之时 UTF-16 还没有问世，所以只能用 UCS-2 来处理字符，而这也为字符处理留下了隐患，而后来通过不断完善，譬如引入 UTF-16 将问题一步步解决。</p>
 <h2 id="JavaScript-字符处理"><a href="#JavaScript-字符处理" class="headerlink" title="JavaScript 字符处理"></a>JavaScript 字符处理</h2><h3 id="length-属性"><a href="#length-属性" class="headerlink" title="length 属性"></a>length 属性</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="keyword">char</span> = <span class="string">'💩'</span></div><div class="line"><span class="keyword">char</span>.length === <span class="number">2</span> <span class="comment">// true</span></div><div class="line"></div><div class="line"><span class="keyword">char</span>.charCodeAt(<span class="number">0</span>).toString(<span class="number">16</span>) <span class="comment">// d83d</span></div><div class="line"><span class="keyword">char</span>.charCodeAt(<span class="number">1</span>).toString(<span class="number">16</span>) <span class="comment">// dca9</span></div><div class="line"><span class="keyword">char</span> === <span class="string">'\ud83d\udca9'</span> <span class="comment">// true</span></div></pre></td></tr></table></figure>
 <p><strong>分析：</strong><br>由于 💩 这个 emoji 在 JS中编码为 <code>\ud83d\udca9</code>，而 JS 认为每两个字节即表示一个字符，所以 💩 这个 emoji 字符的字符长度就为 2。所以在输入框长度限制时就会有问题，譬如：输入长度限制 20，但是输入 10 个 emoji 后，字符串长度就达到 20 了。</p>
 <p><strong>解决方法：</strong><br>上一节中，了解到 UTF-16 使用代理对，通过四个字节来表示非 BMP 字符，前两个字节和后两个字节都有各自的范围，所以：<br><figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> regexAstralSymbols = <span class="regexp">/[\uD800-\uDBFF][\uDC00-\uDFFF]/g</span>; <span class="comment">// 匹配UTF-16的代理对</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">countSymbols</span>(<span class="params">string</span>) </span>&#123;</div><div class="line">    <span class="comment">// 把代理对改为一个BMP的字符，这时候取长度就正常</span></div><div class="line">    <span class="keyword">return</span> <span class="built_in">string</span>.replace(regexAstralSymbols, <span class="string">'_'</span>).length;</div><div class="line">&#125;</div><div class="line">countSymbols(<span class="string">'💩'</span>); <span class="comment">// 1</span></div></pre></td></tr></table></figure></p>
@@ -492,7 +492,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">58</span>
+              <span class="site-state-item-count">59</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -509,7 +509,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">79</span>
+                <span class="site-state-item-count">80</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
