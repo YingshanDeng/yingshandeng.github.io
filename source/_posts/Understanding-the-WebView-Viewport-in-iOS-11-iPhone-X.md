@@ -25,7 +25,10 @@ iPhone X Safari 在横屏状态下，网页左右两侧可能会出现白边，�
 
 ### 解决方案二：`viewport-fit` + `safe-area-inset-*`
 在 iOS 11 中苹果为 Web 新增两个内容 `viewport-fit` + `safe-area-inset-*`
-> ❗️注意：`viewport-fit` 和 `safe-area-inset-*` 只对于 WKWebView 有效，在 UIWebView 中无效
+> ❗️注意：~~`viewport-fit` 和 `safe-area-inset-*` 只对于 WKWebView 有效，在 UIWebView 中无效~~
+
+**纠正说明：**感谢 @dickeylth 和 @asiawang 二位的提醒说明，以上：~~`viewport-fit` 和 `safe-area-inset-*` 只对于 WKWebView 有效，在 UIWebView 中无效~~ 说法不对；应该是：**viewport-fit 和 safe-area-inset-* 是 iOS 11 才新增的内容，对于 iOS11 中的 WKWebView 和 UIWebView 都有效；但是对于 iOS10 及以下就不生效了**
+
 
 1️⃣、`viewport-fit` 用于设置网页在可视窗口的布局方式
 > 文档：[CSS Round Display Spec](https://drafts.csswg.org/css-round-display/#viewport-fit-descriptor)
