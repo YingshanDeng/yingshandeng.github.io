@@ -106,7 +106,7 @@
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/2B17E02C-7C0C-4282-9369-F5E6D1C75836.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/FCF9D371-F2B5-44FE-9FFC-DC991E39FD2C.png">
 <meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/css-funciton-min-max.png">
-<meta property="og:updated_time" content="2017-11-05T15:24:08.000Z">
+<meta property="og:updated_time" content="2018-03-26T08:32:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="剖析 iOS 11 网页适配问题">
 <meta name="twitter:description" content="北京时间 9 月 12 日凌晨，苹果在乔布斯剧院发布了 iPhone X。iPhone X 正面的全面屏上方有一条刘海，对于如何适配 iPhone X，苹果的 Human Interface Guidelines 文档已经给出详细的说明。 苹果对于 iPhone X 的设计布局意见如下：核心内容应该处于 Safe area 确保不会被设备圆角(corners)，传感器外壳(sensor housi">
@@ -339,8 +339,9 @@
 <h3 id="解决方案一：background-color"><a href="#解决方案一：background-color" class="headerlink" title="解决方案一：background-color"></a>解决方案一：<code>background-color</code></h3><p>如果网页设置了一个背景颜色，那么最简单解决方案是，在 <code>body</code> 节点设置 <code>background-color</code>，使背景颜色填充整个屏幕，从而解决横屏显示左右白边的问题</p>
 <h3 id="解决方案二：viewport-fit-safe-area-inset"><a href="#解决方案二：viewport-fit-safe-area-inset" class="headerlink" title="解决方案二：viewport-fit + safe-area-inset-*"></a>解决方案二：<code>viewport-fit</code> + <code>safe-area-inset-*</code></h3><p>在 iOS 11 中苹果为 Web 新增两个内容 <code>viewport-fit</code> + <code>safe-area-inset-*</code></p>
 <blockquote>
-<p>❗️注意：<code>viewport-fit</code> 和 <code>safe-area-inset-*</code> 只对于 WKWebView 有效，在 UIWebView 中无效</p>
+<p>❗️注意：<del><code>viewport-fit</code> 和 <code>safe-area-inset-*</code> 只对于 WKWebView 有效，在 UIWebView 中无效</del></p>
 </blockquote>
+<p><strong>纠正说明：</strong>感谢 @dickeylth 和 @asiawang 二位的提醒说明，以上：<del><code>viewport-fit</code> 和 <code>safe-area-inset-*</code> 只对于 WKWebView 有效，在 UIWebView 中无效</del> 说法不对；应该是：<strong>viewport-fit 和 safe-area-inset-* 是 iOS 11 才新增的内容，对于 iOS11 中的 WKWebView 和 UIWebView 都有效；但是对于 iOS10 及以下就不生效了</strong></p>
 <p>1️⃣、<code>viewport-fit</code> 用于设置网页在可视窗口的布局方式</p>
 <blockquote>
 <p>文档：<a href="https://drafts.csswg.org/css-round-display/#viewport-fit-descriptor" target="_blank" rel="external">CSS Round Display Spec</a></p>
