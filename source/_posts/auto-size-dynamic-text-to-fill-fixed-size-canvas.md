@@ -4,7 +4,7 @@ tags: Canvas
 categories: JS
 ---
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/1-UGtq-cSfbuekV8aHalVIAw.png)
+![](http://cdn.objcer.com/1-UGtq-cSfbuekV8aHalVIAw.png)
 本文将探究动态文本如何自适应绘制到指定大小的 Canvas 🎏
 
 <!-- more -->
@@ -14,7 +14,7 @@ categories: JS
 void ctx.fillText(text, x, y [, maxWidth]);
 ```
 在 (x, y) 位置填充文本。如果第四个参数提供了最大宽度，文本会进行缩放以适应最大宽度。如果绘制的文本实际宽度超过 `maxWidth`，那么会在水平方向上进行缩放，文字可能被压缩变形。
-![](http://7vikhl.com1.z0.glb.clouddn.com/fillText.png)
+![](http://cdn.objcer.com/fillText.png)
 
 ## 限制宽度
 ```
@@ -96,7 +96,7 @@ function measureDivBinary (tmpDiv, min, max, fontface, desiredWidth, desiredHeig
 ```
 
 ### 关于 `line-height`
-![](http://7vikhl.com1.z0.glb.clouddn.com/2587037021-55bacfa692fb8.png)
+![](http://cdn.objcer.com/2587037021-55bacfa692fb8.png)
 通过上图来理解行高，行距
 - **行高** (line-height) 是指文本行基线间的垂直距离，上图中两条红线之间的距离就是行高
 - 上一行的底线和下一行的顶线之间的距离就是**行距**，而同一行顶线和底线之间的距离是 font-size 的大小

@@ -4,7 +4,7 @@ tags: relatedTarget
 categories: JS
 ---
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/banner-purple.jpg)
+![](http://cdn.objcer.com/banner-purple.jpg)
 本文将介绍一种方法用于检测鼠标指针在页面中移动时，判断是否离开页面 👉
 
 <!-- more -->
@@ -42,7 +42,7 @@ function doSomething(e) {
 - `mouseenter`, `mouseleave`: 不会冒泡
 
 如下例子：
-![](http://7vikhl.com1.z0.glb.clouddn.com/E26BF2A3-9639-4EC5-B23F-7F3D8FB3BB31.png)
+![](http://cdn.objcer.com/E26BF2A3-9639-4EC5-B23F-7F3D8FB3BB31.png)
 - 当鼠标移动进入 outer 元素，会触发 outer 元素的 `mouseover`, `mouseenter` 事件；
 - 当鼠标从 outer 元素移动进入 inner 元素，会触发 inner 元素的 `mouseover`, `mouseenter` 事件；**同时会触发 outer 元素的 `mouseover` 事件**
 

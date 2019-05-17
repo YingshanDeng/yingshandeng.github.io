@@ -3,7 +3,7 @@ tags:
 ---
 🍉 scroll-fixed-content 效果如下（demo 中搜索框在向上滚动时，会固定在导航栏的位置）：
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/scroll-fixed-content.gif)
+![](http://cdn.objcer.com/scroll-fixed-content.gif)
 
 <!-- more -->
 
@@ -18,7 +18,7 @@ tags:
 	- top area：relative 定位，**其中搜索框，改成 fixed 定位，固定到导航栏位置**
 	- main area：relative 定位
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/4E1CE12F-B7FF-47F1-8F4D-984EDA1DDE0A.png)
+![](http://cdn.objcer.com/4E1CE12F-B7FF-47F1-8F4D-984EDA1DDE0A.png)
 
 DOM 结构如下：
 ```

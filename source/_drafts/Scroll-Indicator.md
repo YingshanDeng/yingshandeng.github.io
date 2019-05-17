@@ -5,7 +5,7 @@ categories:
 ---
 
 本文介绍两种方式实现页面滚动进度指示器。
-![scroll-indicatior](http://7vikhl.com1.z0.glb.clouddn.com/C41FDF72-EDAE-49F4-A6FD-29EA6878C736.png)
+![scroll-indicatior](http://cdn.objcer.com/C41FDF72-EDAE-49F4-A6FD-29EA6878C736.png)
 
 <!-- more -->
 
@@ -44,14 +44,14 @@ background: linear-gradient(to bottom right, red, white);
 2、使用角度：可以设置特定的渐变角度
 角度是指水平线与渐变线之间的角度，以逆时针方向旋转。总之，0deg 创建一个从底部到顶部的垂直渐变，当变成90deg时生成一个从左到右的水平渐变。
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/linear_red_angles.png)
+![](http://cdn.objcer.com/linear_red_angles.png)
 
 3、色标
 渐近线的颜色停止点在该位置有特定的颜色。该位置可以被指定为线长度的百分比或一个绝对长度。为实现期望的效果，可以指定任意多个颜色停止点。
 
 如果指定位置使用百分比，那么 0% 表示起点，100%表示终点。然而，如果有需要，也可以使用范围之外的值。例如：
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/linear_colorstops1.png)
+![](http://cdn.objcer.com/linear_colorstops1.png)
 ```
 background: linear-gradient(to bottom, blue, white 80%, orange);
 ```
@@ -60,7 +60,7 @@ background: linear-gradient(to bottom, blue, white 80%, orange);
 
 4、通过线性渐变，生成一个三角形
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/triangle.png)
+![](http://cdn.objcer.com/triangle.png)
 
 ```
 <html>

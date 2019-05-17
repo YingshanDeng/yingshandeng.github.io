@@ -5,7 +5,7 @@ categories: JS
 ---
 
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png)
+![](http://cdn.objcer.com/data-binding-with-es6-proxy.png)
 在上一篇文章：[探究数据绑定（1）脏检查和存取器方法](https://objcer.com/2017/10/27/Data-binding-introduction/) 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。
 
 <!-- more -->
@@ -220,7 +220,7 @@ observe(print)
 
 ### 分析测试用例
 下面通过流程图讲解一下测试用例的执行过程
-![](http://7vikhl.com1.z0.glb.clouddn.com/es6-proxy-observables-code.png)
+![](http://cdn.objcer.com/es6-proxy-observables-code.png)
 
 - 通过 `observable` 方法创建代理对象 `person`
 - `observe` 方法设置监听函数，此时待执行监听函数集合 Set 为空，监听函数添加到 Set 中后执行待执行监听函数集合 Set 中的监听函数

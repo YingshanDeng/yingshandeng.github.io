@@ -4,7 +4,7 @@ tags: AnnotationList
 categories: SharedPen
 ---
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Annotation.png)
+![](http://cdn.objcer.com/SharedPen-Annotation.png)
 
 CodeMirror 是一款优秀的开源文本编辑器，常用于代码编辑器。但并不支持富文本编辑功能。但是得益于 CodeMirror 的 API
 > [markText](https://codemirror.net/doc/manual.html#api_marker): **Can be used to mark a range of text with a specific CSS class name.**
@@ -16,13 +16,13 @@ doc.markText({line:0, ch: 3}, {line: 0, ch: 6}, {className: 'classB'})
 doc.markText({line:0, ch: 6}, {line: 0, ch: 9}, {className: 'classC'})
 ```
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/marktext.png)
+![](http://cdn.objcer.com/marktext.png)
 
 `markText` 方法会返回一个 `CodeMirror.TextMarker` 对象，该对象中的 `clear()` 方法用于清除 class，这样就非常便于我们动态为文本设置富文本样式了。
 
 
 为了管理，操作整个富文本文档流，我们引入 **AnnotationList** 单链表结构，把每一段富文本当成 `Node` 节点，由此形成链表结构。
-![](http://7vikhl.com1.z0.glb.clouddn.com/annotation-list.png)
+![](http://cdn.objcer.com/annotation-list.png)
 
 本文将详解 AnnotationList 单链表结构 🤓
 
@@ -62,7 +62,7 @@ class Node {
 - `attachedObject`：`CodeMirror.TextMarker` 对象
 - `next`：指向下一个节点
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/list-node.png)
+![](http://cdn.objcer.com/list-node.png)
 
 ## 辅助方法 `getAffectedNodes_(span)`
 此方法用于获取指定文本区间(span)在单链表中的节点信息，包括：
@@ -79,13 +79,13 @@ class Node {
 `start` 和 `end` 分别表示文本区间(span)的第一个和最后一个字符所在的节点。
 大致有如下三种情况：
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/start-end-node.png)
+![](http://cdn.objcer.com/start-end-node.png)
 
 ### `pred` 和 `succ`
 `pred` 和 `succ` 是指文本区间(span)左右边界恰好也是处于单链表节点边界处时，左边界的前一个节点和右边界的后一个节点。
 大致有如下五种情况：
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/pred-succ-node.png?t=1)
+![](http://cdn.objcer.com/pred-succ-node.png?t=1)
 
 ### `startPos` 和 `predPos`
 `startPos` 和 `predPos` 是指 `start` 和 `pred` 节点首字符在整个文档中的位置
@@ -105,10 +105,10 @@ this.wrapOperation_(span, function (startPos, start) {
 
 ### 插入操作 `insertAnnotatedSpan`
 插入操作包括两种情况：
-![](http://7vikhl.com1.z0.glb.clouddn.com/insert-span.png)
+![](http://cdn.objcer.com/insert-span.png)
 
 其中前者在节点间隔处插入，`start` 节点为 `null`，此时由新插入的文本生成 Node 节点作为新生成链表段直接返回；而后者在节点中插入，`start` 节点为当前节点，生成新链表段需要将 `start` 节点从插入点分裂生成两个节点，新插入的文本作为新 Node 节点插入其中，如下图所示：
-![](http://7vikhl.com1.z0.glb.clouddn.com/insert-span-action.png?t=1)
+![](http://cdn.objcer.com/insert-span-action.png?t=1)
 
 ```js
 function insertAnnotatedSpan (span, annotation) {
@@ -132,7 +132,7 @@ function insertAnnotatedSpan (span, annotation) {
 
 ### 删除操作 `removeSpan`
 删除操作中，要求文本区间长度大于 0；其执行过程如下图所示：
-![](http://7vikhl.com1.z0.glb.clouddn.com/delete-span-action.png)
+![](http://cdn.objcer.com/delete-span-action.png)
 
 ```js
 function removeSpan (removeSpan) {
@@ -164,7 +164,7 @@ function removeSpan (removeSpan) {
 
 ### 更新操作 `updateSpan`
 更新操作中，文本区间长度也要大于 0；其执行过程如下图所示：
-![](http://7vikhl.com1.z0.glb.clouddn.com/update-span-action.png)
+![](http://cdn.objcer.com/update-span-action.png)
 
 ```js
 function updateSpan (span, updateFn) {
@@ -209,7 +209,7 @@ function updateSpan (span, updateFn) {
 
 ### wrapOperation_
 `wrapOperation_` 方法是 AnnotationList 链表操作的核心方法，通过这个方法会从单链表中提取需旧节点数组和新节点数组，如下图所示：
-![](http://7vikhl.com1.z0.glb.clouddn.com/oldNodes-newNodes.png)
+![](http://cdn.objcer.com/oldNodes-newNodes.png)
 
 其中浅灰色层覆盖的节点为 `oldNodes` 数组；浅蓝色层覆盖的节点为 `newNodes` 数组。得到这两个数组后，首先对 `oldNodes` 数组中的节点进行操作，通过 `attachedObject` 属性得到 `CodeMirror.TextMarker` 对象，调用 `clear()` 方法，取消先前设置的 class。然后对 `newNodes` 数组中的节点，通过 `markText` 方法设置相应的 class。
 
@@ -223,7 +223,7 @@ this.mergeNodesWithSameAnnotations_(newSegment)
 
 **2. 存在 `pred` 或者 `succ` 节点时的判断**
 考虑如下这种情况：
-![](http://7vikhl.com1.z0.glb.clouddn.com/AD4C499B-D669-4251-B59D-0162041C4D97.png)
+![](http://cdn.objcer.com/AD4C499B-D669-4251-B59D-0162041C4D97.png)
 
 对中间三个节点进行更新操作，那么由于选择的文本区间边界正好处于链表的节点边界，所以 `pred` 和 `succ` 节点都不为空，那么此时需要进行两个判断：
 - `pred` 节点和 `newSegment` 的首节点判断富文本属性 `annotation` 是否相同；若相同，说明 `pred` 节点和`newSegment` 的首节点可以**合并**，那么需要将 `pred` 节点纳入 `oldNodes` 数组

@@ -4,22 +4,22 @@ tags: cordova-build
 categories: Cordova
 ---
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/ios.jpg)
+![](http://cdn.objcer.com/ios.jpg)
 
 <!-- more -->
 
 ## 苹果开发知识储备
-![](http://7vikhl.com1.z0.glb.clouddn.com/iOS-dev-center.jpg)
+![](http://cdn.objcer.com/iOS-dev-center.jpg)
 ### Certificates
 Certificates 证书，是用来给应用程序签名(code sign)，证明应用程序的合法性和完整性。对于想要安装到真机调试或者发布到应用商店的应用程序，只有经过签名，才能保证其来源可靠，并且代码完整，未经篡改的。
-![](http://7vikhl.com1.z0.glb.clouddn.com/Code%20Signing%20Identity.jpg)
+![](http://cdn.objcer.com/Code%20Signing%20Identity.jpg)
 在Xcode Build Setting 的 Code Signing Identity 中，你可以设置用于为代码签名的证书。
 
 - 申请一个 Certificate 之前，需要先申请一个 Certificate Signing Request (CSR) 文件，而这个过程中实际上是生成了一对公钥和私钥，保存在你 Mac 的 Keychain 中。**代码签名正是使用这种基于非对称秘钥的加密方式，用私钥进行签名，用公钥进行验证。**
 - 如下图所示，在你 Mac 的 keychain 的 login 中存储着相关的公钥和私钥，而证书中包含了公钥。用私钥来进行签名，**苹果就可以用证书中的公钥来进行验证**，确保是你对代码进行了签名，而不是别人冒充你，同时也确保代码的完整性等。
 - 当你想与其他人或其他设备共享证书时，导出证书（.p12类型），把私钥传给它就可以了。
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/Certificates.png)
+![](http://cdn.objcer.com/Certificates.png)
 证书主要分为两类：Development 和 Production，Development 证书用来开发和调试应用程序，Production 主要用来分发应用程序。
 
 ### Identifiers
@@ -27,14 +27,14 @@ App ID 用于标识一个或者一组 App，App ID 应该是和 Xcode 中的 Bun
 - An Explicit App ID Matches a Single App：唯一的App ID，这种App ID用于唯一标识一个应用程序，例如 `com.ABC.demo1`，标识 Bundle ID 为 `com.ABC.demo1` 的程序。
 - Wildcard App IDs Match Multiple Apps：通配符App ID，用于标识一组应用程序。例如 `*` 可以表示所有应用程序，而 `com.ABC.*` 可以表示以 `com.ABC` 开头的所有应用程序。
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/Bundle%20ID.jpg)
+![](http://cdn.objcer.com/Bundle%20ID.jpg)
 
 ### Devices
 Device 是指运行 iOS 系统用于开发调试 App 的设备。每台 Apple 设备使用 UDID 来唯一标识。设备的 UDID 可通过 `iTunes->Summary` 或者 `Xcode->Window->Devices` 获取。
 
 ### Provisioning Profiles
 一个 Provisioning Profile 文件包含了上述的所有内容：**证书、App ID、设备**。
-![](http://7vikhl.com1.z0.glb.clouddn.com/Provisioning%20Profiles.png)
+![](http://cdn.objcer.com/Provisioning%20Profiles.png)
 
 在打包应用程序或者在真机上运行调试一个应用程序的过程：
 - 使用 Certificates 证书来进行签名，用于标识该应用程序合法性和完整性
@@ -42,7 +42,7 @@ Device 是指运行 iOS 系统用于开发调试 App 的设备。每台 Apple �
 - 到真机中运行调试该应用程序，确认该设备是否能够用来运行
 
 Provisioning Profile 把这些信息全部打包在一起，在打包时嵌入 `.ipa` 的包里。如上所述，在一台设备上运行应用程序的过程如下：
-![](http://7vikhl.com1.z0.glb.clouddn.com/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png)
+![](http://cdn.objcer.com/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png)
 
 与 Certificates 证书一样，Provisioning Profile 也分为 Development 和 Distribution 两种：
 - Development
@@ -64,7 +64,7 @@ phonegap prepare ios
 ### Xcode 真机调试
 Xcode 真机调试需要申请 Certificates 证书，然后添加调试设备 UDID，生成 Provisioning Profiles（Development 类型），下载到电脑中，双击安装。
 苹果设备连接电脑，Xcode -> Build Settings 设置 Code Signing Identity 和 Provisioning Profiles，设置完成后，选择该设备运行即可。
-![](http://7vikhl.com1.z0.glb.clouddn.com/Xcode-debug.jpg)
+![](http://cdn.objcer.com/Xcode-debug.jpg)
 
 当然 [Xcode7以后，无证书也能真机编译调试！](http://www.jianshu.com/p/351be39f959e)
 
@@ -85,11 +85,11 @@ Packaging Type | --packageType | This will determine what type of build is gener
 
 解释一下需要用到的四个参数：
 - **Code Sign Identity**：应用程序签名时使用的证书标识。如下图
-![](http://7vikhl.com1.z0.glb.clouddn.com/Code%20Sign%20Identity.jpg)
+![](http://cdn.objcer.com/Code%20Sign%20Identity.jpg)
 - **Provisioning Profile**：Provisioning Profile 的 GUID。进入 `~/Library/MobileDevice/Provisioning\ Profiles/` 目录，即可获取到对应 Provisioning Profile 的 GUID
-![](http://7vikhl.com1.z0.glb.clouddn.com/GUID.jpg)
+![](http://cdn.objcer.com/GUID.jpg)
 - **Development Team**：开发团队 ID
-![](http://7vikhl.com1.z0.glb.clouddn.com/TeamID.jpg)
+![](http://cdn.objcer.com/TeamID.jpg)
 - **Packaging Type**：打包类型，包括：development、enterprise, ad-hoc, 和 app-store
 
 `build.json` 配置如下：

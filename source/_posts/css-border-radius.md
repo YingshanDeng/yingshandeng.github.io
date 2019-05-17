@@ -6,7 +6,7 @@ categories: CSS
 
 
 `border-radius` 用来设置边框圆角。当使用一个半径时确定一个圆形；当使用两个半径时确定一个椭圆，这个(椭)圆与边框的交集形成圆角效果。
-![](http://7vikhl.com1.z0.glb.clouddn.com/FC08A931-6DE4-4CE0-A6F8-4F1B523E2007.png)
+![](http://cdn.objcer.com/FC08A931-6DE4-4CE0-A6F8-4F1B523E2007.png)
 
 对于 `border-radius` 属性，我们最常见就是设置一个参数：
 ```
@@ -31,11 +31,11 @@ border-radius: 50%;
 - 指定三个值：参数一指定 top-left；参数二指定 top-right 和 bottom-left；参数三指定 bottom-right
 - 指定四个值：四个参数分别指定 top-left，top-right，bottom-right，bottom-left（顺时针方向）
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/33F068D3-6BC7-4EE1-94BD-1B83632382FA.png)
+![](http://cdn.objcer.com/33F068D3-6BC7-4EE1-94BD-1B83632382FA.png)
 
 2、`border-radius` 可以为圆角指定两个半径，上述我们谈到的都是指定了一个圆角半径，那么就是一个正圆形；而指定两个半径，那么就是一个椭圆形。用法是通过一个斜线分割开，斜线左方是 x 轴方向的半径，右方是 y 轴方向的半径。当然，斜线左右两侧可以分别指定 1，2，3，4 个参数，所以有较多的组合。
 例如：
-![](http://7vikhl.com1.z0.glb.clouddn.com/D6EBFB3B-41B5-4249-84C6-5F1773F8C480.png)
+![](http://cdn.objcer.com/D6EBFB3B-41B5-4249-84C6-5F1773F8C480.png)
 
 ## 参考链接
 [MDN border-radius](https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius)

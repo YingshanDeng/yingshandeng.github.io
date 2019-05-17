@@ -38,10 +38,10 @@ setInterval(function() {
 ### 理解 Debounce 策略
 
 用电梯运行来理解 Debounce。想象你在电梯中，电梯超时时间快结束，电梯门快要关闭的时候，突然又有一个人按了电梯要进入电梯，那么电梯就又打开了，超时时间重新倒计时，直到超时时间完全结束时，电梯才进行运送。可以结合如下图示进行理解：
-![](http://7vikhl.com1.z0.glb.clouddn.com/debounce-trailing.png)
+![](http://cdn.objcer.com/debounce-trailing.png)
 
 如上图，你可能会发现，当事件触发没有那么频繁，超过一定间隔后才执行一次回调函数；那么能否在事件触发时就立即执行回调函数，而在没有超过一定间隔时，不再进行调用回到函数。当然可以啦 👊 `Debounce` 函数中我们可以指定一个参数（有些称之为 `immediate` 或者 `leading`）默认 `Debounce` 函数是尾调用的。
-![](http://7vikhl.com1.z0.glb.clouddn.com/debounce-leading.png)
+![](http://cdn.objcer.com/debounce-leading.png)
 
 ```
 // underscore.js

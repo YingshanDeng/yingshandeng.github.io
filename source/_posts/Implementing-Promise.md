@@ -4,7 +4,7 @@ tags: Promise
 categories: JS
 ---
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/Promises:A+.png)
+![](http://cdn.objcer.com/Promises:A+.png)
 
 <!-- more -->
 

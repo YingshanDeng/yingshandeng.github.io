@@ -5,7 +5,7 @@ categories: Cordova
 ---
 
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/app-store.png)
+![](http://cdn.objcer.com/app-store.png)
 
 基于 Cordova 框架能将网页应用 (js, html, css, 图片等) 打包成 App。当 App 在应用商店上架后，如何快速更新是我们需要考虑的问题。🤖
 - 本地打包新版本 App 发布到应用商店，但这中发布流程耗费时间，尤其是 Apple Store
@@ -156,7 +156,7 @@ Cordova 项目的 `config.xml` 文件用于设置项目配置选项，Cordova Ho
 ## 代码热更新原理
 
 ### 热更新流程
-![](http://7vikhl.com1.z0.glb.clouddn.com/update-workflow.png)
+![](http://cdn.objcer.com/update-workflow.png)
 
 - ① 应用启动
 - ② 热更新插件初始化，并在后台加载更新模块 (update loader)
@@ -175,8 +175,8 @@ Cordova 项目中都包含一个 `www` 目录，存储网页静态文件，Cordo
 
 在 safari 调试页面执行 `cordova.file.applicationStorageDirectory` 可以得到应用的存储路径，点击可以打开 Finder 目录。
 从 `Library/Application Support` 目录下就可以找到存储 web content 的外部目录。
-![](http://7vikhl.com1.z0.glb.clouddn.com/chcp-external-folder.png)
-![](http://7vikhl.com1.z0.glb.clouddn.com/3CA8CB1D-C26D-4F98-951C-DBE94650CA5D.png)
+![](http://cdn.objcer.com/chcp-external-folder.png)
+![](http://cdn.objcer.com/3CA8CB1D-C26D-4F98-951C-DBE94650CA5D.png)
 
 Cordova Hot Code Push 插件为每一个版本内容都创建了一个对应的目录，以配置文件 `chcp.json` 中 `release` 字段值为目录名，存放不同版本 `www` 目录中的静态文件，这种处理方式的好处是：
 - 避免了文件缓存问题。例如 iOS UIWebView 缓存 css 文件，即使刷新页面，也不会清除缓存，除非重启应用才能强制清除缓存。不同版本置于不同的目录，由于加载路径不同，这样就可以解决文件的缓存问题
@@ -190,7 +190,7 @@ Cordova Hot Code Push 插件为每一个版本内容都创建了一个对应的�
 - 在新目录中，创建 `update` 目录，根据 `chcp.manifest` 文件，将所有变更、新增文件下载到该目录中
 - 新版本对应的 `chcp.json` 和 `chcp.manifest` 文件也会置于 `update` 目录中
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/926064F1-2CF2-4871-90B6-791BA0059C13.png)
+![](http://cdn.objcer.com/926064F1-2CF2-4871-90B6-791BA0059C13.png)
 
 **2、安装更新内容**
 

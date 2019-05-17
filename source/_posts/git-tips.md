@@ -11,7 +11,7 @@ categories: Git
 
 ## Git基础
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png)
+![](http://cdn.objcer.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png)
 
 ## stash 储藏
 当你在某个分支上工作到一半时，需要切换到其他分支进行一些工作，但是你此时并不想提交当前工作了一半的内容时，你可以使用 `git stash` 这个命令解决你的问题。[参考文档](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%82%A8%E8%97%8F%EF%BC%88Stashing%EF%BC%89)
@@ -156,7 +156,7 @@ git revert 是HEAD继续前进，只是新的 commit 的内容和要 revert 的�
 ## git-flow
 > 关于 git 工作流可以参考:[A successful Git branching model](http://nvie.com/posts/a-successful-git-branching-model/)
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/git-model@2x.png)
+![](http://cdn.objcer.com/git-model@2x.png)
 
 * 项目仓库中一般包含四大类分支：master, hotfix, dev, feature。
 	* master 主分支，用于项目发布，一般不直接在此分支上进行开发，仅在发布时，将开发分支 dev 代码合并进行发布

@@ -4,7 +4,7 @@ tags: '区间树'
 categories: SharedPen
 ---
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png)
+![](http://cdn.objcer.com/SharedPen-IntervalTree.png)
 
 前文 [SharedPen 之 AnnotationList]() 讲到：
 > 为了管理，操作整个富文本文档流，我们引入 **AnnotationList** 单链表结构，把每一段富文本当成 `Node` 节点，由此形成链表结构。
@@ -17,7 +17,7 @@ categories: SharedPen
 **二叉查找树**（Binary Search Tree，简称BST）是一棵二叉树，特点是：它的左子节点的值比父节点的值要小，右节点的值要比父节点的值大。它的高度决定了它的查找效率。在理想的情况下，二叉查找树增删查改的时间复杂度为 `O(logN)`，最坏的情况下为 `O(N)`。当它的高度为 `logN+1` 时，我们就说二叉查找树是平衡的。
 
 由于 BST 存在的问题，产生了一种新的树 -- **自平衡二叉查找树**，自平衡树在插入和删除节点的时候，会通过旋转操作将高度保持在 `logN`，所以它可以在 `O(log N)` 时间内做查找，插入和删除。
-![](http://7vikhl.com1.z0.glb.clouddn.com/tree-all.png)
+![](http://cdn.objcer.com/tree-all.png)
 
 **[红黑树](https://zh.wikipedia.org/zh-cn/%E7%BA%A2%E9%BB%91%E6%A0%91)**（Red–black tree）就是一种**自平衡二叉查找树**，它是复杂的，
 但它的操作有着良好的最坏情况运行时间，并且在实践中是高效的，其实际应用也非常广泛。
@@ -31,14 +31,14 @@ categories: SharedPen
 - 从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点。
 
 下面是一个具体的红黑树的图例：
-![](http://7vikhl.com1.z0.glb.clouddn.com/900px-Red-black_tree_example.svg.png)
+![](http://cdn.objcer.com/900px-Red-black_tree_example.svg.png)
 
 > 推荐一个数据结构可视化在线工具，可以辅助理解：[Data Structure Visualizations](https://www.cs.usfca.edu/~galles/visualization/Algorithms.html)
 其中红黑树增删节点可视化：[Red/Black Tree](https://www.cs.usfca.edu/~galles/visualization/RedBlack.html)
 
 ## 区间树
 区间树（interval tree）是一种扩展的红黑树，区间树中的节点都代表一个区间。例如区间：(2, 8) (6, 15) (30, 36) (20, 25) (33, 40) 构成如下区间树：
-![](http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-demo.png)
+![](http://cdn.objcer.com/interval-tree-demo.png)
 
 对于一个区间：
 - 区间用 `Range(lowerPosition, upperPosition)` 来表示，其中：`lowerPosition` 和 `upperPosition` 分别表示起始位置和结束位置
@@ -77,11 +77,11 @@ class RangeKeyword {
 区间树有两个重要操作：`expand` 和 `remove`
 - **扩张：`expand(pos, length)`**
 在 `pos` 位置，插入 `length` 长度的字符，插入文本后，后续的区间位置需要**自动更新**
-![](http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-expand.png?t=1)
+![](http://cdn.objcer.com/interval-tree-expand.png?t=1)
 例子中区间：`[2, 8),[8, 15),[15, 20),[20, 28)` 变成 `[2, 8),[8, 17),[17, 22),[22, 30)`
 - **收缩：`remove(pos, length)`**：
 在 `pos` 位置，删除 `length` 长度的字符，删除文本后，后续的区间位置需要**自动更新**
-![](http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-remove.png)
+![](http://cdn.objcer.com/interval-tree-remove.png)
 例子中区间：`[2, 8),[8, 15),[15, 20),[20, 28)` 变成 `[2, 8),[8, 13),[13, 18),[18, 26)`
 
 注意到插入和删除文本后，其后续区间的位置都能**自动更新**，为了实现这个功能，我们需要对区间进行一些处理。区间`Range(lowerPosition, upperPosition)` 的 `lowerPosition` 和 `upperPosition` 都表示**绝对位置**，下面给区间引入**相对位置**的概念。
@@ -97,10 +97,10 @@ class RangeKeyword {
 下面通过：`[2, 8),[8, 15),[15, 20),[20, 28),[28, 40)` 这个区间树来解释一下相对位置的概念
 
 下图中的红色箭头指向为 `originNode`，注意到其中的 `[2, 8)` 和 `[8, 15)` 区间其实是指向这个区间树，表示其相对区间为区间树的起点。
-![](http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-originNode.png)
+![](http://cdn.objcer.com/interval-tree-originNode.png)
 
 下图中分别列出了每个区间的 `origin`，`relativeLower`，`upperDistance` 的属性
-![](http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-origin2.png)
+![](http://cdn.objcer.com/interval-tree-origin2.png)
 
 其中区间 `origin` 属性通过如下计算得到：
 ```
@@ -124,14 +124,14 @@ get upperPosition() {
 ```
 
 有了相对位置概念之后，**处理扩张/收缩，只需遍历区间树中的部分节点，更新其中相关的属性即可。**如下区间树，`expand(10, 2)`，在 10 的位置扩展 2 个长度，即区间 `[8, 15)` 变成 `[8, 17)`，除了更新当前区间 `[8, 15)` 外，只需要更新那些以该区间节点为 `originNode` 的区间，我们可以知道区间 `[15, 20)` 和 `[20, 28)` 的 `originNode` 就是 `[8, 15)`
-![](http://7vikhl.com1.z0.glb.clouddn.com/A02DFDB4-8A1E-4D18-997D-E1A1BC5ACC2A.png)
+![](http://cdn.objcer.com/A02DFDB4-8A1E-4D18-997D-E1A1BC5ACC2A.png)
 
 下面简单的介绍一下实现原理：
 ① `passWhole` 和 `passRight`
 执行遍历过程中，需要对比执行操作点（插入点/删除点）和区间节点的关系，其中包含两个重要的比较过程：`passWhole` 和 `passRight`
 - `passWhole`
 区间节点有一个 `limitPosition` 属性，表示当前区间节点所在子树的右边界位置
-![](http://7vikhl.com1.z0.glb.clouddn.com/C2898E5B-198A-4D3D-AA97-3207F4187376.png)
+![](http://cdn.objcer.com/C2898E5B-198A-4D3D-AA97-3207F4187376.png)
 `passWhole` 判断执行操作点的位置如果比当前区间节点所在子树的右边界大，那么可以跳过这个子树
 ```
 passWhole(hint) {

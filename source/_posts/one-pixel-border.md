@@ -5,13 +5,13 @@ categories: CSS
 ---
 
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/retinaDisplayMagnified_1159x285@2x.png)
+![](http://cdn.objcer.com/retinaDisplayMagnified_1159x285@2x.png)
 <!-- more -->
 
 ## 发现问题
 在 iPhone 设备（Retina屏）上一像素边框设置有问题
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/F115E87F-990C-4957-B007-26F8B844287D.png)
+![](http://cdn.objcer.com/F115E87F-990C-4957-B007-26F8B844287D.png)
 
 如上图右所示，UI 要求效果的边框是 1px；如上图左所示，开发出来的效果边框为 2px（膜拜一下UI的像素眼 👍🏿）。设置边框的代码很简单，如下：
 ```
@@ -39,10 +39,10 @@ CSS 像素是浏览器使用的抽象单元，用于精确地，一致地在网�
 
 `devicePixelRatio` 值为 1 的屏幕称之为标准屏；目前，大部分移动设备都是高清屏，即 `devicePixelRatio` 值大于 1 的屏幕，对于苹果设备来说，我们经常听到 Retina 视网膜屏，其中 iPhone6/6s/7 的 `devicePixelRatio` 值为 2；而 iPhone6 plus/6s plus/7 plus 的 `devicePixelRatio` 值为 3。
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/iphone-6-plus-screen.jpg)
+![](http://cdn.objcer.com/iphone-6-plus-screen.jpg)
 
 通过一个例子进一步理解其中的关系：
-![](http://7vikhl.com1.z0.glb.clouddn.com/AF218F20-056F-4CB4-8A1F-2949C6913DCD.png)
+![](http://cdn.objcer.com/AF218F20-056F-4CB4-8A1F-2949C6913DCD.png)
 
 假设我们需要绘制如下这个 `div` 节点，
 ```
@@ -98,7 +98,7 @@ div {
 </div>
 ```
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/9C362BA4-4C66-4590-BED9-6DCE84EA2232.png)
+![](http://cdn.objcer.com/9C362BA4-4C66-4590-BED9-6DCE84EA2232.png)
 
 单一边框：
 ```
@@ -180,7 +180,7 @@ div {
 
 注意到以上通过 CSS 媒体查询获知当前屏幕的 `devicePixelRatio`，然后针对不同的 `devicePixelRatio` 进行处理。还有一种另一种方式，通过 JS 在 HTML 节点添加 class 表征不同的 `devicePixelRatio`，例如在 framework7 框架中， HTML 节点就添加了 `devicePixelRatio` 有关的 class:
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/BED6EAE5-B9D5-45B2-A22E-A1B698ECFED1.png)
+![](http://cdn.objcer.com/BED6EAE5-B9D5-45B2-A22E-A1B698ECFED1.png)
 
 ## 参考链接
 [Towards A Retina Web](https://www.smashingmagazine.com/2012/08/towards-retina-web/)

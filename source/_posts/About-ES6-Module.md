@@ -80,7 +80,7 @@ myName.name(); // 'My name is XiaoDeng'
 var module = new Module(...);
 var exports = module.exports;
 ```
-![](http://7vikhl.com1.z0.glb.clouddn.com/exports&module.exports.png)
+![](http://cdn.objcer.com/exports&module.exports.png)
 `module.exports` 初始值为一个空对象 `{}`; `exports` 是指向的对象和 `module.exports` 执向的对象相同。
 
 `exports` 的作用在于收集属性和方法，例如：

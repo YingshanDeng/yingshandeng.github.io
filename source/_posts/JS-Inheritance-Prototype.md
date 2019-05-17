@@ -101,17 +101,17 @@ Programmer.prototype.sayAge = function() {
 }
 ```
 首先看一下 `Person`， 在构造函数中，定义了一个属性 `name`，然后在 `Person` 的原型中增加了一个 `sayName` 方法。
-![](http://7vikhl.com1.z0.glb.clouddn.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png)
+![](http://cdn.objcer.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png)
 
 调用 `Person` 的构造函数，`var person = new Person('Tom');`，创建一个实例，我们可以得到：
-![](http://7vikhl.com1.z0.glb.clouddn.com/253EFEA4-F163-471A-87EC-78D7781F57C0.png)
-![](http://7vikhl.com1.z0.glb.clouddn.com/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png)
+![](http://cdn.objcer.com/253EFEA4-F163-471A-87EC-78D7781F57C0.png)
+![](http://cdn.objcer.com/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png)
 
 接着看一下子类 `Programmer`，调用构造函数 `var programmer = new Programmer('Jack', 20);` 创建一个实例对象。注意到其中的注释，我们发现，调用了两次 `Person` 的构造函数。第一次调用 `Person` 构造函数时，`Programmer.prototype` 会得到一个 `name` 属性，它是 `Person` 的实例属性，只不过现在位于 `Programmer` 的原型中。当调用 `Programmer` 的构造函数时，又一次调用了 `Person` 的构造函数，这一次又在新对象上创建了 `name` 属性，只不过这个 `name` 属性屏蔽了原型中的同名属性。
 
 这时就会发现，有两个 `name` 属性，一个在实例上，一个在 `Programmer` 原型中，这就是两次调用 `Person` 构造函数的结果。
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png)
+![](http://cdn.objcer.com/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png)
 
 ### 方式二
 那么其实不必为了指定子类型的原型而调用超类的构造函数，我们需要的只是超类型原型的一个副本而已。对其中的一行代码改造一下

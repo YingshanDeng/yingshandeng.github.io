@@ -7,7 +7,7 @@ categories: JS
 
 在文章 [ES7 中的 async await](https://objcer.com/2017/10/11/Async-Await/) 中介绍了 async/await。本文将分析介绍当 async/await 遇上 `forEach` 出现的一些问题和解决方案。
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/1-pWGJIKats-zuumA3RQNEWQ.jpeg)
+![](http://cdn.objcer.com/1-pWGJIKats-zuumA3RQNEWQ.jpeg)
 
 <!-- more -->
 

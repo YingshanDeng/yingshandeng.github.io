@@ -5,7 +5,7 @@ categories: Web Components
 ---
 
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/web-components.png)
+![](http://cdn.objcer.com/web-components.png)
 
 组件是构建现代网页应用的基础。组件化给前端开发带来了极大的效率提升，提高了代码的重用性；组件化的 UI 框架也层出不穷，React, Vue 等等。但是这些框架缺乏标准，代码层面可能存在很大的差异，如何对前端组件标准化就显得尤为重要。
 Web Components 作为面向未来的 Web 组件化标准，包括 HTML Templates, Shadow DOM, Custom elements 和 HTML Imports 四部分，浏览器原生支持，所以 Web Components 是最彻底的组件化解决方案。
@@ -16,7 +16,7 @@ Web Components 作为面向未来的 Web 组件化标准，包括 HTML Templates
 Web Components 包括 HTML Templates, Shadow DOM, Custom elements 和 HTML Imports 四部分， 需要浏览器支持，但是目前为止，未被所有浏览器完整实现。
 参考 [https://www.webcomponents.org/](https://www.webcomponents.org/) 给出的浏览器支持情况：
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/web-component-browser-support.png)
+![](http://cdn.objcer.com/web-component-browser-support.png)
 
 基于 Web Components，Google 推出了 [Polymer](https://www.polymer-project.org/) 框架，作为应用层框架，使用 Polymer 相较于直接使用 Web Components 接口，开发网页应用更加方便简洁，提高效率。Polymer 在今年 5 月份，推出 [Polymer 2.0](https://www.polymer-project.org/blog/2017-05-15-time-for-two.html)，使用 Shadow DOM v1 和 Custom elements v1，对于不兼容的浏览器，也提供了 polyfill。而在今年 Polymer Summit 大会上，推出了最新 [Polymer 3.0 preview](https://www.polymer-project.org/blog/2017-08-22-npm-modules.html)，也指明了 Polymer 最新的发展方向，其中主要变化是：① 从 bower 转向 npm ② 使用 ES6 modules，弃用 HTML Imports
 

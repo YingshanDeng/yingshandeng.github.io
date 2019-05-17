@@ -32,7 +32,7 @@ categories: HTML
 
 我们可以注意到百度页面 head 中就包含了如下一段 DNS 预加载的 link 标签：
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/baidu-dns-prefetching.png)
+![](http://cdn.objcer.com/baidu-dns-prefetching.png)
 
 ### DNS Prefetch Control
 

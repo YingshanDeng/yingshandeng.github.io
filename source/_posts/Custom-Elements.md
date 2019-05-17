@@ -4,7 +4,7 @@ date: 2017-10-20 16:07:56
 categories: Web Components
 ---
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/custom-elements.png)
+![](http://cdn.objcer.com/custom-elements.png)
 
 Custom Elements 为开发者提供了创建新 HTML 标记，扩展现有 HTML 标记的能力，创建自定义新的元素，将 JS 逻辑行为和元素 DOM 关联起来，代码模块化，提供重用性。
 

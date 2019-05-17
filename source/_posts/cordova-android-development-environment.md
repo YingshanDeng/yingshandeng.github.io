@@ -4,7 +4,7 @@ tags:
 categories: Cordova
 ---
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/android-banner.jpg)
+![](http://cdn.objcer.com/android-banner.jpg)
 <!-- more -->
 
 ## 安装 IDE (Android Studio)
@@ -19,7 +19,7 @@ categories: Cordova
 
 ### 解决：*DELETE_FAILED_INTERNAL_ERROR Error while Installing APK*
 安卓真机（小米4C）通过 USB 连接电脑后，运行，可能会出现如下问题：
-![](http://7vikhl.com1.z0.glb.clouddn.com/3B19ED97-CE3F-45A9-8518-C08D779F7FA3.png)
+![](http://cdn.objcer.com/3B19ED97-CE3F-45A9-8518-C08D779F7FA3.png)
 点击 OK 继续，会出现如下错误：
 ```
 DELETE_FAILED_INTERNAL_ERROR
@@ -27,7 +27,7 @@ Error while Installing APKs
 ```
 参考链接：[DELETE_FAILED_INTERNAL_ERROR Error while Installing APK](https://stackoverflow.com/questions/38892270/delete-failed-internal-error-error-while-installing-apk) 大致有两种解决方案：
 - 操作步骤：Android Studio > Preferences >  Build, Execution, Deployment > Instant Run > **Uncheck : Enable Instant Run**（此处理方式会禁用 Instant Run 功能）
-![](http://7vikhl.com1.z0.glb.clouddn.com/03E0830C-F5BB-4EC5-AC41-50A604A3E532.png)
+![](http://cdn.objcer.com/03E0830C-F5BB-4EC5-AC41-50A604A3E532.png)
 - 由于调试设备是小米，所以还可以：设置 > 更多设置 > 开发者选项 > **去掉：启动 MIUI 优化** > 关闭并重启
 
 ### ADB 无线调试
@@ -70,18 +70,18 @@ source ~/.bash_profile
 - 在使用过程中，要确保手机和电脑连接的同一 WiFi
 - 可以通过 AndroidWiFiADB 设备面板查看设备及设置连接状态
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/36CDAE13-BEBC-42D2-9226-A53DF0CEE4B1.png)
+![](http://cdn.objcer.com/36CDAE13-BEBC-42D2-9226-A53DF0CEE4B1.png)
 
 ## Chrome 远程调试模拟器/真机
 > [远程调试 Android 设备使用入门](https://developers.google.com/web/tools/chrome-devtools/remote-debugging/?hl=zh-cn)
 
 操作步骤：
 - 随便在某个页面打开调试页面，如下图找到 **Remote devices**
-![](http://7vikhl.com1.z0.glb.clouddn.com/8FA1EB72-12AE-4984-AA64-2C7022B1F00E.png)
+![](http://cdn.objcer.com/8FA1EB72-12AE-4984-AA64-2C7022B1F00E.png)
 - 确保已勾选 **Discover USB devices**
-![](http://7vikhl.com1.z0.glb.clouddn.com/B378E60C-01E5-43AE-8EA1-02999501F241.png)
+![](http://cdn.objcer.com/B378E60C-01E5-43AE-8EA1-02999501F241.png)
 - 如下图找到对应的模拟器或者真机，点击 **Inspect** 按键就可以打开调试界面
-![](http://7vikhl.com1.z0.glb.clouddn.com/917006D3-5881-4A6F-814F-0B3BB54383D7.png)
+![](http://cdn.objcer.com/917006D3-5881-4A6F-814F-0B3BB54383D7.png)
 
 ## 其他问题记录
 1、Android Studio 导入项目卡在 *Building gradle project info* 的解决方法：

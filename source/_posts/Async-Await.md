@@ -6,7 +6,7 @@ categories: JS
 
 在 JavaScript 中处理异步操作的回调 (callback) 通常会导致多嵌套的代码块，俗称回调地狱 (callback hell)，这样的代码复杂，可读性，可维护性非常不友好；直达 ES6，Promise 出现，使得我们能够扁平化回调函数，告别回调地狱，写出优雅的代码；但是在实践中发现，Promise 并不完美，如果 Promise 的回调中出现嵌套，依旧会出现回调地狱；而如今，async await 出现了，它提供了一种新的编写异步代码方式，使得异步代码看起来像是同步代码，这正式它的魔力所在。
 
-![](http://7vikhl.com1.z0.glb.clouddn.com/1-ko3KtcVSlzpe3RnTRgJaHw.jpeg)
+![](http://cdn.objcer.com/1-ko3KtcVSlzpe3RnTRgJaHw.jpeg)
 
 <!-- more -->
 
