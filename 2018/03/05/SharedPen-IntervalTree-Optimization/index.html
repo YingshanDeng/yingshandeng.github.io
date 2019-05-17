@@ -93,21 +93,21 @@
 <meta property="og:url" content="http://objcer.com/2018/03/05/SharedPen-IntervalTree-Optimization/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="前文 SharedPen 之 AnnotationList 讲到：  为了管理，操作整个富文本文档流，我们引入 AnnotationList 单链表结构，把每一段富文本当成 Node 节点，由此形成链表结构。  单链表数据结构形象容易理解，但是执行操作（增删改查）的效率比较低，所有操作的算法复杂度都是 O(N)（其中N为节点数）；优化的方向是将链表数据结构改造成树形结构。本文将对优化思路进行分析">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/tree-all.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/900px-Red-black_tree_example.svg.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-demo.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-expand.png?t=1">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-remove.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-originNode.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-origin2.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/A02DFDB4-8A1E-4D18-997D-E1A1BC5ACC2A.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/C2898E5B-198A-4D3D-AA97-3207F4187376.png">
-<meta property="og:updated_time" content="2018-03-05T15:39:38.000Z">
+<meta property="og:image" content="http://cdn.objcer.com/SharedPen-IntervalTree.png">
+<meta property="og:image" content="http://cdn.objcer.com/tree-all.png">
+<meta property="og:image" content="http://cdn.objcer.com/900px-Red-black_tree_example.svg.png">
+<meta property="og:image" content="http://cdn.objcer.com/interval-tree-demo.png">
+<meta property="og:image" content="http://cdn.objcer.com/interval-tree-expand.png?t=1">
+<meta property="og:image" content="http://cdn.objcer.com/interval-tree-remove.png">
+<meta property="og:image" content="http://cdn.objcer.com/interval-tree-originNode.png">
+<meta property="og:image" content="http://cdn.objcer.com/interval-tree-origin2.png">
+<meta property="og:image" content="http://cdn.objcer.com/A02DFDB4-8A1E-4D18-997D-E1A1BC5ACC2A.png">
+<meta property="og:image" content="http://cdn.objcer.com/C2898E5B-198A-4D3D-AA97-3207F4187376.png">
+<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SharedPen 之区间树优化">
 <meta name="twitter:description" content="前文 SharedPen 之 AnnotationList 讲到：  为了管理，操作整个富文本文档流，我们引入 AnnotationList 单链表结构，把每一段富文本当成 Node 节点，由此形成链表结构。  单链表数据结构形象容易理解，但是执行操作（增删改查）的效率比较低，所有操作的算法复杂度都是 O(N)（其中N为节点数）；优化的方向是将链表数据结构改造成树形结构。本文将对优化思路进行分析">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png">
+<meta name="twitter:image" content="http://cdn.objcer.com/SharedPen-IntervalTree.png">
 
 
 
@@ -328,7 +328,7 @@
       
 
       
-        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png" alt=""></p>
+        <p><img src="http://cdn.objcer.com/SharedPen-IntervalTree.png" alt=""></p>
 <p>前文 <a href="">SharedPen 之 AnnotationList</a> 讲到：</p>
 <blockquote>
 <p>为了管理，操作整个富文本文档流，我们引入 <strong>AnnotationList</strong> 单链表结构，把每一段富文本当成 <code>Node</code> 节点，由此形成链表结构。</p>
@@ -336,7 +336,7 @@
 <p>单链表数据结构形象容易理解，但是执行操作（增删改查）的效率比较低，所有操作的算法复杂度都是 <code>O(N)</code>（其中N为节点数）；优化的方向是将链表数据结构改造成树形结构。本文将对优化思路进行分析。</p>
 <a id="more"></a>
 <h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p><strong>二叉查找树</strong>（Binary Search Tree，简称BST）是一棵二叉树，特点是：它的左子节点的值比父节点的值要小，右节点的值要比父节点的值大。它的高度决定了它的查找效率。在理想的情况下，二叉查找树增删查改的时间复杂度为 <code>O(logN)</code>，最坏的情况下为 <code>O(N)</code>。当它的高度为 <code>logN+1</code> 时，我们就说二叉查找树是平衡的。</p>
-<p>由于 BST 存在的问题，产生了一种新的树 – <strong>自平衡二叉查找树</strong>，自平衡树在插入和删除节点的时候，会通过旋转操作将高度保持在 <code>logN</code>，所以它可以在 <code>O(log N)</code> 时间内做查找，插入和删除。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/tree-all.png" alt=""></p>
+<p>由于 BST 存在的问题，产生了一种新的树 – <strong>自平衡二叉查找树</strong>，自平衡树在插入和删除节点的时候，会通过旋转操作将高度保持在 <code>logN</code>，所以它可以在 <code>O(log N)</code> 时间内做查找，插入和删除。<br><img src="http://cdn.objcer.com/tree-all.png" alt=""></p>
 <p><strong><a href="https://zh.wikipedia.org/zh-cn/%E7%BA%A2%E9%BB%91%E6%A0%91" target="_blank" rel="external">红黑树</a></strong>（Red–black tree）就是一种<strong>自平衡二叉查找树</strong>，它是复杂的，<br>但它的操作有着良好的最坏情况运行时间，并且在实践中是高效的，其实际应用也非常广泛。</p>
 <p>红黑树是每个节点都带有颜色属性的二叉查找树，颜色为红色或黑色。除二叉查找树强制一般要求以外，对于任何有效的红黑树我们增加了如下的额外要求：</p>
 <ul>
@@ -346,11 +346,11 @@
 <li>每个红色节点必须有两个黑色的子节点。（从每个叶子到根的所有路径上不能有两个连续的红色节点。）</li>
 <li>从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点。</li>
 </ul>
-<p>下面是一个具体的红黑树的图例：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/900px-Red-black_tree_example.svg.png" alt=""></p>
+<p>下面是一个具体的红黑树的图例：<br><img src="http://cdn.objcer.com/900px-Red-black_tree_example.svg.png" alt=""></p>
 <blockquote>
 <p>推荐一个数据结构可视化在线工具，可以辅助理解：<a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html" target="_blank" rel="external">Data Structure Visualizations</a><br>其中红黑树增删节点可视化：<a href="https://www.cs.usfca.edu/~galles/visualization/RedBlack.html" target="_blank" rel="external">Red/Black Tree</a></p>
 </blockquote>
-<h2 id="区间树"><a href="#区间树" class="headerlink" title="区间树"></a>区间树</h2><p>区间树（interval tree）是一种扩展的红黑树，区间树中的节点都代表一个区间。例如区间：(2, 8) (6, 15) (30, 36) (20, 25) (33, 40) 构成如下区间树：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-demo.png" alt=""></p>
+<h2 id="区间树"><a href="#区间树" class="headerlink" title="区间树"></a>区间树</h2><p>区间树（interval tree）是一种扩展的红黑树，区间树中的节点都代表一个区间。例如区间：(2, 8) (6, 15) (30, 36) (20, 25) (33, 40) 构成如下区间树：<br><img src="http://cdn.objcer.com/interval-tree-demo.png" alt=""></p>
 <p>对于一个区间：</p>
 <ul>
 <li>区间用 <code>Range(lowerPosition, upperPosition)</code> 来表示，其中：<code>lowerPosition</code> 和 <code>upperPosition</code> 分别表示起始位置和结束位置</li>
@@ -365,8 +365,8 @@
 <p><strong>接下来将以这种连续（左闭右开）区间进行分析</strong></p>
 <p>区间树有两个重要操作：<code>expand</code> 和 <code>remove</code></p>
 <ul>
-<li><strong>扩张：<code>expand(pos, length)</code></strong><br>在 <code>pos</code> 位置，插入 <code>length</code> 长度的字符，插入文本后，后续的区间位置需要<strong>自动更新</strong><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-expand.png?t=1" alt=""><br>例子中区间：<code>[2, 8),[8, 15),[15, 20),[20, 28)</code> 变成 <code>[2, 8),[8, 17),[17, 22),[22, 30)</code></li>
-<li><strong>收缩：<code>remove(pos, length)</code></strong>：<br>在 <code>pos</code> 位置，删除 <code>length</code> 长度的字符，删除文本后，后续的区间位置需要<strong>自动更新</strong><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-remove.png" alt=""><br>例子中区间：<code>[2, 8),[8, 15),[15, 20),[20, 28)</code> 变成 <code>[2, 8),[8, 13),[13, 18),[18, 26)</code></li>
+<li><strong>扩张：<code>expand(pos, length)</code></strong><br>在 <code>pos</code> 位置，插入 <code>length</code> 长度的字符，插入文本后，后续的区间位置需要<strong>自动更新</strong><br><img src="http://cdn.objcer.com/interval-tree-expand.png?t=1" alt=""><br>例子中区间：<code>[2, 8),[8, 15),[15, 20),[20, 28)</code> 变成 <code>[2, 8),[8, 17),[17, 22),[22, 30)</code></li>
+<li><strong>收缩：<code>remove(pos, length)</code></strong>：<br>在 <code>pos</code> 位置，删除 <code>length</code> 长度的字符，删除文本后，后续的区间位置需要<strong>自动更新</strong><br><img src="http://cdn.objcer.com/interval-tree-remove.png" alt=""><br>例子中区间：<code>[2, 8),[8, 15),[15, 20),[20, 28)</code> 变成 <code>[2, 8),[8, 13),[13, 18),[18, 26)</code></li>
 </ul>
 <p>注意到插入和删除文本后，其后续区间的位置都能<strong>自动更新</strong>，为了实现这个功能，我们需要对区间进行一些处理。区间<code>Range(lowerPosition, upperPosition)</code> 的 <code>lowerPosition</code> 和 <code>upperPosition</code> 都表示<strong>绝对位置</strong>，下面给区间引入<strong>相对位置</strong>的概念。</p>
 <ul>
@@ -383,14 +383,14 @@
 </li>
 </ul>
 <p>下面通过：<code>[2, 8),[8, 15),[15, 20),[20, 28),[28, 40)</code> 这个区间树来解释一下相对位置的概念</p>
-<p>下图中的红色箭头指向为 <code>originNode</code>，注意到其中的 <code>[2, 8)</code> 和 <code>[8, 15)</code> 区间其实是指向这个区间树，表示其相对区间为区间树的起点。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-originNode.png" alt=""></p>
-<p>下图中分别列出了每个区间的 <code>origin</code>，<code>relativeLower</code>，<code>upperDistance</code> 的属性<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/interval-tree-origin2.png" alt=""></p>
+<p>下图中的红色箭头指向为 <code>originNode</code>，注意到其中的 <code>[2, 8)</code> 和 <code>[8, 15)</code> 区间其实是指向这个区间树，表示其相对区间为区间树的起点。<br><img src="http://cdn.objcer.com/interval-tree-originNode.png" alt=""></p>
+<p>下图中分别列出了每个区间的 <code>origin</code>，<code>relativeLower</code>，<code>upperDistance</code> 的属性<br><img src="http://cdn.objcer.com/interval-tree-origin2.png" alt=""></p>
 <p>其中区间 <code>origin</code> 属性通过如下计算得到：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">get</span> <span class="title">origin</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> n = <span class="literal">null</span>,</div><div class="line">      o = <span class="number">0</span>;</div><div class="line">  <span class="keyword">for</span> (n = <span class="keyword">this</span>.originNode; <span class="literal">null</span> != n; n = n.originNode) &#123;</div><div class="line">    o += n.relativeLower;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> o;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>区间的绝对位置可以通过如下计算得到：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">get</span> lowerPosition() &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.origin + <span class="keyword">this</span>.relativeLower;</div><div class="line">&#125;</div><div class="line"><span class="keyword">get</span> upperPosition() &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.lowerPosition + <span class="keyword">this</span>.upperDistance;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>有了相对位置概念之后，<strong>处理扩张/收缩，只需遍历区间树中的部分节点，更新其中相关的属性即可。</strong>如下区间树，<code>expand(10, 2)</code>，在 10 的位置扩展 2 个长度，即区间 <code>[8, 15)</code> 变成 <code>[8, 17)</code>，除了更新当前区间 <code>[8, 15)</code> 外，只需要更新那些以该区间节点为 <code>originNode</code> 的区间，我们可以知道区间 <code>[15, 20)</code> 和 <code>[20, 28)</code> 的 <code>originNode</code> 就是 <code>[8, 15)</code><br><img src="http://7vikhl.com1.z0.glb.clouddn.com/A02DFDB4-8A1E-4D18-997D-E1A1BC5ACC2A.png" alt=""></p>
+<p>有了相对位置概念之后，<strong>处理扩张/收缩，只需遍历区间树中的部分节点，更新其中相关的属性即可。</strong>如下区间树，<code>expand(10, 2)</code>，在 10 的位置扩展 2 个长度，即区间 <code>[8, 15)</code> 变成 <code>[8, 17)</code>，除了更新当前区间 <code>[8, 15)</code> 外，只需要更新那些以该区间节点为 <code>originNode</code> 的区间，我们可以知道区间 <code>[15, 20)</code> 和 <code>[20, 28)</code> 的 <code>originNode</code> 就是 <code>[8, 15)</code><br><img src="http://cdn.objcer.com/A02DFDB4-8A1E-4D18-997D-E1A1BC5ACC2A.png" alt=""></p>
 <p>下面简单的介绍一下实现原理：<br>① <code>passWhole</code> 和 <code>passRight</code><br>执行遍历过程中，需要对比执行操作点（插入点/删除点）和区间节点的关系，其中包含两个重要的比较过程：<code>passWhole</code> 和 <code>passRight</code></p>
 <ul>
-<li><p><code>passWhole</code><br>区间节点有一个 <code>limitPosition</code> 属性，表示当前区间节点所在子树的右边界位置<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/C2898E5B-198A-4D3D-AA97-3207F4187376.png" alt=""><br><code>passWhole</code> 判断执行操作点的位置如果比当前区间节点所在子树的右边界大，那么可以跳过这个子树</p>
+<li><p><code>passWhole</code><br>区间节点有一个 <code>limitPosition</code> 属性，表示当前区间节点所在子树的右边界位置<br><img src="http://cdn.objcer.com/C2898E5B-198A-4D3D-AA97-3207F4187376.png" alt=""><br><code>passWhole</code> 判断执行操作点的位置如果比当前区间节点所在子树的右边界大，那么可以跳过这个子树</p>
 <figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">passWhole(<span class="keyword">hint</span>) &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._position &gt; <span class="keyword">hint</span>.limitPosition;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 <li><p><code>passRight</code><br><code>passRight</code> 判断执行操作点的位置如果比当前区间的（绝对位置的）起始位置小，那么可以跳过这个区间节点对应的右子树（即只需考虑当前区间的左子树）</p>
@@ -520,7 +520,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               src="http://cdn.objcer.com/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -629,7 +629,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

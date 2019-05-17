@@ -93,12 +93,12 @@
 <meta property="og:url" content="http://objcer.com/2015/02/14/iOS-7-Custom-Transition/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="iOS 7 中为 ViewControllers 间（Navigation Push / Pop  或者  Modal Present / Dismiss）的切换和交互增加了特性，你可以自定义切换的动画效果和切换过程的交互动作">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/demo.gif">
-<meta property="og:updated_time" content="2017-03-12T05:31:08.000Z">
+<meta property="og:image" content="http://cdn.objcer.com/demo.gif">
+<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 7 Custom Transition">
 <meta name="twitter:description" content="iOS 7 中为 ViewControllers 间（Navigation Push / Pop  或者  Modal Present / Dismiss）的切换和交互增加了特性，你可以自定义切换的动画效果和切换过程的交互动作">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/demo.gif">
+<meta name="twitter:image" content="http://cdn.objcer.com/demo.gif">
 
 
 
@@ -356,7 +356,7 @@
 </blockquote>
 <p><a href="https://github.com/YingshanDeng/CustomTransitionDemo" target="_blank" rel="external">demo下载链接</a></p>
 <p>效果如下：</p>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/demo.gif" alt="demo效果"></p>
+<p><img src="http://cdn.objcer.com/demo.gif" alt="demo效果"></p>
 <p>1、基础代码（项目中包含两个VC：FirstViewController SecondViewController）<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions &#123;</div><div class="line">    <span class="comment">// Override point for customization after application launch.</span></div><div class="line">    <span class="keyword">self</span>.window = [[<span class="built_in">UIWindow</span> alloc] initWithFrame:[[<span class="built_in">UIScreen</span> mainScreen] bounds]];</div><div class="line">    FirstViewController *firstVC = [[FirstViewController alloc] init];</div><div class="line">    <span class="built_in">UINavigationController</span> *naviController = [[<span class="built_in">UINavigationController</span> alloc] initWithRootViewController:firstVC];</div><div class="line">    <span class="keyword">self</span>.window.rootViewController = naviController;</div><div class="line">    [<span class="keyword">self</span>.window makeKeyAndVisible];</div><div class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>其中 FirstViewController 视图中有一个 btn 用于跳转到 SecondViewController<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="comment">// Do any additional setup after loading the view.</span></div><div class="line">    [<span class="keyword">self</span>.view setBackgroundColor:[<span class="built_in">UIColor</span> whiteColor]];</div><div class="line">    <span class="keyword">self</span>.title = <span class="string">@"FirstVC"</span>;</div><div class="line"></div><div class="line">    <span class="built_in">CGRect</span> rect = [[<span class="built_in">UIScreen</span> mainScreen] bounds];</div><div class="line">    <span class="built_in">UIButton</span> *btn = [<span class="built_in">UIButton</span> buttonWithType:<span class="built_in">UIButtonTypeRoundedRect</span>];</div><div class="line">    btn.layer.bounds = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">50</span>);</div><div class="line">    btn.layer.position = <span class="built_in">CGPointMake</span>(rect.size.width / <span class="number">2</span>, rect.size.height / <span class="number">2</span>);</div><div class="line">    [btn setTitle:<span class="string">@"Click -- Push"</span> forState:<span class="built_in">UIControlStateNormal</span>];</div><div class="line">    [btn addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(btnPressed:) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];</div><div class="line">    [<span class="keyword">self</span>.view addSubview:btn];</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)btnPressed:(<span class="built_in">UIButton</span> *)btn</div><div class="line">&#123;</div><div class="line">    SecondViewController *secondVC = [[SecondViewController alloc] init];</div><div class="line">    [<span class="keyword">self</span>.navigationController pushViewController:secondVC animated:<span class="literal">YES</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>2、定制 Pan 手势，我们只在 Pan 手势是向右滑动的时候才做响应。</p>
@@ -475,7 +475,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               src="http://cdn.objcer.com/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -584,7 +584,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

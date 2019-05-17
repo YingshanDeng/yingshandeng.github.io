@@ -93,13 +93,13 @@
 <meta property="og:url" content="http://objcer.com/2017/10/31/Data-Binding-with-ES6-Proxies/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="在上一篇文章：探究数据绑定（1）脏检查和存取器方法 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/es6-proxy-observables-code.png">
-<meta property="og:updated_time" content="2017-10-31T07:27:40.000Z">
+<meta property="og:image" content="http://cdn.objcer.com/data-binding-with-es6-proxy.png">
+<meta property="og:image" content="http://cdn.objcer.com/es6-proxy-observables-code.png">
+<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探究数据绑定（2）ES6 Proxy">
 <meta name="twitter:description" content="在上一篇文章：探究数据绑定（1）脏检查和存取器方法 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png">
+<meta name="twitter:image" content="http://cdn.objcer.com/data-binding-with-es6-proxy.png">
 
 
 
@@ -320,7 +320,7 @@
       
 
       
-        <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png" alt=""><br>在上一篇文章：<a href="https://objcer.com/2017/10/27/Data-binding-introduction/">探究数据绑定（1）脏检查和存取器方法</a> 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。</p>
+        <p><img src="http://cdn.objcer.com/data-binding-with-es6-proxy.png" alt=""><br>在上一篇文章：<a href="https://objcer.com/2017/10/27/Data-binding-introduction/">探究数据绑定（1）脏检查和存取器方法</a> 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。</p>
 <a id="more"></a>
 <h2 id="知识储备"><a href="#知识储备" class="headerlink" title="知识储备"></a>知识储备</h2><p>Proxy 方式实现数据绑定中涉及到 Proxy、Reflect、Set、Map 和 WeakMap，这些都是 ES6 的新特性。</p>
 <h3 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h3><p>Proxy 对象代理，在目标对象之前架设一层拦截，外部对目标对象的操作，都会通过这层拦截，我们可以定制拦截行为，每一个被代理的拦截行为都对应一个处理函数。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let p = <span class="keyword">new</span> Proxy(<span class="keyword">target</span>, <span class="keyword">handler</span>);</div></pre></td></tr></table></figure></p>
@@ -394,7 +394,7 @@
 <li>拦截方法 <code>set</code>：使用 <code>obj.property = value</code> 设置对象属性，即会被拦截方法 <code>set</code> 拦截<br>👉 查看 <code>set</code> 中的注释</li>
 </ul>
 <p><strong><code>observe(fn)</code> 方法中，添加对象属性监听函数</strong><br>  监听函数中使用 <code>obj.property</code> 获取对象属性，即表明监听函数监听了该属性，那么就会触发拦截方法 <code>get</code> 中对监听属性的逻辑处理，为其创建对象属性监听函数集合 Set，并将当前的监听函数添加进其中</p>
-<h3 id="分析测试用例"><a href="#分析测试用例" class="headerlink" title="分析测试用例"></a>分析测试用例</h3><p>下面通过流程图讲解一下测试用例的执行过程<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/es6-proxy-observables-code.png" alt=""></p>
+<h3 id="分析测试用例"><a href="#分析测试用例" class="headerlink" title="分析测试用例"></a>分析测试用例</h3><p>下面通过流程图讲解一下测试用例的执行过程<br><img src="http://cdn.objcer.com/es6-proxy-observables-code.png" alt=""></p>
 <ul>
 <li>通过 <code>observable</code> 方法创建代理对象 <code>person</code></li>
 <li><code>observe</code> 方法设置监听函数，此时待执行监听函数集合 Set 为空，监听函数添加到 Set 中后执行待执行监听函数集合 Set 中的监听函数</li>
@@ -536,7 +536,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               src="http://cdn.objcer.com/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -645,7 +645,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

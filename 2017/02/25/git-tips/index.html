@@ -93,13 +93,13 @@
 <meta property="og:url" content="http://objcer.com/2017/02/25/git-tips/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="在开发过程中，常用的 git 命令和技巧整理如下。">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/git-model@2x.png">
-<meta property="og:updated_time" content="2017-03-18T12:31:25.000Z">
+<meta property="og:image" content="http://cdn.objcer.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png">
+<meta property="og:image" content="http://cdn.objcer.com/git-model@2x.png">
+<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 的常用命令和技能">
 <meta name="twitter:description" content="在开发过程中，常用的 git 命令和技巧整理如下。">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png">
+<meta name="twitter:image" content="http://cdn.objcer.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png">
 
 
 
@@ -322,7 +322,7 @@
       
         <p>在开发过程中，常用的 git 命令和技巧整理如下。</p>
 <a id="more"></a>
-<h2 id="Git基础"><a href="#Git基础" class="headerlink" title="Git基础"></a>Git基础</h2><p><img src="http://7vikhl.com1.z0.glb.clouddn.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png" alt=""></p>
+<h2 id="Git基础"><a href="#Git基础" class="headerlink" title="Git基础"></a>Git基础</h2><p><img src="http://cdn.objcer.com/56A5C90C-5C23-4915-96EC-4B4A4F60E5E1.png" alt=""></p>
 <h2 id="stash-储藏"><a href="#stash-储藏" class="headerlink" title="stash 储藏"></a>stash 储藏</h2><p>当你在某个分支上工作到一半时，需要切换到其他分支进行一些工作，但是你此时并不想提交当前工作了一半的内容时，你可以使用 <code>git stash</code> 这个命令解决你的问题。<a href="https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%82%A8%E8%97%8F%EF%BC%88Stashing%EF%BC%89" target="_blank" rel="external">参考文档</a></p>
 <h3 id="git-stash"><a href="#git-stash" class="headerlink" title="git stash"></a><code>git stash</code></h3><p><code>git stash</code> 可以获取你工作目录的中间状态——也就是你<strong>修改过的被追踪的文件</strong>和<strong>暂存的变更</strong>，并将它保存到一个未完结变更的堆栈中，随时可以重新应用。<br>注意：未被跟踪的文件在执行 <code>git stash</code> 时是不会被保存的。例如：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">On branch master</div><div class="line">Your branch is ahead of 'origin/master' by 5 commits.</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git push"</span> <span class="keyword">to</span> publish your <span class="keyword">local</span> commits)</div><div class="line">Changes <span class="keyword">to</span> be committed:</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git reset HEAD &lt;file&gt;..."</span> <span class="keyword">to</span> unstage)</div><div class="line"></div><div class="line">	modified:   file.js</div><div class="line"></div><div class="line">Changes <span class="keyword">not</span> staged <span class="keyword">for</span> <span class="keyword">commit</span>:</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">update</span> what will be committed)</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git checkout -- &lt;file&gt;..."</span> <span class="keyword">to</span> discard changes <span class="keyword">in</span> working <span class="keyword">directory</span>)</div><div class="line"></div><div class="line">	modified:   <span class="number">1.</span>html</div><div class="line"></div><div class="line">Untracked files:</div><div class="line">  (<span class="keyword">use</span> <span class="string">"git add &lt;file&gt;..."</span> <span class="keyword">to</span> <span class="keyword">include</span> <span class="keyword">in</span> what will be committed)</div><div class="line"></div><div class="line">	stash.txt</div></pre></td></tr></table></figure>
@@ -359,7 +359,7 @@
 <h2 id="git-flow"><a href="#git-flow" class="headerlink" title="git-flow"></a>git-flow</h2><blockquote>
 <p>关于 git 工作流可以参考:<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">A successful Git branching model</a></p>
 </blockquote>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/git-model@2x.png" alt=""></p>
+<p><img src="http://cdn.objcer.com/git-model@2x.png" alt=""></p>
 <ul>
 <li>项目仓库中一般包含四大类分支：master, hotfix, dev, feature。<ul>
 <li>master 主分支，用于项目发布，一般不直接在此分支上进行开发，仅在发布时，将开发分支 dev 代码合并进行发布</li>
@@ -497,7 +497,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               src="http://cdn.objcer.com/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -606,7 +606,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -321,7 +321,7 @@
 
       
         
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Main.png" alt=""></p>
+          <p><img src="http://cdn.objcer.com/SharedPen-Main.png" alt=""></p>
 <p>2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏<br>SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：<a href="https://github.com/YingshanDeng/SharedPen" target="_blank" rel="external">GitHub: YingshanDeng/SharedPen</a>。本文将对 SharedPen 整体架构进行介绍，下列文章对其中具体的技术方案进行了详细介绍：</p>
 <ul>
 <li><a href="https://objcer.com/2018/03/05/SharePen-Operational-Transformation/">SharedPen 之 Operational Transformation</a></li>
@@ -458,7 +458,7 @@
 
       
         
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-IntervalTree.png" alt=""></p>
+          <p><img src="http://cdn.objcer.com/SharedPen-IntervalTree.png" alt=""></p>
 <p>前文 <a href="">SharedPen 之 AnnotationList</a> 讲到：</p>
 <blockquote>
 <p>为了管理，操作整个富文本文档流，我们引入 <strong>AnnotationList</strong> 单链表结构，把每一段富文本当成 <code>Node</code> 节点，由此形成链表结构。</p>
@@ -594,7 +594,7 @@
 
       
         
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Operational%20Transformation.png" alt=""></p>
+          <p><img src="http://cdn.objcer.com/SharedPen-Operational%20Transformation.png" alt=""></p>
 <p>当多用户协同编辑同一篇文档，由于没有锁的机制，便会出现内容冲突，这时就需要一定的算法来自动解决冲突，使所有对文档的修改同步后，每个协同编辑的用户看到的文档内容是完全一致的。而 Operational Transformation (简称 OT) 算法就是解决协同问题的通用算法，支持各类协同编辑引用，例如文档，表格，演示，代码编辑等。其最早发表于 1989 年，后因 Google 的在线协作产品 Google Wave，Google Docs 的应用而成熟流行。</p>
 <blockquote>
 <p>关于 Google Wave: <a href="http://www.ifanr.com/675122" target="_blank" rel="external">Google Wave，值得纪念的伟大失败</a></p>
@@ -733,15 +733,15 @@
 
       
         
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/SharedPen-Annotation.png" alt=""></p>
+          <p><img src="http://cdn.objcer.com/SharedPen-Annotation.png" alt=""></p>
 <p>CodeMirror 是一款优秀的开源文本编辑器，常用于代码编辑器。但并不支持富文本编辑功能。但是得益于 CodeMirror 的 API</p>
 <blockquote>
 <p><a href="https://codemirror.net/doc/manual.html#api_marker" target="_blank" rel="external">markText</a>: <strong>Can be used to mark a range of text with a specific CSS class name.</strong></p>
 </blockquote>
 <p>能够为指定 range 的文本设置一个 CSS class，这样我们就可以通过这个 class 来设置富文本样式。例如对于文本：<code>ABCDEFGHF</code>，我们可以通过如下方式为其设置 class<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">doc</span><span class="selector-class">.markText</span>(&#123;<span class="attribute">line</span>:<span class="number">0</span>, ch: <span class="number">0</span>&#125;, &#123;<span class="attribute">line</span>: <span class="number">0</span>, ch: <span class="number">3</span>&#125;, &#123;<span class="attribute">className</span>: <span class="string">'classA'</span>&#125;)</div><div class="line"><span class="selector-tag">doc</span><span class="selector-class">.markText</span>(&#123;<span class="attribute">line</span>:<span class="number">0</span>, ch: <span class="number">3</span>&#125;, &#123;<span class="attribute">line</span>: <span class="number">0</span>, ch: <span class="number">6</span>&#125;, &#123;<span class="attribute">className</span>: <span class="string">'classB'</span>&#125;)</div><div class="line"><span class="selector-tag">doc</span><span class="selector-class">.markText</span>(&#123;<span class="attribute">line</span>:<span class="number">0</span>, ch: <span class="number">6</span>&#125;, &#123;<span class="attribute">line</span>: <span class="number">0</span>, ch: <span class="number">9</span>&#125;, &#123;<span class="attribute">className</span>: <span class="string">'classC'</span>&#125;)</div></pre></td></tr></table></figure></p>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/marktext.png" alt=""></p>
+<p><img src="http://cdn.objcer.com/marktext.png" alt=""></p>
 <p><code>markText</code> 方法会返回一个 <code>CodeMirror.TextMarker</code> 对象，该对象中的 <code>clear()</code> 方法用于清除 class，这样就非常便于我们动态为文本设置富文本样式了。</p>
-<p>为了管理，操作整个富文本文档流，我们引入 <strong>AnnotationList</strong> 单链表结构，把每一段富文本当成 <code>Node</code> 节点，由此形成链表结构。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/annotation-list.png" alt=""></p>
+<p>为了管理，操作整个富文本文档流，我们引入 <strong>AnnotationList</strong> 单链表结构，把每一段富文本当成 <code>Node</code> 节点，由此形成链表结构。<br><img src="http://cdn.objcer.com/annotation-list.png" alt=""></p>
 <p>本文将详解 AnnotationList 单链表结构 🤓</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/02/27/SharedPen-AnnotationList/#more" rel="contents">
@@ -873,7 +873,7 @@
 
       
         
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/gulpjs-cover.png" alt=""></p>
+          <p><img src="http://cdn.objcer.com/gulpjs-cover.png" alt=""></p>
 <p>Gulp 是三个自动化构建工具（Grunt, Gulp, Webpack）之一，其通过代码优于配置的策略，Gulp 让简单的任务简单，复杂的任务可管理，仅提供几个 API 就能将构建任务很好完成，而且有着丰富的插件生态，本文将探究 Gulp 的原理及如何创建插件。</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/02/27/Explore-Gulp/#more" rel="contents">
@@ -1005,7 +1005,7 @@
 
       
         
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/banner-purple.jpg" alt=""><br>本文将介绍一种方法用于检测鼠标指针在页面中移动时，判断是否离开页面 👉</p>
+          <p><img src="http://cdn.objcer.com/banner-purple.jpg" alt=""><br>本文将介绍一种方法用于检测鼠标指针在页面中移动时，判断是否离开页面 👉</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/02/26/Detect-the-mouse-leave-the-window/#more" rel="contents">
               阅读全文 &raquo;
@@ -1136,7 +1136,7 @@
 
       
         
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/regex.jpg" alt=""><br>对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓</p>
+          <p><img src="http://cdn.objcer.com/regex.jpg" alt=""><br>对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2018/01/22/learn-regexp/#more" rel="contents">
               阅读全文 &raquo;
@@ -1399,7 +1399,7 @@
 
       
         
-          <p><img src="http://7vikhl.com1.z0.glb.clouddn.com/data-binding-with-es6-proxy.png" alt=""><br>在上一篇文章：<a href="https://objcer.com/2017/10/27/Data-binding-introduction/">探究数据绑定（1）脏检查和存取器方法</a> 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。</p>
+          <p><img src="http://cdn.objcer.com/data-binding-with-es6-proxy.png" alt=""><br>在上一篇文章：<a href="https://objcer.com/2017/10/27/Data-binding-introduction/">探究数据绑定（1）脏检查和存取器方法</a> 中，探究了 ES5 中实现数据绑定的两种方式；而在本文中，将会探究使用 ES6 Proxy 实现数据绑定。</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2017/10/31/Data-Binding-with-ES6-Proxies/#more" rel="contents">
               阅读全文 &raquo;
@@ -1611,7 +1611,7 @@
       <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               src="http://cdn.objcer.com/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -1709,7 +1709,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

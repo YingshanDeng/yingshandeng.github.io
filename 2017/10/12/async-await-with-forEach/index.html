@@ -93,12 +93,12 @@
 <meta property="og:url" content="http://objcer.com/2017/10/12/async-await-with-forEach/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="在文章 ES7 中的 async await 中介绍了 async/await。本文将分析介绍当 async/await 遇上 forEach 出现的一些问题和解决方案。">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/1-pWGJIKats-zuumA3RQNEWQ.jpeg">
-<meta property="og:updated_time" content="2017-10-12T08:29:53.000Z">
+<meta property="og:image" content="http://cdn.objcer.com/1-pWGJIKats-zuumA3RQNEWQ.jpeg">
+<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="当 async&#x2F;await 遇上 forEach">
 <meta name="twitter:description" content="在文章 ES7 中的 async await 中介绍了 async/await。本文将分析介绍当 async/await 遇上 forEach 出现的一些问题和解决方案。">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/1-pWGJIKats-zuumA3RQNEWQ.jpeg">
+<meta name="twitter:image" content="http://cdn.objcer.com/1-pWGJIKats-zuumA3RQNEWQ.jpeg">
 
 
 
@@ -320,7 +320,7 @@
 
       
         <p>在文章 <a href="https://objcer.com/2017/10/11/Async-Await/">ES7 中的 async await</a> 中介绍了 async/await。本文将分析介绍当 async/await 遇上 <code>forEach</code> 出现的一些问题和解决方案。</p>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/1-pWGJIKats-zuumA3RQNEWQ.jpeg" alt=""></p>
+<p><img src="http://cdn.objcer.com/1-pWGJIKats-zuumA3RQNEWQ.jpeg" alt=""></p>
 <a id="more"></a>
 <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> getNumbers = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> multi = <span class="function"><span class="params">num</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (num) &#123;</div><div class="line">        resolve(num * num)</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'num not specified'</span>))</div><div class="line">      &#125;</div><div class="line">    &#125;, <span class="number">1000</span>)</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> nums = <span class="keyword">await</span> getNumbers()</div><div class="line">  nums.forEach(<span class="keyword">async</span> x =&gt; &#123;</div><div class="line">    <span class="keyword">var</span> res = <span class="keyword">await</span> multi(x)</div><div class="line">    <span class="built_in">console</span>.log(res)</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">test()</div></pre></td></tr></table></figure>
 <p>在这个例子中，通过 <code>forEach</code> 遍历的将每一个数字都执行 <code>multi</code> 操作。代码执行的结果是：1 秒后，一次性输出1，4，9。这个结果和我们的预期有些区别，我们是希望每间隔 1 秒，然后依次输出 1，4，9；所以当前代码应该是并行执行了，而我们期望的应该是串行执行。</p>
@@ -463,7 +463,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               src="http://cdn.objcer.com/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -572,7 +572,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -93,12 +93,12 @@
 <meta property="og:url" content="http://objcer.com/2017/03/18/css-transition-timing-function/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="在 CSS Animation 属性中可以设置和动画有关的参数，其中 transition-timing-function 是规定动画执行的速度曲线，常见的取值有两个：①步进函数 ②三次贝塞尔曲线  Timing functions are either defined as a stepping function or a cubic Bézier curve.  (W3C)The ‘trans">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/step.png">
-<meta property="og:updated_time" content="2017-03-18T08:50:52.000Z">
+<meta property="og:image" content="http://cdn.objcer.com/step.png">
+<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于 CSS transition-timing-function">
 <meta name="twitter:description" content="在 CSS Animation 属性中可以设置和动画有关的参数，其中 transition-timing-function 是规定动画执行的速度曲线，常见的取值有两个：①步进函数 ②三次贝塞尔曲线  Timing functions are either defined as a stepping function or a cubic Bézier curve.  (W3C)The ‘trans">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/step.png">
+<meta name="twitter:image" content="http://cdn.objcer.com/step.png">
 
 
 
@@ -333,7 +333,7 @@
 <li><code>step-start</code> 等同于 <code>steps(1,start)</code>：动画分成1步，动画执行时以 <strong>间隔终点</strong> 为起点开始变化；</li>
 <li><code>step-end</code> 等同于 <code>steps(1,end)</code>：动画分成一步，动画执行时以 <strong>间隔起点</strong> 为起点开始变化。</li>
 </ul>
-<p><img src="http://7vikhl.com1.z0.glb.clouddn.com/step.png" alt=""></p>
+<p><img src="http://cdn.objcer.com/step.png" alt=""></p>
 <p>例如：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// html</span></div><div class="line">&lt;<span class="selector-tag">div</span> class=<span class="string">"box"</span>&gt;&lt;/div&gt;</div><div class="line"><span class="comment">// css</span></div><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">	<span class="attribute">position</span>: absolute;</div><div class="line">	<span class="attribute">left</span>: <span class="number">0px</span>;</div><div class="line">	<span class="attribute">width</span>: <span class="number">150px</span>;</div><div class="line">	<span class="attribute">height</span>: <span class="number">150px</span>;</div><div class="line">	<span class="attribute">background</span>: gray;</div><div class="line">	<span class="attribute">animation</span>: move <span class="number">2s</span> steps(<span class="number">2</span>, start) forwards;</div><div class="line">&#125;</div><div class="line">@keyframes move &#123;</div><div class="line">	<span class="number">0%</span> &#123;</div><div class="line">		<span class="attribute">left</span>: <span class="number">0px</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="number">100%</span> &#123;</div><div class="line">		<span class="attribute">left</span>: <span class="number">600px</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>该例子中，div 节点移动变化：<code>300px --&gt; 600px</code>。如果修改成 <code>animation: move 2s steps(2, end) forwards;</code>，那么 div 节点移动变化：<code>0px --&gt; 300px --&gt; 600px</code></p>
 <p>逐帧动画例子可以参考: <a href="http://www.jianshu.com/p/05c5a9b302d2" target="_blank" rel="external">css逐帧动画</a></p>
@@ -445,7 +445,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               src="http://cdn.objcer.com/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -554,7 +554,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

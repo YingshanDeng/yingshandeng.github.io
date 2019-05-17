@@ -93,13 +93,13 @@
 <meta property="og:url" content="http://objcer.com/2016/11/06/Debouncing-and-Throttling/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="Debounce 和 Throttle 是用于解决请求和响应速度不匹配问题的两中策略。例如对于窗口大小调整（resize 事件），页面滚动（scroll 事件）等触发回调频率高的问题，如果回调函数处理复制，那么势必会影响响应速度，往往就会导致卡顿，不流畅的问题。在工具类库 underscore 和 lodash 都提供了这两个函数。">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/debounce-trailing.png">
-<meta property="og:image" content="http://7vikhl.com1.z0.glb.clouddn.com/debounce-leading.png">
-<meta property="og:updated_time" content="2016-11-06T09:45:00.000Z">
+<meta property="og:image" content="http://cdn.objcer.com/debounce-trailing.png">
+<meta property="og:image" content="http://cdn.objcer.com/debounce-leading.png">
+<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Debouncing and Throttling ">
 <meta name="twitter:description" content="Debounce 和 Throttle 是用于解决请求和响应速度不匹配问题的两中策略。例如对于窗口大小调整（resize 事件），页面滚动（scroll 事件）等触发回调频率高的问题，如果回调函数处理复制，那么势必会影响响应速度，往往就会导致卡顿，不流畅的问题。在工具类库 underscore 和 lodash 都提供了这两个函数。">
-<meta name="twitter:image" content="http://7vikhl.com1.z0.glb.clouddn.com/debounce-trailing.png">
+<meta name="twitter:image" content="http://cdn.objcer.com/debounce-trailing.png">
 
 
 
@@ -328,8 +328,8 @@
 <h2 id="Debounce"><a href="#Debounce" class="headerlink" title="Debounce"></a>Debounce</h2><blockquote>
 <p>The Debounce technique allow us to “group” multiple sequential calls in a single one.</p>
 </blockquote>
-<h3 id="理解-Debounce-策略"><a href="#理解-Debounce-策略" class="headerlink" title="理解 Debounce 策略"></a>理解 Debounce 策略</h3><p>用电梯运行来理解 Debounce。想象你在电梯中，电梯超时时间快结束，电梯门快要关闭的时候，突然又有一个人按了电梯要进入电梯，那么电梯就又打开了，超时时间重新倒计时，直到超时时间完全结束时，电梯才进行运送。可以结合如下图示进行理解：<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/debounce-trailing.png" alt=""></p>
-<p>如上图，你可能会发现，当事件触发没有那么频繁，超过一定间隔后才执行一次回调函数；那么能否在事件触发时就立即执行回调函数，而在没有超过一定间隔时，不再进行调用回到函数。当然可以啦 👊 <code>Debounce</code> 函数中我们可以指定一个参数（有些称之为 <code>immediate</code> 或者 <code>leading</code>）默认 <code>Debounce</code> 函数是尾调用的。<br><img src="http://7vikhl.com1.z0.glb.clouddn.com/debounce-leading.png" alt=""></p>
+<h3 id="理解-Debounce-策略"><a href="#理解-Debounce-策略" class="headerlink" title="理解 Debounce 策略"></a>理解 Debounce 策略</h3><p>用电梯运行来理解 Debounce。想象你在电梯中，电梯超时时间快结束，电梯门快要关闭的时候，突然又有一个人按了电梯要进入电梯，那么电梯就又打开了，超时时间重新倒计时，直到超时时间完全结束时，电梯才进行运送。可以结合如下图示进行理解：<br><img src="http://cdn.objcer.com/debounce-trailing.png" alt=""></p>
+<p>如上图，你可能会发现，当事件触发没有那么频繁，超过一定间隔后才执行一次回调函数；那么能否在事件触发时就立即执行回调函数，而在没有超过一定间隔时，不再进行调用回到函数。当然可以啦 👊 <code>Debounce</code> 函数中我们可以指定一个参数（有些称之为 <code>immediate</code> 或者 <code>leading</code>）默认 <code>Debounce</code> 函数是尾调用的。<br><img src="http://cdn.objcer.com/debounce-leading.png" alt=""></p>
 <figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// underscore.js</span></div><div class="line"><span class="literal">_</span>.debounce = <span class="function"><span class="keyword">function</span></span>(func, wait, immediate)</div></pre></td></tr></table></figure>
 <h3 id="Debounce-应用例子"><a href="#Debounce-应用例子" class="headerlink" title="Debounce 应用例子"></a>Debounce 应用例子</h3><p>1、窗口大小调整 <code>resize</code> 事件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="built_in">window</span>).on(<span class="string">'resize'</span>, _.debounce(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// resize handler</span></div><div class="line"> &#125;, <span class="number">400</span>));</div></pre></td></tr></table></figure></p>
 <p>2、在搜索框中监听输入事件，在结束输入后，自动发起 ajax 请求</p>
@@ -462,7 +462,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://7vikhl.com1.z0.glb.clouddn.com/avatar.jpg"
+               src="http://cdn.objcer.com/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -571,7 +571,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
