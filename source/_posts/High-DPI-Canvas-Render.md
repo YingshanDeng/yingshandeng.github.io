@@ -4,7 +4,7 @@ tags: Canvas
 categories: JS
 ---
 
-![](http://cdn.objcer.com/img_html5-canvas-guide2.jpg)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/img_html5-canvas-guide2.jpg)
 本文将对 Canvas 在高清屏中绘制出现模糊问题进行分析，并给出解决方案 🎏
 
 <!-- more -->
@@ -20,7 +20,7 @@ categories: JS
 - 渲染过程：**devicePixelRatio**
   Canvas 显示到屏幕中还需要渲染过程，渲染过程根据 `devicePixelRatio` 参数将缓存区中的 Canvas 进行缩放渲染到屏幕中
 
-![](http://cdn.objcer.com/canvas-backingstore-device.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/canvas-backingstore-device.png)
 
 分析图片在高清屏中 Canvas 绘制会模糊的原因：
 1、`devicePixelRatio = device pixel / CSS pixel`

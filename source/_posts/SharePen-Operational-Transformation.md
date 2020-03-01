@@ -4,7 +4,7 @@ tags: 'Operational Transformation'
 categories: SharedPen
 ---
 
-![](http://cdn.objcer.com/SharedPen-Operational%20Transformation.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/SharedPen-Operational%20Transformation.png)
 
 当多用户协同编辑同一篇文档，由于没有锁的机制，便会出现内容冲突，这时就需要一定的算法来自动解决冲突，使所有对文档的修改同步后，每个协同编辑的用户看到的文档内容是完全一致的。而 Operational Transformation (简称 OT) 算法就是解决协同问题的通用算法，支持各类协同编辑引用，例如文档，表格，演示，代码编辑等。其最早发表于 1989 年，后因 Google 的在线协作产品 Google Wave，Google Docs 的应用而成熟流行。
 > 关于 Google Wave: [Google Wave，值得纪念的伟大失败](http://www.ifanr.com/675122)
@@ -36,7 +36,7 @@ var operation = new ot.Operation()
 operation.apply("lorem ipsum"); // => "lorem ipsum dolor"
 ```
 
-![](http://cdn.objcer.com/EB6D28DA-FACE-4B68-BB71-1A7E8ABFFDEE.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/EB6D28DA-FACE-4B68-BB71-1A7E8ABFFDEE.png)
 
 这个例子中，operation 包含两个 action: `retain(11)` 和 `insert(" dolor")`，顺序执行这两个 action，光标从左往右移动 11 个字符，然后在光标当前位置插入字符 `" dolor"`，光标最终到达字符串末端，operation 应用完成。
 
@@ -50,7 +50,7 @@ operation.apply("lorem ipsum amet"); // throws an error
 operation.retain(5).apply("lorem ipsum amet"); // => "lorem ipsum dolor amet"
 ```
 
-![](http://cdn.objcer.com/36EAED8F-D0E3-48F4-AAC9-9FC7AE2EFC88.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/36EAED8F-D0E3-48F4-AAC9-9FC7AE2EFC88.png)
 
 ### 删除
 ```
@@ -60,7 +60,7 @@ var operation = new ot.Operation() // create new operation
 operation.apply("lorem ipsum"); // => "ipsum"
 ```
 
-![](http://cdn.objcer.com/4CA49A74-0941-4E5E-A7E5-78410D96D148.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/4CA49A74-0941-4E5E-A7E5-78410D96D148.png)
 
 在这个例子中，operation 包含两个 action: `delete("lorem ")` 和 `retain(5)`，顺序执行这两个 action，先删除字符 `"lorem "`，然后光标再从左往右移动 5 个字符恰好到达字符串末端，operation 应用完成。
 
@@ -131,14 +131,14 @@ opB.apply(str) // => got
 - Client-B: 'got' + (retain(2); insert('a')) = 'goat'
 
 两个用户得到的文档内容也不一致了，这种情况下就需要 `transform` 操作转换了。
-![](http://cdn.objcer.com/49EEDFD9-F635-4F55-8DCA-C165E4813AC6.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/49EEDFD9-F635-4F55-8DCA-C165E4813AC6.png)
 
 ① 如上图左，`a` 表示客户端的 operation，`b` 表示服务端的 operation，二者相交的顶点表示文档状态相同，此时客户端和服务端对文档分别应用操作 `a` 和 `b`，这时两边的文档内容都发生变化，且不一致；为了客户端和服务端的文档达到一致的状态，我们需要对 `a` 和 `b` 进行操作转换 `transfrom(a, b) => (a', b')` 得到两个衍生的操作 `a'` 和 `b'`。
 ② 如上图右，`a'` 在服务端应用，`b'` 在客户端应用，最终文档内容达到一致。
 
 上面这种问题称之为：**one-step diamond problem**，客户端和服务端同时对文档执行一个 operation，从上方顶点分裂开两条边，相当于 diamond 图形的上方两边（`a`, `b`），通过 OT 算法的 `transform` 方法得到两个衍生的 operation，客户端和服务端分别执行这两个衍生的 operation，相当于 diamond 图形的下方两边（`a'`, `b'`），这样从上方顶点分裂开的两边又汇合到下顶点，构成一个完整的 diamond 图形。diamond 图形的上下两个顶点表示客户端和服务器的文档内容处于相同状态。
 
-![](http://cdn.objcer.com/EE6A20BC-A5EA-4BA4-B7F8-566310464A8D.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/EE6A20BC-A5EA-4BA4-B7F8-566310464A8D.png)
 
 所以这个例子的正确解法是：
 ```
@@ -167,11 +167,11 @@ WrappedOperation(inverseOperation, Metadata)
 
 ### compound OT
 上一节中介绍了客户端和服务端各有一个操作的情况，通过 `transform` 操作变换，将客户端和服务端的文档内容收敛到相同状态；但是在实际应用场景中，不可能仅仅只有一个操作，而是有多个操作，假设客户端有两个操作，服务端只有一个操作，如下图所示：
-![](http://cdn.objcer.com/AC60F950-D30A-44BC-AB0C-19719EA41C5B.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/AC60F950-D30A-44BC-AB0C-19719EA41C5B.png)
 
 此时需要构建两个 diamond 图形才能使客户端和服务端的文档收敛到相同的状态。
 
-![](http://cdn.objcer.com/7F6B6005-8F23-4294-A94C-196EFE124E8A.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/7F6B6005-8F23-4294-A94C-196EFE124E8A.png)
 如上图客户端有三个操作，服务端有一个操作的时候，需要构建三个 diamond 图形能将两端文档内容收敛到相同状态；由此我们可以类推出，当两端操作数出现多对一 `N:1` 或者一对多 `1:N` 的关系时，可以递归构建 diamond 图形来使得两端内容最终收敛到相同状态。
 假设已知客户端有一个操作 `clientOp`，服务端有多个操作 `serverOps` ，那么可以通过如下代码，计算出客户端的操作经过变换，在服务端应用的操作 `clientOpPrime`。
 ```js
@@ -184,7 +184,7 @@ for(var i = 0; i < serverOps.length; i++) {
 ```
 
 当然，客户端和服务端的操作数也有可能出现多对多 `N:M` 的关系，那么做法是将 `N:M` 的关系拆分成多个 `N:1` 或者 `1:N` 的关系来解决。
-![](http://cdn.objcer.com/781C4BCD-1D5C-4AD2-9173-B8CF6CD5C016.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/781C4BCD-1D5C-4AD2-9173-B8CF6CD5C016.png)
 
 ### revision(版本号)
 - 文档一次编辑前后的差异 (diff) 即为一个 operation 操作

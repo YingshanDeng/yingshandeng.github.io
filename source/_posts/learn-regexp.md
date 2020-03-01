@@ -4,7 +4,7 @@ tags: [正则表达式]
 categories: JS
 ---
 
-![](http://cdn.objcer.com/regex.jpg)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/regex.jpg)
 对正则表达式，我们并不陌生。在很多地方都会用到，尤其是字符串处理，正则表达式更是一把利器。本文通过一个例子来学习总结一下正则表达式的一些知识内容 🤓
 
 <!-- more -->
@@ -123,7 +123,7 @@ console.log(RegExp.$2) // "./dist/sharedpen.min.js"
 
 ### 最长匹配（贪婪匹配）和最短匹配（懒惰匹配）
 到目前为止，我们的正则表达式为：`<!--\s*(css|js):([\w\-\/\.]+)\s*-->[\s\S]*<!--\s*end\s*-->`，但是会发现，此时匹配有点问题：
-![](http://cdn.objcer.com/51E1FD12-5B3D-4600-8EEE-C00AE4485F46.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/51E1FD12-5B3D-4600-8EEE-C00AE4485F46.png)
 
 我们是希望遇到第一个 `<!-- end -->` 就结束匹配，而现在却是匹配到最后一个。这个时候就需要了解正则表达式的最长匹配（贪婪匹配）和最短匹配（懒惰匹配）
 例子一：

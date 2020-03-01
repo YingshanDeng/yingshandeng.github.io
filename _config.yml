@@ -66,7 +66,7 @@ pagination_dir: page
 theme: next
 
 # Avatar 头像
-avatar: http://cdn.objcer.com/avatar.jpg
+avatar: https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg
 
 # 多说评论
 # duoshuo_shortname: objcer

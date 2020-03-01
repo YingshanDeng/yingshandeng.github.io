@@ -4,7 +4,7 @@ tags: ['富文本', '实时协同编辑器']
 categories: SharedPen
 ---
 
-![](http://cdn.objcer.com/SharedPen-Main.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/SharedPen-Main.png)
 
 2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏
 SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：[GitHub: YingshanDeng/SharedPen](https://github.com/YingshanDeng/SharedPen)。本文将对 SharedPen 整体架构进行介绍，下列文章对其中具体的技术方案进行了详细介绍：
@@ -23,7 +23,7 @@ SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一�
 
 ## 数据一致性解决方案
 首先介绍一下分布式系统，分布式系统即运行在多物理计算机上的系统。这个是人类目前实际可行的构建超大规模系统的唯二办法之一（另一种就是构建超级计算机）。构建一个分布式系统的难点在于：让分布式系统运作起来正确性与单机程序完全无二。而协同编辑器，我们也可以看做是一个分布式系统，多端的协作者修改文档，而最终文档内容要收敛到相同的状态
-![](http://cdn.objcer.com/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png)
 
 目前来说，解决分布式系统数据一致性问题，主流的有两大方案：
 - **Conflict-free replicated data type** (CRDT)
@@ -47,7 +47,7 @@ Operational transformation (OT) is a technology for supporting a range of collab
 
 ## 富文本编辑器
 SharedPen 是基于 web 端的所见即所得 (WYSIWYG) 编辑器。
-![](http://cdn.objcer.com/sharedpen.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen.png)
 
 在 ot.js 库中，使用 [CodeMirror](https://codemirror.net/) 作为文本编辑器，CodeMirror 是一款优秀的编辑器，多用于代码编辑器，譬如在 Chrome 浏览器的调试器中，就使用 CodeMirror 作为代码编辑器。ot.js 库基于 CodeMirror 实现了一个简单的纯文本编辑器，demo 可以参考：[GitHub: ot.js-demo](https://github.com/YingshanDeng/ot.js-demo)
 
@@ -56,8 +56,8 @@ CodeMirror 编辑器具有丰富友好的 API 接口：
   CodeMirror 中以行为单位，通过 `{line, ch}` 第几行的第几个字符可以准确为每一个字符定位 `pos`，同时每一个字符都有一个全局索引 `index`，通过 `doc.posFromIndex` 和 `doc.indexFromPos` 两个辅助方法可以对二者进行转换
 - **丰富的事件回调: `change`, `beforeChange`, `cursorActivity`...**
 其中编辑事件 `change` 的回调参数信息非常丰富，便于我们将其转换成 OT 算法中的 operation
-![](http://cdn.objcer.com/codemirror-change-insert.png)
-![](http://cdn.objcer.com/codemirror-change-delete.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/codemirror-change-insert.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/codemirror-change-delete.png)
 - **`markText` 富文本支持 API**
   注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API `markText` 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 [SharedPen 之 AnnotationList](https://objcer.com/2018/02/27/SharedPen-AnnotationList/) 中进行了详细介绍 😋
 
@@ -69,11 +69,11 @@ Teletype(Atom协同编辑插件) | Peer-to-Peer 模式 | 辅助建立连接(握�
 
 ### Peer-to-Peer 模式
 Atom 协同编辑插件 Teletype，采用 Peer-to-Peer 模式，通过 WebRTC 加密多端之间的通信。除了最初的握手依赖于 GitHub 的服务器之外，所有的传输都是点对点的（不需要访问 GitHub 服务器）。
-![](http://cdn.objcer.com/sharedpen-peer-to-peer.png?t=1)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen-peer-to-peer.png?t=1)
 
 ### C/S 模式
 像 Google Docs，石墨文档都是采用 C/S 模式作为前后端架构，SharedPen 也是采用这种架构模式，前后端建立 socket 连接，相互实时发送 operation 操作，服务端中还对数据进行持久化存储。
-![](http://cdn.objcer.com/sharedpen-client-server.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen-client-server.png)
 
 ## 参考链接
 [谈谈CRDT](http://liyu1981.github.io/what-is-CRDT/)

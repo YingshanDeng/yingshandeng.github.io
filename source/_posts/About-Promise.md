@@ -4,7 +4,7 @@ tags: Promise
 categories: JS
 ---
 
-![](http://cdn.objcer.com/do-you-promise.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/do-you-promise.png)
 
 <!-- more -->
 

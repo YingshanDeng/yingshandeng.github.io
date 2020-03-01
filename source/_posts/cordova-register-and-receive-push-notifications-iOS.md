@@ -4,7 +4,7 @@ tags: Push Notification
 categories: Cordova
 ---
 
-![](http://cdn.objcer.com/iOS-PUsh-Notifications.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/iOS-PUsh-Notifications.png)
 
 <!-- more -->
 
@@ -13,7 +13,7 @@ categories: Cordova
 
 ### 推送原理
 当 Provider 远程服务器需要向 App 推送一条消息时，并不是直接往 App 推送消息，而是推送苹果 APNs 服务器上，而苹果的 APNs 服务器再通过与设备建立长连接进而把消息推送到我们的设备上。
-![](http://cdn.objcer.com/82BDFC5F-339D-4402-8719-5197D0246305.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/82BDFC5F-339D-4402-8719-5197D0246305.png)
 
 由此：APNs 推送就划分成两部分：
 - Provider-to-APNs connection (服务端交互)
@@ -23,10 +23,10 @@ categories: Cordova
 1、当一个 App 注册接收远程通知时，系统会发送请求到 APNs 服务器，APNs 服务器收到此请求会生成一个**独一无二**的 deviceToken，发送到对应请求的 App 上。然后 App 把此 deviceToken 发送给我们自己的服务器 Provider。
 > ❗️一个 deviceToken 可以唯一标识某个设备上的某个 App，可以理解成：**deviceToken = device UUID + App Bundle ID**
 
-![](http://cdn.objcer.com/Managing%20the%20device%20token.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Managing%20the%20device%20token.png)
 
 2、Provider 给我们的设备推送通知的时候，必须包含此 deviceToken。
-![](http://cdn.objcer.com/Remote%20notification%20path%20from%20provider%20to%20device.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Remote%20notification%20path%20from%20provider%20to%20device.png)
 
 ### 推送消息 Payload
 > [Creating the Remote Notification Payload](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW1)
@@ -86,7 +86,7 @@ categories: Cordova
 3、当设备处于离线 offline 状态时，APNs 会为保留 Provider 所推送的最后一条通知，当设备转换为连网状态时，APNs则把其保留的最后一条通知推送给我们的设备；如果设备长时间离线，那么最后一条通知也有可能被丢弃。
 
 ### 总结
-![](http://cdn.objcer.com/apns-app.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/apns-app.png)
 
 - ① App 向系统发起请求
 - ② 系统向 APNs 发送注册远程推送请求
@@ -265,19 +265,19 @@ getIconBadgeNumber() {
 
 ### 导出推送证书
 登录 [苹果开发者中心](https://developer.apple.com) 在 `Certificates, Identifiers & Profiles -> Identifiers -> App IDs`，找到应用对应的 App ID，点击 `Edit` 对 Push Notifications 进行配置导出 certificate 证书。
-![](http://cdn.objcer.com/CreateCertificate.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/CreateCertificate.png)
 
 双击安装证书如下：
-![](http://cdn.objcer.com/aps.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/aps.png)
 
 同时我们也需要更新下载 Provisioning Profile 文件。
 
 ### Xcode 真机调试推送配置
 1、target -> Capabilities
-![](http://cdn.objcer.com/capabilities.jpg)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/capabilities.jpg)
 
 2、target -> Build Settings -> Signings
-![](http://cdn.objcer.com/build-settings.jpg)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/build-settings.jpg)
 
 
 ## 参考链接

@@ -68,7 +68,7 @@ scores.sort((a, b) => b - a) // 降序排列
 
 关于排序是否稳定，参考: [维基百科](http://imweb.io/topic/565cf7253ad940357eb99881)
 这个图也能很好的理解
-![](http://cdn.objcer.com/440px-Sorting_stability_playing_cards.svg.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/440px-Sorting_stability_playing_cards.svg.png)
 
 ## 参考链接
 [MDN Array.prototype.sort](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)

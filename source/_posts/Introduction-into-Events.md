@@ -4,7 +4,7 @@ tags: [事件捕获, 事件冒泡]
 categories: JS
 ---
 
-![](http://cdn.objcer.com/js-event.jpg)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/js-event.jpg)
 <!-- more -->
 
 ## Bubbling and capturing
@@ -13,7 +13,7 @@ Javascript DOM 事件流存在如下三个阶段：
 - 处于目标阶段 Target phase – the event reached the target element.
 - 事件冒泡阶段 Bubbling phase – **the event bubbles up from the element.**
 
-![](http://cdn.objcer.com/eventflow@2x.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/eventflow@2x.png)
 
 **Javascript DOM 标准事件流的触发的先后顺序为：先捕获再冒泡。**点击 `<td>` DOM 节点时，事件传播顺序：首先是事件捕获阶段，从上向下传播；然后到达点击事件目标节点；最后是冒泡阶段，从下向上传播。
 

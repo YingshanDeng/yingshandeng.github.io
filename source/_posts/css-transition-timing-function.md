@@ -43,7 +43,7 @@ categories: CSS
 - `step-start` 等同于 `steps(1,start)`：动画分成1步，动画执行时以 **间隔终点** 为起点开始变化；
 - `step-end` 等同于 `steps(1,end)`：动画分成一步，动画执行时以 **间隔起点** 为起点开始变化。
 
-![](http://cdn.objcer.com/step.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/step.png)
 
 例如：
 ```

@@ -10,7 +10,7 @@ categories: iOS
 
 先看看效果：
 
-![hambuger buttons](http://cdn.objcer.com/hamburger-btn.gif)
+![hambuger buttons](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/hamburger-btn.gif)
 
 [Demo 下载地址](https://github.com/YingshanDeng/HamburgerButtonAnimation)
 
@@ -67,13 +67,13 @@ categories: iOS
 
 ## 动画过程
 
-![动画始终状态](http://cdn.objcer.com/btn-change.png)
+![动画始终状态](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/btn-change.png)
 
 - top短线：旋转 -5/4 π 弧度，同时上移
 - middle短线：翻转 π 弧度
 - bottom短线：旋转 3/4 π 弧度，同时下移
 
-![动画过程](http://cdn.objcer.com/hamburger-animate.gif)
+![动画过程](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/hamburger-animate.gif)
 
 三条短线的动画过程是同步的，所以都置于 `CATransaction` 中：
 

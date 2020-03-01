@@ -3,7 +3,7 @@ tags:
 ---
 
 本文记录下，在自定义实现 iOS 相册 DEMO 中，解决使用 ALAsset 缩略图模糊的问题，如下图左，即为模糊的缩略图；如下图右，即为正常显示的缩略图。
-![](http://cdn.objcer.com/1210059F-0531-4914-99FD-09FD86444B21.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/1210059F-0531-4914-99FD-09FD86444B21.png)
 
 相册 DEMO [项目地址](https://github.com/YingshanDeng/XDImagePicker)
 <!-- more -->
@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger, UIViewContentMode) {
 };
 ```
 关于其中常用的设值区别如下：
-![](http://cdn.objcer.com/contentMode.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/contentMode.png)
 
 ## 问题完善
 由于使用 `aspectRatioThumbnail` 属性获取图片的缩略图，在页面滚动过程中发现：快速滚动时会遇到一点卡顿的感觉，通过 Instrument 工具分析过程中发现：

@@ -14,7 +14,7 @@ categories: 编程
 ## URI, URL, URN
 
 **URI, URL, URN** 三者关系图:
-![](http://cdn.objcer.com/URI-vs-URL.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/URI-vs-URL.png)
 
 📌 关系：
 - URI 是一个紧凑的字符串用来标示抽象或物理资源
@@ -22,7 +22,7 @@ categories: 编程
 - URI 包括 URL 和 URN，每一个 URL 都是 URI
 - URN 是唯一标识的一部分，就是一个特殊的名字
 
-![](http://cdn.objcer.com/800px-URI_Euler_Diagram_no_lone_URIs.svg.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/800px-URI_Euler_Diagram_no_lone_URIs.svg.png)
 > *[维基百科]:* URI 可被视为定位符（URL），名称（URN）或两者兼备。统一资源名（URN）如同一个人的名称，而统一资源定位符（URL）代表一个人的住址。换言之，URN 定义某事物的身份，而 URL 提供查找该事物的方法。
 
 举例说明：

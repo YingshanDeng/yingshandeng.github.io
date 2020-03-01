@@ -119,7 +119,7 @@ typedef NS_ENUM(NSInteger, UIAttachmentBehaviorType) {
 
 例如：假如有一张照片想固定在墙上，只是在左下角钉一个钉子（相当于附着一个点），那么在重力效果下，就会出现翻转，如下图（1）和（2）；那么为了这张照片可以固定，那么至少钉两个钉子（相当于钉附着两个点），如下图（3）钉了四个钉子。
 
-![图片钉墙](http://cdn.objcer.com/photo.png)
+![图片钉墙](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/photo.png)
 
 代码如下：
 

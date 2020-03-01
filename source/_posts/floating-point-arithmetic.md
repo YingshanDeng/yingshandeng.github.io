@@ -4,7 +4,7 @@ tags: [float-point]
 categories: JS
 ---
 
-![](http://cdn.objcer.com/1-brjYnVlXwM3j_SWXImT0Rg.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/1-brjYnVlXwM3j_SWXImT0Rg.png)
 JavaScript中所有的数字，无论是整数还是小数，其类型都是 Number，遵循 [IEEE 754](http://grouper.ieee.org/groups/754/) 程序内部用一个 64 位固定长度的二进制进行存储表示。JavaScript 中的浮点数进行运算时，经常会遇到计算精度问题，例如经典的 `0.1+0.2=0.30000000000000004`，本文将探究 JavaScript 的浮点数，并解释为何 `0.1+0.2=0.30000000000000004`
 
 <!-- more -->
@@ -13,7 +13,7 @@ JavaScript中所有的数字，无论是整数还是小数，其类型都是 Num
 
 JavaScript 里的数字是采用 [IEEE 754](http://grouper.ieee.org/groups/754/) 标准的 64 位 double 双精度浮点数（与之相关的还有 32 位 float 单精度浮点数）。该规范定义了浮点数的格式。
 
-![](http://cdn.objcer.com/5F33F675-2DF0-472F-9F2E-98066AE91720.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/5F33F675-2DF0-472F-9F2E-98066AE91720.png)
 
 对于 32 位的浮点数，最高的 1 位是符号位 S，接着的 8 位是指数 E，剩下的 23 位为尾数位 M
 对于 64 位的浮点数，最高的 1 位是符号位 S，接着的 11 位是指数 E，剩下的 52 位为尾数位 M
@@ -43,7 +43,7 @@ V = (-1)^S * (M + 1) * 2^(E - 1023)
 
 **十进制小数转换成二进制小数：**采用"乘2取整，顺序排列"法。具体做法是：用 2 乘十进制小数，可以得到积，将积的整数部分取出，再用 2 乘余下的小数 部分，又得到一个积，再将积的整数部分取出，如此进行，直到积中的小数部分为零，或者达到所要求的精度为止。然后把取出的整数部分按顺序排列起来，先取的整数作为二进制小数的高位有效位，后取的整数作为低位有效位。
 
-![](http://cdn.objcer.com/58DF62FC-51A3-4F01-A3C6-0E75DF916261.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/58DF62FC-51A3-4F01-A3C6-0E75DF916261.png)
 
 （173.8125）10＝（❓）2
 - （173）10＝（10101101）2
@@ -62,7 +62,7 @@ V = (-1)^S * (M + 1) * 2^(E - 1023)
 - 指数位 E = -4 + 1023 = 1019 (`1019` 11 位二进制表示为：01111111011)
 - 尾数位 M = 100110011001100... (舍去首位 1)
 
-![](http://cdn.objcer.com/000D23FF-1ECD-45D1-9BC3-09908A10787B.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/000D23FF-1ECD-45D1-9BC3-09908A10787B.png)
 
 所以十进制 0.1 转换成 64 位浮点数二进制表示为：
 ```
@@ -173,7 +173,7 @@ Math.pow(2, 53) + 2
 
 下面这张图能很好的表示 JavaScript 中浮点数和实数（Real Number）之间的对应关系，我们常用的 `[-2^53, 2^53]` 只是最中间非常小的一部分，越往两边越稀疏越不精确。
 
-![](http://cdn.objcer.com/real-numbers-floating-point-numbers.jpeg)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/real-numbers-floating-point-numbers.jpeg)
 
 ## 参考链接
 [JavaScript 浮点数陷阱及解法](https://github.com/camsong/blog/issues/9)

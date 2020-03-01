@@ -4,7 +4,7 @@ tags: [BMP, charCodeAt, codePointAt]
 categories: Unicode
 ---
 
-![](http://cdn.objcer.com/IMG_1915.PNG)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/IMG_1915.PNG)
 <!-- more -->
 
 ## BMP(Basic Multilingual Plane)字符

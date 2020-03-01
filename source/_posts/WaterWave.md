@@ -5,14 +5,14 @@ categories: iOS
 ---
 
 这篇文章带来一个水波纹动画效果，实现相对简单。效果如下：
-![水波纹效果图](http://cdn.objcer.com/water-wave.gif)
+![水波纹效果图](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/water-wave.gif)
 
 <!--more-->
 
 ## 实现思路
 1、正弦函数（sin）
 
-![sin](http://cdn.objcer.com/sin-cos.png)
+![sin](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sin-cos.png)
 
 > **Note ：**先普及一下正弦函数，高手请忽略！
 

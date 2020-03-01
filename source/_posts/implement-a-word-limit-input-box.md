@@ -4,9 +4,9 @@ tags: DEMO
 categories: JS
 ---
 
-![](http://cdn.objcer.com/twitter-input-box.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/twitter-input-box.png)
 在 Twitter 发推输入框中，有一个字数限制的逻辑，超出字数限制部分的文字会设置背景颜色提示，以便用户进行调整。这是一个很好的交互设计，在 [Ant Design](https://ant.design/docs/spec/feature-cn) 中也有提到这一点。
-![](http://cdn.objcer.com/ant-design-input.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/ant-design-input.png)
 
 本文将介绍如何实现这一字数限制输入框，效果访问：[Codepen](https://codepen.io/yingshandeng/pen/boRNLx)
 <!-- more -->
@@ -40,7 +40,7 @@ categories: JS
 - 上层 DIV 节点用于文字输入，背景颜色透明
 - 下层 DIV 节点用于高亮超出部分文字，文字颜色设置为透明，超出部分节点设置背景颜色
 
-![](http://cdn.objcer.com/rich-input.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/rich-input.png)
 
 ## 输入框 placeholder
 `contenteditable="true"` 的 DIV 设置 placeholder 可以通过 CSS 来解决：
@@ -77,7 +77,7 @@ editorArea.addEventListener('input', (evt) => {
 
 ## 中文输入字数统计
 在中文输入是，中文还未输入到输入框，字数就在统计了；合理的是，中文输入 composing 组合过程中不应进行字数统计，在中文输入到输入框后，才进行字数统计。
-![](http://cdn.objcer.com/CCCDB51D-C8BD-4014-884B-C69A097F35C5.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/CCCDB51D-C8BD-4014-884B-C69A097F35C5.png)
 
 解决这个问题需要用到 `compositionstart` 和 `compositionend` 这两个事件；前者表示输入组合开始，后者表示输入组合结束，在 `compositionend` 事件中就是我们字数统计的合理时机。
 ```

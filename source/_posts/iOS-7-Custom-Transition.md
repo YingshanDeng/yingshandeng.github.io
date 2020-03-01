@@ -125,7 +125,7 @@ categories: iOS
 
 效果如下：
 
-![demo效果](http://cdn.objcer.com/demo.gif)
+![demo效果](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/demo.gif)
 
 
 1、基础代码（项目中包含两个VC：FirstViewController SecondViewController）

@@ -9,7 +9,7 @@ categories: 算法
 
 <!-- more -->
 
-![](http://cdn.objcer.com/D0A39C6C-2A93-4E2D-8FFD-C209BD563C69.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/D0A39C6C-2A93-4E2D-8FFD-C209BD563C69.png)
 如上图，在 JavaScript 中可以用 object 表示如下：
 ```
 let tree = {

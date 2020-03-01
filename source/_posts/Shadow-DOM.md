@@ -4,7 +4,7 @@ date: 2017-10-20 16:08:02
 categories: Web Components
 ---
 
-![](http://cdn.objcer.com/shadow-dom.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/shadow-dom.png)
 Shadow DOM 是四大网络组件标准之一，提供 CSS 作用域、DOM 封装和组合(Composition) 等优势，构建自定义元素。
 
 <!-- more -->
@@ -105,7 +105,7 @@ window.customElements.define('x-tag', class extends HTMLElement {
 
 **Flattened DOM tree**
 浏览器将用户的 light DOM 分布到 shadow DOM 中，渲染成一颗 DOM 树，这个过程称为 **`flattening the tree`**，这棵树称为扁平树 **`Flattened DOM tree`**。 扁平树也是我们在 DevTools 中最终看到的树以及在页面上渲染的结果。
-![](http://cdn.objcer.com/FF183E44-E19D-4B24-918B-2DE5067699A4.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/FF183E44-E19D-4B24-918B-2DE5067699A4.png)
 
 ### <slot> 元素
 Shadow DOM 使用 `<slot>` 元素将 light DOM 树组合到 shadow DOM 中，形成一颗 DOM 树。

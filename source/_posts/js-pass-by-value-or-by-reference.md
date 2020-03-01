@@ -108,7 +108,7 @@ setTimeout(() => {
 可以发现，代码执行过程中，虽然外部 `x` 发生了变化，但是输出的值还一直是 100。
 
 2、pass by value 和 pass by reference 的区别
-![](http://cdn.objcer.com/pass-by-reference-vs-pass-by-value-animation.gif)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/pass-by-reference-vs-pass-by-value-animation.gif)
 
 ## 参考链接
 [Javascript by reference vs. by value](http://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value?answertab=votes#tab-top)

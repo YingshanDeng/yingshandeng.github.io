@@ -33,7 +33,7 @@ date: 2016-07-17 16:36:17
 
 有了 CI, 我们只需要一部操作：将代码推送到远程分支，CI 监听分支变化，若有新的提交内容，就进行执行构建命令，构建成功后，执行发布命令，发布到内网环境。
 
-![完美](http://cdn.objcer.com/perfect.gif)
+![完美](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/perfect.gif)
 
 目前 CI 工具比较火的包括 [TeamCity](https://www.jetbrains.com/teamcity/) [Jenkins](https://jenkins.io/index.html) [Travis CI](https://travis-ci.org/) (只适用于 Github 仓库) ... 然后通过 [这篇文章](http://jolestar.com/ci-teamcity-vs-jenkins/) 了解，最后选择了 TeamCity 作为 CI 系统。
 

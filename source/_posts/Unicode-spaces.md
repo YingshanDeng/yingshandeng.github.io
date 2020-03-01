@@ -5,7 +5,7 @@ categories: Unicode
 ---
 
 
-![](http://cdn.objcer.com/IMG_3319.PNG)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/IMG_3319.PNG)
 
 <!-- more -->
 

@@ -4,7 +4,7 @@ tags: Gulp
 categories: JS
 ---
 
-![](http://cdn.objcer.com/gulpjs-cover.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/gulpjs-cover.png)
 
 Gulp 是三个自动化构建工具（Grunt, Gulp, Webpack）之一，其通过代码优于配置的策略，Gulp 让简单的任务简单，复杂的任务可管理，仅提供几个 API 就能将构建任务很好完成，而且有着丰富的插件生态，本文将探究 Gulp 的原理及如何创建插件。
 
