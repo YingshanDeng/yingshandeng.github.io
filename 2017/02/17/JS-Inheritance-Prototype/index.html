@@ -93,15 +93,15 @@
 <meta property="og:url" content="http://objcer.com/2017/02/17/JS-Inheritance-Prototype/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="案例分析：1234567891011121314151617function Thing1() &amp;#123;    this.foo = &apos;foo&apos;&amp;#125;Thing1.prototype.foo = &quot;bar&quot;;function Thing2() &amp;#123;  this.logFoo(); // log: bar  Thing1.apply(this);  this.logFoo(); /">
-<meta property="og:image" content="http://cdn.objcer.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png">
-<meta property="og:image" content="http://cdn.objcer.com/253EFEA4-F163-471A-87EC-78D7781F57C0.png">
-<meta property="og:image" content="http://cdn.objcer.com/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png">
-<meta property="og:image" content="http://cdn.objcer.com/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/253EFEA4-F163-471A-87EC-78D7781F57C0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS继承与原型链">
 <meta name="twitter:description" content="案例分析：1234567891011121314151617function Thing1() &amp;#123;    this.foo = &apos;foo&apos;&amp;#125;Thing1.prototype.foo = &quot;bar&quot;;function Thing2() &amp;#123;  this.logFoo(); // log: bar  Thing1.apply(this);  this.logFoo(); /">
-<meta name="twitter:image" content="http://cdn.objcer.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png">
 
 
 
@@ -349,11 +349,11 @@
 <p>如果让原型对象等于另一个类型的实例，那么此时的原型对象将包含一个指向另一个原型的指针，如此层层递进，就构成了所谓的原型链。</p>
 <p>下面详细介绍两种基于原型链继承的写法：</p>
 <h3 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">&#125;</div><div class="line">Person.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Programmer</span>(<span class="params">name, age</span>) </span>&#123;</div><div class="line">    Person.call(<span class="keyword">this</span>, name); <span class="comment">// 第二次调用 Person() 构造函数</span></div><div class="line"></div><div class="line">    <span class="keyword">this</span>.age = age;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Programmer.prototype = <span class="keyword">new</span> Person(); <span class="comment">// 第一次调用 Person() 构造函数</span></div><div class="line">Programmer.prototype.constructor = Programmer;</div><div class="line">Programmer.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.age)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>首先看一下 <code>Person</code>， 在构造函数中，定义了一个属性 <code>name</code>，然后在 <code>Person</code> 的原型中增加了一个 <code>sayName</code> 方法。<br><img src="http://cdn.objcer.com/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png" alt=""></p>
-<p>调用 <code>Person</code> 的构造函数，<code>var person = new Person(&#39;Tom&#39;);</code>，创建一个实例，我们可以得到：<br><img src="http://cdn.objcer.com/253EFEA4-F163-471A-87EC-78D7781F57C0.png" alt=""><br><img src="http://cdn.objcer.com/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png" alt=""></p>
+<p>首先看一下 <code>Person</code>， 在构造函数中，定义了一个属性 <code>name</code>，然后在 <code>Person</code> 的原型中增加了一个 <code>sayName</code> 方法。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/6AB5B2C2-FA48-4488-BA42-857B30F7CC35.png" alt=""></p>
+<p>调用 <code>Person</code> 的构造函数，<code>var person = new Person(&#39;Tom&#39;);</code>，创建一个实例，我们可以得到：<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/253EFEA4-F163-471A-87EC-78D7781F57C0.png" alt=""><br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/D7622C01-59F4-4EFD-9B93-D28D531E4E5A.png" alt=""></p>
 <p>接着看一下子类 <code>Programmer</code>，调用构造函数 <code>var programmer = new Programmer(&#39;Jack&#39;, 20);</code> 创建一个实例对象。注意到其中的注释，我们发现，调用了两次 <code>Person</code> 的构造函数。第一次调用 <code>Person</code> 构造函数时，<code>Programmer.prototype</code> 会得到一个 <code>name</code> 属性，它是 <code>Person</code> 的实例属性，只不过现在位于 <code>Programmer</code> 的原型中。当调用 <code>Programmer</code> 的构造函数时，又一次调用了 <code>Person</code> 的构造函数，这一次又在新对象上创建了 <code>name</code> 属性，只不过这个 <code>name</code> 属性屏蔽了原型中的同名属性。</p>
 <p>这时就会发现，有两个 <code>name</code> 属性，一个在实例上，一个在 <code>Programmer</code> 原型中，这就是两次调用 <code>Person</code> 构造函数的结果。</p>
-<p><img src="http://cdn.objcer.com/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/CF18A411-AFF9-41F8-9AC9-47FD7DEE6465.png" alt=""></p>
 <h3 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h3><p>那么其实不必为了指定子类型的原型而调用超类的构造函数，我们需要的只是超类型原型的一个副本而已。对其中的一行代码改造一下<br><figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 将 <span class="type">Programmer</span>.proto<span class="keyword">type</span> = new <span class="type">Person</span>(); 这行代码改成如下：</div><div class="line"><span class="type">Programmer</span>.proto<span class="keyword">type</span> = <span class="type">Object</span>.create(<span class="type">Person</span>.prototype); // ①</div><div class="line"><span class="type">Programmer</span>.proto<span class="keyword">type</span>.constructor = <span class="type">Programmer</span>; // ②</div></pre></td></tr></table></figure></p>
 <p>如上，第①步创建超类型原型的一个副本，赋值给子类型的原型；第②步为子类型原型重新设置 constructor 属性，从而弥补因重写原型而失去的默认 constructor 属性。<br>这种继承方式的高效体现在其只调用了一次 <code>Person</code> 构造函数，并且因此避免了在 <code>Programmer.prototype</code> 上创建不必要的，多余的属性。所以这种方式也是目前继承最理想，最常用的写法。</p>
 <h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>在原型链上查找属性比较耗时，对性能有副作用，这在性能要求苛刻的情况下很重要。另外，试图访问不存在的属性时会遍历整个原型链。遍历对象的属性时，原型链上的每个可枚举属性都会被枚举出来。<br>检测对象的属性是定义在自身上还是在原型链上，有必要使用 <code>hasOwnProperty</code> 方法，所有继承自 Object.proptotype 的对象都包含这个方法。<code>hasOwnProperty</code> 是 JavaScript 中唯一一个只涉及对象自身属性而不会遍历原型链的方法</p>
@@ -476,7 +476,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -585,7 +585,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

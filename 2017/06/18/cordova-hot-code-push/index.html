@@ -93,16 +93,16 @@
 <meta property="og:url" content="http://objcer.com/2017/06/18/cordova-hot-code-push/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="基于 Cordova 框架能将网页应用 (js, html, css, 图片等) 打包成 App。当 App 在应用商店上架后，如何快速更新是我们需要考虑的问题。🤖  本地打包新版本 App 发布到应用商店，但这中发布流程耗费时间，尤其是 Apple Store 应用加载网络资源，这样 App 展示的内容就可以保证是最新的，但当应用断网时，应用就无法正常使用  我们能想的这两种方式都存在的很大">
-<meta property="og:image" content="http://cdn.objcer.com/app-store.png">
-<meta property="og:image" content="http://cdn.objcer.com/update-workflow.png">
-<meta property="og:image" content="http://cdn.objcer.com/chcp-external-folder.png">
-<meta property="og:image" content="http://cdn.objcer.com/3CA8CB1D-C26D-4F98-951C-DBE94650CA5D.png">
-<meta property="og:image" content="http://cdn.objcer.com/926064F1-2CF2-4871-90B6-791BA0059C13.png">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/app-store.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/update-workflow.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/chcp-external-folder.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/3CA8CB1D-C26D-4F98-951C-DBE94650CA5D.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/926064F1-2CF2-4871-90B6-791BA0059C13.png">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cordova 代码热更新">
 <meta name="twitter:description" content="基于 Cordova 框架能将网页应用 (js, html, css, 图片等) 打包成 App。当 App 在应用商店上架后，如何快速更新是我们需要考虑的问题。🤖  本地打包新版本 App 发布到应用商店，但这中发布流程耗费时间，尤其是 Apple Store 应用加载网络资源，这样 App 展示的内容就可以保证是最新的，但当应用断网时，应用就无法正常使用  我们能想的这两种方式都存在的很大">
-<meta name="twitter:image" content="http://cdn.objcer.com/app-store.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/app-store.png">
 
 
 
@@ -323,7 +323,7 @@
       
 
       
-        <p><img src="http://cdn.objcer.com/app-store.png" alt=""></p>
+        <p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/app-store.png" alt=""></p>
 <p>基于 Cordova 框架能将网页应用 (js, html, css, 图片等) 打包成 App。当 App 在应用商店上架后，如何快速更新是我们需要考虑的问题。🤖</p>
 <ul>
 <li>本地打包新版本 App 发布到应用商店，但这中发布流程耗费时间，尤其是 Apple Store</li>
@@ -411,7 +411,7 @@
 <li><code>native-interface</code>：当前 native side 的版本号</li>
 </ul>
 <p>可以禁用自动下载，安装热更新代码，通过手动调用执行。</p>
-<h2 id="代码热更新原理"><a href="#代码热更新原理" class="headerlink" title="代码热更新原理"></a>代码热更新原理</h2><h3 id="热更新流程"><a href="#热更新流程" class="headerlink" title="热更新流程"></a>热更新流程</h3><p><img src="http://cdn.objcer.com/update-workflow.png" alt=""></p>
+<h2 id="代码热更新原理"><a href="#代码热更新原理" class="headerlink" title="代码热更新原理"></a>代码热更新原理</h2><h3 id="热更新流程"><a href="#热更新流程" class="headerlink" title="热更新流程"></a>热更新流程</h3><p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/update-workflow.png" alt=""></p>
 <ul>
 <li>① 应用启动</li>
 <li>② 热更新插件初始化，并在后台加载更新模块 (update loader)</li>
@@ -427,7 +427,7 @@
 <li>iOS: platforms/ios/www.</li>
 </ul>
 <p><code>www</code> 目录打包到应用中之后，我们就没办法对其进行更新了，因为只有可读权限。为了解决这一问题，在应用第一次启动的时候，从应用 bundle 中加载网页内容的同时，将 <code>www</code> 目录拷贝到外部目录中，在后续应用启动时，都从这个外部存储的静态文件中加载文件，而对于外部的这个存储目录，我们就有读写权限，这样就为我们动态更新网页代码提供了可能。</p>
-<p>在 safari 调试页面执行 <code>cordova.file.applicationStorageDirectory</code> 可以得到应用的存储路径，点击可以打开 Finder 目录。<br>从 <code>Library/Application Support</code> 目录下就可以找到存储 web content 的外部目录。<br><img src="http://cdn.objcer.com/chcp-external-folder.png" alt=""><br><img src="http://cdn.objcer.com/3CA8CB1D-C26D-4F98-951C-DBE94650CA5D.png" alt=""></p>
+<p>在 safari 调试页面执行 <code>cordova.file.applicationStorageDirectory</code> 可以得到应用的存储路径，点击可以打开 Finder 目录。<br>从 <code>Library/Application Support</code> 目录下就可以找到存储 web content 的外部目录。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/chcp-external-folder.png" alt=""><br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/3CA8CB1D-C26D-4F98-951C-DBE94650CA5D.png" alt=""></p>
 <p>Cordova Hot Code Push 插件为每一个版本内容都创建了一个对应的目录，以配置文件 <code>chcp.json</code> 中 <code>release</code> 字段值为目录名，存放不同版本 <code>www</code> 目录中的静态文件，这种处理方式的好处是：</p>
 <ul>
 <li>避免了文件缓存问题。例如 iOS UIWebView 缓存 css 文件，即使刷新页面，也不会清除缓存，除非重启应用才能强制清除缓存。不同版本置于不同的目录，由于加载路径不同，这样就可以解决文件的缓存问题</li>
@@ -441,7 +441,7 @@
 <li>在新目录中，创建 <code>update</code> 目录，根据 <code>chcp.manifest</code> 文件，将所有变更、新增文件下载到该目录中</li>
 <li>新版本对应的 <code>chcp.json</code> 和 <code>chcp.manifest</code> 文件也会置于 <code>update</code> 目录中</li>
 </ul>
-<p><img src="http://cdn.objcer.com/926064F1-2CF2-4871-90B6-791BA0059C13.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/926064F1-2CF2-4871-90B6-791BA0059C13.png" alt=""></p>
 <p><strong>2、安装更新内容</strong></p>
 <ul>
 <li>将当前版本对应目录下的 <code>www</code> 目录拷贝到新版本对应的目录下</li>
@@ -584,7 +584,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -693,7 +693,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -93,13 +93,13 @@
 <meta property="og:url" content="http://objcer.com/2017/10/20/Shadow-DOM/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="Shadow DOM 是四大网络组件标准之一，提供 CSS 作用域、DOM 封装和组合(Composition) 等优势，构建自定义元素。">
-<meta property="og:image" content="http://cdn.objcer.com/shadow-dom.png">
-<meta property="og:image" content="http://cdn.objcer.com/FF183E44-E19D-4B24-918B-2DE5067699A4.png">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/shadow-dom.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/FF183E44-E19D-4B24-918B-2DE5067699A4.png">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shadow DOM">
 <meta name="twitter:description" content="Shadow DOM 是四大网络组件标准之一，提供 CSS 作用域、DOM 封装和组合(Composition) 等优势，构建自定义元素。">
-<meta name="twitter:image" content="http://cdn.objcer.com/shadow-dom.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/shadow-dom.png">
 
 
 
@@ -320,7 +320,7 @@
       
 
       
-        <p><img src="http://cdn.objcer.com/shadow-dom.png" alt=""><br>Shadow DOM 是四大网络组件标准之一，提供 CSS 作用域、DOM 封装和组合(Composition) 等优势，构建自定义元素。</p>
+        <p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/shadow-dom.png" alt=""><br>Shadow DOM 是四大网络组件标准之一，提供 CSS 作用域、DOM 封装和组合(Composition) 等优势，构建自定义元素。</p>
 <a id="more"></a>
 <h2 id="什么是-Shadow-DOM"><a href="#什么是-Shadow-DOM" class="headerlink" title="什么是 Shadow DOM"></a>什么是 Shadow DOM</h2><p>浏览器在解析网页文档的时候，会将 HTML 标签转换成节点，为了保持页面的层次结构，这些节点构成一个节点树，这个结构就是 DOM（文档对象模型）。DOM 将文档作为一个结构化的节点组以及包含属性和方法的对象，是 HTML 的编程接口，我们通常会使用 JavaScript 来访问操纵 DOM。<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> header = <span class="built_in">document</span>.createElement(<span class="string">'header'</span>);</div><div class="line"><span class="keyword">const</span> h1 = <span class="built_in">document</span>.createElement(<span class="string">'h1'</span>);</div><div class="line">h1.textContent = <span class="string">'Hello world!'</span>;</div><div class="line">header.appendChild(h1);</div><div class="line"><span class="built_in">document</span>.body.appendChild(header);</div></pre></td></tr></table></figure></p>
 <p>这段 JavaScript 代码执行后会生成如下的 DOM 结构：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">header</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello DOM<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">header</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div></pre></td></tr></table></figure></p>
@@ -342,7 +342,7 @@
 <h3 id="light-DOM-和-shadow-DOM"><a href="#light-DOM-和-shadow-DOM" class="headerlink" title="light DOM 和 shadow DOM"></a>light DOM 和 shadow DOM</h3><p><strong>light DOM</strong><br>使用组件的用户编写的标记，DOM 元素的实际子元素，该子元素不在组件的 shadow DOM 之内，这就是 light DOM。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">is</span>=<span class="string">"better-button"</span>&gt;</span></div><div class="line">  <span class="comment">&lt;!-- the image and span are better-button's light DOM --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"gear.svg"</span> <span class="attr">slot</span>=<span class="string">"icon"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">span</span>&gt;</span>Settings<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>其中 <code>image</code> 和 <code>span</code> 即是 <code>button</code> 的 light DOM。</p>
 <p><strong>shadow DOM</strong><br>组件作者编写的标记，它定义组件的内部结构，作用域 CSS 等<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#shadow-root</div><div class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined">...</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">slot</span> <span class="attr">name</span>=<span class="string">"icon"</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"wrapper"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">slot</span>&gt;</span>Button<span class="tag">&lt;/<span class="name">slot</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p><strong>Flattened DOM tree</strong><br>浏览器将用户的 light DOM 分布到 shadow DOM 中，渲染成一颗 DOM 树，这个过程称为 <strong><code>flattening the tree</code></strong>，这棵树称为扁平树 <strong><code>Flattened DOM tree</code></strong>。 扁平树也是我们在 DevTools 中最终看到的树以及在页面上渲染的结果。<br><img src="http://cdn.objcer.com/FF183E44-E19D-4B24-918B-2DE5067699A4.png" alt=""></p>
+<p><strong>Flattened DOM tree</strong><br>浏览器将用户的 light DOM 分布到 shadow DOM 中，渲染成一颗 DOM 树，这个过程称为 <strong><code>flattening the tree</code></strong>，这棵树称为扁平树 <strong><code>Flattened DOM tree</code></strong>。 扁平树也是我们在 DevTools 中最终看到的树以及在页面上渲染的结果。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/FF183E44-E19D-4B24-918B-2DE5067699A4.png" alt=""></p>
 <h3 id="元素"><a href="#元素" class="headerlink" title=" 元素"></a><slot> 元素</slot></h3><p>Shadow DOM 使用 <code>&lt;slot&gt;</code> 元素将 light DOM 树组合到 shadow DOM 中，形成一颗 DOM 树。</p>
 <p>Slot 相当于是组件内部的占位符，通过定义一个或者多个 <code>&lt;slot&gt;</code>，可以将外部的标记引入到组件 shadow DOM 中进行渲染，相当于“跨域”了 shadow DOM 的边界，这些引入到 shadow DOM 中的元素被称为分布式节点 <strong><code>distributed nodes</code></strong>。注意：slot 实际上并不移动这些分布式节点，它们在 shadow DOM 内部的其他位置进行渲染。</p>
 <p>组件可在其 shadow DOM 中定义零个或多个 slot。Slot 可以为空，或者提供回退内容(fallback content)，如果用户不提供 light DOM 内容，slot 会将对其备用内容进行渲染。</p>
@@ -524,7 +524,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -633,7 +633,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

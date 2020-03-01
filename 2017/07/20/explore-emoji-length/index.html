@@ -93,15 +93,15 @@
 <meta property="og:url" content="http://objcer.com/2017/07/20/explore-emoji-length/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="我们注意到在 Twitter，微博，谷歌翻译的输入框中输入 emoji 字符，都不能正确的判断字符个数。🤷‍在阅读本文之前，需要先对 Unicode 编码有所了解，参考: JavaScript Unicode 编码那些事">
-<meta property="og:image" content="http://cdn.objcer.com/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png">
-<meta property="og:image" content="http://cdn.objcer.com/5E88BF15-66B7-4A32-9125-B3E019C52E9C.png">
-<meta property="og:image" content="http://cdn.objcer.com/480D3F20-0262-40E4-B7C6-E068A9958692.png">
-<meta property="og:image" content="http://cdn.objcer.com/E3F5C223-E3E9-4ECC-AD67-DF09D6D62DD6.png">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/5E88BF15-66B7-4A32-9125-B3E019C52E9C.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/480D3F20-0262-40E4-B7C6-E068A9958692.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/E3F5C223-E3E9-4ECC-AD67-DF09D6D62DD6.png">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探究 emoji 字符长度">
 <meta name="twitter:description" content="我们注意到在 Twitter，微博，谷歌翻译的输入框中输入 emoji 字符，都不能正确的判断字符个数。🤷‍在阅读本文之前，需要先对 Unicode 编码有所了解，参考: JavaScript Unicode 编码那些事">
-<meta name="twitter:image" content="http://cdn.objcer.com/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png">
 
 
 
@@ -322,7 +322,7 @@
       
 
       
-        <p><img src="http://cdn.objcer.com/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png" alt=""><br>我们注意到在 Twitter，微博，谷歌翻译的输入框中输入 emoji 字符，都不能正确的判断字符个数。🤷‍<br>在阅读本文之前，需要先对 Unicode 编码有所了解，参考: <a href="http://objcer.com/2017/05/21/JavaScript-Unicode/">JavaScript Unicode 编码那些事</a></p>
+        <p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/C0E1DEF1-900B-4372-B8CB-B166A1ABBA57.png" alt=""><br>我们注意到在 Twitter，微博，谷歌翻译的输入框中输入 emoji 字符，都不能正确的判断字符个数。🤷‍<br>在阅读本文之前，需要先对 Unicode 编码有所了解，参考: <a href="http://objcer.com/2017/05/21/JavaScript-Unicode/">JavaScript Unicode 编码那些事</a></p>
 <a id="more"></a>
 <h2 id="String-length-Char-count"><a href="#String-length-Char-count" class="headerlink" title="String length != Char count"></a>String length != Char count</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="string">'😂'</span><span class="selector-class">.length</span> <span class="comment">// 2</span></div><div class="line"><span class="string">'1️⃣'</span><span class="selector-class">.length</span> <span class="comment">// 3</span></div><div class="line"><span class="string">'👨‍👨‍👦'</span><span class="selector-class">.length</span> <span class="comment">// 8</span></div><div class="line"><span class="string">'👨‍👩‍👧‍👦'</span><span class="selector-class">.length</span> <span class="comment">// 11</span></div></pre></td></tr></table></figure>
 <h2 id="关于-Unicode"><a href="#关于-Unicode" class="headerlink" title="关于 Unicode"></a>关于 Unicode</h2><p>Unicode 编码范围是从 U+0000 到 U+10FFFF，每一个编码（也称之为码位 code point）表示一个 Unicode 字符；而这么多码位有划分成 17 个平面：</p>
@@ -334,9 +334,9 @@
 <h2 id="关于-emoji"><a href="#关于-emoji" class="headerlink" title="关于 emoji"></a>关于 emoji</h2><blockquote>
 <p>An Emoji as we know it today <strong>is defined by at least one code point</strong> in the Unicode range. This means that there are also several Emoji out there being a combination of several different Emoji and code points. These combinations are called <strong>sequences</strong>.</p>
 </blockquote>
-<p>一个 emoji 字符至少由一个码位表示，一个 emoji 有多个码位表示的我们称之为序列(sequences)。可以在 <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank" rel="external">Full Emoji List</a> 页面查看到所有 emoji 的编码信息<br><img src="http://cdn.objcer.com/5E88BF15-66B7-4A32-9125-B3E019C52E9C.png" alt=""></p>
+<p>一个 emoji 字符至少由一个码位表示，一个 emoji 有多个码位表示的我们称之为序列(sequences)。可以在 <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank" rel="external">Full Emoji List</a> 页面查看到所有 emoji 的编码信息<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/5E88BF15-66B7-4A32-9125-B3E019C52E9C.png" alt=""></p>
 <p>在 JavaScript 中 <code>String.length</code> 计算字符长度时，认为两个字节为一个字符，所以一个基本平面上的字符长度都为 1；而一个补充平面上的字符使用代理对，由四个字符表示，所以长度为 2；<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// a: 0x61</span></div><div class="line"><span class="string">'a'</span><span class="selector-class">.lenght</span> <span class="comment">// 1</span></div><div class="line"></div><div class="line"><span class="comment">//💩: U+d83d U+dca9</span></div><div class="line"><span class="string">'💩'</span><span class="selector-class">.length</span> <span class="comment">// 2</span></div><div class="line"></div><div class="line"><span class="comment">// '1️⃣': U+0031 U+FE0F U+20E3</span></div><div class="line"><span class="string">'1️⃣'</span><span class="selector-class">.length</span> <span class="comment">// 3</span></div></pre></td></tr></table></figure></p>
-<h3 id="Modifier-sequences"><a href="#Modifier-sequences" class="headerlink" title="Modifier sequences"></a>Modifier sequences</h3><p><img src="http://cdn.objcer.com/480D3F20-0262-40E4-B7C6-E068A9958692.png" alt=""><br>我们注意部分人类相关的 <strong>Human emoji</strong> 可以选择其他 5 种不同的肤色(<strong>Skin color</strong>)，默认颜色的 emoji 称之为 <strong>neutral emoji</strong>，不同肤色称之为 <strong>modifier</strong>，这些不同肤色的 emoji 我们称之为 <strong>Modifier sequences</strong>。</p>
+<h3 id="Modifier-sequences"><a href="#Modifier-sequences" class="headerlink" title="Modifier sequences"></a>Modifier sequences</h3><p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/480D3F20-0262-40E4-B7C6-E068A9958692.png" alt=""><br>我们注意部分人类相关的 <strong>Human emoji</strong> 可以选择其他 5 种不同的肤色(<strong>Skin color</strong>)，默认颜色的 emoji 称之为 <strong>neutral emoji</strong>，不同肤色称之为 <strong>modifier</strong>，这些不同肤色的 emoji 我们称之为 <strong>Modifier sequences</strong>。</p>
 <blockquote>
 <p>These modifiers are called EMOJI MODIFIER FITZPATRICK TYPE-1-2, -3, -4, -5, and -6 (U+1F3FB–U+1F3FF): 🏻 🏼 🏽 🏾 🏿</p>
 </blockquote>
@@ -392,7 +392,7 @@
 </tbody>
 </table>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// U+1F467 + U+1F3FD</div><div class="line">👧 + 🏽</div><div class="line"><span class="meta">&gt;</span><span class="bash"> 👧🏽</span></div></pre></td></tr></table></figure>
-<p><img src="http://cdn.objcer.com/E3F5C223-E3E9-4ECC-AD67-DF09D6D62DD6.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/E3F5C223-E3E9-4ECC-AD67-DF09D6D62DD6.png" alt=""></p>
 <p>明显的，这类 emoji 的通过 <code>String.length</code> 获取长度为 <strong>4</strong></p>
 <h3 id="ZWJ-sequences"><a href="#ZWJ-sequences" class="headerlink" title="ZWJ sequences"></a>ZWJ sequences</h3><p>接下来里了解一下 <strong>family emoji</strong>，譬如我们常见的：三口之家：👪，四口之家：👨‍👩‍👧‍👦，等等；其中值得注意的是：</p>
 <ul>
@@ -511,7 +511,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -620,7 +620,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

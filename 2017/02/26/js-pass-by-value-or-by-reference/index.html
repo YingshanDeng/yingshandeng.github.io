@@ -93,12 +93,12 @@
 <meta property="og:url" content="http://objcer.com/2017/02/26/js-pass-by-value-or-by-reference/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="在 JavaScript 中是传值(pass by value)还是传引用(pass by reference)呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。">
-<meta property="og:image" content="http://cdn.objcer.com/pass-by-reference-vs-pass-by-value-animation.gif">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/pass-by-reference-vs-pass-by-value-animation.gif">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS中是 pass by value 还是 pass by reference🤔">
 <meta name="twitter:description" content="在 JavaScript 中是传值(pass by value)还是传引用(pass by reference)呢？通常我们认为传参是原始类型（String, Number…）就是 pass by value，而引用类型（Array, Object）的话，就是 pass by reference。那么事实真的是如此吗？下面通过一些例子来了解一下。">
-<meta name="twitter:image" content="http://cdn.objcer.com/pass-by-reference-vs-pass-by-value-animation.gif">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/pass-by-reference-vs-pass-by-value-animation.gif">
 
 
 
@@ -345,7 +345,7 @@
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>1、前段时间在微博上看到<a href="http://weibo.com/1400854834/ErIrQ0BYg?type=comment#_rnd1488085633169" target="_blank" rel="external">阮一峰微博上说，函数参数默认值不是传值调用</a>，例子如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> x = <span class="number">99</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">p = x + <span class="number">1</span></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(p)</div><div class="line">&#125;</div><div class="line">foo(); <span class="comment">// 100</span></div><div class="line">x = <span class="number">100</span>;</div><div class="line">foo(); <span class="comment">// 101</span></div></pre></td></tr></table></figure></p>
 <p>那么是不是呢？在评论中，看到有一个比较合理的说法是：<strong>其实就是传值调用</strong>，只不过每执行一次foo()就传一次新值。传进去的值不会改变，除非再次调用foo()。例子如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> x = <span class="number">99</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">p = x + <span class="number">1</span></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</div><div class="line">  <span class="keyword">var</span> intervalId = setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(p);</div><div class="line">    count++;</div><div class="line">    <span class="keyword">if</span>(count&gt;<span class="number">10</span>) clearInterval(intervalId);</div><div class="line">  &#125;, <span class="number">1000</span>)</div><div class="line">&#125;</div><div class="line">foo();</div><div class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  x = <span class="number">100</span>;</div><div class="line">&#125;, <span class="number">3000</span>)</div></pre></td></tr></table></figure></p>
 <p>可以发现，代码执行过程中，虽然外部 <code>x</code> 发生了变化，但是输出的值还一直是 100。</p>
-<p>2、pass by value 和 pass by reference 的区别<br><img src="http://cdn.objcer.com/pass-by-reference-vs-pass-by-value-animation.gif" alt=""></p>
+<p>2、pass by value 和 pass by reference 的区别<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/pass-by-reference-vs-pass-by-value-animation.gif" alt=""></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value?answertab=votes#tab-top" target="_blank" rel="external">Javascript by reference vs. by value</a></p>
 
       
@@ -457,7 +457,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -566,7 +566,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

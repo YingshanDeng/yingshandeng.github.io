@@ -91,12 +91,12 @@
 <meta property="og:title" content="Javascript DOM 事件模型">
 <meta property="og:url" content="http://objcer.com/2017/08/14/Introduction-into-Events/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
-<meta property="og:image" content="http://cdn.objcer.com/js-event.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/eventflow@2x.png">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/js-event.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/eventflow@2x.png">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript DOM 事件模型">
-<meta name="twitter:image" content="http://cdn.objcer.com/js-event.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/js-event.jpg">
 
 
 
@@ -317,14 +317,14 @@
       
 
       
-        <p><img src="http://cdn.objcer.com/js-event.jpg" alt=""><br><a id="more"></a></p>
+        <p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/js-event.jpg" alt=""><br><a id="more"></a></p>
 <h2 id="Bubbling-and-capturing"><a href="#Bubbling-and-capturing" class="headerlink" title="Bubbling and capturing"></a>Bubbling and capturing</h2><p>Javascript DOM 事件流存在如下三个阶段：</p>
 <ul>
 <li>事件捕获阶段 Capturing phase – <strong>the event goes down to the element.</strong></li>
 <li>处于目标阶段 Target phase – the event reached the target element.</li>
 <li>事件冒泡阶段 Bubbling phase – <strong>the event bubbles up from the element.</strong></li>
 </ul>
-<p><img src="http://cdn.objcer.com/eventflow@2x.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/eventflow@2x.png" alt=""></p>
 <p><strong>Javascript DOM 标准事件流的触发的先后顺序为：先捕获再冒泡。</strong>点击 <code>&lt;td&gt;</code> DOM 节点时，事件传播顺序：首先是事件捕获阶段，从上向下传播；然后到达点击事件目标节点；最后是冒泡阶段，从下向上传播。</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">addEventListener(<span class="string">type:</span> DOMString, <span class="string">callback:</span> EventListener, capture?: <span class="keyword">boolean</span>)</div></pre></td></tr></table></figure>
 <p>DOM 节点添加事件监听方法 <code>addEventListener</code> 中第三个参数可以指定是该监听是添加在事件捕获阶段或者是事件冒泡阶段，默认为 <code>false</code>，即事件冒泡阶段；显式指定为 <code>true</code>，即事件捕获阶段。</p>
@@ -486,7 +486,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -595,7 +595,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

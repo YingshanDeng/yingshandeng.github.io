@@ -93,16 +93,16 @@
 <meta property="og:url" content="http://objcer.com/2017/10/16/floating-point-arithmetic/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="JavaScript中所有的数字，无论是整数还是小数，其类型都是 Number，遵循 IEEE 754 程序内部用一个 64 位固定长度的二进制进行存储表示。JavaScript 中的浮点数进行运算时，经常会遇到计算精度问题，例如经典的 0.1+0.2=0.30000000000000004，本文将探究 JavaScript 的浮点数，并解释为何 0.1+0.2=0.300000000000000">
-<meta property="og:image" content="http://cdn.objcer.com/1-brjYnVlXwM3j_SWXImT0Rg.png">
-<meta property="og:image" content="http://cdn.objcer.com/5F33F675-2DF0-472F-9F2E-98066AE91720.png">
-<meta property="og:image" content="http://cdn.objcer.com/58DF62FC-51A3-4F01-A3C6-0E75DF916261.png">
-<meta property="og:image" content="http://cdn.objcer.com/000D23FF-1ECD-45D1-9BC3-09908A10787B.png">
-<meta property="og:image" content="http://cdn.objcer.com/real-numbers-floating-point-numbers.jpeg">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/1-brjYnVlXwM3j_SWXImT0Rg.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/5F33F675-2DF0-472F-9F2E-98066AE91720.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/58DF62FC-51A3-4F01-A3C6-0E75DF916261.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/000D23FF-1ECD-45D1-9BC3-09908A10787B.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/real-numbers-floating-point-numbers.jpeg">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="0.1+0.2=0.30000000000000004❓">
 <meta name="twitter:description" content="JavaScript中所有的数字，无论是整数还是小数，其类型都是 Number，遵循 IEEE 754 程序内部用一个 64 位固定长度的二进制进行存储表示。JavaScript 中的浮点数进行运算时，经常会遇到计算精度问题，例如经典的 0.1+0.2=0.30000000000000004，本文将探究 JavaScript 的浮点数，并解释为何 0.1+0.2=0.300000000000000">
-<meta name="twitter:image" content="http://cdn.objcer.com/1-brjYnVlXwM3j_SWXImT0Rg.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/1-brjYnVlXwM3j_SWXImT0Rg.png">
 
 
 
@@ -323,10 +323,10 @@
       
 
       
-        <p><img src="http://cdn.objcer.com/1-brjYnVlXwM3j_SWXImT0Rg.png" alt=""><br>JavaScript中所有的数字，无论是整数还是小数，其类型都是 Number，遵循 <a href="http://grouper.ieee.org/groups/754/" target="_blank" rel="external">IEEE 754</a> 程序内部用一个 64 位固定长度的二进制进行存储表示。JavaScript 中的浮点数进行运算时，经常会遇到计算精度问题，例如经典的 <code>0.1+0.2=0.30000000000000004</code>，本文将探究 JavaScript 的浮点数，并解释为何 <code>0.1+0.2=0.30000000000000004</code></p>
+        <p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/1-brjYnVlXwM3j_SWXImT0Rg.png" alt=""><br>JavaScript中所有的数字，无论是整数还是小数，其类型都是 Number，遵循 <a href="http://grouper.ieee.org/groups/754/" target="_blank" rel="external">IEEE 754</a> 程序内部用一个 64 位固定长度的二进制进行存储表示。JavaScript 中的浮点数进行运算时，经常会遇到计算精度问题，例如经典的 <code>0.1+0.2=0.30000000000000004</code>，本文将探究 JavaScript 的浮点数，并解释为何 <code>0.1+0.2=0.30000000000000004</code></p>
 <a id="more"></a>
 <h2 id="浮点数的二进制表示"><a href="#浮点数的二进制表示" class="headerlink" title="浮点数的二进制表示"></a>浮点数的二进制表示</h2><p>JavaScript 里的数字是采用 <a href="http://grouper.ieee.org/groups/754/" target="_blank" rel="external">IEEE 754</a> 标准的 64 位 double 双精度浮点数（与之相关的还有 32 位 float 单精度浮点数）。该规范定义了浮点数的格式。</p>
-<p><img src="http://cdn.objcer.com/5F33F675-2DF0-472F-9F2E-98066AE91720.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/5F33F675-2DF0-472F-9F2E-98066AE91720.png" alt=""></p>
 <p>对于 32 位的浮点数，最高的 1 位是符号位 S，接着的 8 位是指数 E，剩下的 23 位为尾数位 M<br>对于 64 位的浮点数，最高的 1 位是符号位 S，接着的 11 位是指数 E，剩下的 52 位为尾数位 M</p>
 <ul>
 <li>符号位 S：0 表示正数，1 表示负数</li>
@@ -340,7 +340,7 @@
 <p>最终的公式变成：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">V = (<span class="number">-1</span>)^S * (M + <span class="number">1</span>) * <span class="number">2</span>^(E - <span class="number">1023</span>)</div></pre></td></tr></table></figure></p>
 <h3 id="十进制转换为二进制"><a href="#十进制转换为二进制" class="headerlink" title="十进制转换为二进制"></a>十进制转换为二进制</h3><p><strong>十进制整数转换为二进制整数：</strong>采用”除2取余，逆序排列”法。具体做法是：用 2 去除十进制整数，可以得到一个商和余数；再用 2 去除商，又会得到一个商和余数，如此进行，直到商为零时为止，然后把先得到的余数作为二进制数的低位有效位，后得到的余数作为二进制数的高位有效位，依次排列起来。</p>
 <p><strong>十进制小数转换成二进制小数：</strong>采用”乘2取整，顺序排列”法。具体做法是：用 2 乘十进制小数，可以得到积，将积的整数部分取出，再用 2 乘余下的小数 部分，又得到一个积，再将积的整数部分取出，如此进行，直到积中的小数部分为零，或者达到所要求的精度为止。然后把取出的整数部分按顺序排列起来，先取的整数作为二进制小数的高位有效位，后取的整数作为低位有效位。</p>
-<p><img src="http://cdn.objcer.com/58DF62FC-51A3-4F01-A3C6-0E75DF916261.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/58DF62FC-51A3-4F01-A3C6-0E75DF916261.png" alt=""></p>
 <p>（173.8125）10＝（❓）2</p>
 <ul>
 <li>（173）10＝（10101101）2</li>
@@ -356,7 +356,7 @@
 <li>指数位 E = -4 + 1023 = 1019 (<code>1019</code> 11 位二进制表示为：01111111011)</li>
 <li>尾数位 M = 100110011001100… (舍去首位 1)</li>
 </ul>
-<p><img src="http://cdn.objcer.com/000D23FF-1ECD-45D1-9BC3-09908A10787B.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/000D23FF-1ECD-45D1-9BC3-09908A10787B.png" alt=""></p>
 <p>所以十进制 0.1 转换成 64 位浮点数二进制表示为：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">0011111110111001100110011001100110011001100110011001100110011010</span></div></pre></td></tr></table></figure></p>
 <p>而将 64 位浮点数二进制的 0.1 转换回十进制时，得到：<code>1.00000000000000005551115123126E-1</code>。</p>
 <p>但是：此时输出 <code>x</code> 为啥能得到 0.1 呢？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">0.1</span></div><div class="line"><span class="built_in">console</span>.log(x) <span class="comment">// -&gt; 0.1</span></div></pre></td></tr></table></figure></p>
@@ -397,7 +397,7 @@
 <li>… 依次跳过更多2的倍数</li>
 </ul>
 <p>下面这张图能很好的表示 JavaScript 中浮点数和实数（Real Number）之间的对应关系，我们常用的 <code>[-2^53, 2^53]</code> 只是最中间非常小的一部分，越往两边越稀疏越不精确。</p>
-<p><img src="http://cdn.objcer.com/real-numbers-floating-point-numbers.jpeg" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/real-numbers-floating-point-numbers.jpeg" alt=""></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://github.com/camsong/blog/issues/9" target="_blank" rel="external">JavaScript 浮点数陷阱及解法</a></p>
 
       
@@ -507,7 +507,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -616,7 +616,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -91,19 +91,19 @@
 <meta property="og:title" content="Cordova 远程推送 - iOS篇">
 <meta property="og:url" content="http://objcer.com/2017/06/04/cordova-register-and-receive-push-notifications-iOS/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
-<meta property="og:image" content="http://cdn.objcer.com/iOS-PUsh-Notifications.png">
-<meta property="og:image" content="http://cdn.objcer.com/82BDFC5F-339D-4402-8719-5197D0246305.png">
-<meta property="og:image" content="http://cdn.objcer.com/Managing%20the%20device%20token.png">
-<meta property="og:image" content="http://cdn.objcer.com/Remote%20notification%20path%20from%20provider%20to%20device.png">
-<meta property="og:image" content="http://cdn.objcer.com/apns-app.png">
-<meta property="og:image" content="http://cdn.objcer.com/CreateCertificate.png">
-<meta property="og:image" content="http://cdn.objcer.com/aps.png">
-<meta property="og:image" content="http://cdn.objcer.com/capabilities.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/build-settings.jpg">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/iOS-PUsh-Notifications.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/82BDFC5F-339D-4402-8719-5197D0246305.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Managing%20the%20device%20token.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Remote%20notification%20path%20from%20provider%20to%20device.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/apns-app.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/CreateCertificate.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/aps.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/capabilities.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/build-settings.jpg">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cordova 远程推送 - iOS篇">
-<meta name="twitter:image" content="http://cdn.objcer.com/iOS-PUsh-Notifications.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/iOS-PUsh-Notifications.png">
 
 
 
@@ -324,12 +324,12 @@
       
 
       
-        <p><img src="http://cdn.objcer.com/iOS-PUsh-Notifications.png" alt=""></p>
+        <p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/iOS-PUsh-Notifications.png" alt=""></p>
 <a id="more"></a>
 <h2 id="APNs"><a href="#APNs" class="headerlink" title="APNs"></a>APNs</h2><blockquote>
 <p>APNs(<em>Apple Push Notification service</em>) <a href="https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1" target="_blank" rel="external">官方文档 Overview</a></p>
 </blockquote>
-<h3 id="推送原理"><a href="#推送原理" class="headerlink" title="推送原理"></a>推送原理</h3><p>当 Provider 远程服务器需要向 App 推送一条消息时，并不是直接往 App 推送消息，而是推送苹果 APNs 服务器上，而苹果的 APNs 服务器再通过与设备建立长连接进而把消息推送到我们的设备上。<br><img src="http://cdn.objcer.com/82BDFC5F-339D-4402-8719-5197D0246305.png" alt=""></p>
+<h3 id="推送原理"><a href="#推送原理" class="headerlink" title="推送原理"></a>推送原理</h3><p>当 Provider 远程服务器需要向 App 推送一条消息时，并不是直接往 App 推送消息，而是推送苹果 APNs 服务器上，而苹果的 APNs 服务器再通过与设备建立长连接进而把消息推送到我们的设备上。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/82BDFC5F-339D-4402-8719-5197D0246305.png" alt=""></p>
 <p>由此：APNs 推送就划分成两部分：</p>
 <ul>
 <li>Provider-to-APNs connection (服务端交互)</li>
@@ -339,8 +339,8 @@
 <blockquote>
 <p>❗️一个 deviceToken 可以唯一标识某个设备上的某个 App，可以理解成：<strong>deviceToken = device UUID + App Bundle ID</strong></p>
 </blockquote>
-<p><img src="http://cdn.objcer.com/Managing%20the%20device%20token.png" alt=""></p>
-<p>2、Provider 给我们的设备推送通知的时候，必须包含此 deviceToken。<br><img src="http://cdn.objcer.com/Remote%20notification%20path%20from%20provider%20to%20device.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Managing%20the%20device%20token.png" alt=""></p>
+<p>2、Provider 给我们的设备推送通知的时候，必须包含此 deviceToken。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Remote%20notification%20path%20from%20provider%20to%20device.png" alt=""></p>
 <h3 id="推送消息-Payload"><a href="#推送消息-Payload" class="headerlink" title="推送消息 Payload"></a>推送消息 Payload</h3><blockquote>
 <p><a href="https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW1" target="_blank" rel="external">Creating the Remote Notification Payload</a></p>
 </blockquote>
@@ -367,7 +367,7 @@
 </ul>
 <p>例如：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"aps"</span> : &#123;</div><div class="line">        <span class="attr">"alert"</span>: <span class="string">"This is a notification"</span>,</div><div class="line">        <span class="attr">"badge"</span>: <span class="number">1</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"acme-data"</span>: [ <span class="string">"foo"</span>,  <span class="string">"bar"</span> ]</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#123;</div><div class="line">    <span class="attr">"aps"</span> : &#123;</div><div class="line">        <span class="attr">"alert"</span>: &#123;</div><div class="line">            <span class="attr">"title"</span>: <span class="string">"This is Title"</span>,</div><div class="line">            <span class="attr">"body"</span>: <span class="string">"This is Body"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"badge"</span>: <span class="number">1</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"acme-data"</span>: [ <span class="string">"foo"</span>,  <span class="string">"bar"</span> ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>3、当设备处于离线 offline 状态时，APNs 会为保留 Provider 所推送的最后一条通知，当设备转换为连网状态时，APNs则把其保留的最后一条通知推送给我们的设备；如果设备长时间离线，那么最后一条通知也有可能被丢弃。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="http://cdn.objcer.com/apns-app.png" alt=""></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/apns-app.png" alt=""></p>
 <ul>
 <li>① App 向系统发起请求</li>
 <li>② 系统向 APNs 发送注册远程推送请求</li>
@@ -427,11 +427,11 @@
 <li>不展示图标标记（设置 <code>badge</code> 字段为 0 或者 PushNotification 插件初始化是 <code>badge</code> 设置为 <code>false</code>）</li>
 </ul>
 <h2 id="推送证书"><a href="#推送证书" class="headerlink" title="推送证书"></a>推送证书</h2><p>具备接收远程推送的应用打包时需要使用推送证书，同样也区分开发证书和发布证书。</p>
-<h3 id="导出推送证书"><a href="#导出推送证书" class="headerlink" title="导出推送证书"></a>导出推送证书</h3><p>登录 <a href="https://developer.apple.com" target="_blank" rel="external">苹果开发者中心</a> 在 <code>Certificates, Identifiers &amp; Profiles -&gt; Identifiers -&gt; App IDs</code>，找到应用对应的 App ID，点击 <code>Edit</code> 对 Push Notifications 进行配置导出 certificate 证书。<br><img src="http://cdn.objcer.com/CreateCertificate.png" alt=""></p>
-<p>双击安装证书如下：<br><img src="http://cdn.objcer.com/aps.png" alt=""></p>
+<h3 id="导出推送证书"><a href="#导出推送证书" class="headerlink" title="导出推送证书"></a>导出推送证书</h3><p>登录 <a href="https://developer.apple.com" target="_blank" rel="external">苹果开发者中心</a> 在 <code>Certificates, Identifiers &amp; Profiles -&gt; Identifiers -&gt; App IDs</code>，找到应用对应的 App ID，点击 <code>Edit</code> 对 Push Notifications 进行配置导出 certificate 证书。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/CreateCertificate.png" alt=""></p>
+<p>双击安装证书如下：<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/aps.png" alt=""></p>
 <p>同时我们也需要更新下载 Provisioning Profile 文件。</p>
-<h3 id="Xcode-真机调试推送配置"><a href="#Xcode-真机调试推送配置" class="headerlink" title="Xcode 真机调试推送配置"></a>Xcode 真机调试推送配置</h3><p>1、target -&gt; Capabilities<br><img src="http://cdn.objcer.com/capabilities.jpg" alt=""></p>
-<p>2、target -&gt; Build Settings -&gt; Signings<br><img src="http://cdn.objcer.com/build-settings.jpg" alt=""></p>
+<h3 id="Xcode-真机调试推送配置"><a href="#Xcode-真机调试推送配置" class="headerlink" title="Xcode 真机调试推送配置"></a>Xcode 真机调试推送配置</h3><p>1、target -&gt; Capabilities<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/capabilities.jpg" alt=""></p>
+<p>2、target -&gt; Build Settings -&gt; Signings<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/build-settings.jpg" alt=""></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.jianshu.com/p/4b947569a548" target="_blank" rel="external">iOS推送之远程推送（iOS Notification Of Remote Notification）</a></p>
 
       
@@ -541,7 +541,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -650,7 +650,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

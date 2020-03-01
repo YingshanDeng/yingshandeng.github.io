@@ -93,12 +93,12 @@
 <meta property="og:url" content="http://objcer.com/2015/02/17/iOS-7-UIKit-Dynamic/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="iOS 7 中新增的 UIKit Dynamic 特性，为 UIKit 引入了2D物理引擎，通过它，可以更逼真、高效的实现对现实世界的仿真，同时也是你实现炫酷动画效果的利器。">
-<meta property="og:image" content="http://cdn.objcer.com/photo.png">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/photo.png">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 7 UIKit Dynamic">
 <meta name="twitter:description" content="iOS 7 中新增的 UIKit Dynamic 特性，为 UIKit 引入了2D物理引擎，通过它，可以更逼真、高效的实现对现实世界的仿真，同时也是你实现炫酷动画效果的利器。">
-<meta name="twitter:image" content="http://cdn.objcer.com/photo.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/photo.png">
 
 
 
@@ -398,7 +398,7 @@
 </ul>
 <p><strong>Note ：</strong> 对于 <code>UIAttachmentBehavior</code> 行为，如果单纯只是在 dynamic item 和锚点或者另一个 dynamic item 之间只有一个连接，那么有时候可能是不稳定的。那么为了避免这种情况，那么我们可以多加几个附着行为，也即是多加几个连接。</p>
 <p>例如：假如有一张照片想固定在墙上，只是在左下角钉一个钉子（相当于附着一个点），那么在重力效果下，就会出现翻转，如下图（1）和（2）；那么为了这张照片可以固定，那么至少钉两个钉子（相当于钉附着两个点），如下图（3）钉了四个钉子。</p>
-<p><img src="http://cdn.objcer.com/photo.png" alt="图片钉墙"></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/photo.png" alt="图片钉墙"></p>
 <p>代码如下：</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">UIView</span> *box = [[<span class="built_in">UIView</span> alloc] init];</div><div class="line">   box.layer.bounds = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">50</span>, <span class="number">50</span>);</div><div class="line">   box.layer.position = <span class="built_in">CGPointMake</span>(<span class="number">200</span>, <span class="number">100</span>);</div><div class="line">   box.backgroundColor = [<span class="built_in">UIColor</span> blueColor];</div><div class="line">   [<span class="keyword">self</span>.view addSubview:box];</div><div class="line"></div><div class="line">   <span class="built_in">CGRect</span> bounds = box.bounds;</div><div class="line">   <span class="built_in">CGFloat</span> width = <span class="built_in">CGRectGetWidth</span>(bounds);</div><div class="line">   <span class="built_in">CGFloat</span> height = <span class="built_in">CGRectGetHeight</span>(bounds);</div><div class="line"></div><div class="line">   <span class="built_in">CGFloat</span> offsetWidth = width/<span class="number">2</span>;</div><div class="line">   <span class="built_in">CGFloat</span> offsetHeight = height/<span class="number">2</span>;</div><div class="line"></div><div class="line">   <span class="built_in">UIOffset</span> offsetUL = <span class="built_in">UIOffsetMake</span>(-offsetWidth, -offsetHeight);</div><div class="line">   <span class="built_in">UIOffset</span> offsetUR = <span class="built_in">UIOffsetMake</span>( offsetWidth, -offsetHeight);</div><div class="line">   <span class="built_in">UIOffset</span> offsetLL = <span class="built_in">UIOffsetMake</span>(-offsetWidth, offsetHeight);</div><div class="line">   <span class="built_in">UIOffset</span> offsetLR = <span class="built_in">UIOffsetMake</span>( offsetWidth, offsetHeight);</div><div class="line"></div><div class="line">   <span class="built_in">CGFloat</span> anchorWidth = width/<span class="number">2</span>;</div><div class="line">   <span class="built_in">CGFloat</span> anchorHeight = height/<span class="number">2</span>;</div><div class="line"></div><div class="line">   <span class="built_in">CGPoint</span> anchorUL = <span class="built_in">CGPointMake</span>(box.center.x - anchorWidth,</div><div class="line">                                  box.center.y - anchorHeight);</div><div class="line">   <span class="built_in">CGPoint</span> anchorUR = <span class="built_in">CGPointMake</span>(box.center.x + anchorWidth,</div><div class="line">                                  box.center.y - anchorHeight);</div><div class="line">   <span class="built_in">CGPoint</span> anchorLL = <span class="built_in">CGPointMake</span>(box.center.x - anchorWidth,</div><div class="line">                                  box.center.y + anchorHeight);</div><div class="line">   <span class="built_in">CGPoint</span> anchorLR = <span class="built_in">CGPointMake</span>(box.center.x + anchorWidth,</div><div class="line">                                  box.center.y + anchorHeight);</div><div class="line"></div><div class="line"></div><div class="line">   <span class="built_in">UIDynamicAnimator</span> *animator = [[<span class="built_in">UIDynamicAnimator</span> alloc] initWithReferenceView:<span class="keyword">self</span>.view];</div><div class="line"></div><div class="line">   [animator addBehavior:[[<span class="built_in">UIAttachmentBehavior</span> alloc] initWithItem:box offsetFromCenter:offsetUL  attachedToAnchor:anchorUL]];</div><div class="line">   [animator addBehavior:[[<span class="built_in">UIAttachmentBehavior</span> alloc] initWithItem:box offsetFromCenter:offsetUR attachedToAnchor:anchorUR]];</div><div class="line">   [animator addBehavior:[[<span class="built_in">UIAttachmentBehavior</span> alloc] initWithItem:box offsetFromCenter:offsetLL attachedToAnchor:anchorLL]];</div><div class="line">   [animator addBehavior:[[<span class="built_in">UIAttachmentBehavior</span> alloc] initWithItem:box offsetFromCenter:offsetLR attachedToAnchor:anchorLR]];</div><div class="line"></div><div class="line">   [animator addBehavior:[[<span class="built_in">UIGravityBehavior</span> alloc] initWithItems:@[box]]];</div><div class="line"></div><div class="line">   <span class="keyword">self</span>.animator = animator;</div></pre></td></tr></table></figure>
 <blockquote>
@@ -548,7 +548,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -657,7 +657,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

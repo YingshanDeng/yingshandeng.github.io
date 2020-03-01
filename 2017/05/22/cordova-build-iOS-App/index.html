@@ -91,21 +91,21 @@
 <meta property="og:title" content="Cordova 打包应用 - iOS篇">
 <meta property="og:url" content="http://objcer.com/2017/05/22/cordova-build-iOS-App/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
-<meta property="og:image" content="http://cdn.objcer.com/ios.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/iOS-dev-center.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/Code%20Signing%20Identity.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/Certificates.png">
-<meta property="og:image" content="http://cdn.objcer.com/Bundle%20ID.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/Provisioning%20Profiles.png">
-<meta property="og:image" content="http://cdn.objcer.com/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png">
-<meta property="og:image" content="http://cdn.objcer.com/Xcode-debug.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/Code%20Sign%20Identity.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/GUID.jpg">
-<meta property="og:image" content="http://cdn.objcer.com/TeamID.jpg">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/ios.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/iOS-dev-center.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Code%20Signing%20Identity.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Certificates.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Bundle%20ID.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Provisioning%20Profiles.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Xcode-debug.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Code%20Sign%20Identity.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/GUID.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/TeamID.jpg">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cordova 打包应用 - iOS篇">
-<meta name="twitter:image" content="http://cdn.objcer.com/ios.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/ios.jpg">
 
 
 
@@ -326,31 +326,31 @@
       
 
       
-        <p><img src="http://cdn.objcer.com/ios.jpg" alt=""></p>
+        <p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/ios.jpg" alt=""></p>
 <a id="more"></a>
-<h2 id="苹果开发知识储备"><a href="#苹果开发知识储备" class="headerlink" title="苹果开发知识储备"></a>苹果开发知识储备</h2><p><img src="http://cdn.objcer.com/iOS-dev-center.jpg" alt=""></p>
-<h3 id="Certificates"><a href="#Certificates" class="headerlink" title="Certificates"></a>Certificates</h3><p>Certificates 证书，是用来给应用程序签名(code sign)，证明应用程序的合法性和完整性。对于想要安装到真机调试或者发布到应用商店的应用程序，只有经过签名，才能保证其来源可靠，并且代码完整，未经篡改的。<br><img src="http://cdn.objcer.com/Code%20Signing%20Identity.jpg" alt=""><br>在Xcode Build Setting 的 Code Signing Identity 中，你可以设置用于为代码签名的证书。</p>
+<h2 id="苹果开发知识储备"><a href="#苹果开发知识储备" class="headerlink" title="苹果开发知识储备"></a>苹果开发知识储备</h2><p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/iOS-dev-center.jpg" alt=""></p>
+<h3 id="Certificates"><a href="#Certificates" class="headerlink" title="Certificates"></a>Certificates</h3><p>Certificates 证书，是用来给应用程序签名(code sign)，证明应用程序的合法性和完整性。对于想要安装到真机调试或者发布到应用商店的应用程序，只有经过签名，才能保证其来源可靠，并且代码完整，未经篡改的。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Code%20Signing%20Identity.jpg" alt=""><br>在Xcode Build Setting 的 Code Signing Identity 中，你可以设置用于为代码签名的证书。</p>
 <ul>
 <li>申请一个 Certificate 之前，需要先申请一个 Certificate Signing Request (CSR) 文件，而这个过程中实际上是生成了一对公钥和私钥，保存在你 Mac 的 Keychain 中。<strong>代码签名正是使用这种基于非对称秘钥的加密方式，用私钥进行签名，用公钥进行验证。</strong></li>
 <li>如下图所示，在你 Mac 的 keychain 的 login 中存储着相关的公钥和私钥，而证书中包含了公钥。用私钥来进行签名，<strong>苹果就可以用证书中的公钥来进行验证</strong>，确保是你对代码进行了签名，而不是别人冒充你，同时也确保代码的完整性等。</li>
 <li>当你想与其他人或其他设备共享证书时，导出证书（.p12类型），把私钥传给它就可以了。</li>
 </ul>
-<p><img src="http://cdn.objcer.com/Certificates.png" alt=""><br>证书主要分为两类：Development 和 Production，Development 证书用来开发和调试应用程序，Production 主要用来分发应用程序。</p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Certificates.png" alt=""><br>证书主要分为两类：Development 和 Production，Development 证书用来开发和调试应用程序，Production 主要用来分发应用程序。</p>
 <h3 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h3><p>App ID 用于标识一个或者一组 App，App ID 应该是和 Xcode 中的 Bundle ID 是一致的或者匹配的。App ID主要有以下两种：</p>
 <ul>
 <li>An Explicit App ID Matches a Single App：唯一的App ID，这种App ID用于唯一标识一个应用程序，例如 <code>com.ABC.demo1</code>，标识 Bundle ID 为 <code>com.ABC.demo1</code> 的程序。</li>
 <li>Wildcard App IDs Match Multiple Apps：通配符App ID，用于标识一组应用程序。例如 <code>*</code> 可以表示所有应用程序，而 <code>com.ABC.*</code> 可以表示以 <code>com.ABC</code> 开头的所有应用程序。</li>
 </ul>
-<p><img src="http://cdn.objcer.com/Bundle%20ID.jpg" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Bundle%20ID.jpg" alt=""></p>
 <h3 id="Devices"><a href="#Devices" class="headerlink" title="Devices"></a>Devices</h3><p>Device 是指运行 iOS 系统用于开发调试 App 的设备。每台 Apple 设备使用 UDID 来唯一标识。设备的 UDID 可通过 <code>iTunes-&gt;Summary</code> 或者 <code>Xcode-&gt;Window-&gt;Devices</code> 获取。</p>
-<h3 id="Provisioning-Profiles"><a href="#Provisioning-Profiles" class="headerlink" title="Provisioning Profiles"></a>Provisioning Profiles</h3><p>一个 Provisioning Profile 文件包含了上述的所有内容：<strong>证书、App ID、设备</strong>。<br><img src="http://cdn.objcer.com/Provisioning%20Profiles.png" alt=""></p>
+<h3 id="Provisioning-Profiles"><a href="#Provisioning-Profiles" class="headerlink" title="Provisioning Profiles"></a>Provisioning Profiles</h3><p>一个 Provisioning Profile 文件包含了上述的所有内容：<strong>证书、App ID、设备</strong>。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Provisioning%20Profiles.png" alt=""></p>
 <p>在打包应用程序或者在真机上运行调试一个应用程序的过程：</p>
 <ul>
 <li>使用 Certificates 证书来进行签名，用于标识该应用程序合法性和完整性</li>
 <li>指明该应用程序的 App ID，并且验证与 Bundle ID 是否一致</li>
 <li>到真机中运行调试该应用程序，确认该设备是否能够用来运行</li>
 </ul>
-<p>Provisioning Profile 把这些信息全部打包在一起，在打包时嵌入 <code>.ipa</code> 的包里。如上所述，在一台设备上运行应用程序的过程如下：<br><img src="http://cdn.objcer.com/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png" alt=""></p>
+<p>Provisioning Profile 把这些信息全部打包在一起，在打包时嵌入 <code>.ipa</code> 的包里。如上所述，在一台设备上运行应用程序的过程如下：<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/16185213-ea355ff0690b497a80ed5fd2dd5e62cf.png" alt=""></p>
 <p>与 Certificates 证书一样，Provisioning Profile 也分为 Development 和 Distribution 两种：</p>
 <ul>
 <li>Development</li>
@@ -359,7 +359,7 @@
 <p>注：使用 Development Provisioning Profiles 打包的应用程序在设备中运行，要求该设备 UDID 必须绑定添加到该 Provisioning Profiles 中，否则无法在该设备中运行。解决方法是：绑定添加该设备 UDID，更新 Provisioning Profiles，重新打包。</p>
 <h2 id="Xcode-调试"><a href="#Xcode-调试" class="headerlink" title="Xcode 调试"></a>Xcode 调试</h2><h3 id="Xcode-模拟器调试"><a href="#Xcode-模拟器调试" class="headerlink" title="Xcode 模拟器调试"></a>Xcode 模拟器调试</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 添加/移除 iOS 项目</span></div><div class="line">phonegap <span class="built_in">platform</span> <span class="built_in">add</span> ios</div><div class="line">phonegap <span class="built_in">platform</span> remove ios</div><div class="line"><span class="comment"># 更新 iOS 项目</span></div><div class="line">phonegap <span class="built_in">prepare</span> ios</div></pre></td></tr></table></figure>
 <p>在 <code>/platforms/ios</code> 目录下双击打开 <code>.xcworkspace</code> 文件，Xcode 中选择对应的模拟器即可运行。</p>
-<h3 id="Xcode-真机调试"><a href="#Xcode-真机调试" class="headerlink" title="Xcode 真机调试"></a>Xcode 真机调试</h3><p>Xcode 真机调试需要申请 Certificates 证书，然后添加调试设备 UDID，生成 Provisioning Profiles（Development 类型），下载到电脑中，双击安装。<br>苹果设备连接电脑，Xcode -&gt; Build Settings 设置 Code Signing Identity 和 Provisioning Profiles，设置完成后，选择该设备运行即可。<br><img src="http://cdn.objcer.com/Xcode-debug.jpg" alt=""></p>
+<h3 id="Xcode-真机调试"><a href="#Xcode-真机调试" class="headerlink" title="Xcode 真机调试"></a>Xcode 真机调试</h3><p>Xcode 真机调试需要申请 Certificates 证书，然后添加调试设备 UDID，生成 Provisioning Profiles（Development 类型），下载到电脑中，双击安装。<br>苹果设备连接电脑，Xcode -&gt; Build Settings 设置 Code Signing Identity 和 Provisioning Profiles，设置完成后，选择该设备运行即可。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Xcode-debug.jpg" alt=""></p>
 <p>当然 <a href="http://www.jianshu.com/p/351be39f959e" target="_blank" rel="external">Xcode7以后，无证书也能真机编译调试！</a></p>
 <h2 id="应用打包"><a href="#应用打包" class="headerlink" title="应用打包"></a>应用打包</h2><blockquote>
 <p>cordova iOS 应用打包 <a href="https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app" target="_blank" rel="external">参考文档</a></p>
@@ -404,9 +404,9 @@
 </table>
 <p>解释一下需要用到的四个参数：</p>
 <ul>
-<li><strong>Code Sign Identity</strong>：应用程序签名时使用的证书标识。如下图<br><img src="http://cdn.objcer.com/Code%20Sign%20Identity.jpg" alt=""></li>
-<li><strong>Provisioning Profile</strong>：Provisioning Profile 的 GUID。进入 <code>~/Library/MobileDevice/Provisioning\ Profiles/</code> 目录，即可获取到对应 Provisioning Profile 的 GUID<br><img src="http://cdn.objcer.com/GUID.jpg" alt=""></li>
-<li><strong>Development Team</strong>：开发团队 ID<br><img src="http://cdn.objcer.com/TeamID.jpg" alt=""></li>
+<li><strong>Code Sign Identity</strong>：应用程序签名时使用的证书标识。如下图<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Code%20Sign%20Identity.jpg" alt=""></li>
+<li><strong>Provisioning Profile</strong>：Provisioning Profile 的 GUID。进入 <code>~/Library/MobileDevice/Provisioning\ Profiles/</code> 目录，即可获取到对应 Provisioning Profile 的 GUID<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/GUID.jpg" alt=""></li>
+<li><strong>Development Team</strong>：开发团队 ID<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/TeamID.jpg" alt=""></li>
 <li><strong>Packaging Type</strong>：打包类型，包括：development、enterprise, ad-hoc, 和 app-store</li>
 </ul>
 <p><code>build.json</code> 配置如下：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"ios"</span>: &#123;</div><div class="line">        <span class="attr">"debug"</span>: &#123;</div><div class="line">            <span class="attr">"codeSignIdentity"</span>: <span class="string">"iPhone Developer: Deng Yingshan (Z7********)"</span>,</div><div class="line">            <span class="attr">"provisioningProfile"</span>: <span class="string">"91840e00-****-****-****-************"</span>,</div><div class="line">            <span class="attr">"developmentTeam"</span>: <span class="string">"32********"</span>,</div><div class="line">            <span class="attr">"packageType"</span>: <span class="string">"development"</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"release"</span>: &#123;</div><div class="line">            <span class="attr">"codeSignIdentity"</span>: <span class="string">"iPhone Distribution: Zhuhai Kingsoft Office Software Co., Ltd."</span>,</div><div class="line">            <span class="attr">"provisioningProfile"</span>: <span class="string">"ce06cf9c-****-****-****-************"</span>,</div><div class="line">            <span class="attr">"packageType"</span>: <span class="string">"enterprise"</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -536,7 +536,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -645,7 +645,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

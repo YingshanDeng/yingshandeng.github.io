@@ -93,18 +93,18 @@
 <meta property="og:url" content="http://objcer.com/2018/03/05/SharedPen/index.html">
 <meta property="og:site_name" content="Deng&#39;s Blog">
 <meta property="og:description" content="2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等">
-<meta property="og:image" content="http://cdn.objcer.com/SharedPen-Main.png">
-<meta property="og:image" content="http://cdn.objcer.com/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png">
-<meta property="og:image" content="http://cdn.objcer.com/sharedpen.png">
-<meta property="og:image" content="http://cdn.objcer.com/codemirror-change-insert.png">
-<meta property="og:image" content="http://cdn.objcer.com/codemirror-change-delete.png">
-<meta property="og:image" content="http://cdn.objcer.com/sharedpen-peer-to-peer.png?t=1">
-<meta property="og:image" content="http://cdn.objcer.com/sharedpen-client-server.png">
-<meta property="og:updated_time" content="2019-05-17T12:19:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/SharedPen-Main.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/codemirror-change-insert.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/codemirror-change-delete.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen-peer-to-peer.png?t=1">
+<meta property="og:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen-client-server.png">
+<meta property="og:updated_time" content="2020-03-01T13:08:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SharedPen 富文本实时协同编辑器">
 <meta name="twitter:description" content="2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等">
-<meta name="twitter:image" content="http://cdn.objcer.com/SharedPen-Main.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/SharedPen-Main.png">
 
 
 
@@ -325,7 +325,7 @@
       
 
       
-        <p><img src="http://cdn.objcer.com/SharedPen-Main.png" alt=""></p>
+        <p><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/SharedPen-Main.png" alt=""></p>
 <p>2017 年末，公司组织了 WPS 黑客马拉松比赛已正式开赛，比赛的主题是：利用 WPS 客户端、云，及其它第三方开放服务，针对文档的查看 、创作 ，以及工作、学习中的团队分享、合作等，来构想并实现 WPS 产品创新点。冲着主题宽泛，开发时间长，且一等奖 1 万的奖金 🤑，毫不犹豫的报名了。经过一个多月的开发，SharedPen 富文本实时协同编辑器基本功能开发完成，最终在评审中也如愿获得一等奖 👏<br>SharedPen 目前仍处于开发阶段，欢迎感兴趣的朋友与我联系一起交流，项目地址：<a href="https://github.com/YingshanDeng/SharedPen" target="_blank" rel="external">GitHub: YingshanDeng/SharedPen</a>。本文将对 SharedPen 整体架构进行介绍，下列文章对其中具体的技术方案进行了详细介绍：</p>
 <ul>
 <li><a href="https://objcer.com/2018/03/05/SharePen-Operational-Transformation/">SharedPen 之 Operational Transformation</a></li>
@@ -336,7 +336,7 @@
 <h2 id="关于协同编辑器"><a href="#关于协同编辑器" class="headerlink" title="关于协同编辑器"></a>关于协同编辑器</h2><p>协同编辑也就是多个人对一份文档进行编辑，每个协作这都有自己的输入光标，并可以可以自由地和其他协作者一起输入。对于 web-based 的协同编辑器，目前有很多成熟的产品。像我很喜欢用的: <a href="https://www.google.com/docs/about/" target="_blank" rel="external">Google Docs</a>，国内的: <a href="https://shimo.im/" target="_blank" rel="external">石墨文档</a>。</p>
 <p>另一个值得介绍的是 <a href="https://teletype.atom.io/" target="_blank" rel="external">Teletype</a>，这是在旧金山举办的 2017 QCon 大会上，GitHub 发布的 Atom 实时协作插件，Teletype 可以让两名开发者轻松的协作编写代码，由于 Atom 是基于 <a href="https://electronjs.org/" target="_blank" rel="external">Electron</a> 构建的应用程序，所以我们也可以将其看作是 web-based 协同编辑器。</p>
 <p><strong>协同编辑的关键是要解决数据一致性的问题</strong>，不同的协作者修改他们自己的文档副本，本地的编辑会立刻应用到本地副本，之后会传输给其他协作者，这会导致不同的副本可能会以不同的顺序应用各种修改，应该有算法来确保在协同编辑之后，所有副本最终的内容是一致的。</p>
-<h2 id="数据一致性解决方案"><a href="#数据一致性解决方案" class="headerlink" title="数据一致性解决方案"></a>数据一致性解决方案</h2><p>首先介绍一下分布式系统，分布式系统即运行在多物理计算机上的系统。这个是人类目前实际可行的构建超大规模系统的唯二办法之一（另一种就是构建超级计算机）。构建一个分布式系统的难点在于：让分布式系统运作起来正确性与单机程序完全无二。而协同编辑器，我们也可以看做是一个分布式系统，多端的协作者修改文档，而最终文档内容要收敛到相同的状态<br><img src="http://cdn.objcer.com/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png" alt=""></p>
+<h2 id="数据一致性解决方案"><a href="#数据一致性解决方案" class="headerlink" title="数据一致性解决方案"></a>数据一致性解决方案</h2><p>首先介绍一下分布式系统，分布式系统即运行在多物理计算机上的系统。这个是人类目前实际可行的构建超大规模系统的唯二办法之一（另一种就是构建超级计算机）。构建一个分布式系统的难点在于：让分布式系统运作起来正确性与单机程序完全无二。而协同编辑器，我们也可以看做是一个分布式系统，多端的协作者修改文档，而最终文档内容要收敛到相同的状态<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/real-time-portals-fa6fa303e261b1679024081d6229c9f9.png" alt=""></p>
 <p>目前来说，解决分布式系统数据一致性问题，主流的有两大方案：</p>
 <ul>
 <li><strong>Conflict-free replicated data type</strong> (CRDT)</li>
@@ -355,12 +355,12 @@
 <p>Wikipedia 介绍: <a href="https://en.wikipedia.org/wiki/Operational_transformation" target="_blank" rel="external">Operational transformation</a><br>Operational transformation (OT) is a technology for supporting a range of collaboration functionalities in advanced collaborative software systems. OT was originally invented for consistency maintenance and concurrency control in collaborative editing of plain text documents. Two decades of research has extended its capabilities and expanded its applications to include group undo, locking, conflict resolution, operation notification and compression, group-awareness, HTML/XML and tree-structured document editing, collaborative office productivity tools, application-sharing, and collaborative computer-aided media design tools (see OTFAQ). In 2009 OT was adopted as a core technique behind the collaboration features in Apache Wave and Google Docs.</p>
 </blockquote>
 <p><strong>SharedPen 也是采用 OT 作为协同编辑解决方案</strong>，使用了 <a href="https://github.com/Operational-Transformation/ot.js" target="_blank" rel="external">ot.js</a> 库，OT 算法在文章 <a href="https://objcer.com/2018/03/05/SharePen-Operational-Transformation/">SharedPen 之 Operational Transformation</a> 进行了详细介绍 😋</p>
-<h2 id="富文本编辑器"><a href="#富文本编辑器" class="headerlink" title="富文本编辑器"></a>富文本编辑器</h2><p>SharedPen 是基于 web 端的所见即所得 (WYSIWYG) 编辑器。<br><img src="http://cdn.objcer.com/sharedpen.png" alt=""></p>
+<h2 id="富文本编辑器"><a href="#富文本编辑器" class="headerlink" title="富文本编辑器"></a>富文本编辑器</h2><p>SharedPen 是基于 web 端的所见即所得 (WYSIWYG) 编辑器。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen.png" alt=""></p>
 <p>在 ot.js 库中，使用 <a href="https://codemirror.net/" target="_blank" rel="external">CodeMirror</a> 作为文本编辑器，CodeMirror 是一款优秀的编辑器，多用于代码编辑器，譬如在 Chrome 浏览器的调试器中，就使用 CodeMirror 作为代码编辑器。ot.js 库基于 CodeMirror 实现了一个简单的纯文本编辑器，demo 可以参考：<a href="https://github.com/YingshanDeng/ot.js-demo" target="_blank" rel="external">GitHub: ot.js-demo</a></p>
 <p>CodeMirror 编辑器具有丰富友好的 API 接口：</p>
 <ul>
 <li><strong>坐标系统</strong><br>CodeMirror 中以行为单位，通过 <code>{line, ch}</code> 第几行的第几个字符可以准确为每一个字符定位 <code>pos</code>，同时每一个字符都有一个全局索引 <code>index</code>，通过 <code>doc.posFromIndex</code> 和 <code>doc.indexFromPos</code> 两个辅助方法可以对二者进行转换</li>
-<li><strong>丰富的事件回调: <code>change</code>, <code>beforeChange</code>, <code>cursorActivity</code>…</strong><br>其中编辑事件 <code>change</code> 的回调参数信息非常丰富，便于我们将其转换成 OT 算法中的 operation<br><img src="http://cdn.objcer.com/codemirror-change-insert.png" alt=""><br><img src="http://cdn.objcer.com/codemirror-change-delete.png" alt=""></li>
+<li><strong>丰富的事件回调: <code>change</code>, <code>beforeChange</code>, <code>cursorActivity</code>…</strong><br>其中编辑事件 <code>change</code> 的回调参数信息非常丰富，便于我们将其转换成 OT 算法中的 operation<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/codemirror-change-insert.png" alt=""><br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/codemirror-change-delete.png" alt=""></li>
 <li><strong><code>markText</code> 富文本支持 API</strong><br>注意到 CodeMirror 其实并不支持富文本编辑，但是得益于 API <code>markText</code> 可以动态为指定范围的文本设置一个 CSS class，也可以通过自身实现为其增加富文本编辑功能，这部分内容在文章：👉 <a href="https://objcer.com/2018/02/27/SharedPen-AnnotationList/">SharedPen 之 AnnotationList</a> 中进行了详细介绍 😋</li>
 </ul>
 <h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><table>
@@ -384,8 +384,8 @@
 </tr>
 </tbody>
 </table>
-<h3 id="Peer-to-Peer-模式"><a href="#Peer-to-Peer-模式" class="headerlink" title="Peer-to-Peer 模式"></a>Peer-to-Peer 模式</h3><p>Atom 协同编辑插件 Teletype，采用 Peer-to-Peer 模式，通过 WebRTC 加密多端之间的通信。除了最初的握手依赖于 GitHub 的服务器之外，所有的传输都是点对点的（不需要访问 GitHub 服务器）。<br><img src="http://cdn.objcer.com/sharedpen-peer-to-peer.png?t=1" alt=""></p>
-<h3 id="C-S-模式"><a href="#C-S-模式" class="headerlink" title="C/S 模式"></a>C/S 模式</h3><p>像 Google Docs，石墨文档都是采用 C/S 模式作为前后端架构，SharedPen 也是采用这种架构模式，前后端建立 socket 连接，相互实时发送 operation 操作，服务端中还对数据进行持久化存储。<br><img src="http://cdn.objcer.com/sharedpen-client-server.png" alt=""></p>
+<h3 id="Peer-to-Peer-模式"><a href="#Peer-to-Peer-模式" class="headerlink" title="Peer-to-Peer 模式"></a>Peer-to-Peer 模式</h3><p>Atom 协同编辑插件 Teletype，采用 Peer-to-Peer 模式，通过 WebRTC 加密多端之间的通信。除了最初的握手依赖于 GitHub 的服务器之外，所有的传输都是点对点的（不需要访问 GitHub 服务器）。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen-peer-to-peer.png?t=1" alt=""></p>
+<h3 id="C-S-模式"><a href="#C-S-模式" class="headerlink" title="C/S 模式"></a>C/S 模式</h3><p>像 Google Docs，石墨文档都是采用 C/S 模式作为前后端架构，SharedPen 也是采用这种架构模式，前后端建立 socket 连接，相互实时发送 operation 操作，服务端中还对数据进行持久化存储。<br><img src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/sharedpen-client-server.png" alt=""></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://liyu1981.github.io/what-is-CRDT/" target="_blank" rel="external">谈谈CRDT</a><br><a href="http://www.jdon.com/artichect/crdt.html" target="_blank" rel="external">分布式CRDT模型</a><br><a href="https://drive.googleblog.com/2010/05/whats-different-about-new-google-docs.html" target="_blank" rel="external">What’s different about the new Google Docs?</a></p>
 
       
@@ -493,7 +493,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://cdn.objcer.com/avatar.jpg"
+               src="https://raw.githubusercontent.com/yingshandeng/image-host/master/data/avatar.jpg"
                alt="小邓" />
           <p class="site-author-name" itemprop="name">小邓</p>
           <p class="site-description motion-element" itemprop="description">Hello World</p>
@@ -602,7 +602,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
