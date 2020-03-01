@@ -4,7 +4,7 @@ tags: Promise
 categories: JS
 ---
 
-![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/Promises:A+.png)
+![](https://raw.githubusercontent.com/yingshandeng/image-host/master/data/PromisesA%2B.png)
 
 <!-- more -->
 
